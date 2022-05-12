@@ -13,7 +13,10 @@ class AuthRemoteDataSource extends DataSource {
     const String endPoint = '$baseUrl/auth';
     final response = await http.post(
       Uri.parse(endPoint),
-      body: loginRequest.toJson(),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(loginRequest.toJson()),
     );
 
     if (response.statusCode >= 200 && response.statusCode <= 300) {

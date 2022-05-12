@@ -13,9 +13,6 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Login Page'),
-        ),
         body: renderBody(),
       ),
     );
@@ -44,7 +41,7 @@ class LoginPage extends StatelessWidget {
                 if (state is Loading) {
                   return const CircularProgressIndicator();
                 } else {
-                  return TextButton(
+                  return ElevatedButton(
                     onPressed: () {
                       context.read<AuthCubit>().loginUser(
                             const LoginRequestModel(
