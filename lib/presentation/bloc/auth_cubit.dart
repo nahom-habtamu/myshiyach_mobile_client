@@ -10,6 +10,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   void loginUser(LoginRequestModel request) async {
     try {
+      emit(Empty());
       emit(Loading());
       var authResult = await login.call(request);
       emit(Loaded(authResult));
