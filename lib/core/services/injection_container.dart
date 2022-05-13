@@ -1,11 +1,11 @@
 import 'package:get_it/get_it.dart';
 
-import '../../features/auth/data/datasources/auth_remote_data_source.dart';
-import '../../features/auth/data/datasources/data_source.dart';
-import '../../features/auth/data/repositories/auth_repository.dart';
-import '../../features/auth/domain/contracts/auth.dart';
-import '../../features/auth/domain/usecases/login.dart';
-import '../../features/auth/presentation/bloc/auth_cubit.dart';
+import '../../data/datasources/auth_remote_data_source.dart';
+import '../../data/datasources/data_source.dart';
+import '../../data/repositories/auth_repository.dart';
+import '../../domain/contracts/auth.dart';
+import '../../domain/usecases/login.dart';
+import '../../presentation/bloc/auth_cubit.dart';
 import 'network_info.dart';
 
 final sl = GetIt.instance;

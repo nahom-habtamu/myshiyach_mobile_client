@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'core/services/injection_container.dart' as di;
-import 'features/auth/presentation/screens/login_page.dart';
+import 'presentation/screens/login_page.dart';
 
 void main() {
   di.init();

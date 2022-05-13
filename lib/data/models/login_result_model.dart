@@ -1,4 +1,5 @@
-import 'package:mnale_client/features/auth/domain/enitites/login_result.dart';
+
+import '../../domain/enitites/login_result.dart';
 
 class LoginResultModel extends LoginResult {
   @override
