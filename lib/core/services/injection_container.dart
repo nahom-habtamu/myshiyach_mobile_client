@@ -1,11 +1,11 @@
 import 'package:get_it/get_it.dart';
 
 import '../../data/datasources/auth_remote_data_source.dart';
-import '../../data/datasources/data_source.dart';
+import '../../data/datasources/auth_data_source.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../domain/contracts/auth.dart';
 import '../../domain/usecases/login.dart';
-import '../../presentation/bloc/auth_cubit.dart';
+import '../../presentation/bloc/auth/auth_cubit.dart';
 import 'network_info.dart';
 
 final sl = GetIt.instance;
@@ -21,5 +21,5 @@ void init() {
   );
   sl.registerFactory(() => NetworkInfo());
   sl.registerLazySingleton(() => AuthRemoteDataSource());
-  sl.registerLazySingleton<DataSource>(() => AuthRemoteDataSource());
+  sl.registerLazySingleton<AuthDataSource>(() => AuthRemoteDataSource());
 }

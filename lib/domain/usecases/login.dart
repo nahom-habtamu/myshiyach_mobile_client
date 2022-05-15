@@ -1,4 +1,4 @@
-import '../../data/models/login_request_model.dart';
+import '../../data/models/login/login_request_model.dart';
 import '../contracts/auth.dart';
 import '../enitites/login_result.dart';
 

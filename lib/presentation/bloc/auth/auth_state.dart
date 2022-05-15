@@ -1,4 +1,4 @@
-import '../../domain/enitites/login_result.dart';
+import '../../../domain/enitites/login_result.dart';
 
 abstract class AuthState {}
 

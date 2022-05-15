@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../constants/login_page_constants.dart';
 
-class LoginInput extends StatelessWidget {
+class AuthInput extends StatelessWidget {
   final bool obsecureText;
   final String hintText;
   final Function(String) onChanged;
-  const LoginInput({
+  const AuthInput({
     Key? key,
     this.obsecureText = false,
     required this.hintText,

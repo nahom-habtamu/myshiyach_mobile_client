@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/models/login_request_model.dart';
-import '../bloc/auth_cubit.dart';
-import '../bloc/auth_state.dart';
-import '../widgets/login_input.dart';
+import '../../data/models/login/login_request_model.dart';
+import '../bloc/auth/auth_cubit.dart';
+import '../bloc/auth/auth_state.dart';
+import '../widgets/auth_input.dart';
+import 'sign_up_page.dart';
 
 class LoginPage extends StatefulWidget {
+  static String routeName = "/loginPage";
   const LoginPage({Key? key}) : super(key: key);
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -27,57 +28,56 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  SingleChildScrollView renderBody() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            renderLoginPageHeaders(),
-            const SizedBox(
-              height: 55,
-            ),
-            LoginInput(
-              hintText: "Phone Number",
-              onChanged: (value) => setState(() => userName = value),
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            LoginInput(
-              obsecureText: true,
-              hintText: "Password",
-              onChanged: (value) => setState(() => password = value),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            renderRememberMeAndForgotPassword(),
-            const SizedBox(
-              height: 20,
-            ),
-            BlocBuilder<AuthCubit, AuthState>(
-              builder: (context, state) {
-                if (state is Loading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else {
-                  return renderLoginButton();
-                }
-              },
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: renderLoginResult(),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            renderPageSwitcher()
-          ],
-        ),
+  renderBody() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          renderLoginPageHeaders(),
+          const SizedBox(
+            height: 55,
+          ),
+          AuthInput(
+            hintText: "Phone Number",
+            onChanged: (value) => setState(() => userName = value),
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          AuthInput(
+            obsecureText: true,
+            hintText: "Password",
+            onChanged: (value) => setState(() => password = value),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          renderRememberMeAndForgotPassword(),
+          const SizedBox(
+            height: 20,
+          ),
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, state) {
+              if (state is Loading) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                return renderLoginButton();
+              }
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Center(
+            child: renderLoginResult(),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          renderPageSwitcher()
+        ],
       ),
     );
   }
@@ -175,31 +175,36 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  SizedBox renderPageSwitcher() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: const Center(
-        child: Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: "Don't have an account ? ",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 13,
-                  letterSpacing: 0.2,
+  renderPageSwitcher() {
+    return GestureDetector(
+      onTap: (){
+        Navigator.pushReplacementNamed(context, SignUpPage.routeName);
+      },
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: const Center(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: "Don't have an account ? ",
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 13,
+                    letterSpacing: 0.2,
+                  ),
                 ),
-              ),
-              TextSpan(
-                text: ' Sign Up ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff11435E),
-                  fontSize: 13,
-                  letterSpacing: 0.2,
+                TextSpan(
+                  text: ' Sign Up ',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff11435E),
+                    fontSize: 13,
+                    letterSpacing: 0.2,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

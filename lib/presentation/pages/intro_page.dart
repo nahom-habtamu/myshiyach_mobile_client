@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'login_page.dart';
+
 class IntroPage extends StatefulWidget {
+  static String routeName = "/introPage";
   const IntroPage({Key? key}) : super(key: key);
 
   @override
@@ -97,7 +100,10 @@ class _IntroPageState extends State<IntroPage> {
                           currentInformationIndex++;
                         });
                       } else {
-                        print("INFORMATION OVER");
+                        Navigator.pushNamed(
+                          context, 
+                          LoginPage.routeName
+                        );
                       }
                     },
                     child: const Text('Next'),

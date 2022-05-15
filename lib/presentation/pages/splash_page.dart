@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'intro_page.dart';
 
 import '../../core/services/injection_container.dart';
-import '../bloc/auth_cubit.dart';
+import '../bloc/auth/auth_cubit.dart';
 
 class SplashPage extends StatefulWidget {
+  static String routeName = "/splashPage";
   const SplashPage({Key? key}) : super(key: key);
 
   @override
@@ -24,10 +25,7 @@ class _SplashPageState extends State<SplashPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (_) => sl<AuthCubit>(),
-                child: const IntroPage(),
-              ),
+              builder: (context) => const IntroPage(),
             ),
           )
         },
