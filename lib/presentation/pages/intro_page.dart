@@ -15,19 +15,22 @@ class _IntroPageState extends State<IntroPage> {
 
   var introData = [
     {
-      'image': "Easy Process",
+      'image':
+          "https://cdn2.iconfinder.com/data/icons/customer-support-38/200/asking-question-3--ask-question-MARK-CUSTOMER-SERVICE-SUPPORT-ASSISTANCE-MAN-SHRUG-HELP-512.png",
       'header': "Easy Process",
       'description':
           'Find all your needs in one place.  We provide every service to make your experience smooth.'
     },
     {
-      'image': "Expert People",
+      'image':
+          "https://cdn2.iconfinder.com/data/icons/customer-support-38/200/asking-question-4--ask-question-MARK-CUSTOMER-SERVICE-SUPPORT-ASSISTANCE-MAN-HELP-THINKING-CONFUSED-512.png",
       'header': "Expert People",
       'description':
           'We have the best in class individuals working just for you. They are well  trained and capable of handling anything you need.'
     },
     {
-      'image': "Some Way",
+      'image':
+          "https://thumbs.dreamstime.com/z/mark-question-shine-asking-questions-ask-help-shining-question-mark-stamp-need-information-stock-vector-mark-168461097.jpg",
       'header': "Some Way",
       'description':
           'You will get what you need , therefore you will be satisfied'
@@ -100,10 +103,7 @@ class _IntroPageState extends State<IntroPage> {
                           currentInformationIndex++;
                         });
                       } else {
-                        Navigator.pushNamed(
-                          context, 
-                          LoginPage.routeName
-                        );
+                        Navigator.pushNamed(context, LoginPage.routeName);
                       }
                     },
                     child: const Text('Next'),

@@ -14,10 +14,10 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-
 class _LoginPageState extends State<LoginPage> {
   String userName = "";
   String password = "";
+  bool rememberMe = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -31,53 +31,58 @@ class _LoginPageState extends State<LoginPage> {
   renderBody() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          renderLoginPageHeaders(),
-          const SizedBox(
-            height: 55,
-          ),
-          AuthInput(
-            hintText: "Phone Number",
-            onChanged: (value) => setState(() => userName = value),
-          ),
-          const SizedBox(
-            height: 25,
-          ),
-          AuthInput(
-            obsecureText: true,
-            hintText: "Password",
-            onChanged: (value) => setState(() => password = value),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          renderRememberMeAndForgotPassword(),
-          const SizedBox(
-            height: 20,
-          ),
-          BlocBuilder<AuthCubit, AuthState>(
-            builder: (context, state) {
-              if (state is Loading) {
-                return const Center(child: CircularProgressIndicator());
-              } else {
-                return renderLoginButton();
-              }
-            },
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Center(
-            child: renderLoginResult(),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          renderPageSwitcher()
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 40,
+            ),
+            renderLoginPageHeaders(),
+            const SizedBox(
+              height: 55,
+            ),
+            AuthInput(
+              hintText: "Phone Number",
+              onChanged: (value) => setState(() => userName = value),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            AuthInput(
+              obsecureText: true,
+              hintText: "Password",
+              onChanged: (value) => setState(() => password = value),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            renderRememberMeAndForgotPassword(),
+            const SizedBox(
+              height: 20,
+            ),
+            BlocBuilder<AuthCubit, AuthState>(
+              builder: (context, state) {
+                if (state is Loading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return renderLoginButton();
+                }
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: renderLoginResult(),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            renderPageSwitcher()
+          ],
+        ),
       ),
     );
   }
@@ -119,8 +124,12 @@ class _LoginPageState extends State<LoginPage> {
       child: Transform.scale(
         scale: 0.75,
         child: Checkbox(
-          value: true,
-          onChanged: (value) {},
+          value: rememberMe,
+          onChanged: (value) {
+            setState(() {
+              rememberMe = value!;
+            });
+          },
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(4),
@@ -177,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
 
   renderPageSwitcher() {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.pushReplacementNamed(context, SignUpPage.routeName);
       },
       child: SizedBox(

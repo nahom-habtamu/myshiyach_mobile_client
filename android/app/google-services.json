@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "98572027350",
+    "project_id": "mnale-6577c",
+    "storage_bucket": "mnale-6577c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98572027350:android:9f7a2b765f0b5e5811d077",
+        "android_client_info": {
+          "package_name": "com.nahomhabtamu.mnale_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98572027350-f4met7bdeadvj92haqp97art1lbcuqsi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIoM5B_kkAdR95QPcPwrSXFCEW2MqnAtQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98572027350-f4met7bdeadvj92haqp97art1lbcuqsi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

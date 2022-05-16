@@ -1,4 +1,3 @@
-
 import '../../../domain/enitites/login_result.dart';
 
 class LoginResultModel extends LoginResult {

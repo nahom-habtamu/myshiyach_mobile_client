@@ -27,14 +27,15 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primaryColor: const Color(0xff11435E),
+          fontFamily: 'DMSans',
         ),
         home: const SplashPage(),
         routes: {
-          SplashPage.routeName :(context) => const SplashPage(),
-          IntroPage.routeName :(context) => const IntroPage(),
-          LoginPage.routeName :(context) => const LoginPage(),
-          SignUpPage.routeName :(context) => const SignUpPage(),
+          SplashPage.routeName: (context) => const SplashPage(),
+          IntroPage.routeName: (context) => const IntroPage(),
+          LoginPage.routeName: (context) => const LoginPage(),
+          SignUpPage.routeName: (context) => const SignUpPage(),
         },
       ),
     );

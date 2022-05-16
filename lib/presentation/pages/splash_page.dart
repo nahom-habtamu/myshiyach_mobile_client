@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'intro_page.dart';
 
-import '../../core/services/injection_container.dart';
-import '../bloc/auth/auth_cubit.dart';
+import 'intro_page.dart';
 
 class SplashPage extends StatefulWidget {
   static String routeName = "/splashPage";
@@ -22,11 +19,9 @@ class _SplashPageState extends State<SplashPage> {
       Future.delayed(
         const Duration(seconds: 1),
         () => {
-          Navigator.push(
+          Navigator.pushReplacementNamed(
             context,
-            MaterialPageRoute(
-              builder: (context) => const IntroPage(),
-            ),
+            IntroPage.routeName,
           )
         },
       );

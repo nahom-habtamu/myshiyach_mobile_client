@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/login_page_constants.dart';
 
-class AuthInput extends StatelessWidget {
+class AuthInput extends StatefulWidget {
   final bool obsecureText;
   final String hintText;
   final Function(String) onChanged;
@@ -14,21 +14,38 @@ class AuthInput extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<AuthInput> createState() => _AuthInputState();
+}
+
+class _AuthInputState extends State<AuthInput> {
+  bool isPasswordVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isPasswordVisible = widget.obsecureText;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: obsecureText,
+      obscureText: isPasswordVisible,
       style: loginInputTextStyle,
-      onChanged: (value) => onChanged(value),
+      onChanged: (value) => widget.onChanged(value),
       decoration: InputDecoration(
-        labelText: hintText,
+        labelText: widget.hintText,
         border: loginInputEnabledBorder,
         enabledBorder: loginInputEnabledBorder,
         focusedBorder: loginInputDisabledBorder,
-        suffixIcon: obsecureText
+        suffixIcon: widget.obsecureText
             ? InkWell(
-                onTap: () {},
-                child: const Icon(
-                  Icons.remove_red_eye,
+                onTap: () {
+                  setState(() {
+                    isPasswordVisible = !isPasswordVisible;
+                  });
+                },
+                child: Icon(
+                  isPasswordVisible ? Icons.visibility : Icons.visibility_off,
                   size: 25,
                   color: Colors.grey,
                 ),
