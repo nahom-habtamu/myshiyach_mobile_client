@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/services/injection_container.dart' as di;
 import 'core/services/injection_container.dart';
 import 'presentation/bloc/auth/auth_cubit.dart';
-import 'presentation/pages/login_page.dart';
+import 'presentation/bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import 'presentation/pages/intro_page.dart';
-import 'presentation/pages/splash_page.dart';
+import 'presentation/pages/login_page.dart';
+import 'presentation/pages/otp_verification_page.dart';
 import 'presentation/pages/sign_up_page.dart';
+import 'presentation/pages/splash_page.dart';
 
 void main() {
   di.init();
@@ -22,7 +24,10 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (_) => sl<AuthCubit>(),
-        )
+        ),     
+        BlocProvider(
+          create: (_) => sl<VerifyPhoneNumberCubit>(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -36,6 +41,8 @@ class MyApp extends StatelessWidget {
           IntroPage.routeName: (context) => const IntroPage(),
           LoginPage.routeName: (context) => const LoginPage(),
           SignUpPage.routeName: (context) => const SignUpPage(),
+          OtpVerificationPage.routeName: (context) =>
+              const OtpVerificationPage(),
         },
       ),
     );

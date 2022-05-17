@@ -1,35 +1,55 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../datasources/firebase_data_source.dart';
+
 import '../../../../core/exceptions/server_exception.dart';
 import '../../../../core/services/network_info.dart';
 import '../../domain/contracts/auth.dart';
 import '../datasources/auth_remote_data_source.dart';
 import '../models/login/login_result_model.dart';
 import '../models/login/login_request_model.dart';
-import '../models/register_user_request_model.dart';
+import '../models/register_user/register_user_request_model.dart';
 
 class AuthRepository extends Auth {
-  final AuthRemoteDataSource dataSource;
+  final FirebaseDataSource firebaseDataSource;
+  final AuthRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 
   AuthRepository({
-    required this.dataSource,
+    required this.remoteDataSource,
     required this.networkInfo,
+    required this.firebaseDataSource,
   });
 
   @override
   Future<LoginResultModel> login(LoginRequestModel loginRequest) async {
     var connectionAvailable = await networkInfo.isConnected();
     if (connectionAvailable) {
-      return dataSource.login(loginRequest);
+      return remoteDataSource.login(loginRequest);
     }
     throw ServerException();
   }
 
   @override
-  Future<void> regusterUser(RegisterUserRequestModel registerRequest) async {
+  Future<void> registerUser(RegisterUserRequestModel registerRequest) async {
     var connectionAvailable = await networkInfo.isConnected();
     if (connectionAvailable) {
-      return dataSource.registerUser(registerRequest);
+      return remoteDataSource.registerUser(registerRequest);
     }
     throw ServerException();
+  }
+
+  @override
+  Future<void> verifyPhoneNumber(
+      String phoneNumber,
+      Function(FirebaseAuthException) onVerificationFailed,
+      Function(PhoneAuthCredential) onVerificationComplete,
+      Function(String, int?) onCodeSent) {
+    return firebaseDataSource.verifyPhoneNumber(
+      phoneNumber,
+      onVerificationFailed,
+      onVerificationComplete,
+      onCodeSent,
+    );
   }
 }

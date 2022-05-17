@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/auth/auth_cubit.dart';
-import '../bloc/auth/auth_state.dart';
+import '../bloc/verify_phone_number/verify_phone_number_cubit.dart';
+import '../bloc/verify_phone_number/verify_phone_number_state.dart';
 import '../widgets/auth_input.dart';
 import 'login_page.dart';
+import 'otp_verification_page.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   static String routeName = "/signUpPage";
   const SignUpPage({Key? key}) : super(key: key);
+
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  String fullName = "";
+  String phoneNumber = "";
+  String password = "";
+  String passwordRepeat = "";
+  bool areTermsAndConditionsAgreed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +36,35 @@ class SignUpPage extends StatelessWidget {
                 const SizedBox(
                   height: 25,
                 ),
-                AuthInput(hintText: "Full Name", onChanged: (value) => {}),
+                AuthInput(
+                  hintText: "Full Name",
+                  onChanged: (value) => {
+                    setState(() {
+                      fullName = value;
+                    })
+                  },
+                ),
                 const SizedBox(
                   height: 25,
                 ),
-                AuthInput(hintText: "Phone Number", onChanged: (value) => {}),
+                AuthInput(
+                  hintText: "Phone Number",
+                  onChanged: (value) => {
+                    setState(() {
+                      phoneNumber = value;
+                    })
+                  },
+                ),
                 const SizedBox(
                   height: 25,
                 ),
                 AuthInput(
                   hintText: "Password",
-                  onChanged: (value) => {},
+                  onChanged: (value) => {
+                    setState(() {
+                      password = value;
+                    })
+                  },
                   obsecureText: true,
                 ),
                 const SizedBox(
@@ -42,7 +72,11 @@ class SignUpPage extends StatelessWidget {
                 ),
                 AuthInput(
                   hintText: "Confirm Password",
-                  onChanged: (value) => {},
+                  onChanged: (value) => {
+                    setState(() {
+                      passwordRepeat = value;
+                    })
+                  },
                   obsecureText: true,
                 ),
                 const SizedBox(
@@ -57,8 +91,12 @@ class SignUpPage extends StatelessWidget {
                       child: Transform.scale(
                         scale: 0.75,
                         child: Checkbox(
-                          value: true,
-                          onChanged: (value) {},
+                          value: areTermsAndConditionsAgreed,
+                          onChanged: (value) {
+                            setState(() {
+                              areTermsAndConditionsAgreed = value!;
+                            });
+                          },
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(4),
@@ -86,10 +124,11 @@ class SignUpPage extends StatelessWidget {
                           TextSpan(
                             text: 'Term and Conditions ',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xff11435E),
-                                letterSpacing: 0.2,
-                                height: 2),
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff11435E),
+                              letterSpacing: 0.2,
+                              height: 2,
+                            ),
                           ),
                         ],
                       ),
@@ -99,16 +138,24 @@ class SignUpPage extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                BlocBuilder<AuthCubit, AuthState>(
+                BlocBuilder<VerifyPhoneNumberCubit, VerifyPhoneNumberState>(
                   builder: (context, state) {
                     if (state is Loading) {
                       return const Center(child: CircularProgressIndicator());
+                    } else if (state is CodeSent) {
+                      return Center(
+                        child: Text(state.verificationId),
+                      );
                     } else {
                       return SizedBox(
                         height: 50,
                         width: MediaQuery.of(context).size.width,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context
+                                .read<VerifyPhoneNumberCubit>()
+                                .verify(phoneNumber);
+                          },
                           child: const Text('Continue'),
                           style: ElevatedButton.styleFrom(
                             primary: const Color(0xff11435E),
