@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "98572027350-9vi3hsfkkq88s99127f2lgiql3gog2c9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nahomhabtamu.mnale_client",
+            "certificate_hash": "834e9d5e53a9015b8b62775785b3423af2d2d7fe"
+          }
+        },
+        {
           "client_id": "98572027350-f4met7bdeadvj92haqp97art1lbcuqsi.apps.googleusercontent.com",
           "client_type": 3
         }
