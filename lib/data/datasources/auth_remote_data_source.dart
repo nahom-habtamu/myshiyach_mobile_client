@@ -30,7 +30,7 @@ class AuthRemoteDataSource extends AuthDataSource {
 
   @override
   Future<void> registerUser(RegisterUserRequestModel registerRequest) async {
-    const String endPoint = '$baseUrl/auth';
+    const String endPoint = '$baseUrl/users';
     final response = await http.post(
       Uri.parse(endPoint),
       headers: <String, String>{
@@ -40,7 +40,7 @@ class AuthRemoteDataSource extends AuthDataSource {
     );
 
     if (response.statusCode < 200 && response.statusCode > 300) {
-      throw Exception("User Not Found");
+      throw Exception("Registration Failed");
     }
   }
 }

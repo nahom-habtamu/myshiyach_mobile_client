@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/services/injection_container.dart' as di;
 import 'core/services/injection_container.dart';
 import 'presentation/bloc/auth/auth_cubit.dart';
+import 'presentation/bloc/register_user/register_user_cubit.dart';
 import 'presentation/bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import 'presentation/pages/intro_page.dart';
 import 'presentation/pages/login_page.dart';
@@ -27,9 +28,12 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (_) => sl<AuthCubit>(),
-        ),     
+        ),
         BlocProvider(
           create: (_) => sl<VerifyPhoneNumberCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<RegisterUserCubit>(),
         ),
       ],
       child: MaterialApp(

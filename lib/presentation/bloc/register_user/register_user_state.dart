@@ -4,7 +4,7 @@ class Empty extends RegisterUserState {}
 
 class Loading extends RegisterUserState {}
 
-class Loaded extends RegisterUserState {}
+class Successfull extends RegisterUserState {}
 
 class Error extends RegisterUserState {
   final String message;

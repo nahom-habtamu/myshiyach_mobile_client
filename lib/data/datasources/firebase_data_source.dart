@@ -7,6 +7,8 @@ abstract class FirebaseDataSource {
     Function(PhoneAuthCredential) onVerificationComplete,
     Function(String verficationID, int? resendToken) onCodeSent,
   );
+
+  Future<void> authenticatePhoneNumber(PhoneAuthCredential credential);
 }
 
 class FirebaseDataSouceImpl extends FirebaseDataSource {
@@ -25,5 +27,10 @@ class FirebaseDataSouceImpl extends FirebaseDataSource {
       codeAutoRetrievalTimeout: (String verificationID) {},
       timeout: const Duration(seconds: 120),
     );
+  }
+
+  @override
+  Future<void> authenticatePhoneNumber(PhoneAuthCredential credential) async {
+    await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }

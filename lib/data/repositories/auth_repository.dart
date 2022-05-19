@@ -52,4 +52,9 @@ class AuthRepository extends Auth {
       onCodeSent,
     );
   }
+
+  @override
+  Future<void> authenticatePhoneNumber(PhoneAuthCredential credential) {
+    return firebaseDataSource.authenticatePhoneNumber(credential);
+  }
 }

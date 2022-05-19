@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/presentation/screen_arguments/otp_verification_page_argument.dart';
 
+import '../../data/models/register_user/register_user_request_model.dart';
 import '../bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import '../bloc/verify_phone_number/verify_phone_number_state.dart';
 import '../widgets/auth_input.dart';
@@ -142,11 +145,28 @@ class _SignUpPageState extends State<SignUpPage> {
                   builder: (context, state) {
                     if (state is Loading) {
                       return const Center(child: CircularProgressIndicator());
-                    } else if (state is CodeSent) {
-                      return Center(
-                        child: Text(state.verificationId),
-                      );
                     } else {
+                      if (state is CodeSent) {
+                        var registerRequest = RegisterUserRequestModel(
+                          fullName: fullName,
+                          phoneNumber: phoneNumber,
+                          password: password,
+                        );
+
+                        var otpPageArgument = OtpVerficationPageArgument(
+                          registerRequest,
+                          state.verificationId,
+                        );
+
+                        SchedulerBinding.instance!.addPostFrameCallback((_) {
+                          Navigator.pushReplacementNamed(
+                            context,
+                            OtpVerificationPage.routeName,
+                            arguments: otpPageArgument,
+                          );
+                        });
+                      }
+
                       return SizedBox(
                         height: 50,
                         width: MediaQuery.of(context).size.width,

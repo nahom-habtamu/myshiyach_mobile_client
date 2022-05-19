@@ -13,4 +13,5 @@ abstract class Auth {
     Function(PhoneAuthCredential) onVerificationComplete,
     Function(String verficationID, int? resendToken) onCodeSent,
   );
+  Future<void> authenticatePhoneNumber(PhoneAuthCredential credential);
 }
