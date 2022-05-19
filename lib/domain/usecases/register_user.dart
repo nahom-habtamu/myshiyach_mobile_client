@@ -1,8 +1,8 @@
-import '../contracts/auth.dart';
+import '../contracts/auth_service.dart';
 import '../../data/models/register_user/register_user_request_model.dart';
 
 class RegisterUser {
-  final Auth repository;
+  final AuthService repository;
 
   const RegisterUser(this.repository);
 

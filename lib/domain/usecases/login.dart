@@ -1,9 +1,9 @@
 import '../../data/models/login/login_request_model.dart';
-import '../contracts/auth.dart';
+import '../contracts/auth_service.dart';
 import '../enitites/login_result.dart';
 
 class Login {
-  final Auth repository;
+  final AuthService repository;
 
   const Login(this.repository);
 

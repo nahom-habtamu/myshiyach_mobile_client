@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-abstract class FirebaseDataSource {
+abstract class FirebaseAuthDataSource {
   Future<void> verifyPhoneNumber(
     String phoneNumber,
     Function(FirebaseAuthException) onVerificationFailed,
@@ -11,7 +11,7 @@ abstract class FirebaseDataSource {
   Future<void> authenticatePhoneNumber(PhoneAuthCredential credential);
 }
 
-class FirebaseDataSouceImpl extends FirebaseDataSource {
+class FirebaseDataSouceImpl extends FirebaseAuthDataSource {
   @override
   Future<void> verifyPhoneNumber(
     String phoneNumber,

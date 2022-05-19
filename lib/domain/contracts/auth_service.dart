@@ -4,7 +4,7 @@ import '../../data/models/login/login_request_model.dart';
 import '../../data/models/login/login_result_model.dart';
 import '../../data/models/register_user/register_user_request_model.dart';
 
-abstract class Auth {
+abstract class AuthService {
   Future<LoginResultModel> login(LoginRequestModel loginRequest);
   Future<void> registerUser(RegisterUserRequestModel registerRequest);
   Future<void> verifyPhoneNumber(

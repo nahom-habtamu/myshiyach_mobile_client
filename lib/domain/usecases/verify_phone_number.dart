@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../contracts/auth.dart';
+import '../contracts/auth_service.dart';
 
 class VerifyPhoneNumber {
-  final Auth repository;
+  final AuthService repository;
 
   const VerifyPhoneNumber(this.repository);
 
