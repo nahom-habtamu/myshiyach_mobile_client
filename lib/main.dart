@@ -11,6 +11,7 @@ import 'presentation/bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/intro_page.dart';
 import 'presentation/pages/login_page.dart';
+import 'presentation/pages/master_page.dart';
 import 'presentation/pages/otp_verification_page.dart';
 import 'presentation/pages/sign_up_page.dart';
 import 'presentation/pages/splash_page.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
           IntroPage.routeName: (context) => const IntroPage(),
           LoginPage.routeName: (context) => const LoginPage(),
           SignUpPage.routeName: (context) => const SignUpPage(),
+          MasterPage.routeName: (context) => const MasterPage(),
           OtpVerificationPage.routeName: (context) =>
               const OtpVerificationPage(),
         },
