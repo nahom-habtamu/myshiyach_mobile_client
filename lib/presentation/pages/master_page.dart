@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mnale_client/presentation/pages/home_page.dart';
+
+import 'home_page.dart';
+import 'profile_page.dart';
 
 class MasterPage extends StatefulWidget {
   static String routeName = "/masterPage";
@@ -14,10 +16,10 @@ class _MasterPageState extends State<MasterPage> {
 
   List<Widget> pagesToShow = [
     const HomePage(),
-    const Text('Chat'),
-    const Text('Add Post'),
-    const Text('Settings'),
-    const Text('Saved'),
+    const Center(child: Text('Chat')),
+    const Center(child: Text('Add Post')),
+    const Center(child: Text('Saved')),
+    const ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -45,12 +47,12 @@ class _MasterPageState extends State<MasterPage> {
             label: 'Add Post',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.save),
             label: 'Saved',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'post_detail_page.dart';
 import '../../domain/enitites/product.dart';
 import '../bloc/get_all_products/get_all_products_cubit.dart';
 import '../bloc/get_all_products/get_all_products_state.dart';
@@ -31,7 +32,75 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
           child: Column(
             children: [
-              Text('Products'),
+              const Padding(
+                padding: EdgeInsets.only(top: 22.0),
+                child: Text(
+                  'Products',
+                  style: TextStyle(fontSize: 25),
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * 0.75,
+                      child: TextFormField(
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                        onChanged: (value) => {},
+                        decoration: const InputDecoration(
+                          labelText: "Search Item",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(16.0),
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.black26,
+                              width: 1,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(16.0),
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.black26,
+                              width: 1,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(16.0),
+                            ),
+                            borderSide: BorderSide(
+                              color: Colors.black26,
+                              width: 1,
+                            ),
+                          ),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            size: 30,
+                          ),
+                          isDense: true,
+                          contentPadding: EdgeInsets.all(15),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.search),
+                    )
+                  ],
+                ),
+              ),
               buildCategories([
                 "All",
                 "Electronics",
@@ -72,7 +141,7 @@ class _HomePageState extends State<HomePage> {
 
   buildCategories(List<String> categories) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 25.0),
+      padding: const EdgeInsets.only(bottom: 20.0),
       child: SizedBox(
         height: 35,
         child: ListView.builder(
@@ -124,36 +193,41 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Container buildProduct(Product product) {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      width: MediaQuery.of(context).size.width * 0.45,
-      height: 210,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(15),
+  GestureDetector buildProduct(Product product) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, PostDetailPage.routeName, arguments: product);
+      },
+      child: Container(
+        margin: const EdgeInsets.all(5),
+        width: MediaQuery.of(context).size.width * 0.45,
+        height: 210,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
         ),
-      ),
-      child: Column(
-        children: [
-          renderProductListItemImage(),
-          Expanded(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  renderTitle(),
-                  renderDescription(),
-                  renderPrice(),
-                  renderTimerAndFavoriteIcon()
-                ],
+        child: Column(
+          children: [
+            renderProductListItemImage(),
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    renderTitle(),
+                    renderDescription(),
+                    renderPrice(),
+                    renderTimerAndFavoriteIcon()
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -19,6 +19,7 @@ dependencies:
   firebase_auth:
   pinput:
   pin_code_fields: ^7.4.0
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:
