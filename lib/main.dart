@@ -12,8 +12,8 @@ import 'presentation/pages/home_page.dart';
 import 'presentation/pages/intro_page.dart';
 import 'presentation/pages/login_page.dart';
 import 'presentation/pages/master_page.dart';
-import 'presentation/pages/post_detail_page.dart';
 import 'presentation/pages/otp_verification_page.dart';
+import 'presentation/pages/post_detail_page.dart';
 import 'presentation/pages/sign_up_page.dart';
 import 'presentation/pages/splash_page.dart';
 
