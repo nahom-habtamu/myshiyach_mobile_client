@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/presentation/pages/add_post_page.dart';
+import 'package:mnale_client/presentation/pages/chat_page.dart';
 
 import 'core/services/injection_container.dart' as di;
 import 'core/services/injection_container.dart';
@@ -58,6 +60,8 @@ class MyApp extends StatelessWidget {
           SignUpPage.routeName: (context) => const SignUpPage(),
           MasterPage.routeName: (context) => const MasterPage(),
           PostDetailPage.routeName: (context) => const PostDetailPage(),
+          AddPostPage.routeName: (context) => const AddPostPage(),
+          ChatListPage.routeName: (context) => const ChatListPage(),
           OtpVerificationPage.routeName: (context) =>
               const OtpVerificationPage(),
         },

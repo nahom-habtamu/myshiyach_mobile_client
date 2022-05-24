@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mnale_client/presentation/pages/chat_page.dart';
 
+import 'add_post_page.dart';
 import 'home_page.dart';
 import 'profile_page.dart';
 
@@ -16,8 +18,8 @@ class _MasterPageState extends State<MasterPage> {
 
   List<Widget> pagesToShow = [
     const HomePage(),
-    const Center(child: Text('Chat')),
-    const Center(child: Text('Add Post')),
+    const ChatListPage(),
+    const AddPostPage(),
     const Center(child: Text('Saved')),
     const ProfilePage(),
   ];
