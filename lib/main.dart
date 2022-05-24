@@ -1,8 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/presentation/pages/add_post_page.dart';
-import 'package:mnale_client/presentation/pages/chat_page.dart';
 
 import 'core/services/injection_container.dart' as di;
 import 'core/services/injection_container.dart';
@@ -10,6 +8,8 @@ import 'presentation/bloc/auth/auth_cubit.dart';
 import 'presentation/bloc/get_all_products/get_all_products_cubit.dart';
 import 'presentation/bloc/register_user/register_user_cubit.dart';
 import 'presentation/bloc/verify_phone_number/verify_phone_number_cubit.dart';
+import 'presentation/pages/add_post_page.dart';
+import 'presentation/pages/chat_page.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/intro_page.dart';
 import 'presentation/pages/login_page.dart';
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Mnale',
         theme: ThemeData(
           primaryColor: const Color(0xff11435E),
           fontFamily: 'DMSans',
