@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mnale_client/presentation/pages/chat_page.dart';
 
 import 'add_post_page.dart';
+import 'chat_page.dart';
 import 'home_page.dart';
 import 'profile_page.dart';
+import 'saved_posts.dart';
 
 class MasterPage extends StatefulWidget {
   static String routeName = "/masterPage";
@@ -20,7 +21,7 @@ class _MasterPageState extends State<MasterPage> {
     const HomePage(),
     const ChatListPage(),
     const AddPostPage(),
-    const Center(child: Text('Saved')),
+    const SavedPostsPage(),
     const ProfilePage(),
   ];
 

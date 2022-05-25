@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../data/models/product/product_model.dart';
+import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 
+import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import 'post_detail_page.dart';
 import '../../domain/enitites/product.dart';
 import '../bloc/get_all_products/get_all_products_cubit.dart';
@@ -15,11 +18,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<Product> favorites = [];
+  SetFavoriteProductsCubit? setFavoriteProductsCubit;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       context.read<GetAllProductsCubit>().execute();
+      setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
+      initializeFavoriteProducts();
+    });
+  }
+
+  initializeFavoriteProducts() async {
+    var result = await context
+        .read<GetFavoriteProductsCubit>()
+        .getFavoriteProducts
+        .call();
+    setState(() {
+      favorites = [...result];
     });
   }
 
@@ -196,7 +214,8 @@ class _HomePageState extends State<HomePage> {
   GestureDetector buildProduct(Product product) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, PostDetailPage.routeName, arguments: product);
+        Navigator.pushNamed(context, PostDetailPage.routeName,
+            arguments: product);
       },
       child: Container(
         margin: const EdgeInsets.all(5),
@@ -221,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                     renderTitle(),
                     renderDescription(),
                     renderPrice(),
-                    renderTimerAndFavoriteIcon()
+                    renderTimerAndFavoriteIcon(product)
                   ],
                 ),
               ),
@@ -282,18 +301,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Row renderTimerAndFavoriteIcon() {
+  Row renderTimerAndFavoriteIcon(Product product) {
+    var duplicate =
+        favorites.where((element) => element.id == product.id).toList();
+
     return Row(
-      children: const [
-        Icon(
+      children: [
+        const Icon(
           Icons.access_time_rounded,
           size: 18,
           color: Colors.grey,
         ),
-        SizedBox(
+        const SizedBox(
           width: 4,
         ),
-        Expanded(
+        const Expanded(
           child: Text(
             'Just Now',
             style: TextStyle(
@@ -302,17 +324,49 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        CircleAvatar(
-          radius: 13,
-          backgroundColor: Color.fromRGBO(233, 225, 225, 1),
-          child: Icon(
-            Icons.favorite_border,
-            size: 20,
-            color: Colors.red,
+        GestureDetector(
+          onTap: () {
+            if (duplicate.isNotEmpty) {
+              favorites.removeWhere((element) => element.id == product.id);
+              setState(() {});
+            } else {
+              var newFavorites = [...favorites, product];
+              setState(() {
+                favorites = newFavorites;
+              });
+            }
+            List<ProductModel> favoritesToSave = parseListToProductModelList();
+            setFavoriteProductsCubit!.setFavoriteProducts.call(favoritesToSave);
+          },
+          child: CircleAvatar(
+            radius: 14,
+            backgroundColor: const Color.fromRGBO(233, 225, 225, 1),
+            child: Icon(
+              duplicate.isEmpty ? Icons.favorite_border : Icons.favorite,
+              size: 20,
+              color: Colors.red,
+            ),
           ),
         ),
       ],
     );
+  }
+
+  List<ProductModel> parseListToProductModelList() {
+    var favoritesToSave = favorites
+        .map(
+          (e) => ProductModel(
+            id: e.id,
+            title: e.title,
+            description: e.description,
+            price: e.price,
+            mainCategory: e.mainCategory,
+            subCategory: e.subCategory,
+            brand: e.brand,
+          ),
+        )
+        .toList();
+    return favoritesToSave;
   }
 
   SizedBox renderProductListItemImage() {

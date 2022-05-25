@@ -6,7 +6,9 @@ import 'core/services/injection_container.dart' as di;
 import 'core/services/injection_container.dart';
 import 'presentation/bloc/auth/auth_cubit.dart';
 import 'presentation/bloc/get_all_products/get_all_products_cubit.dart';
+import 'presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import 'presentation/bloc/register_user/register_user_cubit.dart';
+import 'presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import 'presentation/bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import 'presentation/pages/add_post_page.dart';
 import 'presentation/pages/chat_page.dart';
@@ -22,7 +24,7 @@ import 'presentation/pages/splash_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  di.init();
+  await di.init();
   runApp(const MyApp());
 }
 
@@ -43,6 +45,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => sl<GetAllProductsCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<GetFavoriteProductsCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<SetFavoriteProductsCubit>(),
         ),
       ],
       child: MaterialApp(

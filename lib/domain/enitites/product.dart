@@ -1,4 +1,5 @@
 class Product {
+  final String id;
   final String title;
   final String description;
   final int price;
@@ -8,6 +9,7 @@ class Product {
   Map<String, dynamic>? other;
 
   Product({
+    required this.id,
     required this.title,
     required this.description,
     required this.price,

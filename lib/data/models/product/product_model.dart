@@ -4,6 +4,7 @@ import '../../../domain/enitites/product.dart';
 
 class ProductModel extends Product {
   ProductModel({
+    required String id,
     required String title,
     required String description,
     required int price,
@@ -12,6 +13,7 @@ class ProductModel extends Product {
     required String brand,
     // Map<String, dynamic>? other,
   }) : super(
+          id: id,
           title: title,
           description: description,
           price: price,
@@ -23,6 +25,7 @@ class ProductModel extends Product {
 
   factory ProductModel.fromJson(dynamic json) {
     return ProductModel(
+      id: json["_id"],
       title: json["title"],
       description: json["description"],
       price: json["price"],
@@ -32,6 +35,16 @@ class ProductModel extends Product {
       // other: jsonDecode(json["other"]),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "title": title,
+        "description": description,
+        "price": price,
+        "mainCategory": mainCategory,
+        "subCategory": subCategory,
+        "brand": brand,
+      };
 
   static List<ProductModel> parseProductsFromJson(dynamic jsonList) {
     var products = <ProductModel>[];

@@ -208,7 +208,6 @@ class _PostDetailCarouselState extends State<PostDetailCarousel> {
         CarouselImageChangerIcon(
           isRightArrow: true,
           onClick: () {
-            print("I AM CLICKED PREVIOUS");
             carouselController.previousPage(
               duration: const Duration(seconds: 1),
               curve: Curves.easeInOut,
@@ -217,7 +216,6 @@ class _PostDetailCarouselState extends State<PostDetailCarousel> {
         ),
         CarouselImageChangerIcon(
           onClick: () {
-            print("I AM CLICKED NEXT");
             carouselController.nextPage(
               duration: const Duration(seconds: 1),
               curve: Curves.easeInOut,

@@ -73,8 +73,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               ),
               BlocBuilder<RegisterUserCubit, RegisterUserState>(
                 builder: (context, state) {
-                  print(state);
-
                   if (state is Loading) {
                     return const Center(child: CircularProgressIndicator());
                   } else {
