@@ -7,7 +7,7 @@ class GetAllProductsCubit extends Cubit<GetAllProductsState> {
   final GetAllProducts getAllProducts;
   GetAllProductsCubit(this.getAllProducts) : super(Empty());
 
-  void execute() async {
+  void call() async {
     try {
       emit(Empty());
       emit(Loading());

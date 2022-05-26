@@ -9,7 +9,7 @@ class PostDetailPage extends StatelessWidget {
   const PostDetailPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Product;
+    final product = ModalRoute.of(context)!.settings.arguments as Product;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -33,12 +33,8 @@ class PostDetailPage extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const PostDetailCarousel(
-                items: [
-                  'https://images.unsplash.com/photo-1653286015985-d4857eac5679?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=627',
-                  'https://images.unsplash.com/photo-1653256471013-8613f0bf3b9b?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764',
-                  'https://images.unsplash.com/photo-1653276526709-c424ad920de6?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765'
-                ],
+              PostDetailCarousel(
+                items: [...product.productImages],
               ),
               Expanded(
                 child: SizedBox(
@@ -53,9 +49,9 @@ class PostDetailPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            '2007 2.5l automatic 4wd Nissan Elgrand Highway Star ULEZ',
-                            style: TextStyle(
+                          Text(
+                            product.title,
+                            style: const TextStyle(
                               color: Color(0xff11435E),
                               fontSize: 18,
                               height: 1.5,
@@ -66,18 +62,18 @@ class PostDetailPage extends StatelessWidget {
                             height: 20,
                           ),
                           Row(
-                            children: const [
-                              Icon(
+                            children: [
+                              const Icon(
                                 Icons.timer_sharp,
                                 color: Colors.grey,
                                 size: 15,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
                               Text(
-                                '26 days ago',
-                                style: TextStyle(
+                                product.createdAt,
+                                style: const TextStyle(
                                   color: Colors.grey,
                                   fontSize: 12,
                                 ),
@@ -87,9 +83,9 @@ class PostDetailPage extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text(
-                            '£8,900.00',
-                            style: TextStyle(
+                          Text(
+                            '\$${product.price.toString()}',
+                            style: const TextStyle(
                               color: Color(0xff34A853),
                               fontSize: 24,
                               height: 1.5,
@@ -99,30 +95,17 @@ class PostDetailPage extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text(
-                            'Description',
-                            style: TextStyle(
-                              color: Color(0xff11435E),
-                              fontSize: 18,
-                              height: 1.5,
-                              fontWeight: FontWeight.w700,
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: PostDetailInformationItem(
+                              informationKey: "Description",
+                              informationValue: product.description,
                             ),
                           ),
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text(
-                            "2007 Nissan Elgrand Highway Star 2.5L 4WD, ULEZ compliant, with part-leather interior. Manufactured December 2007. 76,450 Miles. MNE51 -160368 chassis no. This has been freshly imported from our trusted agent in Japan who sourced my original family car, and is a ‘4’ (out of 5 with this being the highest grade on their already meticulous grading system, with 5 usually reserved for cars under 10 years old) on the Japanese auction certificate. Four new tyres and hasn't been driven (except for keeping the battery charged) since.Will come with all original Japanese paperwork and invoices including auction sheet, invoices and bill of lading as well as spare key and Japanese log book and manual.Has had a full health check and MOT until 14/12/2022, fog light added by our import specialist mechanic.",
-                            style: TextStyle(
-                              color: Color(0xff434648),
-                              fontSize: 12,
-                              height: 2,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          buildOtherInformation(product.other),
                           SizedBox(
                             height: 50,
                             width: MediaQuery.of(context).size.width,
@@ -160,6 +143,67 @@ class PostDetailPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  buildOtherInformation(Map<String, dynamic>? other) {
+    List<Widget> otherInformation = [];
+    if (other == null) return Container();
+
+    other.forEach(
+      (key, value) => otherInformation.add(
+        PostDetailInformationItem(
+          informationKey: key,
+          informationValue: value,
+        ),
+      ),
+    );
+
+    return Column(
+      children: [...otherInformation],
+    );
+  }
+}
+
+class PostDetailInformationItem extends StatelessWidget {
+  final String informationKey;
+  final String informationValue;
+  const PostDetailInformationItem({
+    Key? key,
+    required this.informationKey,
+    required this.informationValue,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          informationKey,
+          style: const TextStyle(
+            color: Color(0xff11435E),
+            fontSize: 18,
+            height: 1.5,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+          informationValue,
+          style: const TextStyle(
+            color: Color(0xff434648),
+            fontSize: 12,
+            height: 2,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        )
+      ],
     );
   }
 }

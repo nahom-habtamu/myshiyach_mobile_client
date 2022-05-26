@@ -94,6 +94,10 @@ class _AddPostPageState extends State<AddPostPage> {
     );
   }
 
+  renderAdditionalInputs() {
+    return Column(children: const []);
+  }
+
   renderSecondPageInputs() {
     return Column(
       children: const [
@@ -442,7 +446,6 @@ class _ModalSheetImagePickerState extends State<ModalSheetImagePicker> {
         imageQuality: 60,
       );
       if (pickedImage != null) {
-        print(pickedImage.length);
         Navigator.pop(context);
       }
     } catch (e) {

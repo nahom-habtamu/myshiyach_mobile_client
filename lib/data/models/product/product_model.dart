@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../../../domain/enitites/product.dart';
 
 class ProductModel extends Product {
@@ -11,7 +9,11 @@ class ProductModel extends Product {
     required String mainCategory,
     required String subCategory,
     required String brand,
-    // Map<String, dynamic>? other,
+    required String state,
+    required String createdAt,
+    required String createdBy,
+    required List<String> productImages,
+    Map<String, dynamic>? other,
   }) : super(
           id: id,
           title: title,
@@ -20,19 +22,44 @@ class ProductModel extends Product {
           mainCategory: mainCategory,
           subCategory: subCategory,
           brand: brand,
-          // other: other,
+          state: state,
+          createdAt: createdAt,
+          createdBy: createdBy,
+          productImages: productImages,
+          other: other,
         );
 
-  factory ProductModel.fromJson(dynamic json) {
+  factory ProductModel.fromJson(dynamic jsonProduct) {
     return ProductModel(
-      id: json["_id"],
-      title: json["title"],
-      description: json["description"],
-      price: json["price"],
-      mainCategory: json["mainCategory"],
-      subCategory: json["subCategory"],
-      brand: json["brand"],
-      // other: jsonDecode(json["other"]),
+      id: jsonProduct["_id"],
+      title: jsonProduct["title"],
+      description: jsonProduct["description"],
+      price: jsonProduct["price"],
+      mainCategory: jsonProduct["mainCategory"],
+      subCategory: jsonProduct["subCategory"],
+      brand: jsonProduct["brand"],
+      createdAt: jsonProduct["createdAt"],
+      createdBy: jsonProduct["createdBy"],
+      state: jsonProduct["state"],
+      productImages: List<String>.from(jsonProduct["productImages"]),
+      other: Map<String, dynamic>.from(jsonProduct["other"]),
+    );
+  }
+
+  factory ProductModel.fromProduct(Product p) {
+    return ProductModel(
+      id: p.id,
+      title: p.title,
+      description: p.description,
+      price: p.price,
+      mainCategory: p.mainCategory,
+      subCategory: p.subCategory,
+      brand: p.brand,
+      createdAt: p.createdAt,
+      createdBy: p.createdBy,
+      state: p.state,
+      productImages: p.productImages,
+      other: p.other,
     );
   }
 
@@ -44,6 +71,11 @@ class ProductModel extends Product {
         "mainCategory": mainCategory,
         "subCategory": subCategory,
         "brand": brand,
+        "createdAt": createdAt,
+        "createdBy": createdBy,
+        "state": state,
+        "productImages": productImages,
+        "other": other,
       };
 
   static List<ProductModel> parseProductsFromJson(dynamic jsonList) {

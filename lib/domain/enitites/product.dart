@@ -6,6 +6,10 @@ class Product {
   final String mainCategory;
   final String subCategory;
   final String brand;
+  final String state;
+  final String createdAt;
+  final String createdBy;
+  final List<String> productImages;
   Map<String, dynamic>? other;
 
   Product({
@@ -16,6 +20,10 @@ class Product {
     required this.mainCategory,
     required this.subCategory,
     required this.brand,
+    required this.state,
+    required this.createdAt,
+    required this.createdBy,
+    required this.productImages,
     this.other,
   });
 }

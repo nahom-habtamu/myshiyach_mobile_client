@@ -3,16 +3,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
 import '../../data/datasources/auth/auth_remote_data_source.dart';
+import '../../data/datasources/category/category_remote_data_source.dart';
 import '../../data/datasources/firebase/firebase_auth_data_source.dart';
 import '../../data/datasources/product/product_data_source.dart';
 import '../../data/datasources/product/product_local_data_source.dart';
 import '../../data/datasources/product/product_remote_data_source.dart';
 import '../../data/repositories/auth_repository.dart';
+import '../../data/repositories/category_repository.dart';
 import '../../data/repositories/product_repository.dart';
 import '../../domain/contracts/auth_service.dart';
+import '../../domain/contracts/category_service.dart';
 import '../../domain/contracts/product_service.dart';
 import '../../domain/usecases/authenticate_phone_number.dart';
 import '../../domain/usecases/get_all_products.dart';
+import '../../domain/usecases/get_categories.dart';
 import '../../domain/usecases/get_favorite_products.dart';
 import '../../domain/usecases/login.dart';
 import '../../domain/usecases/register_user.dart';
@@ -20,6 +24,7 @@ import '../../domain/usecases/set_favorite_product.dart';
 import '../../domain/usecases/verify_phone_number.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
 import '../../presentation/bloc/get_all_products/get_all_products_cubit.dart';
+import '../../presentation/bloc/get_categories/get_categories_cubit.dart';
 import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import '../../presentation/bloc/register_user/register_user_cubit.dart';
 import '../../presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
@@ -36,6 +41,7 @@ Future<void> init() async {
   sl.registerFactory(() => GetAllProductsCubit(sl()));
   sl.registerFactory(() => GetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
+  sl.registerFactory(() => GetAllCategoriesCubit(sl()));
 
   // usecases
   sl.registerLazySingleton(() => Login(sl()));
@@ -45,6 +51,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetAllProducts(sl()));
   sl.registerLazySingleton(() => GetFavoriteProducts(sl()));
   sl.registerLazySingleton(() => SetFavoriteProducts(sl()));
+  sl.registerLazySingleton(() => GetAllCategories(sl()));
 
   // repositories
 
@@ -58,6 +65,11 @@ Future<void> init() async {
   sl.registerLazySingleton<ProductService>(
     () => ProductRepository(
         remoteDataSource: sl(), networkInfo: sl(), localDataSource: sl()),
+  );
+
+  // Category
+  sl.registerLazySingleton<CategoryService>(
+    () => CategoryRepository(remoteDataSource: sl()),
   );
 
   // Data Sources
@@ -75,6 +87,10 @@ Future<void> init() async {
   sl.registerLazySingleton<ProductDataSource>(() => ProductRemoteDataSource());
 
   sl.registerLazySingleton(() => ProductLocalDataSource(sl()));
+
+  // Category
+
+  sl.registerLazySingleton(() => CategoryRemoteDataSource());
 
   // Shared Preferences
 

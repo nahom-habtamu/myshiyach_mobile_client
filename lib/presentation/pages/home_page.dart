@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/models/product/product_model.dart';
-import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 
-import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
-import 'post_detail_page.dart';
+import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/product.dart';
 import '../bloc/get_all_products/get_all_products_cubit.dart';
 import '../bloc/get_all_products/get_all_products_state.dart';
+import '../bloc/get_categories/get_categories_cubit.dart';
+import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
+import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import 'post_detail_page.dart';
 
 class HomePage extends StatefulWidget {
   static String routeName = "/homePage";
@@ -19,16 +20,37 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Product> favorites = [];
+  List<String> categories = ["All"];
   SetFavoriteProductsCubit? setFavoriteProductsCubit;
+  int selectedMainCategory = 0;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context.read<GetAllProductsCubit>().execute();
+      fetchAllCategories();
+      fetchAllProducts();
       setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
       initializeFavoriteProducts();
     });
+  }
+
+  fetchAllCategories() async {
+    var mainCategories =
+        await context.read<GetAllCategoriesCubit>().getAllCategories.call();
+    setState(() {
+      categories = [
+        ...categories,
+        ...mainCategories.map((e) => e.title).toList()
+      ];
+    });
+  }
+
+  fetchAllProducts() {
+    var productState = context.read<GetAllProductsCubit>().state;
+    if (productState is Empty || productState is Error) {
+      context.read<GetAllProductsCubit>().call();
+    }
   }
 
   initializeFavoriteProducts() async {
@@ -119,15 +141,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-              buildCategories([
-                "All",
-                "Electronics",
-                "Food",
-                "Trending",
-                "Electronics",
-                "Food",
-                "Trending"
-              ]),
+              categories.isNotEmpty ? buildCategories() : Container(),
               Expanded(
                 child: BlocBuilder<GetAllProductsCubit, GetAllProductsState>(
                   builder: (context, state) {
@@ -157,7 +171,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  buildCategories(List<String> categories) {
+  buildCategories() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: SizedBox(
@@ -166,28 +180,42 @@ class _HomePageState extends State<HomePage> {
           itemCount: categories.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Container(
-                height: 35,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 3,
-                  ),
-                  child: Center(
-                    child: Text(
-                      categories[index],
-                      style: const TextStyle(
-                        color: Colors.grey,
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedMainCategory = index;
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Container(
+                  height: 35,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0,
+                      vertical: 3,
+                    ),
+                    child: Center(
+                      child: Text(
+                        categories[index],
+                        style: TextStyle(
+                          color: index == selectedMainCategory
+                              ? Colors.white
+                              : Colors.grey,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xFF686666)),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
+                  decoration: BoxDecoration(
+                    color: index == selectedMainCategory
+                        ? const Color(0xff11435E)
+                        : null,
+                    border: index != selectedMainCategory
+                        ? Border.all(color: const Color(0xFF686666))
+                        : null,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(10),
+                    ),
                   ),
                 ),
               ),
@@ -199,15 +227,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   buildProductList(List<Product> products) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.83,
-      ),
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        return buildProduct(products[index]);
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<GetAllProductsCubit>().call();
       },
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.83,
+        ),
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          return buildProduct(products[index]);
+        },
+      ),
     );
   }
 
@@ -229,7 +262,7 @@ class _HomePageState extends State<HomePage> {
         ),
         child: Column(
           children: [
-            renderProductListItemImage(),
+            renderProductListItemImage(product.productImages.first),
             Expanded(
               child: Padding(
                 padding:
@@ -237,9 +270,9 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    renderTitle(),
-                    renderDescription(),
-                    renderPrice(),
+                    renderTitle(product.title),
+                    renderDescription(product.description),
+                    renderPrice(product.price),
                     renderTimerAndFavoriteIcon(product)
                   ],
                 ),
@@ -251,13 +284,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  SizedBox renderTitle() {
+  SizedBox renderTitle(title) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.45,
       height: 32,
-      child: const Text(
-        'BARGAIN Thinkpad X1 extreme 15”6 4K I7 GTX',
-        style: TextStyle(
+      child: Text(
+        title,
+        style: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.w700,
           fontSize: 12,
@@ -267,13 +300,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  SizedBox renderDescription() {
+  SizedBox renderDescription(description) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.45,
       height: 10,
-      child: const Text(
-        'I7-8750H (4.3 GHZ) * GTX 1050ti (4GB VRAM)',
-        style: TextStyle(
+      child: Text(
+        description,
+        style: const TextStyle(
           color: Color(0xff888888),
           fontSize: 8,
           letterSpacing: 0.2,
@@ -282,15 +315,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Padding renderPrice() {
+  Padding renderPrice(price) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: Container(
         color: const Color(0xffF5FFF8),
         width: MediaQuery.of(context).size.width * 0.45,
-        child: const Text(
-          '6500 birr',
-          style: TextStyle(
+        child: Text(
+          '\$${price.toString()}',
+          style: const TextStyle(
             color: Color(0xff34A853),
             fontSize: 16,
             fontWeight: FontWeight.w700,
@@ -315,10 +348,10 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(
           width: 4,
         ),
-        const Expanded(
+        Expanded(
           child: Text(
-            'Just Now',
-            style: TextStyle(
+            product.createdAt,
+            style: const TextStyle(
               color: Colors.grey,
               fontSize: 12,
             ),
@@ -353,23 +386,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<ProductModel> parseListToProductModelList() {
-    var favoritesToSave = favorites
-        .map(
-          (e) => ProductModel(
-            id: e.id,
-            title: e.title,
-            description: e.description,
-            price: e.price,
-            mainCategory: e.mainCategory,
-            subCategory: e.subCategory,
-            brand: e.brand,
-          ),
-        )
-        .toList();
+    var favoritesToSave =
+        favorites.map((e) => ProductModel.fromProduct(e)).toList();
     return favoritesToSave;
   }
 
-  SizedBox renderProductListItemImage() {
+  SizedBox renderProductListItemImage(image) {
     return SizedBox(
       height: 100,
       width: MediaQuery.of(context).size.width * 0.45,
@@ -379,7 +401,7 @@ class _HomePageState extends State<HomePage> {
           topRight: Radius.circular(15),
         ),
         child: Image.network(
-          'https://images.unsplash.com/photo-1652487346675-908df8c01529?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=60&raw_url=true&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500',
+          image,
           fit: BoxFit.cover,
         ),
       ),

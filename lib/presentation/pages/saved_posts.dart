@@ -98,19 +98,8 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
   }
 
   void updateDataInLocalSource(List<Product> products) {
-    var mappedToProductModel = products
-        .map(
-          (e) => ProductModel(
-            id: e.id,
-            title: e.title,
-            description: e.description,
-            price: e.price,
-            mainCategory: e.mainCategory,
-            subCategory: e.subCategory,
-            brand: e.brand,
-          ),
-        )
-        .toList();
+    var mappedToProductModel =
+        products.map((e) => ProductModel.fromProduct(e)).toList();
 
     setFavoriteProductsCubit!.setFavoriteProducts(mappedToProductModel);
   }
@@ -226,10 +215,11 @@ class SavedPostListItem extends StatelessWidget {
             height: 100,
             child: Row(
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 8.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
                   child: CircleAvatar(
                     backgroundColor: Colors.teal,
+                    backgroundImage: NetworkImage(product.productImages.first),
                     radius: 45,
                   ),
                 ),
