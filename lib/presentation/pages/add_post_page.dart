@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mnale_client/presentation/bloc/get_categories/get_categories_state.dart';
+
+import '../../domain/enitites/main_category.dart';
+import '../bloc/get_categories/get_categories_cubit.dart';
 
 class AddPostPage extends StatefulWidget {
   static String routeName = "/addPostPage";
@@ -11,6 +16,15 @@ class AddPostPage extends StatefulWidget {
 
 class _AddPostPageState extends State<AddPostPage> {
   int currentInputPageState = 0;
+  int selectedMainCategoryIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      context.read<GetAllCategoriesCubit>().call();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -27,69 +41,86 @@ class _AddPostPageState extends State<AddPostPage> {
           elevation: 0,
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.8,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              ),
-            ),
-            padding: const EdgeInsets.only(
-              top: 25,
-              left: 25,
-              right: 25,
-            ),
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 25,
+        body: BlocBuilder<GetAllCategoriesCubit, GetAllCategoriesState>(
+            builder: (context, state) {
+          if (state is Loaded) {
+            return SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.8,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
+                  ),
                 ),
-                currentInputPageState == 0
-                    ? renderFirstPageInputs()
-                    : renderSecondPageInputs(),
-                const SizedBox(
-                  height: 25,
+                padding: const EdgeInsets.only(
+                  top: 25,
+                  left: 25,
+                  right: 25,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ChangeInputButton(
-                      text: "Cancel",
-                      onTap: () {
-                        if (currentInputPageState == 1) {
-                          setState(() {
-                            currentInputPageState = 0;
-                          });
-                        } else {
-                          // Navigator.of(context).pushNamed()
-                        }
-                      },
+                    const SizedBox(
+                      height: 25,
                     ),
-                    ChangeInputButton(
-                      text: currentInputPageState == 0 ? "Next" : "Post",
-                      backgroundColor: const Color(0xFF11435E),
-                      textColor: Colors.white,
-                      onTap: () {
-                        if (currentInputPageState == 0) {
-                          setState(() {
-                            currentInputPageState = 1;
-                          });
-                        } else {
-                          // Navigator.of(context).pushNamed()
-                        }
-                      },
+                    currentInputPageState == 0
+                        ? renderFirstPageInputs(state.categories)
+                        : renderSecondPageInputs(state.categories),
+                    const SizedBox(
+                      height: 25,
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ChangeInputButton(
+                          text: "Cancel",
+                          onTap: () {
+                            if (currentInputPageState == 1) {
+                              setState(() {
+                                currentInputPageState = 0;
+                              });
+                            } else {
+                              // Navigator.of(context).pushNamed()
+                            }
+                          },
+                        ),
+                        ChangeInputButton(
+                          text: currentInputPageState == 0 ? "Next" : "Post",
+                          backgroundColor: const Color(0xFF11435E),
+                          textColor: Colors.white,
+                          onTap: () {
+                            if (currentInputPageState == 0) {
+                              setState(() {
+                                currentInputPageState = 1;
+                              });
+                            } else {
+                              // Navigator.of(context).pushNamed()
+                            }
+                          },
+                        ),
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
-          ),
-        ),
+                ),
+              ),
+            );
+          } else if (state is Loading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is Error) {
+            return Center(
+              child: Text(state.message),
+            );
+          } else {
+            return const Center(
+              child: Text("EMPTY"),
+            );
+          }
+        }),
       ),
     );
   }
@@ -98,66 +129,82 @@ class _AddPostPageState extends State<AddPostPage> {
     return Column(children: const []);
   }
 
-  renderSecondPageInputs() {
+  renderSecondPageInputs(List<MainCategory> categories) {
+    var subCategoriesToDisplay = categories
+        .elementAt(selectedMainCategoryIndex)
+        .subCategories
+        .map((e) => e.title)
+        .toList();
     return Column(
-      children: const [
-        AddPostDropDownInput(
+      children: [
+        const AddPostDropDownInput(
           hintText: "Post State",
+          items: ["New", "Old", "Slightly Used"],
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
         AddPostDropDownInput(
           hintText: "Sub Category",
+          items: [...subCategoriesToDisplay],
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
-        AddPostInput(
+        const AddPostInput(
           hintText: "Contact Phone",
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
-        ModalSheetImagePicker(
+        const ModalSheetImagePicker(
           hintText: "Images",
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
       ],
     );
   }
 
-  renderFirstPageInputs() {
+  renderFirstPageInputs(List<MainCategory> categories) {
+    var mainCategories = categories.map((c) => c.title).toList();
     return Column(
-      children: const [
-        AddPostInput(
+      children: [
+        const AddPostInput(
           hintText: "Item Title",
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
-        AddPostInput(
+        const AddPostInput(
           hintText: "Description",
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
-        AddPostInput(
+        const AddPostInput(
           hintText: "Price",
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
-        AddPostInput(
+        const AddPostInput(
           hintText: "Quantity",
         ),
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
         AddPostDropDownInput(
           hintText: "Category",
+          items: [...mainCategories],
+          onChanged: (value) {
+            var indexOfCurrentlySelectedMainCategory =
+                mainCategories.indexOf(value);
+            setState(() {
+              selectedMainCategoryIndex = indexOfCurrentlySelectedMainCategory;
+            });
+          },
         ),
       ],
     );
@@ -264,14 +311,17 @@ class AddPostInput extends StatelessWidget {
 
 class AddPostDropDownInput extends StatelessWidget {
   final String hintText;
+  final List<String> items;
+  final Function? onChanged;
   const AddPostDropDownInput({
     Key? key,
     required this.hintText,
+    required this.items,
+    this.onChanged,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var items = ["A", "B", "C"];
     return SizedBox(
       height: 50,
       child: DropdownButtonFormField(
@@ -290,7 +340,7 @@ class AddPostDropDownInput extends StatelessWidget {
           color: Colors.black,
           fontSize: 15,
         ),
-        onChanged: (value) => {},
+        onChanged: (value) => {onChanged!(value)},
         decoration: InputDecoration(
           labelText: hintText,
           border: const OutlineInputBorder(
