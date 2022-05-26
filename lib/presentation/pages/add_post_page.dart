@@ -5,10 +5,10 @@ import '../bloc/get_categories/get_categories_state.dart';
 import '../../domain/enitites/main_category.dart';
 import '../bloc/get_categories/get_categories_cubit.dart';
 import '../widgets/add_post/cancel_button.dart';
+import '../widgets/add_post/first_page_inputs.dart';
 import '../widgets/add_post/next_or_post_button.dart';
-import '../widgets/add_post/add_post_dropdown_dart.dart';
 import '../widgets/add_post/add_post_input.dart';
-import '../widgets/add_post/modal_sheet_image_picker.dart';
+import '../widgets/add_post/second_page_inputs.dart';
 
 class AddPostPage extends StatefulWidget {
   static String routeName = "/addPostPage";
@@ -46,24 +46,26 @@ class _AddPostPageState extends State<AddPostPage> {
           centerTitle: true,
         ),
         body: BlocBuilder<GetAllCategoriesCubit, GetAllCategoriesState>(
-            builder: (context, state) {
-          if (state is Loaded) {
-            var isThereAdditionalData = isThereThirdInputList(state.categories);
-            return renderMainContent(state.categories, isThereAdditionalData);
-          } else if (state is Loading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is Error) {
-            return Center(
-              child: Text(state.message),
-            );
-          } else {
-            return const Center(
-              child: Text("EMPTY"),
-            );
-          }
-        }),
+          builder: (context, state) {
+            if (state is Loaded) {
+              var isThereAdditionalData =
+                  isThereThirdInputList(state.categories);
+              return renderMainContent(state.categories, isThereAdditionalData);
+            } else if (state is Loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is Error) {
+              return Center(
+                child: Text(state.message),
+              );
+            } else {
+              return const Center(
+                child: Text("EMPTY"),
+              );
+            }
+          },
+        ),
       ),
     );
   }
@@ -128,14 +130,18 @@ class _AddPostPageState extends State<AddPostPage> {
       return renderSecondPageInputs(categories);
     } else if (isThereThirdInputList(categories) &&
         currentInputPageState == 2) {
-      var additionalInputs = categories[selectedMainCategoryIndex]
-          .subCategories[0]
-          .additionalData
-          .map((e) => AddPostInput(hintText: e));
-      return Column(
-        children: [...additionalInputs],
-      );
+      return renderThirdPageInputs(categories);
     }
+  }
+
+  Column renderThirdPageInputs(List<MainCategory> categories) {
+    var additionalInputs = categories[selectedMainCategoryIndex]
+        .subCategories[0]
+        .additionalData
+        .map((e) => AddPostInput(hintText: e));
+    return Column(
+      children: [...additionalInputs],
+    );
   }
 
   bool isThereThirdInputList(List<MainCategory> categories) {
@@ -151,78 +157,14 @@ class _AddPostPageState extends State<AddPostPage> {
         .subCategories
         .map((e) => e.title)
         .toList();
-    return Column(
-      children: [
-        const AddPostDropDownInput(
-          hintText: "Post State",
-          items: ["New", "Old", "Slightly Used"],
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        AddPostDropDownInput(
-          hintText: "Sub Category",
-          items: [...subCategoriesToDisplay],
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        const AddPostInput(
-          hintText: "Contact Phone",
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        const ModalSheetImagePicker(
-          hintText: "Images",
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-      ],
-    );
+    return SecondPageInputs(subCategoriesToDisplay: subCategoriesToDisplay);
   }
 
   renderFirstPageInputs(List<MainCategory> categories) {
     var mainCategories = categories.map((c) => c.title).toList();
-    return Column(
-      children: [
-        const AddPostInput(
-          hintText: "Item Title",
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        const AddPostInput(
-          hintText: "Description",
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        const AddPostInput(
-          hintText: "Price",
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        const AddPostInput(
-          hintText: "Quantity",
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        AddPostDropDownInput(
-          hintText: "Category",
-          items: [...mainCategories],
-          onChanged: (value) {
-            var indexOfCurrentlySelectedMainCategory =
-                mainCategories.indexOf(value);
-            setState(() {
-              selectedMainCategoryIndex = indexOfCurrentlySelectedMainCategory;
-            });
-          },
-        ),
-      ],
-    );
+    return FirstPageInputs(mainCategories: mainCategories);
   }
 }
+
+
+
