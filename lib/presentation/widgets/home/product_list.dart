@@ -4,15 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/models/product/product_model.dart';
 import '../../../domain/enitites/product.dart';
 import '../../bloc/get_all_products/get_all_products_cubit.dart';
-import '../../bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import 'product_list_item.dart';
 
 class ProductList extends StatefulWidget {
+  final List<Product> favorites;
   final List<Product> products;
   const ProductList({
     Key? key,
     required this.products,
+    required this.favorites,
   }) : super(key: key);
 
   @override
@@ -22,25 +23,13 @@ class ProductList extends StatefulWidget {
 class _ProductListState extends State<ProductList> {
   SetFavoriteProductsCubit? setFavoriteProductsCubit;
   List<Product> favorites = [];
-
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
-      initializeFavoriteProducts();
     });
-  }
-
-  initializeFavoriteProducts() async {
-    var result = await context
-        .read<GetFavoriteProductsCubit>()
-        .getFavoriteProducts
-        .call();
-    setState(() {
-      favorites = [...result];
-    });
+    
   }
 
   @override
@@ -50,6 +39,7 @@ class _ProductListState extends State<ProductList> {
         context.read<GetAllProductsCubit>().call();
       },
       child: GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 0.83,

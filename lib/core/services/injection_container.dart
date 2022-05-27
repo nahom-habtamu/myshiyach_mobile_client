@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:mnale_client/presentation/bloc/display_all_products/display_all_products_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -38,6 +39,7 @@ Future<void> init() async {
   sl.registerFactory(() => AuthCubit(sl()));
   sl.registerFactory(() => VerifyPhoneNumberCubit(sl()));
   sl.registerFactory(() => RegisterUserCubit(sl(), sl()));
+  sl.registerFactory(() => DisplayAllProductsCubit(sl(), sl(), sl()));
   sl.registerFactory(() => GetAllProductsCubit(sl()));
   sl.registerFactory(() => GetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));

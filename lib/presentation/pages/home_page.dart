@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/enitites/product.dart';
-import '../bloc/get_all_products/get_all_products_cubit.dart';
-import '../bloc/get_all_products/get_all_products_state.dart';
-import '../bloc/get_categories/get_categories_cubit.dart';
-import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../bloc/display_all_products/display_all_products_cubit.dart';
+import '../bloc/display_all_products/display_all_products_state.dart';
 import '../widgets/home/main_category_bar.dart';
 import '../widgets/home/product_list.dart';
 import '../widgets/home/search_bar.dart';
@@ -19,35 +17,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> categories = ["All"];
-  SetFavoriteProductsCubit? setFavoriteProductsCubit;
   int selectedMainCategory = 0;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      fetchAllCategories();
-      fetchAllProducts();
-      setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
+      fetchAllNeededToDisplayProductList();
     });
   }
 
-  fetchAllCategories() async {
-    var mainCategories =
-        await context.read<GetAllCategoriesCubit>().getAllCategories.call();
-    setState(() {
-      categories = [
-        ...categories,
-        ...mainCategories.map((e) => e.title).toList()
-      ];
-    });
-  }
-
-  fetchAllProducts() {
-    var productState = context.read<GetAllProductsCubit>().state;
-    if (productState is Empty || productState is Error) {
-      context.read<GetAllProductsCubit>().call();
+  fetchAllNeededToDisplayProductList() {
+    var state = context.read<DisplayAllProductsCubit>().state;
+    if (state is Empty || state is Error) {
+      context.read<DisplayAllProductsCubit>().call();
     }
   }
 
@@ -55,9 +38,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xffF1F1F1),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+          padding: const EdgeInsets.all(25),
           child: Column(
             children: [
               const Padding(
@@ -68,28 +50,34 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SearchBar(),
-              buildCategories(),
-              Expanded(
-                child: BlocBuilder<GetAllProductsCubit, GetAllProductsState>(
-                  builder: (context, state) {
-                    if (state is Loaded) {
-                      return Center(
-                        child: buildProductList(state.products),
-                      );
-                    } else if (state is Loading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (state is Error) {
-                      return Text(
-                        state.message,
-                        style: const TextStyle(color: Colors.red),
-                      );
-                    } else {
-                      return const Text('EMPTY');
-                    }
-                  },
-                ),
+              BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
+                builder: (context, state) {
+                  if (state is Loaded) {
+                    var categories =
+                        state.categories.map((e) => e.title).toList();
+                    return buildCategories(categories);
+                  } else {
+                    return Container();
+                  }
+                },
+              ),
+              BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
+                builder: (context, state) {
+                  if (state is Loaded) {
+                    return buildProductList(state.products, state.favorites);
+                  } else if (state is Loading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (state is Error) {
+                    return Text(
+                      state.message,
+                      style: const TextStyle(color: Colors.red),
+                    );
+                  } else {
+                    return const Text('EMPTY');
+                  }
+                },
               )
             ],
           ),
@@ -98,7 +86,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  buildCategories() {
+  buildCategories(List<String> categories) {
     return MainCategoryBar(
       categories: categories,
       selectedMainCategory: selectedMainCategory,
@@ -110,7 +98,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  buildProductList(List<Product> products) {
-    return ProductList(products: products);
+  buildProductList(List<Product> products, List<Product> favorites) {
+    return Expanded(
+      child: ProductList(products: products, favorites: favorites),
+    );
   }
 }

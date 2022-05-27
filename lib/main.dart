@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/services/injection_container.dart' as di;
 import 'core/services/injection_container.dart';
 import 'presentation/bloc/auth/auth_cubit.dart';
+import 'presentation/bloc/display_all_products/display_all_products_cubit.dart';
 import 'presentation/bloc/get_all_products/get_all_products_cubit.dart';
 import 'presentation/bloc/get_categories/get_categories_cubit.dart';
 import 'presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
@@ -43,6 +44,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => sl<RegisterUserCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<DisplayAllProductsCubit>(),
         ),
         BlocProvider(
           create: (_) => sl<GetAllProductsCubit>(),
