@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'login_page.dart';
 
 import '../bloc/register_user/register_user_cubit.dart';
 import '../bloc/register_user/register_user_state.dart';
@@ -73,6 +75,14 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               ),
               BlocBuilder<RegisterUserCubit, RegisterUserState>(
                 builder: (context, state) {
+                  if (state is Successfull) {
+                    SchedulerBinding.instance!.addPostFrameCallback((_) {
+                      Navigator.pushReplacementNamed(
+                        context,
+                        LoginPage.routeName,
+                      );
+                    });
+                  }
                   if (state is Loading) {
                     return const Center(child: CircularProgressIndicator());
                   } else {

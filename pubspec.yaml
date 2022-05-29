@@ -17,6 +17,7 @@ dependencies:
   shared_preferences: ^2.0.15
   firebase_core:
   firebase_auth:
+  firebase_storage:
   pinput:
   pin_code_fields: ^7.4.0
   carousel_slider: ^4.1.1

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mnale_client/domain/enitites/sub_category.dart';
 
+import '../../../domain/enitites/sub_category.dart';
 import 'add_post_dropdown_dart.dart';
 import 'add_post_input.dart';
 import 'cancel_button.dart';
@@ -28,8 +28,7 @@ class SecondPageInputs extends StatefulWidget {
 class _SecondPageInputsState extends State<SecondPageInputs> {
   Map<String, dynamic> secondInputValues = {};
 
-  updateStateOnInputChange(String inputKey, String inputValue) {
-    print("INPUT KEY " + inputKey + " WITH VALUE " + inputValue + " ADDED ");
+  updateStateOnInputChange(String inputKey, dynamic inputValue) {
     setState(() {
       secondInputValues = {...secondInputValues, inputKey: inputValue};
     });
@@ -40,12 +39,14 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
     var postStateToShowOnDropdown = ["New", "Old", "Slightly Used"]
         .map((m) => {"value": m, "preview": m})
         .toList();
-    var subCategoryToShowOnDropDown = widget.subCategoriesToDisplay.map(
-      (m) => {
-        "value": m.id,
-        "preview": m.title,
-      },
-    ).toList();
+    var subCategoryToShowOnDropDown = widget.subCategoriesToDisplay
+        .map(
+          (m) => {
+            "value": m.id,
+            "preview": m.title,
+          },
+        )
+        .toList();
 
     return Column(
       children: [
@@ -73,10 +74,10 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
           height: 30,
         ),
         ImagePickerInput(
-            hintText: "Images",
-            onImagePicked: (value) {
-              print(value.toString());
-            }),
+          hintText: "Images",
+          onImagePicked: (value) =>
+              updateStateOnInputChange("productImages", value),
+        ),
         const SizedBox(
           height: 30,
         ),

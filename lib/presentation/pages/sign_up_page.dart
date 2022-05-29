@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/presentation/screen_arguments/otp_verification_page_argument.dart';
 
 import '../../data/models/register_user/register_user_request_model.dart';
+import '../screen_arguments/otp_verification_page_argument.dart';
 import '../bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import '../bloc/verify_phone_number/verify_phone_number_state.dart';
 import '../widgets/auth_input.dart';

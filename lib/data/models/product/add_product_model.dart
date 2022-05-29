@@ -6,7 +6,7 @@ class AddProductModel {
   final String subCategory;
   final String brand;
   final String state;
-  final List<String> productImages;
+  List<String> productImages;
   Map<String, dynamic>? other;
 
   AddProductModel({
@@ -30,10 +30,7 @@ class AddProductModel {
       subCategory: json["subCategory"],
       brand: json["brand"],
       state: json["state"],
-      productImages: [
-        "https://images.unsplash.com/photo-1653655205981-84fa6d15e551?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-        "https://images.unsplash.com/photo-1653731448468-823d9eb59a87?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60"
-      ],
+      productImages: [],
       other: json["other"],
     );
   }
@@ -47,6 +44,6 @@ class AddProductModel {
         "brand": brand,
         "state": state,
         "productImages": productImages,
-        "other" : other
+        "other": other
       };
 }

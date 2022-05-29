@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/login/login_request_model.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../widgets/auth_input.dart';
+import 'home_page.dart';
 import 'sign_up_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -146,7 +148,13 @@ class _LoginPageState extends State<LoginPage> {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is Loaded) {
-          return const Text('SUCCESSFULL');
+          SchedulerBinding.instance!.addPostFrameCallback((_) {
+            Navigator.pushReplacementNamed(
+              context,
+              HomePage.routeName,
+            );
+          });
+          return Container();
         } else if (state is Error) {
           return Text(
             state.message,

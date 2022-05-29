@@ -7,4 +7,5 @@ abstract class ProductService {
   Future<List<ProductModel>> getAllFavoriteProducts();
   Future<void> setFavoriteProducts(List<ProductModel> products);
   Future<ProductModel> createProduct(AddProductModel addProductModel);
+  Future<List<String>> uploadProductPictures(List<dynamic> images);
 }

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
 import '../../data/datasources/auth/auth_remote_data_source.dart';
+import '../../data/datasources/firebase/firebase_storage_data_source.dart';
 import '../../data/datasources/category/category_remote_data_source.dart';
 import '../../data/datasources/firebase/firebase_auth_data_source.dart';
 import '../../data/datasources/product/product_data_source.dart';
@@ -23,6 +24,7 @@ import '../../domain/usecases/login.dart';
 import '../../domain/usecases/register_user.dart';
 import '../../domain/usecases/set_favorite_product.dart';
 import '../../domain/usecases/verify_phone_number.dart';
+import '../../domain/usecases/upload_product_pictures.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
 import '../../presentation/bloc/create_product/create_product_cubit.dart';
 import '../../presentation/bloc/get_all_products/get_all_products_cubit.dart';
@@ -46,7 +48,12 @@ Future<void> init() async {
   sl.registerFactory(() => GetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => GetAllCategoriesCubit(sl()));
-  sl.registerFactory(() => CreateProductCubit(sl()));
+  sl.registerFactory(
+    () => CreateProductCubit(
+      createProduct: sl(),
+      uploadProductPictures: sl(),
+    ),
+  );
 
   // usecases
   sl.registerLazySingleton(() => Login(sl()));
@@ -58,6 +65,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SetFavoriteProducts(sl()));
   sl.registerLazySingleton(() => GetAllCategories(sl()));
   sl.registerLazySingleton(() => CreateProduct(sl()));
+  sl.registerLazySingleton(() => UploadProductPictures(sl()));
 
   // repositories
 
@@ -70,7 +78,10 @@ Future<void> init() async {
   // Product
   sl.registerLazySingleton<ProductService>(
     () => ProductRepository(
-        remoteDataSource: sl(), networkInfo: sl(), localDataSource: sl()),
+        remoteDataSource: sl(),
+        networkInfo: sl(),
+        localDataSource: sl(),
+        storageService: sl()),
   );
 
   // Category
@@ -83,6 +94,11 @@ Future<void> init() async {
   // Auth
   sl.registerLazySingleton<FirebaseAuthDataSource>(
     () => FirebaseDataSouceImpl(),
+  );
+
+  // UPLOAD SERVICE
+  sl.registerLazySingleton<FirebaseStorageDataSource>(
+    () => FirebaseStorageDataSourceImpl(),
   );
 
   sl.registerLazySingleton(() => AuthRemoteDataSource());

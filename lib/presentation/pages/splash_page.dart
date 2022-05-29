@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'master_page.dart';
+import 'intro_page.dart';
 
 class SplashPage extends StatefulWidget {
   static String routeName = "/splashPage";
@@ -21,7 +21,7 @@ class _SplashPageState extends State<SplashPage> {
         () => {
           Navigator.pushReplacementNamed(
             context,
-            MasterPage.routeName,
+            IntroPage.routeName,
           )
         },
       );

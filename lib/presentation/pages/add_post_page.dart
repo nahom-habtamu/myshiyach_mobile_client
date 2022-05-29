@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,7 +91,7 @@ class _AddPostPageState extends State<AddPostPage> {
   renderMainContent(List<MainCategory> categories, bool isThereAdditionalData) {
     return BlocBuilder<CreateProductCubit, CreateProductState>(
         builder: (context, state) {
-      if (state is AddPostNotTriggered) {
+      if (state is AddPostNotTriggered || state is AddPostError) {
         return SingleChildScrollView(
           child: Container(
             height: MediaQuery.of(context).size.height * 0.8,
@@ -123,15 +122,15 @@ class _AddPostPageState extends State<AddPostPage> {
         return const Center(
           child: CircularProgressIndicator(),
         );
-      } else if (state is AddPostSuccessfull) {
+      } else {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
           Navigator.pushReplacementNamed(
             context,
             PostConfirmationPage.routeName,
           );
         });
+        return Container();
       }
-      return Container();
     });
   }
 
@@ -173,10 +172,9 @@ class _AddPostPageState extends State<AddPostPage> {
   }
 
   renderSecondPageInputs(
-    List<MainCategory> categories, bool isThereAdditionalData) {
-    var subCategoriesToDisplay = categories
-        .elementAt(selectedMainCategoryIndex)
-        .subCategories.toList();
+      List<MainCategory> categories, bool isThereAdditionalData) {
+    var subCategoriesToDisplay =
+        categories.elementAt(selectedMainCategoryIndex).subCategories.toList();
 
     return SecondPageInputs(
       isThereAdditionalData: isThereAdditionalData,
@@ -204,7 +202,10 @@ class _AddPostPageState extends State<AddPostPage> {
 
   void createProduct() {
     var productToAdd = AddProductModel.fromJson(mergedInputValues);
-    context.read<CreateProductCubit>().call(productToAdd);
+    context.read<CreateProductCubit>().call(
+      productToAdd,
+      mergedInputValues["productImages"],
+    );
   }
 
   renderFirstPageInputs(List<MainCategory> categories) {
