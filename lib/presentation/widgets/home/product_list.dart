@@ -39,7 +39,6 @@ class _ProductListState extends State<ProductList> {
         context.read<GetAllProductsCubit>().call();
       },
       child: GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 0.83,

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AddPostInput extends StatelessWidget {
+  final Function onChanged;
   final String hintText;
   const AddPostInput({
     Key? key,
-    required this.hintText,
+    required this.hintText, required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -17,7 +18,7 @@ class AddPostInput extends StatelessWidget {
           fontSize: 15,
         ),
         textAlign: TextAlign.center,
-        onChanged: (value) => {},
+        onChanged: (value) => onChanged(value),
         decoration: InputDecoration(
           labelText: hintText,
           border: const OutlineInputBorder(

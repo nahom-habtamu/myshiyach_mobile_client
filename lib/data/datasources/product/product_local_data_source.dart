@@ -18,7 +18,7 @@ class ProductLocalDataSource {
       );
       return products;
     }
-    throw Exception("No Favorite Products");
+    return [];
   }
 
   Future<void> setFavoriteProducts(List<ProductModel> products) async {

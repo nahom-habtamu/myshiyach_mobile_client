@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../../../domain/enitites/main_category.dart';
+
 class AddPostDropDownInput extends StatelessWidget {
   final String hintText;
-  final List<String> items;
-  final Function? onChanged;
+  final List<Map<String,String>> items;
+  final Function onChanged;
   const AddPostDropDownInput({
     Key? key,
     required this.hintText,
     required this.items,
-    this.onChanged,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -16,11 +18,11 @@ class AddPostDropDownInput extends StatelessWidget {
     return SizedBox(
       height: 50,
       child: DropdownButtonFormField(
-        items: items.map((category) {
+        items: items.map((item) {
           return DropdownMenuItem(
-            value: category,
+            value: item["value"],
             child: Text(
-              category,
+              item["preview"]!,
               style: const TextStyle(
                 color: Color(0x893D3A3A),
               ),
@@ -31,7 +33,7 @@ class AddPostDropDownInput extends StatelessWidget {
           color: Colors.black,
           fontSize: 15,
         ),
-        onChanged: (value) => {onChanged!(value)},
+        onChanged: (value) => onChanged(value),
         decoration: InputDecoration(
           labelText: hintText,
           border: const OutlineInputBorder(

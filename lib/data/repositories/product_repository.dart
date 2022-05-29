@@ -1,8 +1,8 @@
-import 'package:mnale_client/data/datasources/product/product_local_data_source.dart';
-
 import '../../core/services/network_info.dart';
 import '../../domain/contracts/product_service.dart';
 import '../datasources/product/product_remote_data_source.dart';
+import '../datasources/product/product_local_data_source.dart';
+import '../models/product/add_product_model.dart';
 import '../models/product/product_model.dart';
 
 class ProductRepository extends ProductService {
@@ -29,5 +29,10 @@ class ProductRepository extends ProductService {
   @override
   Future<void> setFavoriteProducts(List<ProductModel> products) {
     return localDataSource.setFavoriteProducts(products);
+  }
+
+  @override
+  Future<ProductModel> createProduct(AddProductModel addProductModel) {
+    return remoteDataSource.createProduct(addProductModel);
   }
 }

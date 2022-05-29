@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ModalSheetImagePicker extends StatefulWidget {
+class ImagePickerInput extends StatefulWidget {
+  final Function onImagePicked;
   final String hintText;
-  const ModalSheetImagePicker({
+  const ImagePickerInput({
     Key? key,
     required this.hintText,
+    required this.onImagePicked,
   }) : super(key: key);
 
   @override
-  State<ModalSheetImagePicker> createState() => _ModalSheetImagePickerState();
+  State<ImagePickerInput> createState() => _ImagePickerInputState();
 }
 
-class _ModalSheetImagePickerState extends State<ModalSheetImagePicker> {
+class _ImagePickerInputState extends State<ImagePickerInput> {
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -47,6 +49,7 @@ class _ModalSheetImagePickerState extends State<ModalSheetImagePicker> {
       ),
     );
   }
+
   renderImagePicker(bool isCamera) {
     return MaterialButton(
       highlightColor: Colors.black87,
@@ -78,14 +81,12 @@ class _ModalSheetImagePickerState extends State<ModalSheetImagePicker> {
 
   pickImage() async {
     try {
-      var pickedImage = await _picker.pickMultiImage(
+      var pickedImages = await _picker.pickMultiImage(
         maxHeight: 480,
         maxWidth: 600,
         imageQuality: 60,
       );
-      if (pickedImage != null) {
-        Navigator.pop(context);
-      }
+      widget.onImagePicked(pickedImages);
     } catch (e) {
       return null;
     }
