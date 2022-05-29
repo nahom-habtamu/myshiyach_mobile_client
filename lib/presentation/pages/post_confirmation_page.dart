@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mnale_client/presentation/pages/master_page.dart';
 
 import 'home_page.dart';
 
@@ -67,7 +68,7 @@ class PostConfirmationPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, HomePage.routeName);
+                    Navigator.pushReplacementNamed(context, MasterPage.routeName);
                   },
                   child: const Text('Go to Homepage'),
                   style: ElevatedButton.styleFrom(
