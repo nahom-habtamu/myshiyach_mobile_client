@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/models/product/product_model.dart';
 import '../../../domain/enitites/product.dart';
-import '../../bloc/get_all_products/get_all_products_cubit.dart';
+import '../../../data/models/product/product_model.dart';
+import '../../bloc/display_all_products/display_all_products_cubit.dart';
 import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import 'product_list_item.dart';
 
@@ -28,6 +28,9 @@ class _ProductListState extends State<ProductList> {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
+      setState(() {
+        favorites = [...widget.favorites];
+      });
     });
     
   }
@@ -36,7 +39,7 @@ class _ProductListState extends State<ProductList> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        context.read<GetAllProductsCubit>().call();
+        context.read<DisplayAllProductsCubit>().call();
       },
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

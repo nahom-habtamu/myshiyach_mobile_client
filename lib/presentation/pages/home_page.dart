@@ -66,8 +66,10 @@ class _HomePageState extends State<HomePage> {
                   if (state is Loaded) {
                     return buildProductList(state.products, state.favorites);
                   } else if (state is Loading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
+                    return const Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     );
                   } else if (state is Error) {
                     return Text(
