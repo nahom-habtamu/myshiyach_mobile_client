@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../data/models/login/login_request_model.dart';
 import '../../data/models/login/login_result_model.dart';
 import '../../data/models/register_user/register_user_request_model.dart';
+import '../../data/models/user/user_model.dart';
 
 abstract class AuthService {
   Future<LoginResultModel> login(LoginRequestModel loginRequest);
@@ -14,4 +15,5 @@ abstract class AuthService {
     Function(String verficationID, int? resendToken) onCodeSent,
   );
   Future<void> authenticatePhoneNumber(PhoneAuthCredential credential);
+  Future<UserModel> getCurrentUser(String token);
 }

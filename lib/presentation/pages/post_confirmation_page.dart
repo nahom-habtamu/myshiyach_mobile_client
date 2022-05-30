@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mnale_client/presentation/pages/master_page.dart';
 
-import 'home_page.dart';
+import 'master_page.dart';
 
 class PostConfirmationPage extends StatelessWidget {
   static String routeName = '/postConfirmationPage';

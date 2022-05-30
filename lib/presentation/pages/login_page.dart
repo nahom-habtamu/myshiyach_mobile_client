@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             BlocBuilder<AuthCubit, AuthState>(
               builder: (context, state) {
-                if (state is Loading) {
+                if (state is AuthLoading) {
                   return const Center(child: CircularProgressIndicator());
                 } else {
                   return renderLoginButton();
@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
   BlocBuilder<AuthCubit, AuthState> renderLoginResult() {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
-        if (state is Loaded) {
+        if (state is AuthSuccessfull) {
           SchedulerBinding.instance!.addPostFrameCallback((_) {
             Navigator.pushReplacementNamed(
               context,
@@ -155,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
             );
           });
           return Container();
-        } else if (state is Error) {
+        } else if (state is AuthError) {
           return Text(
             state.message,
             style: const TextStyle(color: Colors.red),

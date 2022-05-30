@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/enitites/main_category.dart';
-
 class AddPostDropDownInput extends StatelessWidget {
   final String hintText;
   final List<Map<String,String>> items;

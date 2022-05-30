@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/presentation/bloc/auth/auth_cubit.dart';
+import 'package:mnale_client/presentation/bloc/auth/auth_state.dart';
 
 import '../../domain/enitites/product.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
@@ -36,6 +38,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      print(authState.loginResult.token);
+      print(authState.currentUser);
+    }
     return SafeArea(
       child: Scaffold(
         body: Padding(
