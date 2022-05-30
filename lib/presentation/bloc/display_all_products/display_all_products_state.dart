@@ -1,5 +1,5 @@
-import 'package:mnale_client/domain/enitites/main_category.dart';
-import 'package:mnale_client/domain/enitites/product.dart';
+import '../../../domain/enitites/main_category.dart';
+import '../../../domain/enitites/product.dart';
 
 abstract class DisplayAllProductsState {}
 

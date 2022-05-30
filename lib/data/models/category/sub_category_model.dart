@@ -19,7 +19,7 @@ class SubCategoryModel extends SubCategory {
     );
   }
 
-  static List<SubCategoryModel> parseProductsFromJson(dynamic jsonList) {
+  static List<SubCategoryModel> parseSubCategoriesFromJson(dynamic jsonList) {
     var subCategories = <SubCategoryModel>[];
     if (jsonList.length > 0) {
       jsonList

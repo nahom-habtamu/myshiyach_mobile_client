@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'add_post_page.dart';
-import 'chat_page.dart';
+import 'chat_list_page.dart';
 import 'home_page.dart';
 import 'profile_page.dart';
 import 'saved_posts.dart';

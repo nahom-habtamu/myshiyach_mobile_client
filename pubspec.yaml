@@ -18,6 +18,7 @@ dependencies:
   firebase_core:
   firebase_auth:
   firebase_storage:
+  cloud_firestore:
   pinput:
   pin_code_fields: ^7.4.0
   carousel_slider: ^4.1.1

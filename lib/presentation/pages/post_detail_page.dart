@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:mnale_client/presentation/pages/chat_page.dart';
+import 'package:mnale_client/presentation/pages/chat_list_page.dart';
 
 import '../../domain/enitites/product.dart';
 

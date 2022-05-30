@@ -16,7 +16,7 @@ class MainCategoryModel extends MainCategory {
     return MainCategoryModel(
       id: jsonMainCategory["_id"],
       title: jsonMainCategory["title"],
-      subCategories: SubCategoryModel.parseProductsFromJson(
+      subCategories: SubCategoryModel.parseSubCategoriesFromJson(
         jsonMainCategory["subCategories"],
       ),
     );
