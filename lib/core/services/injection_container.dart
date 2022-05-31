@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mnale_client/presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -69,6 +70,7 @@ Future<void> init() async {
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => GetAllCategoriesCubit(sl()));
   sl.registerFactory(() => GetAllConversationsCubit(sl()));
+  sl.registerFactory(() => GetUserByIdCubit(sl()));
   sl.registerFactory(
     () => CreateProductCubit(
       createProduct: sl(),

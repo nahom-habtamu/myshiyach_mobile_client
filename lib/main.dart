@@ -11,6 +11,7 @@ import 'presentation/bloc/get_all_conversations/get_all_conversations_cubit.dart
 import 'presentation/bloc/get_all_products/get_all_products_cubit.dart';
 import 'presentation/bloc/get_categories/get_categories_cubit.dart';
 import 'presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
+import 'presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import 'presentation/bloc/register_user/register_user_cubit.dart';
 import 'presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import 'presentation/bloc/verify_phone_number/verify_phone_number_cubit.dart';
@@ -69,6 +70,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => sl<GetAllConversationsCubit>(),
         ),
+        BlocProvider(
+          create: (_) => sl<GetUserByIdCubit>(),
+        ),
       ],
       child: MaterialApp(
         title: 'Mnale',
@@ -87,7 +91,8 @@ class MyApp extends StatelessWidget {
           PostDetailPage.routeName: (context) => const PostDetailPage(),
           AddPostPage.routeName: (context) => const AddPostPage(),
           ChatListPage.routeName: (context) => const ChatListPage(),
-          PostConfirmationPage.routeName: (context) => const PostConfirmationPage(),
+          PostConfirmationPage.routeName: (context) =>
+              const PostConfirmationPage(),
           OtpVerificationPage.routeName: (context) =>
               const OtpVerificationPage(),
         },

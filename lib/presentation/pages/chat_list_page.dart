@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/enitites/conversation.dart';
 import '../bloc/get_all_conversations/get_all_conversations_cubit.dart';
+import '../widgets/chat_list/conversation_item.dart';
 
 class ChatListPage extends StatefulWidget {
   static String routeName = "/chatPage";
@@ -85,34 +86,9 @@ class _ChatListPageState extends State<ChatListPage> {
   }
 
   Widget buildConversationItem(Conversation conversation) {
-    return Card(
-      color: Colors.white.withOpacity(0.9),
-      elevation: 5,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        height: 100,
-        child: Row(
-          children: const [
-             Padding(
-              padding: EdgeInsets.only(left: 8.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.teal,
-                radius: 45,
-                child: Text("AB"),
-              ),
-            ),
-            Expanded(
-              child: ListTile(
-                title: Text('title'),
-                subtitle: Text('last message in convo'),
-              ),
-            )
-          ],
-        ),
-      ),
+    return ConversationItem(
+      conversation: conversation,
     );
   }
 }
+
