@@ -12,21 +12,27 @@ import '../../data/datasources/firebase/firebase_storage_data_source.dart';
 import '../../data/datasources/product/product_data_source.dart';
 import '../../data/datasources/product/product_local_data_source.dart';
 import '../../data/datasources/product/product_remote_data_source.dart';
+import '../../data/datasources/user/user_remote_data_source.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/category_repository.dart';
 import '../../data/repositories/conversation_repository.dart';
 import '../../data/repositories/product_repository.dart';
+import '../../data/repositories/token_repository.dart';
+import '../../data/repositories/user_repository.dart';
 import '../../domain/contracts/auth_service.dart';
 import '../../domain/contracts/category_service.dart';
 import '../../domain/contracts/conversation_service.dart';
 import '../../domain/contracts/product_service.dart';
+import '../../domain/contracts/token_service.dart';
+import '../../domain/contracts/user_service.dart';
 import '../../domain/usecases/authenticate_phone_number.dart';
 import '../../domain/usecases/create_product.dart';
+import '../../domain/usecases/extract_token.dart';
 import '../../domain/usecases/get_all_conversations.dart';
 import '../../domain/usecases/get_all_products.dart';
 import '../../domain/usecases/get_categories.dart';
-import '../../domain/usecases/get_current_user.dart';
 import '../../domain/usecases/get_favorite_products.dart';
+import '../../domain/usecases/get_user_by_id.dart';
 import '../../domain/usecases/login.dart';
 import '../../domain/usecases/register_user.dart';
 import '../../domain/usecases/set_favorite_product.dart';
@@ -48,7 +54,13 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   // state
-  sl.registerFactory(() => AuthCubit(sl(), sl()));
+  sl.registerFactory(
+    () => AuthCubit(
+      extractToken: sl(),
+      getCurrentUser: sl(),
+      login: sl(),
+    ),
+  );
   sl.registerFactory(() => VerifyPhoneNumberCubit(sl()));
   sl.registerFactory(() => RegisterUserCubit(sl(), sl()));
   sl.registerFactory(() => DisplayAllProductsCubit(sl(), sl(), sl()));
@@ -66,7 +78,7 @@ Future<void> init() async {
 
   // usecases
   sl.registerLazySingleton(() => Login(sl()));
-  sl.registerLazySingleton(() => GetCurrentUser(sl()));
+  sl.registerLazySingleton(() => GetUserById(sl()));
   sl.registerLazySingleton(() => VerifyPhoneNumber(sl()));
   sl.registerLazySingleton(() => AuthenticatePhoneNumber(sl()));
   sl.registerLazySingleton(() => RegisterUser(sl()));
@@ -77,6 +89,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => CreateProduct(sl()));
   sl.registerLazySingleton(() => UploadProductPictures(sl()));
   sl.registerLazySingleton(() => GetAllConversations(sl()));
+  sl.registerFactory(() => ExtractToken(sl()));
 
   // repositories
 
@@ -89,13 +102,25 @@ Future<void> init() async {
     ),
   );
 
-  // Conversation
+  // Conversation Service
 
   sl.registerLazySingleton<ConversationService>(
     () => ConversationRepository(sl()),
   );
 
-  // Product
+  // Token Service
+
+  sl.registerLazySingleton<TokenService>(
+    () => TokenRepository(),
+  );
+
+  // User Service
+
+  sl.registerLazySingleton<UserService>(
+    () => UserRepository(sl()),
+  );
+
+  // Product Service
   sl.registerLazySingleton<ProductService>(
     () => ProductRepository(
       remoteDataSource: sl(),
@@ -127,6 +152,11 @@ Future<void> init() async {
   sl.registerLazySingleton<FirebaseStorageDataSource>(
     () => FirebaseStorageDataSourceImpl(),
   );
+
+  //  User
+  sl.registerLazySingleton(() => UserRemoteDataSource());
+
+  // Auth
 
   sl.registerLazySingleton(() => AuthRemoteDataSource());
   sl.registerLazySingleton<AuthDataSource>(() => AuthRemoteDataSource());

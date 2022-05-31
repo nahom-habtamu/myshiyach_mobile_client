@@ -8,7 +8,6 @@ import '../datasources/auth/firebase_auth_data_source.dart';
 import '../models/login/login_request_model.dart';
 import '../models/login/login_result_model.dart';
 import '../models/register_user/register_user_request_model.dart';
-import '../models/user/user_model.dart';
 
 class AuthRepository extends AuthService {
   final FirebaseAuthDataSource firebaseDataSource;
@@ -56,10 +55,5 @@ class AuthRepository extends AuthService {
   @override
   Future<void> authenticatePhoneNumber(PhoneAuthCredential credential) {
     return firebaseDataSource.authenticatePhoneNumber(credential);
-  }
-
-  @override
-  Future<UserModel> getCurrentUser(String token) {
-    return remoteDataSource.getCurrentUser(token);
   }
 }

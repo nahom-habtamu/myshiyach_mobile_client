@@ -61,18 +61,22 @@ class _ProductListState extends State<ProductList> {
       product: product,
       isFavorite: duplicate.isEmpty,
       onTap: () {
-        if (duplicate.isNotEmpty) {
-          favorites.removeWhere((element) => element.id == product.id);
-          setState(() {});
-        } else {
-          setState(() {
-            favorites = [...favorites, product];
-          });
-        }
-        List<ProductModel> favoritesToSave = parseListToProductModelList();
-        setFavoriteProductsCubit!.setFavoriteProducts.call(favoritesToSave);
+        updateFavorites(duplicate, product);
       },
     );
+  }
+
+  void updateFavorites(List<Product> duplicate, Product product) {
+    if (duplicate.isNotEmpty) {
+      favorites.removeWhere((element) => element.id == product.id);
+      setState(() {});
+    } else {
+      setState(() {
+        favorites = [...favorites, product];
+      });
+    }
+    List<ProductModel> favoritesToSave = parseListToProductModelList();
+    setFavoriteProductsCubit!.setFavoriteProducts.call(favoritesToSave);
   }
 
   List<ProductModel> parseListToProductModelList() {

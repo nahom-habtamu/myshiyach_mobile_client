@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:mnale_client/data/models/user/user_model.dart';
 
 import '../../../../../core/constants/api_information.dart';
 import '../../models/login/login_request_model.dart';
@@ -43,22 +42,5 @@ class AuthRemoteDataSource extends AuthDataSource {
     if (response.statusCode < 200 && response.statusCode > 300) {
       throw Exception("Registration Failed");
     }
-  }
-
-  @override
-  Future<UserModel> getCurrentUser(String token) async {
-    const String endPoint = '$baseUrl/users/me';
-    final response = await http.get(
-      Uri.parse(endPoint),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': token
-      },
-    );
-
-    if (response.statusCode < 200 && response.statusCode > 300) {
-      throw Exception("Registration Failed");
-    }
-    return UserModel.fromJson(json.decode(response.body));
   }
 }

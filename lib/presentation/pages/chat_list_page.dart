@@ -54,7 +54,7 @@ class _ChatListPageState extends State<ChatListPage> {
           child:
               BlocBuilder<GetAllConversationsCubit, Stream<List<Conversation>>>(
             builder: (context, conversations) {
-              return buildConversation(conversations);
+              return buildConversationList(conversations);
             },
           ),
         ),
@@ -62,7 +62,7 @@ class _ChatListPageState extends State<ChatListPage> {
     );
   }
 
-  Widget buildConversation(Stream<List<Conversation>> conversationStream) {
+  Widget buildConversationList(Stream<List<Conversation>> conversationStream) {
     return StreamBuilder<List<Conversation>>(
       stream: conversationStream,
       builder:
@@ -78,9 +78,41 @@ class _ChatListPageState extends State<ChatListPage> {
         }
         return ListView(
           children:
-              snapshot.data!.map((e) => Text(e.messages[0].text)).toList(),
+              snapshot.data!.map((e) => buildConversationItem(e)).toList(),
         );
       },
+    );
+  }
+
+  Widget buildConversationItem(Conversation conversation) {
+    return Card(
+      color: Colors.white.withOpacity(0.9),
+      elevation: 5,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        height: 100,
+        child: Row(
+          children: const [
+             Padding(
+              padding: EdgeInsets.only(left: 8.0),
+              child: CircleAvatar(
+                backgroundColor: Colors.teal,
+                radius: 45,
+                child: Text("AB"),
+              ),
+            ),
+            Expanded(
+              child: ListTile(
+                title: Text('title'),
+                subtitle: Text('last message in convo'),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
