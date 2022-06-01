@@ -1,4 +1,4 @@
-import 'package:mnale_client/data/models/register_user/register_user_request_model.dart';
+import '../../data/models/register_user/register_user_request_model.dart';
 
 class OtpVerficationPageArgument {
   final RegisterUserRequestModel registerUserRequest;
