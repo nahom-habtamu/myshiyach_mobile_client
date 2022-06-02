@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/enitites/conversation.dart';
+import '../../pages/chat_detail_page.dart';
 import '../../bloc/auth/auth_cubit.dart';
 import '../../bloc/auth/auth_state.dart';
 import '../../bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../bloc/get_user_by_id/get_user_by_id_state.dart';
+import '../../screen_arguments/chat_detail_page_arguments.dart';
 
 class ConversationItem extends StatefulWidget {
   final Conversation conversation;
@@ -67,33 +69,45 @@ class _ConversationItemState extends State<ConversationItem> {
     );
   }
 
-  Card renderMainContent(Loaded state) {
-    return Card(
-      color: Colors.white.withOpacity(0.9),
-      elevation: 5,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        height: 100,
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.teal,
-                radius: 45,
-                child: Text(state.user.fullName[0].toUpperCase()),
+  GestureDetector renderMainContent(Loaded state) {
+    return GestureDetector(
+      onTap: () {
+        var chatDetailPageArguments = ChatDetailPageArguments(
+          conversation: widget.conversation,
+          strangerUser: state.user,
+        );
+        Navigator.of(context).pushNamed(
+          ChatDetailPage.routeName,
+          arguments: chatDetailPageArguments,
+        );
+      },
+      child: Card(
+        color: Colors.white.withOpacity(0.9),
+        elevation: 5,
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          height: 100,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.teal,
+                  radius: 45,
+                  child: Text(state.user.fullName[0].toUpperCase()),
+                ),
               ),
-            ),
-            Expanded(
-              child: ListTile(
-                title: Text(state.user.fullName),
-                subtitle: Text(widget.conversation.messages.last.text),
-              ),
-            )
-          ],
+              Expanded(
+                child: ListTile(
+                  title: Text(state.user.fullName),
+                  subtitle: Text(widget.conversation.messages.last.text),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
