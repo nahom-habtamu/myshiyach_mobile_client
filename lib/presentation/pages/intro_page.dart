@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'login_page.dart';
+import 'master_page.dart';
 
 class IntroPage extends StatefulWidget {
   static String routeName = "/introPage";
@@ -103,7 +104,10 @@ class _IntroPageState extends State<IntroPage> {
                           currentInformationIndex++;
                         });
                       } else {
-                        Navigator.pushNamed(context, LoginPage.routeName);
+                        Navigator.pushReplacementNamed(
+                          context,
+                          LoginPage.routeName,
+                        );
                       }
                     },
                     child: const Text('Next'),
@@ -151,26 +155,31 @@ class _IntroPageState extends State<IntroPage> {
     );
   }
 
-  Align renderSkipButton() {
-    return Align(
-      alignment: Alignment.topRight,
-      child: Container(
-        height: 41,
-        width: 69,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: const Color(0xFF11435E),
+  GestureDetector renderSkipButton() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, MasterPage.routeName);
+      },
+      child: Align(
+        alignment: Alignment.topRight,
+        child: Container(
+          height: 41,
+          width: 69,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: const Color(0xFF11435E),
+            ),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20),
+            ),
           ),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(20),
-          ),
-        ),
-        child: const Center(
-          child: Text(
-            'Skip',
-            style: TextStyle(
-              color: Color(0xFF11435E),
-              fontSize: 14,
+          child: const Center(
+            child: Text(
+              'Skip',
+              style: TextStyle(
+                color: Color(0xFF11435E),
+                fontSize: 14,
+              ),
             ),
           ),
         ),
