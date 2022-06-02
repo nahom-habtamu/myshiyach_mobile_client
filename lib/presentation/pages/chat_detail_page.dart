@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/enitites/user.dart';
+import '../../data/models/conversation/message_model.dart';
+import '../../domain/enitites/conversation.dart';
 import '../../domain/enitites/message.dart';
+import '../../domain/enitites/user.dart';
+import '../bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
+import '../bloc/auth/auth_cubit.dart';
+import '../bloc/auth/auth_state.dart';
+import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../constants/login_page_constants.dart';
 import '../screen_arguments/chat_detail_page_arguments.dart';
 
@@ -14,9 +22,27 @@ class ChatDetailPage extends StatefulWidget {
 }
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
+  User? currentUser;
+  String messageContent = "";
+  ChatDetailPageArguments? args;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    initializeCurrentUser();
+  }
+
+  void initializeCurrentUser() {
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      currentUser = authState.currentUser;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final args =
+    args =
         ModalRoute.of(context)!.settings.arguments as ChatDetailPageArguments;
     return SafeArea(
       child: Scaffold(
@@ -31,33 +57,59 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           elevation: 0,
           centerTitle: true,
         ),
-        body: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
-            ),
-          ),
-          padding: const EdgeInsets.only(top: 5),
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            children: [
-              renderChatDetailStrangerInfo(args.strangerUser),
-              Container(
-                height: 1,
-                color: Colors.black12,
-              ),
-              renderMessageBubbles(args),
-              renderMessageSender()
-            ],
-          ),
+        body: BlocBuilder<GetConversationByIdCubit, Stream<Conversation>>(
+          builder: (context, conversationStream) {
+            return buildChatDetail(conversationStream);
+          },
         ),
       ),
     );
   }
 
-  Padding renderMessageSender() {
+  Widget buildChatDetail(Stream<Conversation> conversationStream) {
+    return StreamBuilder<Conversation>(
+      stream: conversationStream,
+      builder: (BuildContext context, AsyncSnapshot<Conversation> snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Something went wrong');
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return renderMainContent(snapshot.data!);
+      },
+    );
+  }
+
+  Container renderMainContent(Conversation conversation) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
+        ),
+      ),
+      padding: const EdgeInsets.only(top: 5),
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          renderChatDetailStrangerInfo(),
+          Container(
+            height: 1,
+            color: Colors.black12,
+          ),
+          renderMessageBubbles(conversation),
+          renderMessageSender(conversation)
+        ],
+      ),
+    );
+  }
+
+  Padding renderMessageSender(Conversation conversation) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: SizedBox(
@@ -69,19 +121,22 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               width: MediaQuery.of(context).size.width * 0.8,
               child: TextFormField(
                 style: loginInputTextStyle.copyWith(fontSize: 14),
-                onChanged: (value) => {},
+                onChanged: (value) => setState(() => messageContent = value),
                 decoration: const InputDecoration(
-                    labelText: "Enter Message",
-                    border: loginInputEnabledBorder,
-                    enabledBorder: loginInputEnabledBorder,
-                    focusedBorder: loginInputDisabledBorder,
-                    filled: true,
-                    fillColor: Colors.white,
-                    contentPadding: EdgeInsets.all(18)),
+                  labelText: "Enter Message",
+                  border: loginInputEnabledBorder,
+                  enabledBorder: loginInputEnabledBorder,
+                  focusedBorder: loginInputDisabledBorder,
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: EdgeInsets.all(18),
+                ),
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                handleAddingMessage();
+              },
               icon: const Icon(
                 Icons.send,
                 size: 25,
@@ -93,8 +148,29 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     );
   }
 
-  Row renderChatDetailStrangerInfo(User strangerUser) {
-    var splittedStrangerName = strangerUser.fullName.split(" ");
+  void handleAddingMessage() async {
+    var messageToAdd = MessageModel(
+      text: messageContent,
+      senderId: currentUser!.id,
+      recieverId: args!.strangerUser.id,
+    );
+    context
+        .read<AddMessageToConversationCubit>()
+        .call(args!.conversationId, messageToAdd);
+    await handleScrollingToBottom();
+  }
+
+  Future<void> handleScrollingToBottom() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn);
+    });
+  }
+
+  Row renderChatDetailStrangerInfo() {
+    var splittedStrangerName = args!.strangerUser.fullName.split(" ");
     var avatarContent = splittedStrangerName.first[0].toUpperCase() +
         splittedStrangerName.last[0].toUpperCase();
     return Row(
@@ -130,7 +206,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                strangerUser.fullName,
+                args!.strangerUser.fullName,
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 16,
@@ -138,7 +214,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 ),
               ),
               Text(
-                strangerUser.email ?? "no email",
+                args!.strangerUser.email ?? "no email",
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 15,
@@ -151,18 +227,19 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     );
   }
 
-  renderMessageBubbles(ChatDetailPageArguments args) {
+  renderMessageBubbles(Conversation conversation) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: ListView.builder(
           shrinkWrap: true,
+          controller: _scrollController,
           itemBuilder: (context, index) => renderMessageBubble(
-            args.conversation.messages[index],
-            args.strangerUser.id,
-            args.conversation.messages[index].senderId == args.strangerUser.id,
+            conversation.messages[index],
+            args!.strangerUser.id,
+            conversation.messages[index].senderId == args!.strangerUser.id,
           ),
-          itemCount: args.conversation.messages.length,
+          itemCount: conversation.messages.length,
         ),
       ),
     );
@@ -196,8 +273,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               message.text,
               style: TextStyle(
                 color: message.senderId == strangerId
-                ? Colors.white
-                : Colors.black,
+                    ? Colors.white
+                    : Colors.black,
                 fontSize: 14,
                 letterSpacing: -0.3,
               ),

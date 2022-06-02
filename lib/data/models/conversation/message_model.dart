@@ -19,6 +19,12 @@ class MessageModel extends Message {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+        "text": text,
+        "senderId": senderId,
+        "recieverId": recieverId,
+      };
+
   static List<MessageModel> parseMessagesFromJson(dynamic jsonList) {
     var messages = <MessageModel>[];
     if (jsonList.length > 0) {

@@ -1,12 +1,11 @@
-import '../../domain/enitites/conversation.dart';
 import '../../domain/enitites/user.dart';
 
 class ChatDetailPageArguments {
-  final Conversation conversation;
+  final String conversationId;
   final User strangerUser;
 
   ChatDetailPageArguments({
-    required this.conversation,
+    required this.conversationId,
     required this.strangerUser,
   });
 }

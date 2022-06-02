@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mnale_client/presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -26,12 +25,14 @@ import '../../domain/contracts/conversation_service.dart';
 import '../../domain/contracts/product_service.dart';
 import '../../domain/contracts/token_service.dart';
 import '../../domain/contracts/user_service.dart';
+import '../../domain/usecases/add_message_to_conversation.dart';
 import '../../domain/usecases/authenticate_phone_number.dart';
 import '../../domain/usecases/create_product.dart';
 import '../../domain/usecases/extract_token.dart';
 import '../../domain/usecases/get_all_conversations.dart';
 import '../../domain/usecases/get_all_products.dart';
 import '../../domain/usecases/get_categories.dart';
+import '../../domain/usecases/get_conversation_by_id.dart';
 import '../../domain/usecases/get_favorite_products.dart';
 import '../../domain/usecases/get_user_by_id.dart';
 import '../../domain/usecases/login.dart';
@@ -39,13 +40,16 @@ import '../../domain/usecases/register_user.dart';
 import '../../domain/usecases/set_favorite_product.dart';
 import '../../domain/usecases/upload_product_pictures.dart';
 import '../../domain/usecases/verify_phone_number.dart';
+import '../../presentation/bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
 import '../../presentation/bloc/create_product/create_product_cubit.dart';
 import '../../presentation/bloc/display_all_products/display_all_products_cubit.dart';
 import '../../presentation/bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import '../../presentation/bloc/get_all_products/get_all_products_cubit.dart';
 import '../../presentation/bloc/get_categories/get_categories_cubit.dart';
+import '../../presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
+import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../presentation/bloc/register_user/register_user_cubit.dart';
 import '../../presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../../presentation/bloc/verify_phone_number/verify_phone_number_cubit.dart';
@@ -71,6 +75,8 @@ Future<void> init() async {
   sl.registerFactory(() => GetAllCategoriesCubit(sl()));
   sl.registerFactory(() => GetAllConversationsCubit(sl()));
   sl.registerFactory(() => GetUserByIdCubit(sl()));
+  sl.registerFactory(() => AddMessageToConversationCubit(sl()));
+  sl.registerFactory(() => GetConversationByIdCubit(sl()));
   sl.registerFactory(
     () => CreateProductCubit(
       createProduct: sl(),
@@ -92,6 +98,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UploadProductPictures(sl()));
   sl.registerLazySingleton(() => GetAllConversations(sl()));
   sl.registerFactory(() => ExtractToken(sl()));
+  sl.registerFactory(() => AddMessageToConversation(sl()));
+  sl.registerFactory(() => GetConversationById(sl()));
 
   // repositories
 

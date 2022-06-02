@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/enitites/conversation.dart';
+import '../../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../../pages/chat_detail_page.dart';
 import '../../bloc/auth/auth_cubit.dart';
 import '../../bloc/auth/auth_state.dart';
@@ -72,8 +73,9 @@ class _ConversationItemState extends State<ConversationItem> {
   GestureDetector renderMainContent(Loaded state) {
     return GestureDetector(
       onTap: () {
+        context.read<GetConversationByIdCubit>().call(widget.conversation.id);
         var chatDetailPageArguments = ChatDetailPageArguments(
-          conversation: widget.conversation,
+          conversationId: widget.conversation.id,
           strangerUser: state.user,
         );
         Navigator.of(context).pushNamed(

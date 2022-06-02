@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/services/injection_container.dart' as di;
 import 'core/services/injection_container.dart';
+import 'presentation/bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
 import 'presentation/bloc/auth/auth_cubit.dart';
 import 'presentation/bloc/create_product/create_product_cubit.dart';
 import 'presentation/bloc/display_all_products/display_all_products_cubit.dart';
 import 'presentation/bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import 'presentation/bloc/get_all_products/get_all_products_cubit.dart';
+import 'presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import 'presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import 'presentation/bloc/get_categories/get_categories_cubit.dart';
 import 'presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
@@ -72,7 +74,13 @@ class MyApp extends StatelessWidget {
           create: (_) => sl<GetAllConversationsCubit>(),
         ),
         BlocProvider(
+          create: (_) => sl<GetConversationByIdCubit>(),
+        ),
+        BlocProvider(
           create: (_) => sl<GetUserByIdCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<AddMessageToConversationCubit>(),
         ),
       ],
       child: MaterialApp(
