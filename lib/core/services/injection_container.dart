@@ -28,6 +28,7 @@ import '../../domain/contracts/user_service.dart';
 import '../../domain/usecases/add_message_to_conversation.dart';
 import '../../domain/usecases/authenticate_phone_number.dart';
 import '../../domain/usecases/create_product.dart';
+import '../../domain/usecases/delete_product_by_id.dart';
 import '../../domain/usecases/extract_token.dart';
 import '../../domain/usecases/get_all_conversations.dart';
 import '../../domain/usecases/get_all_products.dart';
@@ -43,6 +44,7 @@ import '../../domain/usecases/verify_phone_number.dart';
 import '../../presentation/bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
 import '../../presentation/bloc/create_product/create_product_cubit.dart';
+import '../../presentation/bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../../presentation/bloc/display_all_products/display_all_products_cubit.dart';
 import '../../presentation/bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import '../../presentation/bloc/get_all_products/get_all_products_cubit.dart';
@@ -77,6 +79,7 @@ Future<void> init() async {
   sl.registerFactory(() => GetUserByIdCubit(sl()));
   sl.registerFactory(() => AddMessageToConversationCubit(sl()));
   sl.registerFactory(() => GetConversationByIdCubit(sl()));
+  sl.registerFactory(() => DeleteProductByIdCubit(sl()));
   sl.registerFactory(
     () => CreateProductCubit(
       createProduct: sl(),
@@ -97,9 +100,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => CreateProduct(sl()));
   sl.registerLazySingleton(() => UploadProductPictures(sl()));
   sl.registerLazySingleton(() => GetAllConversations(sl()));
-  sl.registerFactory(() => ExtractToken(sl()));
-  sl.registerFactory(() => AddMessageToConversation(sl()));
-  sl.registerFactory(() => GetConversationById(sl()));
+  sl.registerLazySingleton(() => ExtractToken(sl()));
+  sl.registerLazySingleton(() => AddMessageToConversation(sl()));
+  sl.registerLazySingleton(() => GetConversationById(sl()));
+  sl.registerLazySingleton(() => DeleteProductById(sl()));
 
   // repositories
 
@@ -159,8 +163,8 @@ Future<void> init() async {
   );
 
   // UPLOAD SERVICE
-  sl.registerLazySingleton<FirebaseStorageDataSource>(
-    () => FirebaseStorageDataSourceImpl(),
+  sl.registerLazySingleton<StorageDataSource>(
+    () => FirebaseStorageDataSource(),
   );
 
   //  User

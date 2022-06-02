@@ -10,7 +10,7 @@ class ProductRepository extends ProductService {
   final ProductRemoteDataSource remoteDataSource;
   final ProductLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
-  final FirebaseStorageDataSource storageService;
+  final StorageDataSource storageService;
 
   ProductRepository({
     required this.remoteDataSource,
@@ -42,5 +42,10 @@ class ProductRepository extends ProductService {
   @override
   Future<List<String>> uploadProductPictures(List<dynamic> images) {
     return storageService.uploadFiles(images);
+  }
+
+  @override
+  Future<String> deleteProduct(String id, String token) {
+    return remoteDataSource.deleteProduct(id, token);
   }
 }

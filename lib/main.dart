@@ -7,6 +7,7 @@ import 'core/services/injection_container.dart';
 import 'presentation/bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
 import 'presentation/bloc/auth/auth_cubit.dart';
 import 'presentation/bloc/create_product/create_product_cubit.dart';
+import 'presentation/bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import 'presentation/bloc/display_all_products/display_all_products_cubit.dart';
 import 'presentation/bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import 'presentation/bloc/get_all_products/get_all_products_cubit.dart';
@@ -81,6 +82,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => sl<AddMessageToConversationCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<DeleteProductByIdCubit>(),
         ),
       ],
       child: MaterialApp(

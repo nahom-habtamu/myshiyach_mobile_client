@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 
-abstract class FirebaseStorageDataSource {
+abstract class StorageDataSource {
   Future<List<String>> uploadFiles(List<dynamic> images);
 }
 
-class FirebaseStorageDataSourceImpl extends FirebaseStorageDataSource {
+class FirebaseStorageDataSource extends StorageDataSource {
   @override
   Future<List<String>> uploadFiles(List images) async {
     final ref = FirebaseStorage.instance

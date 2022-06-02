@@ -1,12 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:mnale_client/presentation/pages/chat_list_page.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/enitites/product.dart';
+import '../../domain/enitites/user.dart';
+import '../bloc/auth/auth_cubit.dart';
+import '../bloc/auth/auth_state.dart';
+import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
+import '../bloc/delete_product_by_id/delete_product_by_id_state.dart';
+import '../widgets/post_detail/post_detail_carousel.dart';
+import '../widgets/post_detail/post_detail_information_item.dart';
+import 'chat_list_page.dart';
+import 'master_page.dart';
 
-class PostDetailPage extends StatelessWidget {
+class PostDetailPage extends StatefulWidget {
   static String routeName = "/postDetail";
   const PostDetailPage({Key? key}) : super(key: key);
+
+  @override
+  State<PostDetailPage> createState() => _PostDetailPageState();
+}
+
+class _PostDetailPageState extends State<PostDetailPage> {
+  User? currentUser;
+  String? authToken;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      setState(() {
+        currentUser = getCurrentUser();
+        authToken = getToken();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final product = ModalRoute.of(context)!.settings.arguments as Product;
@@ -106,29 +135,9 @@ class PostDetailPage extends StatelessWidget {
                             height: 10,
                           ),
                           buildOtherInformation(product.other),
-                          SizedBox(
-                            height: 50,
-                            width: MediaQuery.of(context).size.width,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  ChatListPage.routeName,
-                                );
-                              },
-                              child: const Text('Send Message'),
-                              style: ElevatedButton.styleFrom(
-                                primary: const Color(0xff11435E),
-                                textStyle: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(16),
-                                  ),
-                                ),
-                              ),
-                            ),
+                          renderPostDetailButtonSection(
+                            product.id,
+                            product.createdBy,
                           ),
                           const SizedBox(
                             height: 10,
@@ -144,6 +153,92 @@ class PostDetailPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Row renderPostDetailButtonSection(String postId, String postCreatedBy) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        goToChatDetailButton(postCreatedBy),
+        if (currentUser!.id == postCreatedBy) deletePostButton(postCreatedBy),
+      ],
+    );
+  }
+
+  SizedBox goToChatDetailButton(String postCreatedBy) {
+    return SizedBox(
+      height: 50,
+      width: currentUser!.id == postCreatedBy
+          ? MediaQuery.of(context).size.width * 0.42
+          : MediaQuery.of(context).size.width * 0.85,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.pushReplacementNamed(
+            context,
+            ChatListPage.routeName,
+          );
+        },
+        child: const Text('Send Message'),
+        style: ElevatedButton.styleFrom(
+          primary: const Color(0xff11435E),
+          textStyle: const TextStyle(
+            color: Colors.white,
+          ),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(16),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  deletePostButton(String postId) {
+    return BlocBuilder<DeleteProductByIdCubit, DeleteProductByIdState>(
+      builder: (context, state) {
+        if (state is DeleteProductLoading) {
+          return SizedBox(
+            height: 50,
+            width: MediaQuery.of(context).size.width * 0.42,
+            child: const CircularProgressIndicator(),
+          );
+        }
+        if (state is DeleteProductLoaded) {
+          naviagateToMasterPage(context);
+        }
+        return SizedBox(
+          height: 50,
+          width: MediaQuery.of(context).size.width * 0.42,
+          child: ElevatedButton(
+            onPressed: () {
+              context.read<DeleteProductByIdCubit>().call(postId, authToken!);
+            },
+            child: const Text('Delete Post'),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.red,
+              textStyle: const TextStyle(
+                color: Colors.white,
+              ),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(16),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void naviagateToMasterPage(BuildContext context) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      Navigator.pushReplacementNamed(
+        context,
+        MasterPage.routeName,
+      );
+    });
   }
 
   buildOtherInformation(Map<String, dynamic>? other) {
@@ -163,189 +258,20 @@ class PostDetailPage extends StatelessWidget {
       children: [...otherInformation],
     );
   }
-}
 
-class PostDetailInformationItem extends StatelessWidget {
-  final String informationKey;
-  final String informationValue;
-  const PostDetailInformationItem({
-    Key? key,
-    required this.informationKey,
-    required this.informationValue,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          informationKey,
-          style: const TextStyle(
-            color: Color(0xff11435E),
-            fontSize: 18,
-            height: 1.5,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-          informationValue,
-          style: const TextStyle(
-            color: Color(0xff434648),
-            fontSize: 12,
-            height: 2,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        )
-      ],
-    );
+  User? getCurrentUser() {
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      return authState.currentUser;
+    }
+    return null;
   }
-}
 
-class PostDetailCarousel extends StatefulWidget {
-  final List<String> items;
-  const PostDetailCarousel({
-    Key? key,
-    required this.items,
-  }) : super(key: key);
-
-  @override
-  State<PostDetailCarousel> createState() => _PostDetailCarouselState();
-}
-
-class _PostDetailCarouselState extends State<PostDetailCarousel> {
-  int currentCarouselIndex = 0;
-  CarouselController carouselController = CarouselController();
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        CarouselSlider(
-          carouselController: carouselController,
-          options: CarouselOptions(
-            viewportFraction: 1,
-            onPageChanged: (index, reason) {
-              setState(() {
-                currentCarouselIndex = index;
-              });
-            },
-          ),
-          items: widget.items
-              .map((item) => Image.network(
-                    item,
-                    fit: BoxFit.cover,
-                    width: MediaQuery.of(context).size.width,
-                  ))
-              .toList(),
-        ),
-        PageCounter(
-          currentPage: currentCarouselIndex,
-          pageCount: widget.items.length,
-        ),
-        CarouselImageChangerIcon(
-          isRightArrow: true,
-          onClick: () {
-            carouselController.previousPage(
-              duration: const Duration(seconds: 1),
-              curve: Curves.easeInOut,
-            );
-          },
-        ),
-        CarouselImageChangerIcon(
-          onClick: () {
-            carouselController.nextPage(
-              duration: const Duration(seconds: 1),
-              curve: Curves.easeInOut,
-            );
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class CarouselImageChangerIcon extends StatelessWidget {
-  final Function onClick;
-  final bool isRightArrow;
-  const CarouselImageChangerIcon({
-    Key? key,
-    this.isRightArrow = false,
-    required this.onClick,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      right: isRightArrow ? MediaQuery.of(context).size.width * 0.8 : 0,
-      left: !isRightArrow ? MediaQuery.of(context).size.width * 0.8 : 0,
-      child: CircleAvatar(
-        radius: 20,
-        backgroundColor: Colors.black54,
-        child: IconButton(
-          onPressed: () {
-            onClick();
-          },
-          icon: Icon(
-            isRightArrow
-                ? Icons.arrow_back_ios_new_outlined
-                : Icons.arrow_forward_ios_outlined,
-            size: 25,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PageCounter extends StatelessWidget {
-  final int pageCount;
-  final int currentPage;
-  const PageCounter({
-    Key? key,
-    required this.pageCount,
-    required this.currentPage,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 15,
-      left: 15,
-      child: Container(
-        height: 35,
-        width: 80,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            const Icon(
-              Icons.photo_camera_back_rounded,
-              color: Colors.white,
-            ),
-            Text(
-              '${currentPage + 1} of $pageCount',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-        decoration: const BoxDecoration(
-          color: Color(0xB9000000),
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-      ),
-    );
+  String? getToken() {
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      return authState.loginResult.token;
+    }
+    return null;
   }
 }
