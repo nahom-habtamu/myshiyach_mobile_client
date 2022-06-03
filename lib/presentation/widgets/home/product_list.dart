@@ -32,7 +32,6 @@ class _ProductListState extends State<ProductList> {
         favorites = [...widget.favorites];
       });
     });
-    
   }
 
   @override

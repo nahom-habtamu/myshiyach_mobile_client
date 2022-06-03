@@ -6,6 +6,7 @@ class AddProductModel {
   final String subCategory;
   final String brand;
   final String state;
+  final String city;
   List<String> productImages;
   Map<String, dynamic>? other;
 
@@ -17,6 +18,7 @@ class AddProductModel {
     required this.subCategory,
     required this.brand,
     required this.state,
+    required this.city,
     required this.productImages,
     this.other,
   });
@@ -30,6 +32,7 @@ class AddProductModel {
       subCategory: json["subCategory"],
       brand: json["brand"],
       state: json["state"],
+      city: json["city"],
       productImages: [],
       other: json["other"],
     );
@@ -43,6 +46,7 @@ class AddProductModel {
         "subCategory": subCategory,
         "brand": brand,
         "state": state,
+        "city": city,
         "productImages": productImages,
         "other": other
       };

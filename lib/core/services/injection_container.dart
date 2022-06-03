@@ -1,5 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mnale_client/data/datasources/category/category_data_source.dart';
+import 'package:mnale_client/data/datasources/city/city_data_source.dart';
+import 'package:mnale_client/data/datasources/city/city_remote_data_source.dart';
+import 'package:mnale_client/data/repositories/city_repository.dart';
+import 'package:mnale_client/domain/contracts/city_service.dart';
+import 'package:mnale_client/domain/usecases/get_all_cities.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -74,7 +80,10 @@ Future<void> init() async {
   sl.registerFactory(() => GetAllProductsCubit(sl()));
   sl.registerFactory(() => GetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
-  sl.registerFactory(() => GetAllCategoriesCubit(sl()));
+  sl.registerFactory(() => GetDataNeededToAddPostCubit(
+        getAllCategories: sl(),
+        getAllCities: sl(),
+      ));
   sl.registerFactory(() => GetAllConversationsCubit(sl()));
   sl.registerFactory(() => GetUserByIdCubit(sl()));
   sl.registerFactory(() => AddMessageToConversationCubit(sl()));
@@ -104,6 +113,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddMessageToConversation(sl()));
   sl.registerLazySingleton(() => GetConversationById(sl()));
   sl.registerLazySingleton(() => DeleteProductById(sl()));
+  sl.registerLazySingleton(() => GetAllCities(sl()));
 
   // repositories
 
@@ -114,6 +124,11 @@ Future<void> init() async {
       networkInfo: sl(),
       firebaseDataSource: sl(),
     ),
+  );
+
+  // City Service
+  sl.registerLazySingleton<CityService>(
+    () => CityRepository(sl()),
   );
 
   // Conversation Service
@@ -156,6 +171,12 @@ Future<void> init() async {
     () => FirebaseDataSouceImpl(),
   );
 
+  // City
+
+  sl.registerLazySingleton<CityDataSource>(
+    () => CityRemoteDataSource(),
+  );
+
   // Converations
 
   sl.registerLazySingleton<ConversationDataSource>(
@@ -183,7 +204,8 @@ Future<void> init() async {
 
   // Category
 
-  sl.registerLazySingleton(() => CategoryRemoteDataSource());
+  sl.registerLazySingleton<CategoryDataSource>(
+      () => CategoryRemoteDataSource());
 
   // Shared Preferences
 

@@ -1,17 +1,18 @@
 import '../../../domain/enitites/main_category.dart';
 
-abstract class GetAllCategoriesState {}
+abstract class GetDataNeededToAddPostState {}
 
-class Empty extends GetAllCategoriesState {}
+class Empty extends GetDataNeededToAddPostState {}
 
-class Loading extends GetAllCategoriesState {}
+class Loading extends GetDataNeededToAddPostState {}
 
-class Loaded extends GetAllCategoriesState {
+class Loaded extends GetDataNeededToAddPostState {
   final List<MainCategory> categories;
-  Loaded(this.categories);
+  final List<String> cities;
+  Loaded(this.categories, this.cities);
 }
 
-class Error extends GetAllCategoriesState {
+class Error extends GetDataNeededToAddPostState {
   final String message;
   Error({required this.message});
 }

@@ -46,7 +46,7 @@ class _AddPostPageState extends State<AddPostPage> {
   }
 
   void initCategories() {
-    var getAllCategoriesCubit = context.read<GetAllCategoriesCubit>();
+    var getAllCategoriesCubit = context.read<GetDataNeededToAddPostCubit>();
     if (getAllCategoriesCubit.state is! Loaded) {
       getAllCategoriesCubit.call();
     }
@@ -80,12 +80,17 @@ class _AddPostPageState extends State<AddPostPage> {
           elevation: 0,
           centerTitle: true,
         ),
-        body: BlocBuilder<GetAllCategoriesCubit, GetAllCategoriesState>(
+        body: BlocBuilder<GetDataNeededToAddPostCubit,
+            GetDataNeededToAddPostState>(
           builder: (context, state) {
             if (state is Loaded) {
               var isThereAdditionalData =
                   isThereThirdInputList(state.categories);
-              return renderMainContent(state.categories, isThereAdditionalData);
+              return renderMainContent(
+                state.categories,
+                state.cities,
+                isThereAdditionalData,
+              );
             } else if (state is Loading) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -105,13 +110,16 @@ class _AddPostPageState extends State<AddPostPage> {
     );
   }
 
-  renderMainContent(List<MainCategory> categories, bool isThereAdditionalData) {
+  renderMainContent(
+    List<MainCategory> categories,
+    List<String> cities,
+    bool isThereAdditionalData,
+  ) {
     return BlocBuilder<CreateProductCubit, CreateProductState>(
         builder: (context, state) {
       if (state is AddPostNotTriggered || state is AddPostError) {
         return SingleChildScrollView(
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.8,
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -119,7 +127,8 @@ class _AddPostPageState extends State<AddPostPage> {
                 topRight: Radius.circular(40),
               ),
             ),
-            padding: const EdgeInsets.only(top: 25, left: 25, right: 25),
+            padding: const EdgeInsets.only(top: 0, left: 25, right: 25),
+            height: MediaQuery.of(context).size.height * 0.8,
             width: MediaQuery.of(context).size.width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -127,7 +136,8 @@ class _AddPostPageState extends State<AddPostPage> {
                 const SizedBox(
                   height: 25,
                 ),
-                renderAppropriateInput(categories, isThereAdditionalData),
+                renderAppropriateInput(
+                    categories, cities, isThereAdditionalData),
                 const SizedBox(
                   height: 25,
                 ),
@@ -152,9 +162,12 @@ class _AddPostPageState extends State<AddPostPage> {
   }
 
   renderAppropriateInput(
-      List<MainCategory> categories, bool isThereAdditionalData) {
+    List<MainCategory> categories,
+    List<String> cities,
+    bool isThereAdditionalData,
+  ) {
     if (currentInputPageState == 0) {
-      return renderFirstPageInputs(categories);
+      return renderFirstPageInputs(categories, cities);
     } else if (currentInputPageState == 1) {
       return renderSecondPageInputs(categories, isThereAdditionalData);
     } else if (isThereThirdInputList(categories) &&
@@ -226,9 +239,13 @@ class _AddPostPageState extends State<AddPostPage> {
         );
   }
 
-  renderFirstPageInputs(List<MainCategory> categories) {
+  renderFirstPageInputs(
+    List<MainCategory> categories,
+    List<String> cities,
+  ) {
     return FirstPageInputs(
       mainCategories: categories,
+      cities: cities,
       onNextPressed: (firstInputValues) {
         appendInputValue(firstInputValues);
         setState(() {

@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
           create: (_) => sl<SetFavoriteProductsCubit>(),
         ),
         BlocProvider(
-          create: (_) => sl<GetAllCategoriesCubit>(),
+          create: (_) => sl<GetDataNeededToAddPostCubit>(),
         ),
         BlocProvider(
           create: (_) => sl<CreateProductCubit>(),

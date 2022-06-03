@@ -1,19 +1,25 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../domain/usecases/get_all_cities.dart';
 import '../../../domain/usecases/get_categories.dart';
 import 'get_categories_state.dart';
 
-class GetAllCategoriesCubit extends Cubit<GetAllCategoriesState> {
+class GetDataNeededToAddPostCubit extends Cubit<GetDataNeededToAddPostState> {
   final GetAllCategories getAllCategories;
-  GetAllCategoriesCubit(this.getAllCategories) : super(Empty());
+  final GetAllCities getAllCities;
+  GetDataNeededToAddPostCubit({
+    required this.getAllCategories,
+    required this.getAllCities,
+  }) : super(Empty());
 
   void call() async {
     try {
       emit(Empty());
       emit(Loading());
       var categories = await getAllCategories.call();
-      if (categories.isNotEmpty) {
-        emit(Loaded(categories));
+      var cities = await getAllCities.call();
+      if (categories.isNotEmpty && cities.isNotEmpty) {
+        emit(Loaded(categories, cities));
       } else {
         emit(Empty());
       }

@@ -10,6 +10,7 @@ class ProductModel extends Product {
     required String subCategory,
     required String brand,
     required String state,
+    required String city,
     required String createdAt,
     required String createdBy,
     required List<String> productImages,
@@ -23,6 +24,7 @@ class ProductModel extends Product {
           subCategory: subCategory,
           brand: brand,
           state: state,
+          city: city,
           createdAt: createdAt,
           createdBy: createdBy,
           productImages: productImages,
@@ -41,6 +43,7 @@ class ProductModel extends Product {
       createdAt: jsonProduct["createdAt"],
       createdBy: jsonProduct["createdBy"],
       state: jsonProduct["state"],
+      city: jsonProduct["city"],
       productImages: List<String>.from(jsonProduct["productImages"]),
       other: Map<String, dynamic>.from(jsonProduct["other"]),
     );
@@ -58,6 +61,7 @@ class ProductModel extends Product {
       createdAt: p.createdAt,
       createdBy: p.createdBy,
       state: p.state,
+      city: p.city,
       productImages: p.productImages,
       other: p.other,
     );
@@ -74,6 +78,7 @@ class ProductModel extends Product {
         "createdAt": createdAt,
         "createdBy": createdBy,
         "state": state,
+        "city": city,
         "productImages": productImages,
         "other": other,
       };

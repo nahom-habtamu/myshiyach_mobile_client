@@ -8,11 +8,13 @@ import '../../../domain/usecases/upload_product_pictures.dart';
 class CreateProductCubit extends Cubit<CreateProductState> {
   final CreateProduct createProduct;
   final UploadProductPictures uploadProductPictures;
-  CreateProductCubit(
-      {required this.createProduct, required this.uploadProductPictures})
-      : super(AddPostNotTriggered());
+  CreateProductCubit({
+    required this.createProduct,
+    required this.uploadProductPictures,
+  }) : super(AddPostNotTriggered());
 
-  void call(AddProductModel addProductModel, List<dynamic> productImages, String token) async {
+  void call(AddProductModel addProductModel, List<dynamic> productImages,
+      String token) async {
     try {
       emit(AddPostNotTriggered());
       emit(AddPostLoading());

@@ -7,6 +7,7 @@ class Product {
   final String subCategory;
   final String brand;
   final String state;
+  final String city;
   final String createdAt;
   final String createdBy;
   final List<String> productImages;
@@ -21,6 +22,7 @@ class Product {
     required this.subCategory,
     required this.brand,
     required this.state,
+    required this.city,
     required this.createdAt,
     required this.createdBy,
     required this.productImages,
