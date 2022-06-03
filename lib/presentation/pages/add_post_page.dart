@@ -35,7 +35,12 @@ class _AddPostPageState extends State<AddPostPage> {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       initializeCurrentUser();
       initCategories();
+      emptyAddPostState();
     });
+  }
+
+  void emptyAddPostState() {
+    context.read<CreateProductCubit>().clear();
   }
 
   void initializeCurrentUser() {
@@ -117,7 +122,7 @@ class _AddPostPageState extends State<AddPostPage> {
   ) {
     return BlocBuilder<CreateProductCubit, CreateProductState>(
         builder: (context, state) {
-      if (state is AddPostNotTriggered || state is AddPostError) {
+      if (state is AddPostEmpty || state is AddPostError) {
         return SingleChildScrollView(
           child: Container(
             decoration: const BoxDecoration(

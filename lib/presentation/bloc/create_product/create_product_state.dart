@@ -2,7 +2,7 @@ import '../../../domain/enitites/product.dart';
 
 abstract class CreateProductState {}
 
-class AddPostNotTriggered extends CreateProductState {}
+class AddPostEmpty extends CreateProductState {}
 
 class AddPostLoading extends CreateProductState {}
 

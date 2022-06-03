@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/utils/date_time_formatter.dart';
 import '../../../domain/enitites/product.dart';
 import '../../pages/post_detail_page.dart';
 
@@ -49,6 +50,7 @@ class _ProductListItemState extends State<ProductListItem> {
                     renderTitle(widget.product.title),
                     renderDescription(widget.product.description),
                     renderPrice(widget.product.price),
+                    renderCity(widget.product.city),
                     renderTimerAndFavoriteIcon(widget.product)
                   ],
                 ),
@@ -62,8 +64,8 @@ class _ProductListItemState extends State<ProductListItem> {
 
   SizedBox renderTitle(title) {
     return SizedBox(
+      height: 15,
       width: MediaQuery.of(context).size.width * 0.45,
-      height: 32,
       child: Text(
         title,
         style: const TextStyle(
@@ -76,16 +78,36 @@ class _ProductListItemState extends State<ProductListItem> {
     );
   }
 
-  SizedBox renderDescription(description) {
+  SizedBox renderDescription(String description) {
+    var descriptionToShow =
+        description.length > 60 ? description.substring(0, 60) : description;
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.45,
-      height: 10,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        child: Text(
+          descriptionToShow,
+          style: const TextStyle(
+            color: Color(0xff888888),
+            fontSize: 8,
+            letterSpacing: 0.2,
+          ),
+        ),
+      ),
+    );
+  }
+
+  SizedBox renderCity(city) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.45,
+      height: 15,
       child: Text(
-        description,
+        city,
         style: const TextStyle(
-          color: Color(0xff888888),
+          color: Color(0xff11435E),
           fontSize: 8,
           letterSpacing: 0.2,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
@@ -97,6 +119,7 @@ class _ProductListItemState extends State<ProductListItem> {
       child: Container(
         color: const Color(0xffF5FFF8),
         width: MediaQuery.of(context).size.width * 0.45,
+        height: 18,
         child: Text(
           '\$${price.toString()}',
           style: const TextStyle(
@@ -110,41 +133,43 @@ class _ProductListItemState extends State<ProductListItem> {
     );
   }
 
-  Row renderTimerAndFavoriteIcon(Product product) {
-    return Row(
-      children: [
-        const Icon(
-          Icons.access_time_rounded,
-          size: 18,
-          color: Colors.grey,
-        ),
-        const SizedBox(
-          width: 4,
-        ),
-        Expanded(
-          child: Text(
-            product.createdAt,
-            style: const TextStyle(
-              color: Colors.grey,
-              fontSize: 12,
+  Expanded renderTimerAndFavoriteIcon(Product product) {
+    return Expanded(
+      child: Row(
+        children: [
+          const Icon(
+            Icons.access_time_rounded,
+            size: 18,
+            color: Colors.grey,
+          ),
+          const SizedBox(
+            width: 4,
+          ),
+          Expanded(
+            child: Text(
+              DateFormatterUtil().call(product.createdAt),
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 12,
+              ),
             ),
           ),
-        ),
-        GestureDetector(
-          onTap: () {
-            widget.onTap();
-          },
-          child: CircleAvatar(
-            radius: 14,
-            backgroundColor: const Color.fromRGBO(233, 225, 225, 1),
-            child: Icon(
-              widget.isFavorite ? Icons.favorite_border : Icons.favorite,
-              size: 20,
-              color: Colors.red,
+          GestureDetector(
+            onTap: () {
+              widget.onTap();
+            },
+            child: CircleAvatar(
+              radius: 14,
+              backgroundColor: const Color(0xFFE9E1E1),
+              child: Icon(
+                widget.isFavorite ? Icons.favorite_border : Icons.favorite,
+                size: 20,
+                color: Colors.red,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

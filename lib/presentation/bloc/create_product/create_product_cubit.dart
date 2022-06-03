@@ -11,12 +11,16 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   CreateProductCubit({
     required this.createProduct,
     required this.uploadProductPictures,
-  }) : super(AddPostNotTriggered());
+  }) : super(AddPostEmpty());
+
+  void clear() {
+    emit(AddPostEmpty());
+  }
 
   void call(AddProductModel addProductModel, List<dynamic> productImages,
       String token) async {
     try {
-      emit(AddPostNotTriggered());
+      emit(AddPostEmpty());
       emit(AddPostLoading());
       var uploadedPictures = await uploadProductPictures.call(productImages);
       addProductModel.productImages = [...uploadedPictures];

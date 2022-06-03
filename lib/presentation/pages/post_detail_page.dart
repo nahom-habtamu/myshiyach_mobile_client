@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/utils/date_time_formatter.dart';
 import '../../domain/enitites/product.dart';
 import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
@@ -101,7 +102,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                 width: 10,
                               ),
                               Text(
-                                product.createdAt,
+                                DateFormatterUtil().call(product.createdAt),
                                 style: const TextStyle(
                                   color: Colors.grey,
                                   fontSize: 12,
@@ -129,6 +130,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
                             child: PostDetailInformationItem(
                               informationKey: "Description",
                               informationValue: product.description,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: PostDetailInformationItem(
+                              informationKey: "City",
+                              informationValue: product.city,
                             ),
                           ),
                           const SizedBox(
