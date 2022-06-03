@@ -160,7 +160,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         goToChatDetailButton(postCreatedBy),
-        if (currentUser!.id == postCreatedBy) deletePostButton(postCreatedBy),
+        if (currentUser!.id == postCreatedBy) deletePostButton(postId),
       ],
     );
   }

@@ -28,13 +28,17 @@ class ProductRemoteDataSource extends ProductDataSource {
   }
 
   @override
-  Future<ProductModel> createProduct(AddProductModel addProductModel) async {
+  Future<ProductModel> createProduct(
+      AddProductModel addProductModel, String token) async {
     const String endPoint = '$baseUrl/products';
-    final response = await http.post(Uri.parse(endPoint),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(addProductModel.toJson()));
+    final response = await http.post(
+      Uri.parse(endPoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': token
+      },
+      body: jsonEncode(addProductModel.toJson()),
+    );
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       var product = ProductModel.fromJson(
@@ -57,7 +61,8 @@ class ProductRemoteDataSource extends ProductDataSource {
     );
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      return json.decode(response.body);
+      var data = json.decode(response.body);
+      return data["productId"] as String;
     }
     throw Exception("Couldn't Add Product");
   }

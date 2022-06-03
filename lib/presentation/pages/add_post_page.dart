@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../bloc/auth/auth_cubit.dart';
+import '../bloc/auth/auth_state.dart';
 import 'post_confirmation_page.dart';
 import '../../data/models/product/add_product_model.dart';
 import '../../domain/enitites/main_category.dart';
@@ -25,13 +27,29 @@ class _AddPostPageState extends State<AddPostPage> {
   int currentInputPageState = 0;
   int selectedMainCategoryIndex = 0;
   Map<String, dynamic> mergedInputValues = {};
+  String accessToken = "";
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context.read<GetAllCategoriesCubit>().call();
+      initializeCurrentUser();
+      initCategories();
     });
+  }
+
+  void initializeCurrentUser() {
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      accessToken = authState.loginResult.token;
+    }
+  }
+
+  void initCategories() {
+    var getAllCategoriesCubit = context.read<GetAllCategoriesCubit>();
+    if (getAllCategoriesCubit.state is! Loaded) {
+      getAllCategoriesCubit.call();
+    }
   }
 
   appendInputValue(Map<String, dynamic> inputValues) {
@@ -202,9 +220,10 @@ class _AddPostPageState extends State<AddPostPage> {
   void createProduct() {
     var productToAdd = AddProductModel.fromJson(mergedInputValues);
     context.read<CreateProductCubit>().call(
-      productToAdd,
-      mergedInputValues["productImages"],
-    );
+          productToAdd,
+          mergedInputValues["productImages"],
+          accessToken,
+        );
   }
 
   renderFirstPageInputs(List<MainCategory> categories) {

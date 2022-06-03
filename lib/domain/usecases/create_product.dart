@@ -7,8 +7,8 @@ class CreateProduct {
 
   CreateProduct(this.repository);
 
-  Future<Product> call(AddProductModel addProductModel) async {
-    var result = await repository.createProduct(addProductModel);
+  Future<Product> call(AddProductModel addProductModel, String token) async {
+    var result = await repository.createProduct(addProductModel, token);
     return result;
   }
 }

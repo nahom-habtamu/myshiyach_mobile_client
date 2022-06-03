@@ -35,8 +35,9 @@ class ProductRepository extends ProductService {
   }
 
   @override
-  Future<ProductModel> createProduct(AddProductModel addProductModel) {
-    return remoteDataSource.createProduct(addProductModel);
+  Future<ProductModel> createProduct(
+      AddProductModel addProductModel, String token) {
+    return remoteDataSource.createProduct(addProductModel, token);
   }
 
   @override
