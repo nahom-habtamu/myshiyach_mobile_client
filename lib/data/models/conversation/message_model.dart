@@ -5,10 +5,12 @@ class MessageModel extends Message {
     required String text,
     required String senderId,
     required String recieverId,
+    required String createdDateTime,
   }) : super(
           text: text,
           senderId: senderId,
           recieverId: recieverId,
+          createdDateTime: createdDateTime,
         );
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
@@ -16,6 +18,7 @@ class MessageModel extends Message {
       text: json["text"],
       senderId: json["senderId"],
       recieverId: json["recieverId"],
+      createdDateTime: json["createdDateTime"]
     );
   }
 
@@ -23,6 +26,7 @@ class MessageModel extends Message {
         "text": text,
         "senderId": senderId,
         "recieverId": recieverId,
+        "createdDateTime": createdDateTime
       };
 
   static List<MessageModel> parseMessagesFromJson(dynamic jsonList) {

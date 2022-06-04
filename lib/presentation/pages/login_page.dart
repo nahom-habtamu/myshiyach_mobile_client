@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/presentation/pages/master_page.dart';
 
 import '../../data/models/login/login_request_model.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../widgets/auth_input.dart';
+import 'master_page.dart';
 import 'sign_up_page.dart';
 
 class LoginPage extends StatefulWidget {

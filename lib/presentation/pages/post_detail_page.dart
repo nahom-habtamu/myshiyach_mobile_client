@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/domain/usecases/get_conversation_by_id.dart';
+import 'package:mnale_client/presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 
 import '../../core/utils/date_time_formatter.dart';
+import '../../data/models/conversation/add_conversation_model.dart';
 import '../../domain/enitites/product.dart';
 import '../../domain/enitites/user.dart';
+import '../bloc/create_conversation/handle_going_to_message_cubit.dart';
+import '../bloc/create_conversation/handle_going_to_message_state.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_state.dart';
 import '../widgets/post_detail/post_detail_carousel.dart';
 import '../widgets/post_detail/post_detail_information_item.dart';
-import 'chat_list_page.dart';
+import 'chat_detail_page.dart';
 import 'master_page.dart';
 
 class PostDetailPage extends StatefulWidget {
@@ -34,6 +39,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         currentUser = getCurrentUser();
         authToken = getToken();
       });
+      context.read<HandleGoingToMessageCubit>().clearState();
     });
   }
 
@@ -176,43 +182,66 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  SizedBox goToChatDetailButton(String postCreatedBy) {
-    return SizedBox(
-      height: 50,
-      width: currentUser!.id == postCreatedBy
-          ? MediaQuery.of(context).size.width * 0.42
-          : MediaQuery.of(context).size.width * 0.85,
-      child: ElevatedButton(
-        onPressed: () {
+  BlocBuilder goToChatDetailButton(String postCreatedBy) {
+    return BlocBuilder<HandleGoingToMessageCubit, HandleGoingToMessageState>(
+        builder: (context, state) {
+      if (state is AddConversationLoading) {
+        return const SizedBox(
+          height: 50,
+          width: 50,
+          child: CircularProgressIndicator(),
+        );
+      }
+      if (state is AddConversationSuccessfull) {
+        context.read<GetConversationByIdCubit>().call(
+              state.chatDetailPageArguments.conversationId,
+            );
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
           Navigator.pushReplacementNamed(
             context,
-            ChatListPage.routeName,
+            ChatDetailPage.routeName,
+            arguments: state.chatDetailPageArguments,
           );
-        },
-        child: const Text('Send Message'),
-        style: ElevatedButton.styleFrom(
-          primary: const Color(0xff11435E),
-          textStyle: const TextStyle(
-            color: Colors.white,
-          ),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(16),
+        });
+      }
+      return SizedBox(
+        height: 50,
+        width: currentUser!.id == postCreatedBy
+            ? MediaQuery.of(context).size.width * 0.42
+            : MediaQuery.of(context).size.width * 0.85,
+        child: ElevatedButton(
+          onPressed: () {
+            var addConversation = AddConversationModel(
+                memberOne: currentUser!.id, memberTwo: postCreatedBy);
+            context
+                .read<HandleGoingToMessageCubit>()
+                .call(addConversation, currentUser!.id, authToken!);
+          },
+          child: const Text('Send Message'),
+          style: ElevatedButton.styleFrom(
+            primary: const Color(0xff11435E),
+            textStyle: const TextStyle(
+              color: Colors.white,
+            ),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(16),
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   deletePostButton(String postId) {
     return BlocBuilder<DeleteProductByIdCubit, DeleteProductByIdState>(
       builder: (context, state) {
         if (state is DeleteProductLoading) {
-          return SizedBox(
+          return const SizedBox(
             height: 50,
-            width: MediaQuery.of(context).size.width * 0.42,
-            child: const CircularProgressIndicator(),
+            width: 50,
+            child: CircularProgressIndicator(),
           );
         }
         if (state is DeleteProductLoaded) {

@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../models/conversation/conversation_model.dart';
 import '../../models/conversation/message_model.dart';
+import '../../models/conversation/conversation_model.dart';
+import '../../models/conversation/add_conversation_model.dart';
 import 'conversation_data_source.dart';
 
 class ConversationFirebaseDataSource extends ConversationDataSource {
@@ -30,5 +31,59 @@ class ConversationFirebaseDataSource extends ConversationDataSource {
     return conversations!.snapshots().map((snapshot) => snapshot.docs
         .map((doc) => ConversationModel.fromDocumentSnapshot(doc))
         .firstWhere((element) => element.id == id));
+  }
+
+  @override
+  Stream<ConversationModel> getConversationByMembers(
+    String memberOneId,
+    String memberTwoId,
+  ) {
+    try {
+      return conversations!.snapshots().map(
+            (snapshot) => snapshot.docs
+                .map((doc) => ConversationModel.fromDocumentSnapshot(doc))
+                .singleWhere(
+                  (element) => _compareConversationWithMembers(
+                    element,
+                    memberOneId,
+                    memberTwoId,
+                  ),
+                ),
+          );
+    } catch (e) {
+      return const Stream.empty();
+    }
+  }
+
+  bool _compareConversationWithMembers(
+    ConversationModel element,
+    String memberOneId,
+    String memberTwoId,
+  ) {
+    return (element.memberOne == memberOneId &&
+            element.memberTwo == memberTwoId) ||
+        (element.memberOne == memberTwoId && element.memberTwo == memberOneId);
+  }
+
+  @override
+  Future<ConversationModel> createConversation(
+    AddConversationModel addConversationModel,
+  ) async {
+    var result = await conversations!.add({
+      "memberOne": addConversationModel.memberOne,
+      "memberTwo": addConversationModel.memberTwo,
+      "messages": [],
+    });
+
+    return conversations!
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => ConversationModel.fromDocumentSnapshot(doc))
+              .firstWhere(
+                (element) => element.id == result.id,
+              ),
+        )
+        .first;
   }
 }
