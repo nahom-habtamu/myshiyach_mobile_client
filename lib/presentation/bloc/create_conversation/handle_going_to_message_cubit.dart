@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/usecases/get_conversation_by_members.dart';
-import '../../../domain/usecases/get_user_by_id.dart';
+import '../../../data/models/conversation/add_conversation_model.dart';
 import '../../../domain/enitites/conversation.dart';
 import '../../../domain/usecases/create_conversation.dart';
-import '../../../data/models/conversation/add_conversation_model.dart';
-import 'handle_going_to_message_state.dart';
+import '../../../domain/usecases/get_conversation_by_members.dart';
+import '../../../domain/usecases/get_user_by_id.dart';
 import '../../screen_arguments/chat_detail_page_arguments.dart';
+import 'handle_going_to_message_state.dart';
 
 class HandleGoingToMessageCubit extends Cubit<HandleGoingToMessageState> {
   final CreateConversation createConversation;

@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/auth/auth_cubit.dart';
-import '../bloc/auth/auth_state.dart';
-import 'post_confirmation_page.dart';
 import '../../data/models/product/add_product_model.dart';
 import '../../domain/enitites/main_category.dart';
-import '../bloc/get_categories/get_categories_state.dart';
+import '../bloc/auth/auth_cubit.dart';
+import '../bloc/auth/auth_state.dart';
 import '../bloc/create_product/create_product_cubit.dart';
 import '../bloc/create_product/create_product_state.dart';
-import '../bloc/get_categories/get_categories_cubit.dart';
-import '../widgets/add_post/third_page_inputs.dart';
+import '../bloc/get_data_needed_to_add_post/get_data_needed_to_add_post_cubit.dart';
+import '../bloc/get_data_needed_to_add_post/get_data_needed_to_add_post_state.dart';
 import '../widgets/add_post/first_page_inputs.dart';
 import '../widgets/add_post/second_page_inputs.dart';
+import '../widgets/add_post/third_page_inputs.dart';
+import 'post_confirmation_page.dart';
 
 class AddPostPage extends StatefulWidget {
   static String routeName = "/addPostPage";

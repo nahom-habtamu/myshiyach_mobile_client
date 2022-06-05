@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 class AddPostInput extends StatelessWidget {
   final Function onChanged;
   final String hintText;
+  final dynamic initialValue;
   const AddPostInput({
     Key? key,
-    required this.hintText, required this.onChanged,
+    required this.hintText, required this.onChanged, this.initialValue,
   }) : super(key: key);
 
   @override
@@ -13,6 +14,7 @@ class AddPostInput extends StatelessWidget {
     return SizedBox(
       height: 50,
       child: TextFormField(
+        initialValue: initialValue,
         style: const TextStyle(
           color: Colors.black,
           fontSize: 15,

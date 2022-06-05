@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/domain/usecases/get_conversation_by_id.dart';
-import 'package:mnale_client/presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
+import 'package:mnale_client/presentation/pages/edit_post_page.dart';
 
 import '../../core/utils/date_time_formatter.dart';
 import '../../data/models/conversation/add_conversation_model.dart';
 import '../../domain/enitites/product.dart';
 import '../../domain/enitites/user.dart';
-import '../bloc/create_conversation/handle_going_to_message_cubit.dart';
-import '../bloc/create_conversation/handle_going_to_message_state.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
+import '../bloc/create_conversation/handle_going_to_message_cubit.dart';
+import '../bloc/create_conversation/handle_going_to_message_state.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_state.dart';
+import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../widgets/post_detail/post_detail_carousel.dart';
 import '../widgets/post_detail/post_detail_information_item.dart';
 import 'chat_detail_page.dart';
@@ -58,6 +58,21 @@ class _PostDetailPageState extends State<PostDetailPage> {
           backgroundColor: const Color(0xffF1F1F1),
           elevation: 0,
           centerTitle: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: IconButton(
+                icon: const Icon(Icons.edit, color: Colors.black),
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    EditPostPage.routeName,
+                    arguments: product,
+                  );
+                },
+              ),
+            )
+          ],
         ),
         body: Container(
           decoration: const BoxDecoration(

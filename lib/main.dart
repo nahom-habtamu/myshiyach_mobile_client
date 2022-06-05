@@ -10,27 +10,29 @@ import 'presentation/bloc/create_conversation/handle_going_to_message_cubit.dart
 import 'presentation/bloc/create_product/create_product_cubit.dart';
 import 'presentation/bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import 'presentation/bloc/display_all_products/display_all_products_cubit.dart';
+import 'presentation/bloc/get_all_categories/get_all_categories_cubit.dart';
 import 'presentation/bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import 'presentation/bloc/get_all_products/get_all_products_cubit.dart';
 import 'presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
+import 'presentation/bloc/get_data_needed_to_add_post/get_data_needed_to_add_post_cubit.dart';
 import 'presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
-import 'presentation/bloc/get_categories/get_categories_cubit.dart';
 import 'presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import 'presentation/bloc/register_user/register_user_cubit.dart';
 import 'presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import 'presentation/bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import 'presentation/pages/add_post_page.dart';
-import 'presentation/pages/chat_list_page.dart';
 import 'presentation/pages/chat_detail_page.dart';
+import 'presentation/pages/chat_list_page.dart';
+import 'presentation/pages/edit_post_page.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/intro_page.dart';
 import 'presentation/pages/login_page.dart';
 import 'presentation/pages/master_page.dart';
-import 'presentation/pages/sign_up_page.dart';
-import 'presentation/pages/splash_page.dart';
-import 'presentation/pages/post_detail_page.dart';
 import 'presentation/pages/otp_verification_page.dart';
 import 'presentation/pages/post_confirmation_page.dart';
+import 'presentation/pages/post_detail_page.dart';
+import 'presentation/pages/sign_up_page.dart';
+import 'presentation/pages/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,6 +92,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => sl<HandleGoingToMessageCubit>(),
         ),
+        BlocProvider(
+          create: (_) => sl<GetAllCategoriesCubit>(),
+        ),
       ],
       child: MaterialApp(
         title: 'Mnale',
@@ -109,6 +114,7 @@ class MyApp extends StatelessWidget {
           AddPostPage.routeName: (context) => const AddPostPage(),
           ChatListPage.routeName: (context) => const ChatListPage(),
           ChatDetailPage.routeName: (context) => const ChatDetailPage(),
+          EditPostPage.routeName: (context) => const EditPostPage(),
           PostConfirmationPage.routeName: (context) =>
               const PostConfirmationPage(),
           OtpVerificationPage.routeName: (context) =>
