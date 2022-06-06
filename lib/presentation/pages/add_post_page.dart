@@ -8,8 +8,8 @@ import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/create_product/create_product_cubit.dart';
 import '../bloc/create_product/create_product_state.dart';
-import '../bloc/get_data_needed_to_add_post/get_data_needed_to_add_post_cubit.dart';
-import '../bloc/get_data_needed_to_add_post/get_data_needed_to_add_post_state.dart';
+import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
+import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_state.dart';
 import '../widgets/add_post/first_page_inputs.dart';
 import '../widgets/add_post/second_page_inputs.dart';
 import '../widgets/add_post/third_page_inputs.dart';
@@ -51,9 +51,10 @@ class _AddPostPageState extends State<AddPostPage> {
   }
 
   void initCategories() {
-    var getAllCategoriesCubit = context.read<GetDataNeededToAddPostCubit>();
-    if (getAllCategoriesCubit.state is! Loaded) {
-      getAllCategoriesCubit.call();
+    var getAllNeededToManagePostCubit =
+        context.read<GetDataNeededToManagePostCubit>();
+    if (getAllNeededToManagePostCubit.state is! Loaded) {
+      getAllNeededToManagePostCubit.call();
     }
   }
 
@@ -85,8 +86,8 @@ class _AddPostPageState extends State<AddPostPage> {
           elevation: 0,
           centerTitle: true,
         ),
-        body: BlocBuilder<GetDataNeededToAddPostCubit,
-            GetDataNeededToAddPostState>(
+        body: BlocBuilder<GetDataNeededToManagePostCubit,
+            GetDataNeededToManagePostState>(
           builder: (context, state) {
             if (state is Loaded) {
               var isThereAdditionalData =

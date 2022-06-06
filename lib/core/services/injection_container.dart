@@ -59,7 +59,7 @@ import '../../presentation/bloc/display_all_products/display_all_products_cubit.
 import '../../presentation/bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import '../../presentation/bloc/get_all_products/get_all_products_cubit.dart';
 import '../../presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
-import '../../presentation/bloc/get_data_needed_to_add_post/get_data_needed_to_add_post_cubit.dart';
+import '../../presentation/bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../presentation/bloc/register_user/register_user_cubit.dart';
@@ -84,10 +84,12 @@ Future<void> init() async {
   sl.registerFactory(() => GetAllProductsCubit(sl()));
   sl.registerFactory(() => GetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
-  sl.registerFactory(() => GetDataNeededToAddPostCubit(
-        getAllCategories: sl(),
-        getAllCities: sl(),
-      ));
+  sl.registerFactory(
+    () => GetDataNeededToManagePostCubit(
+      getAllCategories: sl(),
+      getAllCities: sl(),
+    ),
+  );
   sl.registerFactory(() => GetAllConversationsCubit(sl()));
   sl.registerFactory(() => GetUserByIdCubit(sl()));
   sl.registerFactory(() => AddMessageToConversationCubit(sl()));
@@ -95,10 +97,10 @@ Future<void> init() async {
   sl.registerFactory(() => DeleteProductByIdCubit(sl()));
   sl.registerFactory(() => GetAllCategoriesCubit(sl()));
   sl.registerFactory(() => HandleGoingToMessageCubit(
-    createConversation: sl(),
-    getConversationByMembers: sl(),
-    getUserById: sl(),
-  ));
+        createConversation: sl(),
+        getConversationByMembers: sl(),
+        getUserById: sl(),
+      ));
   sl.registerFactory(
     () => CreateProductCubit(
       createProduct: sl(),

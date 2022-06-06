@@ -2,12 +2,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/usecases/get_all_cities.dart';
 import '../../../domain/usecases/get_categories.dart';
-import 'get_data_needed_to_add_post_state.dart';
+import 'get_data_needed_to_manage_post_state.dart';
 
-class GetDataNeededToAddPostCubit extends Cubit<GetDataNeededToAddPostState> {
+class GetDataNeededToManagePostCubit
+    extends Cubit<GetDataNeededToManagePostState> {
   final GetAllCategories getAllCategories;
   final GetAllCities getAllCities;
-  GetDataNeededToAddPostCubit({
+  GetDataNeededToManagePostCubit({
     required this.getAllCategories,
     required this.getAllCities,
   }) : super(Empty());

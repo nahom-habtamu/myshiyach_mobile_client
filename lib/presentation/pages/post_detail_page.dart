@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/presentation/pages/edit_post_page.dart';
 
 import '../../core/utils/date_time_formatter.dart';
 import '../../data/models/conversation/add_conversation_model.dart';
@@ -17,6 +16,7 @@ import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../widgets/post_detail/post_detail_carousel.dart';
 import '../widgets/post_detail/post_detail_information_item.dart';
 import 'chat_detail_page.dart';
+import 'edit_post_page.dart';
 import 'master_page.dart';
 
 class PostDetailPage extends StatefulWidget {

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 class AddPostDropDownInput extends StatelessWidget {
   final String hintText;
-  final List<Map<String,String>> items;
+  final List<Map<String, String>> items;
   final Function onChanged;
+  final String initialValue;
   const AddPostDropDownInput({
     Key? key,
     required this.hintText,
     required this.items,
     required this.onChanged,
+    this.initialValue = "",
   }) : super(key: key);
 
   @override
