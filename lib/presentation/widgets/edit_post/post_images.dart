@@ -19,6 +19,8 @@ class PostImages extends StatefulWidget {
 
 class _PostImagesState extends State<PostImages> {
   List<dynamic> imagesInDisplay = [];
+  List<dynamic> updatedPickedImages = [];
+  List<dynamic> updatedExistingProductImages = [];
 
   @override
   void initState() {
@@ -28,10 +30,10 @@ class _PostImagesState extends State<PostImages> {
 
   void initImagesToDisplay() {
     setState(() {
-      var builtImages = [
-        ...buildImageWithUrls(),
-        ...buildPickedImages(),
-      ];
+      updatedPickedImages = [...widget.pickedImages];
+      updatedExistingProductImages = [...widget.imagesAlreadyInProduct];
+
+      var builtImages = [...buildImageWithUrls(), ...buildPickedImages()];
       imagesInDisplay = builtImages;
     });
   }
@@ -39,24 +41,29 @@ class _PostImagesState extends State<PostImages> {
   @override
   Widget build(BuildContext context) {
     initImagesToDisplay();
-    return imagesInDisplay.isNotEmpty ? SizedBox(
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: imagesInDisplay.length,
-        itemBuilder: (context, index) => PickedPostImageItem(
-          imageFile: imagesInDisplay[index]["imageFile"],
-          imageUrl: imagesInDisplay[index]["imageUrl"],
-          onDeleteClicked: () {
-            if (imagesInDisplay[index]["imageFile"] == null) {
-              handleDeletingProductImage(index);
-            } else {
-              handleDeletingPickedImage(index);
-            }
-          },
-        ),
-      ),
-    ) : Container();
+    return imagesInDisplay.isNotEmpty
+        ? SizedBox(
+            height: 100,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: imagesInDisplay.length,
+              itemBuilder: (context, index) {
+                var item = imagesInDisplay[index];
+                return PickedPostImageItem(
+                  imageFile: item["imageFile"],
+                  imageUrl: item["imageUrl"],
+                  onDeleteClicked: () {
+                    if (imagesInDisplay[index]["imageFile"] == null) {
+                      handleDeletingProductImage(index);
+                    } else {
+                      handleDeletingPickedImage(index);
+                    }
+                  },
+                );
+              },
+            ),
+          )
+        : Container();
   }
 
   List<Map<String, dynamic>> buildPickedImages() {
@@ -71,7 +78,7 @@ class _PostImagesState extends State<PostImages> {
   }
 
   List<Map<String, dynamic>> buildImageWithUrls() {
-    return widget.imagesAlreadyInProduct
+    return updatedExistingProductImages
         .map((e) => {
               "imageUrl": e,
               "imageFile": null,
@@ -80,14 +87,19 @@ class _PostImagesState extends State<PostImages> {
   }
 
   void handleDeletingPickedImage(int index) {
-    widget.pickedImages.removeWhere(
-        (element) => element.path == imagesInDisplay[index]["imageFile"]);
+    setState(() {
+      updatedPickedImages.removeWhere(
+          (element) => element.path == imagesInDisplay[index]["imageFile"]);
+    });
+
     handleChangingStateAndNotifyingParent();
   }
 
   void handleDeletingProductImage(int index) {
-    widget.imagesAlreadyInProduct.removeWhere(
-        (element) => element == imagesInDisplay[index]["imageUrl"]);
+    setState(() {
+      updatedExistingProductImages.removeWhere(
+          (element) => element == imagesInDisplay[index]["imageUrl"]);
+    });
     handleChangingStateAndNotifyingParent();
   }
 
@@ -98,7 +110,9 @@ class _PostImagesState extends State<PostImages> {
         ...buildPickedImages(),
       ];
     });
-
-    widget.onStateChange(buildImageWithUrls(), buildPickedImages());
+    widget.onStateChange(
+      updatedExistingProductImages,
+      updatedPickedImages,
+    );
   }
 }

@@ -1,3 +1,5 @@
+import 'package:mnale_client/data/models/product/edit_product_model.dart';
+
 import '../../data/models/product/add_product_model.dart';
 import '../../data/models/product/product_model.dart';
 
@@ -9,4 +11,9 @@ abstract class ProductService {
       AddProductModel addProductModel, String token);
   Future<List<String>> uploadProductPictures(List<dynamic> images);
   Future<String> deleteProduct(String id, String token);
+  Future<ProductModel> updateProduct(
+    String id,
+    EditProductModel editProductModel,
+    String token,
+  );
 }

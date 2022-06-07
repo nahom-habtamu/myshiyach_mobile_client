@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../../core/constants/api_information.dart';
-import '../../models/product/product_model.dart';
 import '../../models/product/add_product_model.dart';
+import '../../models/product/edit_product_model.dart';
+import '../../models/product/product_model.dart';
 import 'product_data_source.dart';
 
 class ProductRemoteDataSource extends ProductDataSource {
@@ -65,5 +66,30 @@ class ProductRemoteDataSource extends ProductDataSource {
       return data["productId"] as String;
     }
     throw Exception("Couldn't Add Product");
+  }
+
+  @override
+  Future<ProductModel> updateProduct(
+    String id,
+    EditProductModel editProductModel,
+    String token,
+  ) async {
+    String endPoint = '$baseUrl/products/$id';
+
+    var body = jsonEncode(editProductModel.toJson());
+    final response = await http.patch(
+      Uri.parse(endPoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': token
+      },
+      body: body,
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      var data = json.decode(response.body);
+      return ProductModel.fromJson(data);
+    }
+    throw Exception("Couldn't Update Product");
   }
 }

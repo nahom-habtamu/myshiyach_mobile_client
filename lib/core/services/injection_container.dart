@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mnale_client/domain/usecases/get_conversation_by_members.dart';
-import 'package:mnale_client/presentation/bloc/get_all_categories/get_all_categories_cubit.dart';
+import 'package:mnale_client/domain/usecases/update_product.dart';
+import 'package:mnale_client/presentation/bloc/update_product/update_product_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -43,6 +43,7 @@ import '../../domain/usecases/get_all_conversations.dart';
 import '../../domain/usecases/get_all_products.dart';
 import '../../domain/usecases/get_categories.dart';
 import '../../domain/usecases/get_conversation_by_id.dart';
+import '../../domain/usecases/get_conversation_by_members.dart';
 import '../../domain/usecases/get_favorite_products.dart';
 import '../../domain/usecases/get_user_by_id.dart';
 import '../../domain/usecases/login.dart';
@@ -56,6 +57,7 @@ import '../../presentation/bloc/create_conversation/handle_going_to_message_cubi
 import '../../presentation/bloc/create_product/create_product_cubit.dart';
 import '../../presentation/bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../../presentation/bloc/display_all_products/display_all_products_cubit.dart';
+import '../../presentation/bloc/get_all_categories/get_all_categories_cubit.dart';
 import '../../presentation/bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import '../../presentation/bloc/get_all_products/get_all_products_cubit.dart';
 import '../../presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
@@ -84,6 +86,8 @@ Future<void> init() async {
   sl.registerFactory(() => GetAllProductsCubit(sl()));
   sl.registerFactory(() => GetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
+  sl.registerFactory(() =>
+      UpdateProductCubit(updateProduct: sl(), uploadProductPictures: sl()));
   sl.registerFactory(
     () => GetDataNeededToManagePostCubit(
       getAllCategories: sl(),
@@ -96,6 +100,7 @@ Future<void> init() async {
   sl.registerFactory(() => GetConversationByIdCubit(sl()));
   sl.registerFactory(() => DeleteProductByIdCubit(sl()));
   sl.registerFactory(() => GetAllCategoriesCubit(sl()));
+  sl.registerFactory(() => UpdateProduct(sl()));
   sl.registerFactory(() => HandleGoingToMessageCubit(
         createConversation: sl(),
         getConversationByMembers: sl(),

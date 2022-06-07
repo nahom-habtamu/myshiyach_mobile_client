@@ -19,6 +19,7 @@ import 'presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart
 import 'presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import 'presentation/bloc/register_user/register_user_cubit.dart';
 import 'presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import 'presentation/bloc/update_product/update_product_cubit.dart';
 import 'presentation/bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import 'presentation/pages/add_post_page.dart';
 import 'presentation/pages/chat_detail_page.dart';
@@ -94,6 +95,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => sl<GetAllCategoriesCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<UpdateProductCubit>(),
         ),
       ],
       child: MaterialApp(

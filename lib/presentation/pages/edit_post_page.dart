@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../data/models/product/edit_product_model.dart';
 import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
+import '../bloc/auth/auth_cubit.dart';
+import '../bloc/auth/auth_state.dart';
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_state.dart';
+import '../bloc/update_product/update_product_cubit.dart';
+import '../bloc/update_product/update_product_state.dart';
 import '../widgets/add_post/add_post_dropdown_dart.dart';
 import '../widgets/add_post/add_post_input.dart';
 import '../widgets/add_post/input_image_picker.dart';
 import '../widgets/edit_post/post_images.dart';
+import 'post_detail_page.dart';
 
 class EditPostPage extends StatefulWidget {
   static String routeName = '/editPostPage';
@@ -19,6 +26,7 @@ class EditPostPage extends StatefulWidget {
 }
 
 class _EditPostPageState extends State<EditPostPage> {
+  String accessToken = "";
   List<dynamic> pickedImages = [];
   List<dynamic> imagesAlreadyInProduct = [];
   Product? product;
@@ -28,17 +36,37 @@ class _EditPostPageState extends State<EditPostPage> {
   double price = 0.0;
   String mainCategory = "";
   String subCategory = "";
+  String brand = "";
+  String city = "";
+  String postState = "";
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
+      initializeCurrentUser();
       initCategories();
+      context.read<UpdateProductCubit>().clear();
       setState(() {
         product = ModalRoute.of(context)!.settings.arguments as Product;
         imagesAlreadyInProduct = [...product!.productImages];
+        title = product!.title;
+        description = product!.description;
+        price = product!.price;
+        mainCategory = product!.mainCategory;
+        subCategory = product!.subCategory;
+        brand = product!.brand;
+        city = product!.city;
+        postState = product!.state;
       });
     });
+  }
+
+  void initializeCurrentUser() {
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      accessToken = authState.loginResult.token;
+    }
   }
 
   void initCategories() {
@@ -83,6 +111,9 @@ class _EditPostPageState extends State<EditPostPage> {
               buildMainCategoriesToDisplay(state.categories);
           var citiesToShowOnDropDown = buildCititesToDisplay(state.cities);
           var subCategoriesToShow = buildSubCategoryToDisplay(state.categories);
+          var postStateToShowOnDropdown = ["New", "Old", "Slightly Used"]
+              .map((m) => {"value": m, "preview": m})
+              .toList();
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(25.0),
@@ -105,83 +136,84 @@ class _EditPostPageState extends State<EditPostPage> {
                   ),
                   AddPostInput(
                     hintText: "Title",
-                    onChanged: (value) => {},
+                    onChanged: (value) => setState(() => title = value),
                     initialValue: product!.title,
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   AddPostInput(
-                      hintText: "Description",
-                      onChanged: (value) => {},
-                      initialValue: product!.description),
+                    hintText: "Description",
+                    onChanged: (value) => setState(() => description = value),
+                    initialValue: product!.description,
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
                   AddPostInput(
-                      hintText: "Price",
-                      onChanged: (value) => {},
-                      initialValue: product!.price.toString()),
+                    hintText: "Price",
+                    onChanged: (value) =>
+                        setState(() => price = double.parse(value)),
+                    initialValue: product!.price.toString(),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
                   AddPostInput(
-                      hintText: "State",
-                      onChanged: (value) => {},
-                      initialValue: product!.state),
-                  const SizedBox(
-                    height: 20,
+                    hintText: "Brand",
+                    onChanged: (value) => setState(() => brand = value),
+                    initialValue: product!.brand,
                   ),
-                  AddPostInput(
-                      hintText: "Brand",
-                      onChanged: (value) => {},
-                      initialValue: product!.brand),
                   const SizedBox(
                     height: 20,
                   ),
                   AddPostDropDownInput(
+                    initialValue: postState,
+                    items: postStateToShowOnDropdown,
+                    hintText: "State",
+                    onChanged: (value) => setState(
+                      () => postState = value,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  AddPostDropDownInput(
+                    initialValue: mainCategory,
                     items: mainCategoryToShowOnDropDown,
                     hintText: "Category",
-                    onChanged: (value) => setState(() => mainCategory = value),
+                    onChanged: (value) => setState(
+                      () {
+                        mainCategory = value;
+                        subCategory = "";
+                      },
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   AddPostDropDownInput(
+                    key: Key(subCategory),
+                    initialValue: subCategory,
                     items: subCategoriesToShow,
                     hintText: "Sub Category",
-                    onChanged: (value) => {},
+                    onChanged: (value) => setState(
+                      () => subCategory = value,
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   AddPostDropDownInput(
+                    initialValue: city,
                     items: citiesToShowOnDropDown,
                     hintText: "City",
-                    onChanged: (value) => {},
+                    onChanged: (value) => setState(() => city = value),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: const Text('Save Changes'),
-                      style: ElevatedButton.styleFrom(
-                        primary: const Color(0xff11435E),
-                        textStyle: const TextStyle(
-                          color: Colors.white,
-                        ),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(16),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
+                  renderSaveButton()
                 ],
               ),
             ),
@@ -190,6 +222,89 @@ class _EditPostPageState extends State<EditPostPage> {
         return Container();
       },
     );
+  }
+
+  renderSaveButton() {
+    return BlocBuilder<UpdateProductCubit, UpdateProductState>(
+        builder: (context, state) {
+      if (state is EditPostLoading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      if (state is EditPostSuccessfull) {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+          Navigator.pushReplacementNamed(
+            context,
+            PostDetailPage.routeName,
+            arguments: state.product,
+          );
+        });
+      }
+
+      return SizedBox(
+        height: 50,
+        width: MediaQuery.of(context).size.width,
+        child: ElevatedButton(
+          onPressed: () {
+            handleUpdatingProduct();
+          },
+          child: const Text('Save Changes'),
+          style: ElevatedButton.styleFrom(
+            primary: const Color(0xff11435E),
+            textStyle: const TextStyle(
+              color: Colors.white,
+            ),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(16),
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
+  void handleUpdatingProduct() {
+    var productId = product!.id;
+    var imagesToUpload = [...pickedImages];
+    var productImages = [...imagesAlreadyInProduct];
+    var editProductModel = EditProductModel(
+      brand: brand,
+      city: city,
+      description: description,
+      mainCategory: mainCategory,
+      subCategory: subCategory,
+      price: price,
+      productImages: [],
+      state: postState,
+      title: title,
+    );
+
+    context.read<UpdateProductCubit>().call(
+          productId,
+          editProductModel,
+          imagesToUpload,
+          productImages,
+          accessToken,
+        );
+  }
+
+  String getSubCategoryInitialValue(List<MainCategory> categories) {
+    var currentMainCategory =
+        categories.firstWhere((element) => element.id == mainCategory);
+
+    var subCategoriesWithCurrentMainCat = currentMainCategory.subCategories
+        .where((element) => element.id == subCategory)
+        .toList();
+
+    if (subCategoriesWithCurrentMainCat.isNotEmpty) {
+      return subCategory;
+    }
+
+    return "";
   }
 
   List<Map<String, String>> buildMainCategoriesToDisplay(

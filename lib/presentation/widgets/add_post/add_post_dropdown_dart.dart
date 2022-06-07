@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AddPostDropDownInput extends StatelessWidget {
+class AddPostDropDownInput extends StatefulWidget {
   final String hintText;
   final List<Map<String, String>> items;
   final Function onChanged;
@@ -14,11 +14,25 @@ class AddPostDropDownInput extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<AddPostDropDownInput> createState() => _AddPostDropDownInputState();
+}
+
+class _AddPostDropDownInputState extends State<AddPostDropDownInput> {
+  String? selectedValue;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialValue.isNotEmpty) selectedValue = widget.initialValue;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50,
       child: DropdownButtonFormField(
-        items: items.map((item) {
+        value: selectedValue,
+        items: widget.items.map((item) {
           return DropdownMenuItem(
             value: item["value"],
             child: Text(
@@ -33,9 +47,14 @@ class AddPostDropDownInput extends StatelessWidget {
           color: Colors.black,
           fontSize: 15,
         ),
-        onChanged: (value) => onChanged(value),
+        onChanged: (value) {
+          setState(() {
+            selectedValue = value.toString();
+          });
+          widget.onChanged(value);
+        },
         decoration: InputDecoration(
-          labelText: hintText,
+          labelText: widget.hintText,
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(16.0),

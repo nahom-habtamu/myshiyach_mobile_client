@@ -45,7 +45,7 @@ class ProductModel extends Product {
       state: jsonProduct["state"],
       city: jsonProduct["city"],
       productImages: List<String>.from(jsonProduct["productImages"]),
-      other: Map<String, dynamic>.from(jsonProduct["other"]),
+      other: jsonProduct["other"] == null ? null : Map<String, dynamic>.from(jsonProduct["other"]),
     );
   }
 
