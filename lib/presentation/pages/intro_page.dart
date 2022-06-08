@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'login_page.dart';
-import 'master_page.dart';
 
 class IntroPage extends StatefulWidget {
   static String routeName = "/introPage";
@@ -99,7 +98,7 @@ class _IntroPageState extends State<IntroPage> {
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (currentInformationIndex < 2) {
+                      if (currentInformationIndex < introData.length - 1) {
                         setState(() {
                           currentInformationIndex++;
                         });
@@ -158,7 +157,7 @@ class _IntroPageState extends State<IntroPage> {
   GestureDetector renderSkipButton() {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, MasterPage.routeName);
+        Navigator.pushNamed(context, LoginPage.routeName);
       },
       child: Align(
         alignment: Alignment.topRight,

@@ -35,7 +35,9 @@ class _ConversationItemState extends State<ConversationItem> {
     if (authState is AuthSuccessfull) {
       var strangerId = getStrangerId(authState);
       var token = authState.loginResult.token;
-      context.read<GetUserByIdCubit>().call(strangerId, token);
+      if (context.read<GetUserByIdCubit>().state is! GetUserByIdLoaded) {
+        context.read<GetUserByIdCubit>().call(strangerId, token);
+      }
     }
   }
 
@@ -51,13 +53,11 @@ class _ConversationItemState extends State<ConversationItem> {
   Widget build(BuildContext context) {
     return BlocBuilder<GetUserByIdCubit, GetUserByIdState>(
       builder: (context, state) {
-        if (state is Loaded) {
+        if (state is GetUserByIdLoaded) {
           return renderMainContent(state);
-        } else if (state is Loading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is Error) {
+        } else if (state is GetUserByIdLoading) {
+          return renderLoadingWidget();
+        } else if (state is GetUserByIdError) {
           return Center(
             child: Text(state.message),
           );
@@ -70,7 +70,7 @@ class _ConversationItemState extends State<ConversationItem> {
     );
   }
 
-  GestureDetector renderMainContent(Loaded state) {
+  GestureDetector renderMainContent(GetUserByIdLoaded state) {
     return GestureDetector(
       onTap: () {
         context.read<GetConversationByIdCubit>().call(widget.conversation.id);
@@ -105,11 +105,35 @@ class _ConversationItemState extends State<ConversationItem> {
               Expanded(
                 child: ListTile(
                   title: Text(state.user.fullName),
-                  subtitle: Text(widget.conversation.messages.last.text),
+                  subtitle: SizedBox(
+                    height: 50,
+                    width: 200,
+                    child: Text(
+                      widget.conversation.messages.last.text,
+                      overflow: TextOverflow.fade,
+                    ),
+                  ),
                 ),
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget renderLoadingWidget() {
+    return Card(
+      color: Colors.white.withOpacity(0.9),
+      elevation: 5,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        height: 100,
+        child: const Center(
+          child: Text('Loading...'),
         ),
       ),
     );

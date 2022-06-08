@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mnale_client/domain/usecases/update_product.dart';
-import 'package:mnale_client/presentation/bloc/update_product/update_product_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -17,6 +15,7 @@ import '../../data/datasources/firebase/firebase_storage_data_source.dart';
 import '../../data/datasources/product/product_data_source.dart';
 import '../../data/datasources/product/product_local_data_source.dart';
 import '../../data/datasources/product/product_remote_data_source.dart';
+import '../../data/datasources/user/user_local_data_source.dart';
 import '../../data/datasources/user/user_remote_data_source.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/category_repository.dart';
@@ -45,10 +44,13 @@ import '../../domain/usecases/get_categories.dart';
 import '../../domain/usecases/get_conversation_by_id.dart';
 import '../../domain/usecases/get_conversation_by_members.dart';
 import '../../domain/usecases/get_favorite_products.dart';
+import '../../domain/usecases/get_stored_user_credentials.dart';
 import '../../domain/usecases/get_user_by_id.dart';
 import '../../domain/usecases/login.dart';
 import '../../domain/usecases/register_user.dart';
 import '../../domain/usecases/set_favorite_product.dart';
+import '../../domain/usecases/store_user_credentails.dart';
+import '../../domain/usecases/update_product.dart';
 import '../../domain/usecases/upload_product_pictures.dart';
 import '../../domain/usecases/verify_phone_number.dart';
 import '../../presentation/bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
@@ -66,6 +68,7 @@ import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubi
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../presentation/bloc/register_user/register_user_cubit.dart';
 import '../../presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../../presentation/bloc/update_product/update_product_cubit.dart';
 import '../../presentation/bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import 'network_info.dart';
 
@@ -75,10 +78,11 @@ Future<void> init() async {
   // state
   sl.registerFactory(
     () => AuthCubit(
-      extractToken: sl(),
-      getCurrentUser: sl(),
-      login: sl(),
-    ),
+        extractToken: sl(),
+        getCurrentUser: sl(),
+        login: sl(),
+        getStoredUserCredentials: sl(),
+        storeUserCredentials: sl()),
   );
   sl.registerFactory(() => VerifyPhoneNumberCubit(sl()));
   sl.registerFactory(() => RegisterUserCubit(sl(), sl()));
@@ -133,6 +137,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetAllCities(sl()));
   sl.registerLazySingleton(() => CreateConversation(sl()));
   sl.registerLazySingleton(() => GetConversationByMembers(sl()));
+  sl.registerLazySingleton(() => GetStoredUserCredentials(sl()));
+  sl.registerLazySingleton(() => StoreUserCredentials(sl()));
 
   // repositories
 
@@ -165,7 +171,7 @@ Future<void> init() async {
   // User Service
 
   sl.registerLazySingleton<UserService>(
-    () => UserRepository(sl()),
+    () => UserRepository(localDataSource: sl(), remoteDataSource: sl()),
   );
 
   // Product Service
@@ -209,6 +215,7 @@ Future<void> init() async {
 
   //  User
   sl.registerLazySingleton(() => UserRemoteDataSource());
+  sl.registerLazySingleton(() => UserLocalDataSource(sl()));
 
   // Auth
 

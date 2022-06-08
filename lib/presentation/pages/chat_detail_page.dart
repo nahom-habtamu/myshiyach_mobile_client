@@ -26,6 +26,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   String messageContent = "";
   ChatDetailPageArguments? args;
   final ScrollController _scrollController = ScrollController();
+  final _controller = TextEditingController();
 
   @override
   void initState() {
@@ -121,7 +122,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               width: MediaQuery.of(context).size.width * 0.8,
               child: TextFormField(
                 style: loginInputTextStyle.copyWith(fontSize: 14),
-                onChanged: (value) => setState(() => messageContent = value),
+                controller: _controller,
+                onChanged: (value) => messageContent = value,
                 decoration: const InputDecoration(
                   labelText: "Enter Message",
                   border: loginInputEnabledBorder,
@@ -129,13 +131,18 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   focusedBorder: loginInputDisabledBorder,
                   filled: true,
                   fillColor: Colors.white,
-                  contentPadding: EdgeInsets.all(18),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 18, vertical: 5),
                 ),
+                minLines: 1,
+                maxLines: 5,
+                keyboardType: TextInputType.multiline,
               ),
             ),
             IconButton(
               onPressed: () {
-                handleAddingMessage();
+                _controller.clear();
+                if (messageContent.isNotEmpty) handleAddingMessage();
               },
               icon: const Icon(
                 Icons.send,
@@ -153,7 +160,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       text: messageContent,
       senderId: currentUser!.id,
       recieverId: args!.strangerUser.id,
-      createdDateTime: DateTime.now().toIso8601String()
+      createdDateTime: DateTime.now().toIso8601String(),
     );
     context
         .read<AddMessageToConversationCubit>()

@@ -20,6 +20,13 @@ class _LoginPageState extends State<LoginPage> {
   String userName = "";
   String password = "";
   bool rememberMe = false;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<AuthCubit>().clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -238,7 +245,7 @@ class _LoginPageState extends State<LoginPage> {
             userName: userName,
             password: password,
           );
-          context.read<AuthCubit>().loginUser(requestBody);
+          context.read<AuthCubit>().loginUser(requestBody, rememberMe);
         },
         child: const Text('Login'),
         style: ElevatedButton.styleFrom(

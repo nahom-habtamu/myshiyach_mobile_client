@@ -2,16 +2,16 @@ import '../../../domain/enitites/user.dart';
 
 abstract class GetUserByIdState {}
 
-class Empty extends GetUserByIdState {}
+class GetUserByIdEmpty extends GetUserByIdState {}
 
-class Loading extends GetUserByIdState {}
+class GetUserByIdLoading extends GetUserByIdState {}
 
-class Loaded extends GetUserByIdState {
+class GetUserByIdLoaded extends GetUserByIdState {
   final User user;
-  Loaded(this.user);
+  GetUserByIdLoaded(this.user);
 }
 
-class Error extends GetUserByIdState {
+class GetUserByIdError extends GetUserByIdState {
   final String message;
-  Error({required this.message});
+  GetUserByIdError({required this.message});
 }
