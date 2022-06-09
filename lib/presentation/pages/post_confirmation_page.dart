@@ -36,14 +36,21 @@ class PostConfirmationPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const CircleAvatar(
-                backgroundColor: Colors.teal,
-                radius: 50,
+              CircleAvatar(
+                radius: 80,
+                backgroundColor: Colors.transparent,
+                child: Image.asset(
+                  'assets/success.png',
+                  fit: BoxFit.cover,
+                ),
               ),
               SizedBox(
                 height: 300,
                 child: Column(
                   children: const [
+                    SizedBox(
+                      height: 15,
+                    ),
                     Text(
                       'Ad Placed',
                       style: TextStyle(
@@ -52,11 +59,14 @@ class PostConfirmationPage extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    SizedBox(
+                      height: 15,
+                    ),
                     Text(
                       'Your ad has been Successfully placed, Our logistic team will contact with you soon.For any help, call (+251) 12345678',
                       style: TextStyle(
                         color: Color(0xff11435E),
-                        fontSize: 14,
+                        fontSize: 15,
                       ),
                     ),
                   ],
@@ -67,7 +77,8 @@ class PostConfirmationPage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, MasterPage.routeName);
+                    Navigator.pushReplacementNamed(
+                        context, MasterPage.routeName);
                   },
                   child: const Text('Go to Homepage'),
                   style: ElevatedButton.styleFrom(

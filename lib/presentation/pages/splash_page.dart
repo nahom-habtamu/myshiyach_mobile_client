@@ -21,15 +21,6 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      // Future.delayed(
-      //   const Duration(seconds: 1),
-      //   () => {
-      //     Navigator.pushReplacementNamed(
-      //       context,
-      //       IntroPage.routeName,
-      //     )
-      //   },
-      // );
       context.read<AuthCubit>().loginUser(null, false);
     });
   }
