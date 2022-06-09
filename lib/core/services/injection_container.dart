@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mnale_client/presentation/bloc/logout/logout_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -90,8 +91,13 @@ Future<void> init() async {
   sl.registerFactory(() => GetAllProductsCubit(sl()));
   sl.registerFactory(() => GetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
-  sl.registerFactory(() =>
-      UpdateProductCubit(updateProduct: sl(), uploadProductPictures: sl()));
+  sl.registerFactory(() => LogOutCubit(storeUserCredentials: sl()));
+  sl.registerFactory(
+    () => UpdateProductCubit(
+      updateProduct: sl(),
+      uploadProductPictures: sl(),
+    ),
+  );
   sl.registerFactory(
     () => GetDataNeededToManagePostCubit(
       getAllCategories: sl(),

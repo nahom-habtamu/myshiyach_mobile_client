@@ -17,6 +17,7 @@ import 'presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cub
 import 'presentation/bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import 'presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import 'presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
+import 'presentation/bloc/logout/logout_cubit.dart';
 import 'presentation/bloc/register_user/register_user_cubit.dart';
 import 'presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import 'presentation/bloc/update_product/update_product_cubit.dart';
@@ -99,6 +100,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => sl<UpdateProductCubit>(),
         ),
+        BlocProvider(
+          create: (_) => sl<LogOutCubit>(),
+        )
       ],
       child: MaterialApp(
         title: 'Mnale',

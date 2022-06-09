@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../bloc/logout/logout_cubit.dart';
+import '../bloc/logout/logout_state.dart';
+import '../widgets/profile/setting_item.dart';
+import '../widgets/profile/settings_item_header.dart';
+import 'login_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -116,99 +124,33 @@ class ProfilePage extends StatelessWidget {
                   subTitle: "For More Information",
                   leadingIcon: Icons.call,
                 ),
-                const SettingItem(
-                  title: "Logout",
-                  leadingIcon: Icons.exit_to_app,
+                BlocBuilder<LogOutCubit, LogOutState>(
+                  builder: (context, state) {
+                    if (state is LogOutSuccessfull) {
+                      SchedulerBinding.instance!.addPostFrameCallback((_) {
+                        Navigator.pushReplacementNamed(
+                          context,
+                          LoginPage.routeName,
+                        );
+                      });
+                    } else if (state is LogOutLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return SettingItem(
+                      title: "Logout",
+                      leadingIcon: Icons.exit_to_app,
+                      onPressed: () {
+                        context.read<LogOutCubit>().call();
+                      },
+                    );
+                  },
                 ),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class SettingsItemHeader extends StatelessWidget {
-  final String content;
-  const SettingsItemHeader({
-    Key? key,
-    required this.content,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 25.0),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Text(
-          content.toUpperCase(),
-          style: const TextStyle(
-            color: Colors.grey,
-            fontWeight: FontWeight.w700,
-            fontSize: 16,
-            letterSpacing: 0.9,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SettingItem extends StatelessWidget {
-  final String title;
-  final String subTitle;
-  final IconData leadingIcon;
-  final String trailingIconType;
-
-  const SettingItem({
-    Key? key,
-    required this.title,
-    this.subTitle = "",
-    required this.leadingIcon,
-    this.trailingIconType = "ARROW",
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0),
-      child: ListTile(
-        title: Text(
-          title,
-          style: const TextStyle(
-            color: Color(0xff1B1D21),
-            fontWeight: FontWeight.w500,
-            fontSize: 16,
-            letterSpacing: 0.28,
-          ),
-        ),
-        subtitle: subTitle.isNotEmpty
-            ? Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  subTitle,
-                  style: const TextStyle(
-                    color: Color(0x82000000),
-                    fontSize: 14,
-                    letterSpacing: 0.28,
-                  ),
-                ),
-              )
-            : Container(),
-        trailing: trailingIconType == "ARROW"
-            ? const Icon(
-                Icons.arrow_forward_ios,
-                color: Color(0xff1B1D21),
-                size: 18,
-              )
-            : Switch(
-                value: true,
-                onChanged: (value) {},
-              ),
-        leading: Icon(leadingIcon),
-        onTap: () {},
       ),
     );
   }
