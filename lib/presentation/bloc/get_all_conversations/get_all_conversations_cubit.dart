@@ -9,8 +9,8 @@ class GetAllConversationsCubit extends Cubit<Stream<List<Conversation>>> {
   GetAllConversationsCubit(this.getAllConversations)
       : super(const Stream.empty());
 
-  void call() {
-    var conversations = getAllConversations.call();
+  void call(String currentUserId) {
+    var conversations = getAllConversations.call(currentUserId);
     emit(conversations);
   }
 }

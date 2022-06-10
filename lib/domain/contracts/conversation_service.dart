@@ -3,7 +3,7 @@ import '../../data/models/conversation/conversation_model.dart';
 import '../../data/models/conversation/add_conversation_model.dart';
 
 abstract class ConversationService {
-  Stream<List<ConversationModel>> getAllConversations();
+  Stream<List<ConversationModel>> getAllConversations(String currentUserId);
   Future<ConversationModel> createConversation(
     AddConversationModel addConversationModel,
   );

@@ -50,6 +50,14 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
 
     return Column(
       children: [
+        ImagePickerInput(
+          hintText: "Images",
+          onImagePicked: (value) =>
+              updateStateOnInputChange("productImages", value),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
         AddPostDropDownInput(
           hintText: "Post State",
           items: [...postStateToShowOnDropdown],
@@ -69,14 +77,6 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
         AddPostInput(
           hintText: "Contact Phone",
           onChanged: (value) => updateStateOnInputChange("contactPhone", value),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        ImagePickerInput(
-          hintText: "Images",
-          onImagePicked: (value) =>
-              updateStateOnInputChange("productImages", value),
         ),
         const SizedBox(
           height: 30,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/enitites/conversation.dart';
+import '../bloc/auth/auth_cubit.dart';
+import '../bloc/auth/auth_state.dart';
 import '../bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import '../widgets/chat_list/conversation_item.dart';
 
@@ -18,7 +20,13 @@ class _ChatListPageState extends State<ChatListPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context.read<GetAllConversationsCubit>().call();
+      var authState = context.read<AuthCubit>().state;
+
+      if (authState is AuthSuccessfull) {
+        context.read<GetAllConversationsCubit>().call(
+              authState.currentUser.id,
+            );
+      }
     });
   }
 
@@ -91,4 +99,3 @@ class _ChatListPageState extends State<ChatListPage> {
     );
   }
 }
-

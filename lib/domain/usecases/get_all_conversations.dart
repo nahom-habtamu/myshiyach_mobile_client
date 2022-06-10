@@ -6,8 +6,8 @@ class GetAllConversations {
 
   GetAllConversations(this.repository);
 
-  Stream<List<Conversation>> call() {
-    var parsedResult = repository.getAllConversations();
+  Stream<List<Conversation>> call(String currentUserId) {
+    var parsedResult = repository.getAllConversations(currentUserId);
     return parsedResult;
   }
 }

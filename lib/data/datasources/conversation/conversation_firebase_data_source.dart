@@ -12,9 +12,11 @@ class ConversationFirebaseDataSource extends ConversationDataSource {
   }
 
   @override
-  Stream<List<ConversationModel>> getAllConversations() {
+  Stream<List<ConversationModel>> getAllConversations(String currentUserId) {
     return conversations!.snapshots().map((snapshot) => snapshot.docs
         .map((doc) => ConversationModel.fromDocumentSnapshot(doc))
+        .where((con) =>
+            con.memberOne == currentUserId || con.memberTwo == currentUserId)
         .toList());
   }
 

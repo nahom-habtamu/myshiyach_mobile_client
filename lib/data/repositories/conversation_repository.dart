@@ -10,8 +10,8 @@ class ConversationRepository extends ConversationService {
   ConversationRepository(this.remoteDataSource);
 
   @override
-  Stream<List<ConversationModel>> getAllConversations() {
-    return remoteDataSource.getAllConversations();
+  Stream<List<ConversationModel>> getAllConversations(String currentUserId) {
+    return remoteDataSource.getAllConversations(currentUserId);
   }
 
   @override
