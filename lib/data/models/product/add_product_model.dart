@@ -27,7 +27,7 @@ class AddProductModel {
     return AddProductModel(
       title: json["title"],
       description: json["description"],
-      price: double.parse(json["price"]),
+      price: json["price"],
       mainCategory: json["mainCategory"],
       subCategory: json["subCategory"],
       brand: json["brand"],

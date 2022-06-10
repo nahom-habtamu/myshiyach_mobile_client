@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/presentation/widgets/common/curved_button.dart';
 
 import '../../data/models/product/edit_product_model.dart';
 import '../../domain/enitites/main_category.dart';
@@ -127,7 +128,9 @@ class _EditPostPageState extends State<EditPostPage> {
                     hintText: "Pick Post Images",
                     onImagePicked: (value) {
                       setState(() {
-                        pickedImages = [...value];
+                        if (pickedImages.length + value.length <= 3) {
+                          pickedImages = [...pickedImages, ...value];
+                        }
                       });
                     },
                   ),
@@ -243,26 +246,11 @@ class _EditPostPageState extends State<EditPostPage> {
         });
       }
 
-      return SizedBox(
-        height: 50,
-        width: MediaQuery.of(context).size.width,
-        child: ElevatedButton(
-          onPressed: () {
-            handleUpdatingProduct();
-          },
-          child: const Text('Save Changes'),
-          style: ElevatedButton.styleFrom(
-            primary: const Color(0xff11435E),
-            textStyle: const TextStyle(
-              color: Colors.white,
-            ),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(16),
-              ),
-            ),
-          ),
-        ),
+      return CurvedButton(
+        onPressed: () {
+          handleUpdatingProduct();
+        },
+        text: "Save Changes",
       );
     });
   }

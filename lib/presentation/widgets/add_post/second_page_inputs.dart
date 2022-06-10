@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../../domain/enitites/sub_category.dart';
+import '../edit_post/post_images.dart';
 import 'add_post_dropdown_dart.dart';
-import 'add_post_input.dart';
 import 'cancel_button.dart';
 import 'input_image_picker.dart';
 import 'next_or_post_button.dart';
 
 class SecondPageInputs extends StatefulWidget {
+  final Map<String, dynamic> initalValue;
   final List<SubCategory> subCategoriesToDisplay;
   final Function onCancel;
   final Function onPostOrNext;
@@ -19,6 +20,7 @@ class SecondPageInputs extends StatefulWidget {
     required this.onCancel,
     required this.onPostOrNext,
     required this.isThereAdditionalData,
+    required this.initalValue,
   }) : super(key: key);
 
   @override
@@ -26,12 +28,19 @@ class SecondPageInputs extends StatefulWidget {
 }
 
 class _SecondPageInputsState extends State<SecondPageInputs> {
-  Map<String, dynamic> secondInputValues = {};
+  List<dynamic> pickedImages = [];
+  String postState = "";
+  String subCategory = "";
 
-  updateStateOnInputChange(String inputKey, dynamic inputValue) {
-    setState(() {
-      secondInputValues = {...secondInputValues, inputKey: inputValue};
-    });
+  @override
+  void initState() {
+    super.initState();
+
+    postState = widget.initalValue["state"] ?? "";
+    subCategory = widget.initalValue["subCategory"] ?? "";
+    pickedImages = [
+      ...widget.initalValue["productImages"] ?? [],
+    ];
   }
 
   @override
@@ -50,33 +59,37 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
 
     return Column(
       children: [
+        renderPickedImages(),
+        const SizedBox(
+          height: 30,
+        ),
         ImagePickerInput(
           hintText: "Images",
-          onImagePicked: (value) =>
-              updateStateOnInputChange("productImages", value),
+          onImagePicked: (value) {
+            setState(() {
+              if (pickedImages.length + value.length <= 3) {
+                pickedImages = [...pickedImages, ...value];
+              }
+            });
+          },
         ),
         const SizedBox(
           height: 30,
         ),
         AddPostDropDownInput(
+          initialValue: postState,
           hintText: "Post State",
           items: [...postStateToShowOnDropdown],
-          onChanged: (value) => updateStateOnInputChange("state", value),
+          onChanged: (value) => postState = value,
         ),
         const SizedBox(
           height: 30,
         ),
         AddPostDropDownInput(
+          initialValue: subCategory,
           hintText: "Sub Category",
           items: [...subCategoryToShowOnDropDown],
-          onChanged: (value) => updateStateOnInputChange("subCategory", value),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        AddPostInput(
-          hintText: "Contact Phone",
-          onChanged: (value) => updateStateOnInputChange("contactPhone", value),
+          onChanged: (value) => subCategory = value,
         ),
         const SizedBox(
           height: 30,
@@ -87,6 +100,7 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
             NextOrPostButton(
               isThereAdditionalData: widget.isThereAdditionalData,
               onTap: () {
+                var secondInputValues = buildSecondPageInputs();
                 widget.onPostOrNext(secondInputValues);
               },
             )
@@ -94,5 +108,25 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
         )
       ],
     );
+  }
+
+  renderPickedImages() {
+    return PostImages(
+      pickedImages: pickedImages,
+      imagesAlreadyInProduct: const [],
+      onStateChange: (updatedPostImages, updatedPickedImages) {
+        setState(() {
+          pickedImages = [...updatedPickedImages];
+        });
+      },
+    );
+  }
+
+  buildSecondPageInputs() {
+    return {
+      "state": postState,
+      "subCategory": subCategory,
+      "productImages": pickedImages,
+    };
   }
 }

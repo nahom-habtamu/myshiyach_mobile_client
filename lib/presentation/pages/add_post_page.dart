@@ -33,9 +33,9 @@ class _AddPostPageState extends State<AddPostPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      emptyAddPostState();
       initializeCurrentUser();
       initCategories();
-      emptyAddPostState();
     });
   }
 
@@ -134,7 +134,7 @@ class _AddPostPageState extends State<AddPostPage> {
               ),
             ),
             padding: const EdgeInsets.only(top: 0, left: 25, right: 25),
-            height: MediaQuery.of(context).size.height * 0.8,
+            height: MediaQuery.of(context).size.height * 0.85,
             width: MediaQuery.of(context).size.width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -143,7 +143,10 @@ class _AddPostPageState extends State<AddPostPage> {
                   height: 25,
                 ),
                 renderAppropriateInput(
-                    categories, cities, isThereAdditionalData),
+                  categories,
+                  cities,
+                  isThereAdditionalData,
+                ),
                 const SizedBox(
                   height: 25,
                 ),
@@ -183,8 +186,14 @@ class _AddPostPageState extends State<AddPostPage> {
   }
 
   renderThirdPageInputs(List<MainCategory> categories) {
-    var additionalDataToDisplay =
-        categories[selectedMainCategoryIndex].subCategories[0].additionalData;
+    var selectedSubCategory = categories[selectedMainCategoryIndex]
+        .subCategories
+        .where((element) => element.id == mergedInputValues["subCategory"])
+        .toList();
+
+    var additionalDataToDisplay = selectedSubCategory.isEmpty
+        ? const <String>[]
+        : selectedSubCategory.first.additionalData;
 
     return ThirdPageInputs(
       additionalData: additionalDataToDisplay,
@@ -201,10 +210,13 @@ class _AddPostPageState extends State<AddPostPage> {
   }
 
   bool isThereThirdInputList(List<MainCategory> categories) {
-    return categories[selectedMainCategoryIndex]
-        .subCategories[0]
-        .additionalData
-        .isNotEmpty;
+    var selectedSubCategory = categories[selectedMainCategoryIndex]
+        .subCategories
+        .where((element) => element.id == mergedInputValues["subCategory"])
+        .toList();
+    return selectedSubCategory.isEmpty
+        ? false
+        : selectedSubCategory.first.additionalData.isNotEmpty;
   }
 
   renderSecondPageInputs(
@@ -213,6 +225,7 @@ class _AddPostPageState extends State<AddPostPage> {
         categories.elementAt(selectedMainCategoryIndex).subCategories.toList();
 
     return SecondPageInputs(
+      initalValue: mergedInputValues,
       isThereAdditionalData: isThereAdditionalData,
       subCategoriesToDisplay: subCategoriesToDisplay,
       onCancel: () {
@@ -250,6 +263,7 @@ class _AddPostPageState extends State<AddPostPage> {
     List<String> cities,
   ) {
     return FirstPageInputs(
+      initialValue: mergedInputValues,
       mainCategories: categories,
       cities: cities,
       onNextPressed: (firstInputValues) {

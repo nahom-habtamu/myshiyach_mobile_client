@@ -13,6 +13,7 @@ import '../bloc/create_conversation/handle_going_to_message_state.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_state.dart';
 import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
+import '../widgets/common/curved_button.dart';
 import '../widgets/post_detail/post_detail_carousel.dart';
 import '../widgets/post_detail/post_detail_information_item.dart';
 import 'chat_detail_page.dart';
@@ -28,6 +29,8 @@ class PostDetailPage extends StatefulWidget {
 }
 
 class _PostDetailPageState extends State<PostDetailPage> {
+  Product? product;
+
   User? currentUser;
   String? authToken;
 
@@ -35,17 +38,19 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      setState(() {
-        currentUser = getCurrentUser();
-        authToken = getToken();
+      Future.delayed(Duration.zero, () {
+        setState(() {
+          currentUser = getCurrentUser();
+          authToken = getToken();
+          product = ModalRoute.of(context)!.settings.arguments as Product;
+        });
+        context.read<HandleGoingToMessageCubit>().clearState();
       });
-      context.read<HandleGoingToMessageCubit>().clearState();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final product = ModalRoute.of(context)!.settings.arguments as Product;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -58,21 +63,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
           backgroundColor: const Color(0xffF1F1F1),
           elevation: 0,
           centerTitle: true,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: IconButton(
-                icon: const Icon(Icons.edit, color: Colors.black),
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    EditPostPage.routeName,
-                    arguments: product,
-                  );
-                },
-              ),
-            )
-          ],
         ),
         body: Container(
           decoration: const BoxDecoration(
@@ -85,7 +75,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           child: Column(
             children: [
               PostDetailCarousel(
-                items: [...product.productImages],
+                items: [...product!.productImages],
               ),
               Expanded(
                 child: SizedBox(
@@ -101,7 +91,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            product.title,
+                            product!.title,
                             style: const TextStyle(
                               color: Color(0xff11435E),
                               fontSize: 18,
@@ -123,7 +113,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                 width: 10,
                               ),
                               Text(
-                                DateFormatterUtil().call(product.createdAt),
+                                DateFormatterUtil().call(product!.createdAt),
                                 style: const TextStyle(
                                   color: Colors.grey,
                                   fontSize: 12,
@@ -135,7 +125,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                             height: 10,
                           ),
                           Text(
-                            '\$${product.price.toString()}',
+                            '\$${product!.price.toString()}',
                             style: const TextStyle(
                               color: Color(0xff34A853),
                               fontSize: 24,
@@ -150,7 +140,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                             width: MediaQuery.of(context).size.width,
                             child: PostDetailInformationItem(
                               informationKey: "Description",
-                              informationValue: product.description,
+                              informationValue: product!.description,
                             ),
                           ),
                           const SizedBox(
@@ -160,17 +150,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
                             width: MediaQuery.of(context).size.width,
                             child: PostDetailInformationItem(
                               informationKey: "City",
-                              informationValue: product.city,
+                              informationValue: product!.city,
                             ),
                           ),
                           const SizedBox(
                             height: 10,
                           ),
-                          buildOtherInformation(product.other),
-                          renderPostDetailButtonSection(
-                            product.id,
-                            product.createdBy,
-                          ),
+                          buildOtherInformation(),
+                          renderPostDetailButtonSection(),
                           const SizedBox(
                             height: 10,
                           ),
@@ -187,12 +174,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  Row renderPostDetailButtonSection(String postId, String postCreatedBy) {
+  Row renderPostDetailButtonSection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        goToChatDetailButton(postCreatedBy),
-        if (currentUser!.id == postCreatedBy) deletePostButton(postId),
+        currentUser!.id == product!.createdBy
+            ? goToChatDetailButton(product!.createdBy)
+            : editPostButton(),
+        if (currentUser!.id == product!.createdBy)
+          deletePostButton(product!.id),
       ],
     );
   }
@@ -219,32 +209,17 @@ class _PostDetailPageState extends State<PostDetailPage> {
           );
         });
       }
-      return SizedBox(
-        height: 50,
-        width: currentUser!.id == postCreatedBy
-            ? MediaQuery.of(context).size.width * 0.42
-            : MediaQuery.of(context).size.width * 0.85,
-        child: ElevatedButton(
-          onPressed: () {
-            var addConversation = AddConversationModel(
-                memberOne: currentUser!.id, memberTwo: postCreatedBy);
-            context
-                .read<HandleGoingToMessageCubit>()
-                .call(addConversation, currentUser!.id, authToken!);
-          },
-          child: const Text('Send Message'),
-          style: ElevatedButton.styleFrom(
-            primary: const Color(0xff11435E),
-            textStyle: const TextStyle(
-              color: Colors.white,
-            ),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(16),
-              ),
-            ),
-          ),
-        ),
+      return CurvedButton(
+        onPressed: () {
+          var addConversation = AddConversationModel(
+            memberOne: currentUser!.id,
+            memberTwo: postCreatedBy,
+          );
+          context
+              .read<HandleGoingToMessageCubit>()
+              .call(addConversation, currentUser!.id, authToken!);
+        },
+        text: "Send Message",
       );
     });
   }
@@ -262,26 +237,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
         if (state is DeleteProductLoaded) {
           naviagateToMasterPage(context);
         }
-        return SizedBox(
-          height: 50,
-          width: MediaQuery.of(context).size.width * 0.42,
-          child: ElevatedButton(
-            onPressed: () {
-              context.read<DeleteProductByIdCubit>().call(postId, authToken!);
-            },
-            child: const Text('Delete Post'),
-            style: ElevatedButton.styleFrom(
-              primary: Colors.red,
-              textStyle: const TextStyle(
-                color: Colors.white,
-              ),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(16),
-                ),
-              ),
-            ),
-          ),
+        return CurvedButton(
+          onPressed: () {
+            context.read<DeleteProductByIdCubit>().call(postId, authToken!);
+          },
+          text: "Delete Post",
+          halfWidth: true,
+          backgroundColor: Colors.red,
         );
       },
     );
@@ -296,11 +258,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
     });
   }
 
-  buildOtherInformation(Map<String, dynamic>? other) {
+  buildOtherInformation() {
     List<Widget> otherInformation = [];
-    if (other == null) return Container();
+    if (product!.other == null) return Container();
 
-    other.forEach(
+    product!.other!.forEach(
       (key, value) => otherInformation.add(
         PostDetailInformationItem(
           informationKey: key,
@@ -328,5 +290,19 @@ class _PostDetailPageState extends State<PostDetailPage> {
       return authState.loginResult.token;
     }
     return null;
+  }
+
+  editPostButton() {
+    return CurvedButton(
+      onPressed: () {
+        Navigator.pushNamed(
+          context,
+          EditPostPage.routeName,
+          arguments: product!,
+        );
+      },
+      text: "Edit Post",
+      halfWidth: true,
+    );
   }
 }
