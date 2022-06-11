@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/presentation/pages/my_posts_page.dart';
 
 import 'core/services/injection_container.dart' as di;
 import 'core/services/injection_container.dart';
@@ -16,6 +17,7 @@ import 'presentation/bloc/get_all_products/get_all_products_cubit.dart';
 import 'presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import 'presentation/bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import 'presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
+import 'presentation/bloc/get_my_products/get_my_products_cubit.dart';
 import 'presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import 'presentation/bloc/logout/logout_cubit.dart';
 import 'presentation/bloc/register_user/register_user_cubit.dart';
@@ -102,6 +104,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => sl<LogOutCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<GetMyProductsCubit>(),
         )
       ],
       child: MaterialApp(
@@ -123,6 +128,7 @@ class MyApp extends StatelessWidget {
           ChatListPage.routeName: (context) => const ChatListPage(),
           ChatDetailPage.routeName: (context) => const ChatDetailPage(),
           EditPostPage.routeName: (context) => const EditPostPage(),
+          MyPostsPage.routeName: (context) => const MyPostsPage(),
           PostConfirmationPage.routeName: (context) =>
               const PostConfirmationPage(),
           OtpVerificationPage.routeName: (context) =>

@@ -16,4 +16,5 @@ abstract class ProductService {
     EditProductModel editProductModel,
     String token,
   );
+  Future<List<ProductModel>> getProductsByCreatorId(String userId);
 }

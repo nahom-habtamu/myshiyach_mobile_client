@@ -59,4 +59,9 @@ class ProductRepository extends ProductService {
   ) {
     return remoteDataSource.updateProduct(id, editProductModel, token);
   }
+
+  @override
+  Future<List<ProductModel>> getProductsByCreatorId(String userId) {
+    return remoteDataSource.getProductsByCreatorId(userId);
+  }
 }

@@ -92,4 +92,23 @@ class ProductRemoteDataSource extends ProductDataSource {
     }
     throw Exception("Couldn't Update Product");
   }
+
+  @override
+  Future<List<ProductModel>> getProductsByCreatorId(String userId) async {
+    final String endPoint = '$baseUrl/products?createdBy=$userId';
+    final response = await http.get(
+      Uri.parse(endPoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var products = ProductModel.parseProductsFromJson(
+        json.decode(response.body),
+      );
+      return products;
+    }
+    throw Exception("Couldn't Fetch Products By User");
+  }
 }

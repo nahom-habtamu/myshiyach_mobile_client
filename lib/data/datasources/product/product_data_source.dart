@@ -12,4 +12,7 @@ abstract class ProductDataSource {
     EditProductModel editProductModel,
     String token,
   );
+  Future<List<ProductModel>> getProductsByCreatorId(
+    String userId
+  );
 }

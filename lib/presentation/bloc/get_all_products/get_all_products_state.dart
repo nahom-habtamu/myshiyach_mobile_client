@@ -1,4 +1,4 @@
-import 'package:mnale_client/domain/enitites/product.dart';
+import '../../../domain/enitites/product.dart';
 
 abstract class GetAllProductsState {}
 

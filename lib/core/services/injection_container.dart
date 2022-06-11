@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mnale_client/presentation/bloc/logout/logout_cubit.dart';
+import 'package:mnale_client/domain/usecases/get_my_products.dart';
+import 'package:mnale_client/presentation/bloc/get_my_products/get_my_products_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -67,6 +68,7 @@ import '../../presentation/bloc/get_conversation_by_id.dart/get_conversation_by_
 import '../../presentation/bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
+import '../../presentation/bloc/logout/logout_cubit.dart';
 import '../../presentation/bloc/register_user/register_user_cubit.dart';
 import '../../presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../../presentation/bloc/update_product/update_product_cubit.dart';
@@ -91,6 +93,7 @@ Future<void> init() async {
   sl.registerFactory(() => GetAllProductsCubit(sl()));
   sl.registerFactory(() => GetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
+  sl.registerFactory(() => GetMyProductsCubit(sl()));
   sl.registerFactory(() => LogOutCubit(storeUserCredentials: sl()));
   sl.registerFactory(
     () => UpdateProductCubit(
@@ -110,7 +113,6 @@ Future<void> init() async {
   sl.registerFactory(() => GetConversationByIdCubit(sl()));
   sl.registerFactory(() => DeleteProductByIdCubit(sl()));
   sl.registerFactory(() => GetAllCategoriesCubit(sl()));
-  sl.registerFactory(() => UpdateProduct(sl()));
   sl.registerFactory(() => HandleGoingToMessageCubit(
         createConversation: sl(),
         getConversationByMembers: sl(),
@@ -131,6 +133,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RegisterUser(sl()));
   sl.registerLazySingleton(() => GetAllProducts(sl()));
   sl.registerLazySingleton(() => GetFavoriteProducts(sl()));
+  sl.registerLazySingleton(() => UpdateProduct(sl()));
   sl.registerLazySingleton(() => SetFavoriteProducts(sl()));
   sl.registerLazySingleton(() => GetAllCategories(sl()));
   sl.registerLazySingleton(() => CreateProduct(sl()));
@@ -145,6 +148,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetConversationByMembers(sl()));
   sl.registerLazySingleton(() => GetStoredUserCredentials(sl()));
   sl.registerLazySingleton(() => StoreUserCredentials(sl()));
+  sl.registerLazySingleton(() => GetMyProducts(sl()));
 
   // repositories
 

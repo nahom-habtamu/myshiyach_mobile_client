@@ -2,14 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/enitites/user.dart';
+import '../bloc/auth/auth_cubit.dart';
+import '../bloc/auth/auth_state.dart';
 import '../bloc/logout/logout_cubit.dart';
 import '../bloc/logout/logout_state.dart';
 import '../widgets/profile/setting_item.dart';
 import '../widgets/profile/settings_item_header.dart';
 import 'login_page.dart';
+import 'my_posts_page.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  User? currentUser;
+  @override
+  void initState() {
+    super.initState();
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      currentUser = authState.currentUser;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +60,9 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  'Adam Turin',
-                  style: TextStyle(
+                Text(
+                  currentUser!.fullName,
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 18,
                     letterSpacing: 0.4,
@@ -53,9 +72,9 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(
                   height: 5,
                 ),
-                const Text(
-                  'adam@gmail.com',
-                  style: TextStyle(
+                Text(
+                  currentUser?.email ?? "",
+                  style: const TextStyle(
                     fontSize: 14,
                   ),
                 ),
@@ -77,6 +96,17 @@ class ProfilePage extends StatelessWidget {
                   leadingIcon: Icons.payment,
                   subTitle: "Add your credit & debit cards",
                   title: "Payment Methods",
+                ),
+                SettingItem(
+                  leadingIcon: Icons.my_library_add,
+                  subTitle: "Manage Your Posts",
+                  title: "My Posts",
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      MyPostsPage.routeName,
+                    );
+                  },
                 ),
                 const SettingItem(
                   title: "Locations",

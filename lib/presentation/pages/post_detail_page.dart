@@ -178,7 +178,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        currentUser!.id == product!.createdBy
+        currentUser!.id != product!.createdBy
             ? goToChatDetailButton(product!.createdBy)
             : editPostButton(),
         if (currentUser!.id == product!.createdBy)
@@ -215,9 +215,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
             memberOne: currentUser!.id,
             memberTwo: postCreatedBy,
           );
-          context
-              .read<HandleGoingToMessageCubit>()
-              .call(addConversation, currentUser!.id, authToken!);
+          context.read<HandleGoingToMessageCubit>().call(
+                addConversation,
+                currentUser!.id,
+                authToken!,
+              );
         },
         text: "Send Message",
       );

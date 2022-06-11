@@ -15,10 +15,10 @@ class CurvedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    var width = MediaQuery.of(context).size.width * 0.87;
     return SizedBox(
       height: 50,
-      width: halfWidth ? width * 0.42 : width,
+      width: halfWidth ? width * 0.49 : width,
       child: ElevatedButton(
         onPressed: () => onPressed(),
         child: Text(text),
