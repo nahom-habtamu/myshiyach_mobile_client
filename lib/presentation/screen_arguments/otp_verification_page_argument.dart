@@ -1,10 +1,12 @@
-import '../../data/models/register_user/register_user_request_model.dart';
-
 class OtpVerficationPageArgument {
-  final RegisterUserRequestModel registerUserRequest;
+  final String phoneNumber;
   final String phoneNumberVerificationId;
-  OtpVerficationPageArgument(
-    this.registerUserRequest,
-    this.phoneNumberVerificationId,
-  );
+  final Function(String pin, String verificationId) renderActionButton;
+  final Function renderErrorWidget;
+  OtpVerficationPageArgument({
+    required this.phoneNumberVerificationId,
+    required this.phoneNumber,
+    required this.renderActionButton,
+    required this.renderErrorWidget,
+  });
 }

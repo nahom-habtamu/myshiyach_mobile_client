@@ -17,10 +17,10 @@ class HandleGoingToMessageCubit extends Cubit<HandleGoingToMessageState> {
     required this.createConversation,
     required this.getConversationByMembers,
     required this.getUserById,
-  }) : super(AddConversationEmpty());
+  }) : super(HandleGoingToMessageEmpty());
 
-  void clearState(){
-    emit(AddConversationEmpty());
+  void clearState() {
+    emit(HandleGoingToMessageEmpty());
   }
 
   void call(
@@ -29,8 +29,8 @@ class HandleGoingToMessageCubit extends Cubit<HandleGoingToMessageState> {
     String token,
   ) async {
     try {
-      emit(AddConversationEmpty());
-      emit(AddConversationLoading());
+      emit(HandleGoingToMessageEmpty());
+      emit(HandleGoingToMessageLoading());
 
       var conversationFound = getConversationByMembers.call(
         addConversationModel.memberOne,
@@ -53,7 +53,7 @@ class HandleGoingToMessageCubit extends Cubit<HandleGoingToMessageState> {
         );
       }
     } catch (e) {
-      emit(AddConversationError(message: e.toString()));
+      emit(HandleGoingToMessageError(message: e.toString()));
     }
   }
 
@@ -80,7 +80,7 @@ class HandleGoingToMessageCubit extends Cubit<HandleGoingToMessageState> {
       strangerUser: strangerUser,
     );
 
-    emit(AddConversationSuccessfull(chatDetailPageArguments));
+    emit(HandleGoingToMessageSuccessfull(chatDetailPageArguments));
   }
 
   void _handleCreatingConversationCase(
@@ -88,7 +88,6 @@ class HandleGoingToMessageCubit extends Cubit<HandleGoingToMessageState> {
     String currentUserId,
     String token,
   ) async {
-
     var createdConversation =
         await createConversation.call(addConversationModel);
     var strangerUserId = _getStrangerId(createdConversation, currentUserId);
@@ -99,7 +98,7 @@ class HandleGoingToMessageCubit extends Cubit<HandleGoingToMessageState> {
       strangerUser: strangerUser,
     );
 
-    emit(AddConversationSuccessfull(chatDetailPageArguments));
+    emit(HandleGoingToMessageSuccessfull(chatDetailPageArguments));
   }
 
   String _getStrangerId(Conversation conversation, String currentUserId) {

@@ -8,11 +8,11 @@ import '../../domain/enitites/product.dart';
 import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
-import '../bloc/create_conversation/handle_going_to_message_cubit.dart';
-import '../bloc/create_conversation/handle_going_to_message_state.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_state.dart';
 import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
+import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
+import '../bloc/handle_going_to_message/handle_going_to_message_state.dart';
 import '../widgets/common/curved_button.dart';
 import '../widgets/post_detail/post_detail_carousel.dart';
 import '../widgets/post_detail/post_detail_information_item.dart';
@@ -190,14 +190,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
   BlocBuilder goToChatDetailButton(String postCreatedBy) {
     return BlocBuilder<HandleGoingToMessageCubit, HandleGoingToMessageState>(
         builder: (context, state) {
-      if (state is AddConversationLoading) {
+      if (state is HandleGoingToMessageLoading) {
         return const SizedBox(
           height: 50,
           width: 50,
           child: CircularProgressIndicator(),
         );
       }
-      if (state is AddConversationSuccessfull) {
+      if (state is HandleGoingToMessageSuccessfull) {
         context.read<GetConversationByIdCubit>().call(
               state.chatDetailPageArguments.conversationId,
             );

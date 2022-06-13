@@ -27,4 +27,9 @@ class UserRepository extends UserService {
   Future<void> storeUserCredentials(LoginRequestModel loginRequestModel) {
     return localDataSource.storeUserCredentials(loginRequestModel);
   }
+
+  @override
+  Future<void> changePassword(String phoneNumber, String password) {
+    return remoteDataSource.changePassword("+251926849888", password);
+  }
 }

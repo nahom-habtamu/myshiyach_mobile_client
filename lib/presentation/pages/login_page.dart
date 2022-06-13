@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/presentation/widgets/common/curved_button.dart';
 
 import '../../data/models/login/login_request_model.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../widgets/auth_input.dart';
+import 'forgot_password_page.dart';
 import 'master_page.dart';
 import 'sign_up_page.dart';
 
@@ -115,11 +117,19 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ],
         ),
-        const Text(
-          'Forgot Password ?',
-          style: TextStyle(
-            fontSize: 14,
-            color: Color(0xff11435E),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              ForgotPasswordPage.routeName,
+            );
+          },
+          child: const Text(
+            'Forgot Password ?',
+            style: TextStyle(
+              fontSize: 14,
+              color: Color(0xff11435E),
+            ),
           ),
         ),
       ],
@@ -235,31 +245,16 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  SizedBox renderLoginButton() {
-    return SizedBox(
-      height: 50,
-      width: MediaQuery.of(context).size.width,
-      child: ElevatedButton(
-        onPressed: () {
-          var requestBody = LoginRequestModel(
-            userName: userName,
-            password: password,
-          );
-          context.read<AuthCubit>().loginUser(requestBody, rememberMe);
-        },
-        child: const Text('Login'),
-        style: ElevatedButton.styleFrom(
-          primary: const Color(0xff11435E),
-          textStyle: const TextStyle(
-            color: Colors.white,
-          ),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(16),
-            ),
-          ),
-        ),
-      ),
+  CurvedButton renderLoginButton() {
+    return CurvedButton(
+      onPressed: () {
+        var requestBody = LoginRequestModel(
+          userName: userName,
+          password: password,
+        );
+        context.read<AuthCubit>().loginUser(requestBody, rememberMe);
+      },
+      text: 'Login',
     );
   }
 }

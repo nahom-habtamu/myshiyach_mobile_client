@@ -21,4 +21,24 @@ class UserRemoteDataSource {
     }
     return UserModel.fromJson(json.decode(response.body));
   }
+
+  Future<void> changePassword(String phoneNumber, String password) async {
+    String endPoint = '$baseUrl/users/changePassword';
+    final response = await http.post(
+      Uri.parse(endPoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        {
+          "phoneNumber": phoneNumber,
+          "password": password,
+        },
+      ),
+    );
+
+    if (response.statusCode < 200 && response.statusCode > 300) {
+      throw Exception("Registration Failed");
+    }
+  }
 }

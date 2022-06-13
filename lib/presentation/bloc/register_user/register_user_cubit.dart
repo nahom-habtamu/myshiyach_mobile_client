@@ -10,18 +10,18 @@ class RegisterUserCubit extends Cubit<RegisterUserState> {
   final RegisterUser registerUser;
   final AuthenticatePhoneNumber authenticatePhoneNumber;
   RegisterUserCubit(this.registerUser, this.authenticatePhoneNumber)
-      : super(Empty());
+      : super(RegisterUserEmpty());
 
   void signUpUser(
       RegisterUserRequestModel request, PhoneAuthCredential credential) async {
     try {
-      emit(Empty());
-      emit(Loading());
+      emit(RegisterUserEmpty());
+      emit(RegisterUserLoading());
       await authenticatePhoneNumber.call(credential);
       await registerUser.call(request);
-      emit(Successfull());
+      emit(RegisterUserSuccessfull());
     } catch (e) {
-      emit(Error(message: e.toString()));
+      emit(RegisterUserError(message: e.toString()));
     }
   }
 }

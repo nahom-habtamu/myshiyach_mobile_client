@@ -1,11 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'login_page.dart';
 
-import '../bloc/register_user/register_user_cubit.dart';
-import '../bloc/register_user/register_user_state.dart';
 import '../screen_arguments/otp_verification_page_argument.dart';
 import '../widgets/otp_input.dart';
 
@@ -58,7 +52,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 height: 10,
               ),
               Text(
-                args.registerUserRequest.phoneNumber,
+                args.phoneNumber,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Color(0xff11435E),
@@ -73,60 +67,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               const SizedBox(
                 height: 30,
               ),
-              BlocBuilder<RegisterUserCubit, RegisterUserState>(
-                builder: (context, state) {
-                  if (state is Successfull) {
-                    SchedulerBinding.instance!.addPostFrameCallback((_) {
-                      Navigator.pushReplacementNamed(
-                        context,
-                        LoginPage.routeName,
-                      );
-                    });
-                  }
-                  if (state is Loading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
-                    return SizedBox(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          var credential = PhoneAuthProvider.credential(
-                            verificationId: args.phoneNumberVerificationId,
-                            smsCode: pin,
-                          );
-                          context
-                              .read<RegisterUserCubit>()
-                              .signUpUser(args.registerUserRequest, credential);
-                        },
-                        child: const Text('Submit'),
-                        style: ElevatedButton.styleFrom(
-                          primary: const Color(0xff11435E),
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                          ),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(16),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
-              BlocBuilder<RegisterUserCubit, RegisterUserState>(
-                builder: (context, state) {
-                  if (state is Error) {
-                    return Center(
-                      child: Text(state.message),
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              )
+              args.renderActionButton(pin, args.phoneNumberVerificationId),
+              args.renderErrorWidget(),
             ],
           ),
         ),

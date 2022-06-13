@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mnale_client/domain/usecases/change_password.dart';
 import 'package:mnale_client/domain/usecases/get_my_products.dart';
+import 'package:mnale_client/presentation/bloc/authenticate_phone_number/authenticate_phone_number.cubit.dart';
+import 'package:mnale_client/presentation/bloc/change_password/change_password_cubit.dart';
 import 'package:mnale_client/presentation/bloc/get_my_products/get_my_products_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,7 +60,6 @@ import '../../domain/usecases/upload_product_pictures.dart';
 import '../../domain/usecases/verify_phone_number.dart';
 import '../../presentation/bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
-import '../../presentation/bloc/create_conversation/handle_going_to_message_cubit.dart';
 import '../../presentation/bloc/create_product/create_product_cubit.dart';
 import '../../presentation/bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../../presentation/bloc/display_all_products/display_all_products_cubit.dart';
@@ -68,6 +70,7 @@ import '../../presentation/bloc/get_conversation_by_id.dart/get_conversation_by_
 import '../../presentation/bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
+import '../../presentation/bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../../presentation/bloc/logout/logout_cubit.dart';
 import '../../presentation/bloc/register_user/register_user_cubit.dart';
 import '../../presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
@@ -94,6 +97,7 @@ Future<void> init() async {
   sl.registerFactory(() => GetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => GetMyProductsCubit(sl()));
+  sl.registerFactory(() => AuthPhoneNumberCubit(sl()));
   sl.registerFactory(() => LogOutCubit(storeUserCredentials: sl()));
   sl.registerFactory(
     () => UpdateProductCubit(
@@ -113,6 +117,7 @@ Future<void> init() async {
   sl.registerFactory(() => GetConversationByIdCubit(sl()));
   sl.registerFactory(() => DeleteProductByIdCubit(sl()));
   sl.registerFactory(() => GetAllCategoriesCubit(sl()));
+  sl.registerFactory(() => ChangePasswordCubit(sl()));
   sl.registerFactory(() => HandleGoingToMessageCubit(
         createConversation: sl(),
         getConversationByMembers: sl(),
@@ -149,6 +154,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetStoredUserCredentials(sl()));
   sl.registerLazySingleton(() => StoreUserCredentials(sl()));
   sl.registerLazySingleton(() => GetMyProducts(sl()));
+  sl.registerLazySingleton(() => ChangePassword(sl()));
 
   // repositories
 

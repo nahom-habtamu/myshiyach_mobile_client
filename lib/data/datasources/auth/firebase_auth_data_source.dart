@@ -12,6 +12,8 @@ abstract class FirebaseAuthDataSource {
 }
 
 class FirebaseDataSouceImpl extends FirebaseAuthDataSource {
+  final FirebaseAuth instance = FirebaseAuth.instance;
+
   @override
   Future<void> verifyPhoneNumber(
     String phoneNumber,
@@ -19,7 +21,7 @@ class FirebaseDataSouceImpl extends FirebaseAuthDataSource {
     Function(PhoneAuthCredential) onVerificationComplete,
     Function(String verficationID, int? resendToken) onCodeSent,
   ) async {
-    await FirebaseAuth.instance.verifyPhoneNumber(
+    await instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: onVerificationComplete,
       verificationFailed: onVerificationFailed,
@@ -31,9 +33,6 @@ class FirebaseDataSouceImpl extends FirebaseAuthDataSource {
 
   @override
   Future<void> authenticatePhoneNumber(PhoneAuthCredential credential) async {
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    await instance.signInWithCredential(credential);
   }
 }
-
-
-

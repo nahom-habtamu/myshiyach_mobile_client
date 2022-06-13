@@ -1,12 +1,12 @@
 abstract class RegisterUserState {}
 
-class Empty extends RegisterUserState {}
+class RegisterUserEmpty extends RegisterUserState {}
 
-class Loading extends RegisterUserState {}
+class RegisterUserLoading extends RegisterUserState {}
 
-class Successfull extends RegisterUserState {}
+class RegisterUserSuccessfull extends RegisterUserState {}
 
-class Error extends RegisterUserState {
+class RegisterUserError extends RegisterUserState {
   final String message;
-  Error({required this.message});
+  RegisterUserError({required this.message});
 }

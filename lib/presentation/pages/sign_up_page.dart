@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/register_user/register_user_request_model.dart';
-import '../screen_arguments/otp_verification_page_argument.dart';
-import '../bloc/verify_phone_number/verify_phone_number_cubit.dart';
-import '../bloc/verify_phone_number/verify_phone_number_state.dart';
+import '../bloc/register_user/register_user_cubit.dart';
+import '../bloc/register_user/register_user_state.dart';
+import '../screen_arguments/sign_up_button_arguments.dart';
 import '../widgets/auth_input.dart';
+import '../widgets/common/verify_phone_number_button.dart';
+import '../widgets/signup/sign_up_button.dart';
+import '../widgets/signup/sign_up_intro_content.dart';
+import '../widgets/signup/sign_up_terms_and_services.dart';
 import 'login_page.dart';
-import 'otp_verification_page.dart';
 
 class SignUpPage extends StatefulWidget {
   static String routeName = "/signUpPage";
@@ -35,7 +37,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                renderIntroContent(context),
+                const SignUpIntroContent(),
                 const SizedBox(
                   height: 25,
                 ),
@@ -113,85 +115,16 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(
                       width: 20,
                     ),
-                    const Text.rich(
-                      TextSpan(
-                        style: TextStyle(fontSize: 12),
-                        children: [
-                          TextSpan(
-                            text: "By creating an account, you agree to our\n",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              letterSpacing: 0.2,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'Term and Conditions ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff11435E),
-                              letterSpacing: 0.2,
-                              height: 2,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                    const SignUpTermsAndServices()
                   ],
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                BlocBuilder<VerifyPhoneNumberCubit, VerifyPhoneNumberState>(
-                  builder: (context, state) {
-                    if (state is Loading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else {
-                      if (state is CodeSent) {
-                        var registerRequest = RegisterUserRequestModel(
-                          fullName: fullName,
-                          phoneNumber: phoneNumber,
-                          password: password,
-                        );
-
-                        var otpPageArgument = OtpVerficationPageArgument(
-                          registerRequest,
-                          state.verificationId,
-                        );
-
-                        SchedulerBinding.instance!.addPostFrameCallback((_) {
-                          Navigator.pushReplacementNamed(
-                            context,
-                            OtpVerificationPage.routeName,
-                            arguments: otpPageArgument,
-                          );
-                        });
-                      }
-
-                      return SizedBox(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            context
-                                .read<VerifyPhoneNumberCubit>()
-                                .verify(phoneNumber);
-                          },
-                          child: const Text('Continue'),
-                          style: ElevatedButton.styleFrom(
-                            primary: const Color(0xff11435E),
-                            textStyle: const TextStyle(
-                              color: Colors.white,
-                            ),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(16),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  },
+                VerifyPhoneNumberButton(
+                  phoneNumber: phoneNumber,
+                  renderActionButton: renderRegisterButton,
+                  renderErrorWidget: renderRegisterError,
                 ),
                 const SizedBox(height: 25),
                 GestureDetector(
@@ -241,53 +174,36 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  renderIntroContent(context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 30,
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: const Text(
-              'Register',
-              style: TextStyle(
-                color: Color(0xff11435E),
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          const Text(
-            'Getting Started',
-            style: TextStyle(
-              color: Color(0xff11435E),
-              fontSize: 36,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Text(
-            'Seems you are new here,\nLet\'s set up your profile.',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 22,
-              height: 1.3,
-              letterSpacing: 0.3,
-            ),
-            maxLines: 2,
-          )
-        ],
-      ),
+  renderRegisterButton(String pin, String verificationId) {
+    var registerUserRequest = RegisterUserRequestModel(
+      fullName: fullName,
+      password: password,
+      phoneNumber: phoneNumber,
+    );
+    var args = SignUpButtonArguments(
+      registerUserRequest: registerUserRequest,
+      pin: pin,
+      verificationId: verificationId,
+    );
+    return SignUpButton(
+      args: args,
+    );
+  }
+
+  BlocBuilder<RegisterUserCubit, RegisterUserState> renderRegisterError() {
+    return BlocBuilder<RegisterUserCubit, RegisterUserState>(
+      builder: (context, state) {
+        if (state is RegisterUserError) {
+          return Center(
+            child: Text(state.message),
+          );
+        } else {
+          return Container();
+        }
+      },
     );
   }
 }
+
+
+

@@ -1,7 +1,6 @@
-import 'package:mnale_client/domain/enitites/conversation.dart';
-
 import '../../data/models/conversation/add_conversation_model.dart';
 import '../contracts/conversation_service.dart';
+import '../enitites/conversation.dart';
 
 class CreateConversation {
   final ConversationService repository;
