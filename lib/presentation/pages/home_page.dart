@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int selectedMainCategory = 0;
+  List<int> selectedMainCategories = [];
 
   @override
   void initState() {
@@ -36,11 +36,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // var authState = context.read<AuthCubit>().state;
-    // if (authState is AuthSuccessfull) {
-    //   print(authState.loginResult.token);
-    //   print(authState.currentUser);
-    // }
     return SafeArea(
       child: Scaffold(
         body: Padding(
@@ -54,7 +49,17 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 25),
                 ),
               ),
-              const SearchBar(),
+              BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
+                builder: (context, state) {
+                  if (state is Loaded) {
+                    return SearchBar(
+                      categories: state.categories,
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              ),
               BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
                 builder: (context, state) {
                   if (state is Loaded) {
@@ -96,10 +101,14 @@ class _HomePageState extends State<HomePage> {
   buildCategories(List<String> categories) {
     return MainCategoryBar(
       categories: categories,
-      selectedMainCategory: selectedMainCategory,
+      selectedMainCategories: selectedMainCategories,
       onItemTapped: (i) {
         setState(() {
-          selectedMainCategory = i;
+          if (selectedMainCategories.contains(i)) {
+            selectedMainCategories.remove(i);
+          } else {
+            selectedMainCategories.add(i);
+          }
         });
       },
     );

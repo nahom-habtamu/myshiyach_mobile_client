@@ -5,6 +5,7 @@ import '../pages/change_password_page.dart';
 import '../pages/chat_detail_page.dart';
 import '../pages/chat_list_page.dart';
 import '../pages/edit_post_page.dart';
+import '../pages/filter_data_page.dart';
 import '../pages/forgot_password_page.dart';
 import '../pages/home_page.dart';
 import '../pages/intro_page.dart';
@@ -36,6 +37,7 @@ class AppPages {
       ChangePasswordPage.routeName: (context) => const ChangePasswordPage(),
       PostConfirmationPage.routeName: (context) => const PostConfirmationPage(),
       OtpVerificationPage.routeName: (context) => const OtpVerificationPage(),
+      FilterDataPage.routeName: (context) => const FilterDataPage(),
     };
   }
 }

@@ -4,13 +4,13 @@ import 'category_item.dart';
 
 class MainCategoryBar extends StatelessWidget {
   final List<String> categories;
-  final int selectedMainCategory;
+  final List<int> selectedMainCategories;
   final Function onItemTapped;
 
   const MainCategoryBar({
     Key? key,
     required this.categories,
-    required this.selectedMainCategory,
+    required this.selectedMainCategories,
     required this.onItemTapped,
   }) : super(key: key);
 
@@ -26,7 +26,7 @@ class MainCategoryBar extends StatelessWidget {
           itemBuilder: (context, index) {
             return CategoryItem(
               category: categories[index],
-              isActive: selectedMainCategory == index,
+              isActive: selectedMainCategories.contains(index),
               onTap: () {
                 onItemTapped(index);
               },

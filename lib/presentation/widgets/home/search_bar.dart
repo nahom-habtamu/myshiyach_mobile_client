@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../../domain/enitites/main_category.dart';
+import '../../pages/filter_data_page.dart';
+
 class SearchBar extends StatelessWidget {
+  final List<MainCategory> categories;
   const SearchBar({
     Key? key,
+    required this.categories,
   }) : super(key: key);
 
   @override
@@ -15,7 +20,7 @@ class SearchBar extends StatelessWidget {
         children: [
           SizedBox(
             height: 50,
-            width: MediaQuery.of(context).size.width * 0.75,
+            width: MediaQuery.of(context).size.width * 0.73,
             child: TextFormField(
               style: const TextStyle(
                 color: Colors.black,
@@ -62,9 +67,22 @@ class SearchBar extends StatelessWidget {
               ),
             ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
+              ),
+            ),
+            child: IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  FilterDataPage.routeName,
+                  arguments: categories,
+                );
+              },
+              icon: const Icon(Icons.filter),
+            ),
           )
         ],
       ),
