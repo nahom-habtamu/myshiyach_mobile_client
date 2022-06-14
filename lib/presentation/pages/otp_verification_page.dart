@@ -41,7 +41,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 height: 50,
               ),
               const Text(
-                "An Authentecation code has been sent to",
+                "An Authentication code has been sent to",
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 14,

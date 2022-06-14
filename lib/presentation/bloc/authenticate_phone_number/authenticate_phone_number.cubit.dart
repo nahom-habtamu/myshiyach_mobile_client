@@ -13,7 +13,8 @@ class AuthPhoneNumberCubit extends Cubit<AuthPhoneNumberState> {
     try {
       emit(AuthPhoneNumberEmpty());
       emit(AuthPhoneNumberLoading());
-      authenticatePhoneNumber.call(credential);
+      await authenticatePhoneNumber.call(credential);
+      emit(AuthPhoneNumberSuccessfull());
     } catch (e) {
       emit(AuthPhoneNumberError(message: e.toString()));
     }
