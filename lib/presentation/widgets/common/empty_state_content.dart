@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 
 class EmptyStateContent extends StatelessWidget {
-  const EmptyStateContent({Key? key}) : super(key: key);
+  final String captionText;
+  final Function onButtonClicked;
+  final String hintText;
+  final String buttonText;
+  const EmptyStateContent({
+    Key? key,
+    required this.captionText,
+    required this.onButtonClicked,
+    required this.hintText,
+    required this.buttonText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +21,9 @@ class EmptyStateContent extends StatelessWidget {
       children: [
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.5,
-          child: const Text(
-            'No saved Products yet!',
-            style: TextStyle(
+          child: Text(
+            captionText,
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 30,
               fontWeight: FontWeight.w700,
@@ -27,9 +37,9 @@ class EmptyStateContent extends StatelessWidget {
         ),
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.4,
-          child: const Text(
-            'Hit the heart icon to save a product',
-            style: TextStyle(
+          child: Text(
+            hintText,
+            style: const TextStyle(
               color: Colors.black54,
               fontSize: 17,
               fontWeight: FontWeight.w500,
@@ -45,8 +55,10 @@ class EmptyStateContent extends StatelessWidget {
           height: 50,
           width: MediaQuery.of(context).size.width,
           child: ElevatedButton(
-            onPressed: () {},
-            child: const Text('Start Ordering'),
+            onPressed: () {
+              onButtonClicked();
+            },
+            child: Text(buttonText),
             style: ElevatedButton.styleFrom(
               primary: const Color(0xff11435E),
               textStyle: const TextStyle(

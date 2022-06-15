@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/enitites/product.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
-import '../widgets/home/main_category_bar.dart';
+import '../screen_arguments/filter_page_argument.dart';
+import '../widgets/common/empty_state_content.dart';
 import '../widgets/home/product_list.dart';
 import '../widgets/home/search_bar.dart';
 
@@ -17,7 +18,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<int> selectedMainCategories = [];
+  FilterPageArgument? filterValues;
+  String searchKeyword = "";
 
   @override
   void initState() {
@@ -53,7 +55,18 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, state) {
                   if (state is Loaded) {
                     return SearchBar(
+                      onSearchFilterApplied: (value) {
+                        setState(() {
+                          filterValues = value;
+                        });
+                      },
+                      onSearchQueryChanged: (value) {
+                        setState(() {
+                          searchKeyword = value.trim();
+                        });
+                      },
                       categories: state.categories,
+                      products: state.products,
                     );
                   } else {
                     return Container();
@@ -63,18 +76,13 @@ class _HomePageState extends State<HomePage> {
               BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
                 builder: (context, state) {
                   if (state is Loaded) {
-                    var categories =
-                        state.categories.map((e) => e.title).toList();
-                    return buildCategories(categories);
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-              BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
-                builder: (context, state) {
-                  if (state is Loaded) {
-                    return buildProductList(state.products, state.favorites);
+                    var productsToDisplay =
+                        applyFilterToProducts(state.products);
+                    if (productsToDisplay.isEmpty) {
+                      return buildEmptyStateContent();
+                    }
+
+                    return buildProductList(productsToDisplay, state.favorites);
                   } else if (state is Loading) {
                     return const Expanded(
                       child: Center(
@@ -87,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                       style: const TextStyle(color: Colors.red),
                     );
                   } else {
-                    return const Text('EMPTY');
+                    return buildEmptyStateContent();
                   }
                 },
               )
@@ -98,19 +106,20 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  buildCategories(List<String> categories) {
-    return MainCategoryBar(
-      categories: categories,
-      selectedMainCategories: selectedMainCategories,
-      onItemTapped: (i) {
-        setState(() {
-          if (selectedMainCategories.contains(i)) {
-            selectedMainCategories.remove(i);
-          } else {
-            selectedMainCategories.add(i);
-          }
-        });
-      },
+  Widget buildEmptyStateContent() {
+    return Expanded(
+      child: Center(
+        child: SingleChildScrollView(
+          child: EmptyStateContent(
+            captionText: "No Products yet Found!",
+            hintText: "Hit The button Below Reload",
+            buttonText: "Reload",
+            onButtonClicked: () {
+              context.read<DisplayAllProductsCubit>().call();
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -118,5 +127,57 @@ class _HomePageState extends State<HomePage> {
     return Expanded(
       child: ProductList(products: products, favorites: favorites),
     );
+  }
+
+  List<Product> applyFilterToProducts(List<Product> products) {
+    if (!filterIsNotEmpty()) {
+      return products;
+    }
+
+    var filteredData = products
+        .where(
+          (product) =>
+              checkMainCategoryMatch(product) &&
+              checkPriceMatch(product) &&
+              checkKeywordMatch(product),
+        )
+        .toList();
+    return filteredData;
+  }
+
+  bool filterIsNotEmpty() {
+    return filterValues != null &&
+        (filterValues!.categories.isNotEmpty ||
+            (filterValues!.maxValue != 0 && filterValues!.minValue != 0));
+  }
+
+  bool checkKeywordMatch(Product product) {
+    return product.description.contains(
+          RegExp(r'' + searchKeyword, caseSensitive: false),
+        ) ||
+        product.title.contains(
+          RegExp(r'' + searchKeyword, caseSensitive: false),
+        ) ||
+        product.brand.contains(
+          RegExp(r'' + searchKeyword, caseSensitive: false),
+        );
+  }
+
+  bool checkPriceMatch(Product product) {
+    if (filterValues == null ||
+        (filterValues!.maxValue == 0 && filterValues!.minValue == 0)) {
+      return true;
+    }
+
+    return product.price <= filterValues!.maxValue &&
+        product.price >= filterValues!.minValue;
+  }
+
+  bool checkMainCategoryMatch(Product product) {
+    return filterValues?.categories == null || filterValues!.categories.isEmpty
+        ? true
+        : filterValues!.categories.any(
+            (cat) => cat.id == product.mainCategory,
+          );
   }
 }

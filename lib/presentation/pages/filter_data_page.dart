@@ -1,19 +1,35 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/enitites/main_category.dart';
+import '../screen_arguments/filter_page_argument.dart';
 import '../widgets/common/curved_button.dart';
 import '../widgets/filter/price_range_slider.dart';
 import '../widgets/home/category_item.dart';
 
-class FilterDataPage extends StatelessWidget {
+class FilterDataPage extends StatefulWidget {
   static String routeName = '/filterDataPage';
   const FilterDataPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    var categories =
-        ModalRoute.of(context)!.settings.arguments as List<MainCategory>;
+  State<FilterDataPage> createState() => _FilterDataPageState();
+}
 
+class _FilterDataPageState extends State<FilterDataPage> {
+  var _currentPriceRangeValues = const RangeValues(0, 0);
+  List<MainCategory> selectedMainCategories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _currentPriceRangeValues = const RangeValues(0, 0);
+      selectedMainCategories = [];
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var args = ModalRoute.of(context)!.settings.arguments as FilterPageArgument;
     return Scaffold(
       backgroundColor: const Color(0xffF1F1F1),
       appBar: AppBar(
@@ -32,18 +48,38 @@ class FilterDataPage extends StatelessWidget {
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: [
-            const FilterByPrice(),
+            FilterByPrice(
+              maxValue: args.maxValue,
+              minValue: args.minValue,
+              onChanged: (value) {
+                setState(() {
+                  _currentPriceRangeValues = value;
+                });
+              },
+            ),
             const SizedBox(
               height: 25,
             ),
             FilterCategories(
-              categories: [...categories],
+              categories: [...args.categories],
+              onSelectedCategoriesChanged: (value) {
+                setState(() {
+                  selectedMainCategories = [...value];
+                });
+              },
             ),
             Expanded(
               child: Align(
                 alignment: FractionalOffset.bottomCenter,
                 child: CurvedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    var filterValues = FilterPageArgument(
+                      categories: selectedMainCategories,
+                      maxValue: _currentPriceRangeValues.end,
+                      minValue: _currentPriceRangeValues.start,
+                    );
+                    Navigator.pop(context, filterValues);
+                  },
                   text: "Apply Filter",
                 ),
               ),
@@ -57,9 +93,11 @@ class FilterDataPage extends StatelessWidget {
 
 class FilterCategories extends StatefulWidget {
   final List<MainCategory> categories;
+  final Function onSelectedCategoriesChanged;
   const FilterCategories({
     Key? key,
     required this.categories,
+    required this.onSelectedCategoriesChanged,
   }) : super(key: key);
 
   @override
@@ -67,7 +105,7 @@ class FilterCategories extends StatefulWidget {
 }
 
 class _FilterCategoriesState extends State<FilterCategories> {
-  List<String> selectedMainCategories = [];
+  List<MainCategory> selectedMainCategories = [];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -103,15 +141,20 @@ class _FilterCategoriesState extends State<FilterCategories> {
                   width: 120,
                   child: CategoryItem(
                     category: e.title,
-                    isActive: selectedMainCategories.contains(e.id),
+                    isActive:
+                        selectedMainCategories.any((cat) => cat.id == e.id),
                     onTap: () {
                       setState(() {
-                        if (selectedMainCategories.contains(e.id)) {
-                          selectedMainCategories.remove(e.id);
+                        if (selectedMainCategories
+                            .any((cat) => cat.id == e.id)) {
+                          selectedMainCategories
+                              .removeWhere((cat) => cat.id == e.id);
                         } else {
-                          selectedMainCategories.add(e.id);
+                          selectedMainCategories.add(e);
                         }
                       });
+                      widget
+                          .onSelectedCategoriesChanged(selectedMainCategories);
                     },
                   ),
                 ),
@@ -125,8 +168,14 @@ class _FilterCategoriesState extends State<FilterCategories> {
 }
 
 class FilterByPrice extends StatefulWidget {
+  final double minValue;
+  final double maxValue;
+  final Function onChanged;
   const FilterByPrice({
     Key? key,
+    required this.onChanged,
+    required this.minValue,
+    required this.maxValue,
   }) : super(key: key);
 
   @override
@@ -163,25 +212,26 @@ class _FilterByPriceState extends State<FilterByPrice> {
             width: MediaQuery.of(context).size.width * 0.9,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text(
-                  '\$25',
-                  style: TextStyle(fontSize: 18),
+                  '\$${widget.minValue.toInt()}',
+                  style: const TextStyle(fontSize: 15),
                 ),
                 Text(
-                  '\$100',
-                  style: TextStyle(fontSize: 18),
+                  '\$${widget.maxValue.toInt()}',
+                  style: const TextStyle(fontSize: 15),
                 ),
               ],
             ),
           ),
           PriceRangeSlider(
-            minValue: 25,
-            maxValue: 150,
+            minValue: widget.minValue,
+            maxValue: widget.maxValue,
             onChanged: (value) {
               setState(() {
                 _currentRangeValues = value;
               });
+              widget.onChanged(_currentRangeValues);
             },
           ),
           SizedBox(
@@ -191,11 +241,11 @@ class _FilterByPriceState extends State<FilterByPrice> {
               children: [
                 Text(
                   'Min Price = ${_currentRangeValues.start.toInt()}\$',
-                  style: const TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 15),
                 ),
                 Text(
                   'Max Price = ${_currentRangeValues.end.toInt()}\$',
-                  style: const TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 15),
                 ),
               ],
             ),

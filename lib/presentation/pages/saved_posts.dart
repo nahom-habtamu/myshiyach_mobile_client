@@ -8,6 +8,7 @@ import '../bloc/get_favorite_products/get_favorite_products_state.dart';
 import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../widgets/common/empty_state_content.dart';
 import '../widgets/common/post_card_list_item.dart';
+import 'master_page.dart';
 
 class SavedPostsPage extends StatefulWidget {
   const SavedPostsPage({Key? key}) : super(key: key);
@@ -106,6 +107,13 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
   }
 
   Widget buildEmptyStateContent() {
-    return const EmptyStateContent();
+    return EmptyStateContent(
+      captionText: "No saved Products yet!",
+      hintText: "Hit the heart icon to save a product",
+      buttonText: "Start Ordering",
+      onButtonClicked: () {
+        Navigator.pushReplacementNamed(context, MasterPage.routeName);
+      },
+    );
   }
 }
