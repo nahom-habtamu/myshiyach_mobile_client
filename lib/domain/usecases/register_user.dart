@@ -7,6 +7,6 @@ class RegisterUser {
   const RegisterUser(this.repository);
 
   Future<void> call(RegisterUserRequestModel request) async {
-    await repository.registerUser(request);
+    return await repository.registerUser(request);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../data/models/product/add_product_model.dart';
 import '../../domain/enitites/main_category.dart';
@@ -118,7 +119,18 @@ class _AddPostPageState extends State<AddPostPage> {
   ) {
     return BlocBuilder<CreateProductCubit, CreateProductState>(
         builder: (context, state) {
-      if (state is AddPostEmpty || state is AddPostError) {
+      if (state is AddPostError) {
+        Fluttertoast.showToast(
+          msg: state.message,
+          toastLength: Toast.LENGTH_LONG,
+          timeInSecForIosWeb: 1,
+          backgroundColor: const Color(0xFFA70606),
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
+
+      if (state is AddPostEmpty) {
         return SingleChildScrollView(
           child: Container(
             decoration: const BoxDecoration(

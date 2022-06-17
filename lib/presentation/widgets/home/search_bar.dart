@@ -109,7 +109,9 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                     );
                     setState(() {
-                      filterResult = result as FilterPageArgument;
+                      if (result != null) {
+                        filterResult = result as FilterPageArgument;
+                      }
                     });
                     widget.onSearchFilterApplied(result);
                   },
