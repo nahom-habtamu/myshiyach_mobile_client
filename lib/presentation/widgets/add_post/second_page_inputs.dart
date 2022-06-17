@@ -11,15 +11,13 @@ class SecondPageInputs extends StatefulWidget {
   final Map<String, dynamic> initalValue;
   final List<SubCategory> subCategoriesToDisplay;
   final Function onCancel;
-  final Function onPostOrNext;
-  final bool isThereAdditionalData;
+  final Function onPost;
 
   const SecondPageInputs({
     Key? key,
     required this.subCategoriesToDisplay,
     required this.onCancel,
-    required this.onPostOrNext,
-    required this.isThereAdditionalData,
+    required this.onPost,
     required this.initalValue,
   }) : super(key: key);
 
@@ -31,6 +29,7 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
   List<dynamic> pickedImages = [];
   String postState = "";
   String subCategory = "";
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -57,56 +56,72 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
         )
         .toList();
 
-    return Column(
-      children: [
-        renderPickedImages(),
-        const SizedBox(
-          height: 30,
-        ),
-        ImagePickerInput(
-          hintText: "Images",
-          onImagePicked: (value) {
-            setState(() {
-              if (pickedImages.length + value.length <= 3) {
-                pickedImages = [...pickedImages, ...value];
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          renderPickedImages(),
+          const SizedBox(
+            height: 30,
+          ),
+          ImagePickerInput(
+            hintText: "Images",
+            onImagePicked: (value) {
+              setState(() {
+                if (pickedImages.length + value.length <= 3) {
+                  pickedImages = [...pickedImages, ...value];
+                }
+              });
+            },
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          AddPostDropDownInput(
+            initialValue: postState,
+            hintText: "Post State",
+            items: [...postStateToShowOnDropdown],
+            onChanged: (value) => postState = value,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please Select Post State";
               }
-            });
-          },
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        AddPostDropDownInput(
-          initialValue: postState,
-          hintText: "Post State",
-          items: [...postStateToShowOnDropdown],
-          onChanged: (value) => postState = value,
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        AddPostDropDownInput(
-          initialValue: subCategory,
-          hintText: "Sub Category",
-          items: [...subCategoryToShowOnDropDown],
-          onChanged: (value) => subCategory = value,
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        Row(
-          children: [
-            CancelButton(onTap: widget.onCancel),
-            NextOrPostButton(
-              isThereAdditionalData: widget.isThereAdditionalData,
-              onTap: () {
-                var secondInputValues = buildSecondPageInputs();
-                widget.onPostOrNext(secondInputValues);
-              },
-            )
-          ],
-        )
-      ],
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          AddPostDropDownInput(
+            initialValue: subCategory,
+            hintText: "Sub Category",
+            items: [...subCategoryToShowOnDropDown],
+            onChanged: (value) => subCategory = value,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please Select Sub Category";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Row(
+            children: [
+              CancelButton(onTap: widget.onCancel),
+              PostButton(
+                onTap: () {
+                  if (formKey.currentState!.validate()) {
+                    var secondInputValues = buildSecondPageInputs();
+                    widget.onPost(secondInputValues);
+                  }
+                },
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 

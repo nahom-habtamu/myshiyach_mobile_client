@@ -8,16 +8,32 @@ import '../../pages/otp_verification_page.dart';
 import '../../screen_arguments/otp_verification_page_argument.dart';
 import 'curved_button.dart';
 
-class VerifyPhoneNumberButton extends StatelessWidget {
+class VerifyPhoneNumberButton extends StatefulWidget {
   final String phoneNumber;
   final Function(String pin, String verificationId) renderActionButton;
   final Function renderErrorWidget;
+  final Function onVerifyClicked;
   const VerifyPhoneNumberButton({
     Key? key,
     required this.phoneNumber,
     required this.renderActionButton,
     required this.renderErrorWidget,
+    required this.onVerifyClicked,
   }) : super(key: key);
+
+  @override
+  State<VerifyPhoneNumberButton> createState() =>
+      _VerifyPhoneNumberButtonState();
+}
+
+class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      context.read<VerifyPhoneNumberCubit>().clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +44,10 @@ class VerifyPhoneNumberButton extends StatelessWidget {
         } else {
           if (state is CodeSent) {
             var otpPageArgument = OtpVerficationPageArgument(
-              phoneNumber: phoneNumber,
+              phoneNumber: widget.phoneNumber,
               phoneNumberVerificationId: state.verificationId,
-              renderActionButton: renderActionButton,
-              renderErrorWidget: renderErrorWidget,
+              renderActionButton: widget.renderActionButton,
+              renderErrorWidget: widget.renderErrorWidget,
             );
 
             SchedulerBinding.instance!.addPostFrameCallback(
@@ -46,7 +62,11 @@ class VerifyPhoneNumberButton extends StatelessWidget {
           }
           return CurvedButton(
             onPressed: () {
-              context.read<VerifyPhoneNumberCubit>().verify(phoneNumber);
+              if (widget.onVerifyClicked()) {
+                context
+                    .read<VerifyPhoneNumberCubit>()
+                    .verify(widget.phoneNumber);
+              }
             },
             text: 'Continue',
           );

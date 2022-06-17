@@ -12,7 +12,6 @@ import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cu
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_state.dart';
 import '../widgets/add_post/first_page_inputs.dart';
 import '../widgets/add_post/second_page_inputs.dart';
-import '../widgets/add_post/third_page_inputs.dart';
 import 'post_confirmation_page.dart';
 
 class AddPostPage extends StatefulWidget {
@@ -90,12 +89,9 @@ class _AddPostPageState extends State<AddPostPage> {
             GetDataNeededToManagePostState>(
           builder: (context, state) {
             if (state is Loaded) {
-              var isThereAdditionalData =
-                  isThereThirdInputList(state.categories);
               return renderMainContent(
                 state.categories,
                 state.cities,
-                isThereAdditionalData,
               );
             } else if (state is Loading) {
               return const Center(
@@ -119,7 +115,6 @@ class _AddPostPageState extends State<AddPostPage> {
   renderMainContent(
     List<MainCategory> categories,
     List<String> cities,
-    bool isThereAdditionalData,
   ) {
     return BlocBuilder<CreateProductCubit, CreateProductState>(
         builder: (context, state) {
@@ -134,7 +129,6 @@ class _AddPostPageState extends State<AddPostPage> {
               ),
             ),
             padding: const EdgeInsets.only(top: 0, left: 25, right: 25),
-            height: MediaQuery.of(context).size.height * 0.85,
             width: MediaQuery.of(context).size.width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -145,7 +139,6 @@ class _AddPostPageState extends State<AddPostPage> {
                 renderAppropriateInput(
                   categories,
                   cities,
-                  isThereAdditionalData,
                 ),
                 const SizedBox(
                   height: 25,
@@ -173,80 +166,33 @@ class _AddPostPageState extends State<AddPostPage> {
   renderAppropriateInput(
     List<MainCategory> categories,
     List<String> cities,
-    bool isThereAdditionalData,
   ) {
     if (currentInputPageState == 0) {
       return renderFirstPageInputs(categories, cities);
     } else if (currentInputPageState == 1) {
-      return renderSecondPageInputs(categories, isThereAdditionalData);
-    } else if (isThereThirdInputList(categories) &&
-        currentInputPageState == 2) {
-      return renderThirdPageInputs(categories);
+      return renderSecondPageInputs(categories);
     }
   }
 
-  renderThirdPageInputs(List<MainCategory> categories) {
-    var selectedSubCategory = categories[selectedMainCategoryIndex]
-        .subCategories
-        .where((element) => element.id == mergedInputValues["subCategory"])
-        .toList();
-
-    var additionalDataToDisplay = selectedSubCategory.isEmpty
-        ? const <String>[]
-        : selectedSubCategory.first.additionalData;
-
-    return ThirdPageInputs(
-      additionalData: additionalDataToDisplay,
-      onCancel: () {
-        setState(() {
-          currentInputPageState--;
-        });
-      },
-      onPost: (thirdInputValues) {
-        addOtherInputValues(thirdInputValues);
-        createProduct();
-      },
-    );
-  }
-
-  bool isThereThirdInputList(List<MainCategory> categories) {
-    var selectedSubCategory = categories[selectedMainCategoryIndex]
-        .subCategories
-        .where((element) => element.id == mergedInputValues["subCategory"])
-        .toList();
-    return selectedSubCategory.isEmpty
-        ? false
-        : selectedSubCategory.first.additionalData.isNotEmpty;
-  }
-
-  renderSecondPageInputs(
-      List<MainCategory> categories, bool isThereAdditionalData) {
+  renderSecondPageInputs(List<MainCategory> categories) {
     var subCategoriesToDisplay =
         categories.elementAt(selectedMainCategoryIndex).subCategories.toList();
 
     return SecondPageInputs(
       initalValue: mergedInputValues,
-      isThereAdditionalData: isThereAdditionalData,
       subCategoriesToDisplay: subCategoriesToDisplay,
       onCancel: () {
         setState(() {
           currentInputPageState--;
         });
       },
-      onPostOrNext: (secondInputValues) =>
-          {onSecondPagePost(secondInputValues, isThereAdditionalData)},
+      onPost: (secondInputValues) => {onSecondPagePost(secondInputValues)},
     );
   }
 
-  void onSecondPagePost(secondInputValues, bool isThereAdditionalData) {
+  void onSecondPagePost(secondInputValues) {
     appendInputValue(secondInputValues);
-    if (isThereAdditionalData) {
-      setState(() {
-        currentInputPageState++;
-      });
-    } else {
-      createProduct();
-    }
+    createProduct();
   }
 
   void createProduct() {

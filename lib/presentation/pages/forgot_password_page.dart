@@ -20,6 +20,7 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   String phoneNumber = '';
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,30 +34,44 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 50),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 40,
-            ),
-            renderForgotPasswordPageHeaders(),
-            const SizedBox(
-              height: 55,
-            ),
-            AuthInput(
-              hintText: "Phone Number",
-              onChanged: (value) => setState(() => phoneNumber = value),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            VerifyPhoneNumberButton(
-              phoneNumber: phoneNumber,
-              renderActionButton: renderforgotPasswordButton,
-              renderErrorWidget: renderForgotError,
-            )
-          ],
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 40,
+              ),
+              renderForgotPasswordPageHeaders(),
+              const SizedBox(
+                height: 55,
+              ),
+              AuthInput(
+                hintText: "Phone Number",
+                onChanged: (value) => setState(() => phoneNumber = value),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please Enter PhoneNumber";
+                  } else if (value.length < 10) {
+                    return "Please Enter Correct Phone Number";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              VerifyPhoneNumberButton(
+                onVerifyClicked: () {
+                  return formKey.currentState!.validate();
+                },
+                phoneNumber: phoneNumber,
+                renderActionButton: renderforgotPasswordButton,
+                renderErrorWidget: renderForgotError,
+              )
+            ],
+          ),
         ),
       ),
     );

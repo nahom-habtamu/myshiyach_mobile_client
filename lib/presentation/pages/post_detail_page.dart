@@ -72,103 +72,105 @@ class _PostDetailPageState extends State<PostDetailPage> {
               topRight: Radius.circular(25),
             ),
           ),
-          child: Column(
-            children: [
-              PostDetailCarousel(
-                items: [...product!.productImages],
-              ),
-              Expanded(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 25.0,
-                      right: 25.0,
-                      top: 15,
+          child: product != null
+              ? Column(
+                  children: [
+                    PostDetailCarousel(
+                      items: [...product!.productImages],
                     ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product!.title,
-                            style: const TextStyle(
-                              color: Color(0xff11435E),
-                              fontSize: 18,
-                              height: 1.5,
-                              fontWeight: FontWeight.w700,
-                            ),
+                    Expanded(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 25.0,
+                            right: 25.0,
+                            top: 15,
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.timer_sharp,
-                                color: Colors.grey,
-                                size: 15,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                DateFormatterUtil().call(product!.createdAt),
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  product!.title,
+                                  style: const TextStyle(
+                                    color: Color(0xff11435E),
+                                    fontSize: 18,
+                                    height: 1.5,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            '\$${product!.price.toString()}',
-                            style: const TextStyle(
-                              color: Color(0xff34A853),
-                              fontSize: 24,
-                              height: 1.5,
-                              fontWeight: FontWeight.bold,
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.timer_sharp,
+                                      color: Colors.grey,
+                                      size: 15,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      DateFormatterUtil()
+                                          .call(product!.createdAt),
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  '\$${product!.price.toString()}',
+                                  style: const TextStyle(
+                                    color: Color(0xff34A853),
+                                    fontSize: 24,
+                                    height: 1.5,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: PostDetailInformationItem(
+                                    informationKey: "Description",
+                                    informationValue: product!.description,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: PostDetailInformationItem(
+                                    informationKey: "City",
+                                    informationValue: product!.city,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                renderPostDetailButtonSection(),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: PostDetailInformationItem(
-                              informationKey: "Description",
-                              informationValue: product!.description,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: PostDetailInformationItem(
-                              informationKey: "City",
-                              informationValue: product!.city,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          buildOtherInformation(),
-                          renderPostDetailButtonSection(),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+                    )
+                  ],
+                )
+              : Container(),
         ),
       ),
     );
@@ -258,24 +260,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
         MasterPage.routeName,
       );
     });
-  }
-
-  buildOtherInformation() {
-    List<Widget> otherInformation = [];
-    if (product!.other == null) return Container();
-
-    product!.other!.forEach(
-      (key, value) => otherInformation.add(
-        PostDetailInformationItem(
-          informationKey: key,
-          informationValue: value,
-        ),
-      ),
-    );
-
-    return Column(
-      children: [...otherInformation],
-    );
   }
 
   User? getCurrentUser() {

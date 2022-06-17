@@ -8,6 +8,10 @@ class VerifyPhoneNumberCubit extends Cubit<VerifyPhoneNumberState> {
   final VerifyPhoneNumber verifyPhoneNumber;
   VerifyPhoneNumberCubit(this.verifyPhoneNumber) : super(Empty());
 
+  void clear() {
+    emit(Empty());
+  }
+
   Future<void> verify(String phoneNumber) async {
     try {
       emit(Empty());

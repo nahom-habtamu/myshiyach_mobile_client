@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/presentation/widgets/common/curved_button.dart';
 
 import '../../data/models/product/edit_product_model.dart';
 import '../../domain/enitites/main_category.dart';
@@ -15,6 +14,7 @@ import '../bloc/update_product/update_product_state.dart';
 import '../widgets/add_post/add_post_dropdown_dart.dart';
 import '../widgets/add_post/add_post_input.dart';
 import '../widgets/add_post/input_image_picker.dart';
+import '../widgets/common/curved_button.dart';
 import '../widgets/edit_post/post_images.dart';
 import 'post_detail_page.dart';
 
@@ -40,6 +40,8 @@ class _EditPostPageState extends State<EditPostPage> {
   String brand = "";
   String city = "";
   String postState = "";
+
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -118,106 +120,162 @@ class _EditPostPageState extends State<EditPostPage> {
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(25.0),
-              child: Column(
-                children: [
-                  renderPickedImages(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ImagePickerInput(
-                    hintText: "Pick Post Images",
-                    onImagePicked: (value) {
-                      setState(() {
-                        if (pickedImages.length + value.length <= 3) {
-                          pickedImages = [...pickedImages, ...value];
-                        }
-                      });
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  AddPostInput(
-                    hintText: "Title",
-                    onChanged: (value) => setState(() => title = value),
-                    initialValue: product!.title,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  AddPostInput(
-                    hintText: "Description",
-                    onChanged: (value) => setState(() => description = value),
-                    initialValue: product!.description,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  AddPostInput(
-                    hintText: "Price",
-                    onChanged: (value) =>
-                        setState(() => price = double.parse(value)),
-                    initialValue: product!.price.toString(),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  AddPostInput(
-                    hintText: "Brand",
-                    onChanged: (value) => setState(() => brand = value),
-                    initialValue: product!.brand,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  AddPostDropDownInput(
-                    initialValue: postState,
-                    items: postStateToShowOnDropdown,
-                    hintText: "State",
-                    onChanged: (value) => setState(
-                      () => postState = value,
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    renderPickedImages(),
+                    const SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  AddPostDropDownInput(
-                    initialValue: mainCategory,
-                    items: mainCategoryToShowOnDropDown,
-                    hintText: "Category",
-                    onChanged: (value) => setState(
-                      () {
-                        mainCategory = value;
-                        subCategory = "";
+                    ImagePickerInput(
+                      hintText: "Pick Post Images",
+                      onImagePicked: (value) {
+                        setState(() {
+                          if (pickedImages.length + value.length <= 3) {
+                            pickedImages = [...pickedImages, ...value];
+                          }
+                        });
                       },
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  AddPostDropDownInput(
-                    key: Key(subCategory),
-                    initialValue: subCategory,
-                    items: subCategoriesToShow,
-                    hintText: "Sub Category",
-                    onChanged: (value) => setState(
-                      () => subCategory = value,
+                    const SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  AddPostDropDownInput(
-                    initialValue: city,
-                    items: citiesToShowOnDropDown,
-                    hintText: "City",
-                    onChanged: (value) => setState(() => city = value),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  renderSaveButton()
-                ],
+                    AddPostInput(
+                        hintText: "Title",
+                        onChanged: (value) => setState(() => title = value),
+                        initialValue: product!.title,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please Enter Title";
+                          }
+                          return null;
+                        }),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    AddPostInput(
+                        hintText: "Description",
+                        onChanged: (value) =>
+                            setState(() => description = value),
+                        initialValue: product!.description,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please Enter Description";
+                          }
+                          return null;
+                        }),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    AddPostInput(
+                      hintText: "Price",
+                      onChanged: (value) =>
+                          setState(() => price = double.parse(value)),
+                      initialValue: product!.price.toString(),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Enter Price";
+                        } else {
+                          try {
+                            double.parse(value);
+                            return null;
+                          } catch (e) {
+                            return "Enter Correct Price";
+                          }
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    AddPostInput(
+                      hintText: "Brand",
+                      onChanged: (value) => setState(() => brand = value),
+                      initialValue: product!.brand,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Enter Brand";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    AddPostDropDownInput(
+                      initialValue: postState,
+                      items: postStateToShowOnDropdown,
+                      hintText: "State",
+                      onChanged: (value) => setState(
+                        () => postState = value,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Select Post State";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    AddPostDropDownInput(
+                      initialValue: mainCategory,
+                      items: mainCategoryToShowOnDropDown,
+                      hintText: "Category",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Select Main Category";
+                        }
+                        return null;
+                      },
+                      onChanged: (value) => setState(
+                        () {
+                          mainCategory = value;
+                          subCategory = "";
+                        },
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    AddPostDropDownInput(
+                      key: Key(subCategory),
+                      initialValue: subCategory,
+                      items: subCategoriesToShow,
+                      hintText: "Sub Category",
+                      onChanged: (value) => setState(
+                        () => subCategory = value,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Select Sub Category";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    AddPostDropDownInput(
+                      initialValue: city,
+                      items: citiesToShowOnDropDown,
+                      hintText: "City",
+                      onChanged: (value) => setState(() => city = value),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Select City";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    renderSaveButton()
+                  ],
+                ),
               ),
             ),
           );
@@ -248,7 +306,9 @@ class _EditPostPageState extends State<EditPostPage> {
 
       return CurvedButton(
         onPressed: () {
-          handleUpdatingProduct();
+          if (formKey.currentState!.validate()) {
+            handleUpdatingProduct();
+          }
         },
         text: "Save Changes",
       );

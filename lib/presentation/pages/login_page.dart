@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/presentation/widgets/common/curved_button.dart';
 
 import '../../data/models/login/login_request_model.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../widgets/auth_input.dart';
+import '../widgets/common/curved_button.dart';
 import 'forgot_password_page.dart';
 import 'master_page.dart';
 import 'sign_up_page.dart';
@@ -22,6 +22,7 @@ class _LoginPageState extends State<LoginPage> {
   String userName = "";
   String password = "";
   bool rememberMe = false;
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -43,56 +44,75 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 40,
-            ),
-            renderLoginPageHeaders(),
-            const SizedBox(
-              height: 55,
-            ),
-            AuthInput(
-              hintText: "Phone Number",
-              onChanged: (value) => setState(() => userName = value),
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            AuthInput(
-              obsecureText: true,
-              hintText: "Password",
-              onChanged: (value) => setState(() => password = value),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            renderRememberMeAndForgotPassword(),
-            const SizedBox(
-              height: 20,
-            ),
-            BlocBuilder<AuthCubit, AuthState>(
-              builder: (context, state) {
-                if (state is AuthLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else {
-                  return renderLoginButton();
-                }
-              },
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: renderLoginResult(),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            renderPageSwitcher()
-          ],
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 40,
+              ),
+              renderLoginPageHeaders(),
+              const SizedBox(
+                height: 55,
+              ),
+              AuthInput(
+                hintText: "Phone Number",
+                onChanged: (value) => setState(() => userName = value),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please Enter PhoneNumber";
+                  } else if (value.length < 10) {
+                    return "Please Enter Correct Phone Number";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              AuthInput(
+                obsecureText: true,
+                hintText: "Password",
+                onChanged: (value) => setState(() => password = value),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please Enter Password";
+                  } else if (value.length < 6) {
+                    return "Please Enter 6 or more characters";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              renderRememberMeAndForgotPassword(),
+              const SizedBox(
+                height: 20,
+              ),
+              BlocBuilder<AuthCubit, AuthState>(
+                builder: (context, state) {
+                  if (state is AuthLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    return renderLoginButton();
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: renderLoginResult(),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              renderPageSwitcher()
+            ],
+          ),
         ),
       ),
     );
@@ -248,11 +268,13 @@ class _LoginPageState extends State<LoginPage> {
   CurvedButton renderLoginButton() {
     return CurvedButton(
       onPressed: () {
-        var requestBody = LoginRequestModel(
-          userName: userName,
-          password: password,
-        );
-        context.read<AuthCubit>().loginUser(requestBody, rememberMe);
+        if (formKey.currentState!.validate()) {
+          var requestBody = LoginRequestModel(
+            userName: userName,
+            password: password,
+          );
+          context.read<AuthCubit>().loginUser(requestBody, rememberMe);
+        }
       },
       text: 'Login',
     );

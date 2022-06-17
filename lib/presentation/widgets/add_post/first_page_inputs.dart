@@ -29,6 +29,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
   String brand = "";
   String mainCategory = "";
   String city = "";
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -48,66 +49,113 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
         .toList();
     var cityToShowOnDropDown =
         widget.cities.map((m) => {"value": m, "preview": m}).toList();
-    return Column(
-      children: [
-        AddPostInput(
-          initialValue: title,
-          hintText: "Item Title",
-          onChanged: (value) => title = value,
-        ),
-        const SizedBox(
-          height: 23,
-        ),
-        AddPostInput(
-          initialValue: description,
-          hintText: "Description",
-          onChanged: (value) => description = value,
-        ),
-        const SizedBox(
-          height: 23,
-        ),
-        AddPostInput(
-          initialValue: price == 0.0 ? "" : price.toString(),
-          hintText: "Price",
-          onChanged: (value) => price = double.parse(value),
-        ),
-        const SizedBox(
-          height: 23,
-        ),
-        AddPostInput(
-          initialValue: brand,
-          hintText: "Brand",
-          onChanged: (value) => brand = value,
-        ),
-        const SizedBox(
-          height: 23,
-        ),
-        AddPostDropDownInput(
-          initialValue: mainCategory,
-          hintText: "Category",
-          items: [...mainCategoryToShowOnDropDown],
-          onChanged: (value) => mainCategory = value,
-        ),
-        const SizedBox(
-          height: 23,
-        ),
-        AddPostDropDownInput(
-          initialValue: city,
-          hintText: "City",
-          items: [...cityToShowOnDropDown],
-          onChanged: (value) => city = value,
-        ),
-        const SizedBox(
-          height: 23,
-        ),
-        NextOrPostButton(
-          isThereAdditionalData: true,
-          onTap: () {
-            Map<String, dynamic> firstPageInputs = buildFirstPageInputValues();
-            widget.onNextPressed(firstPageInputs);
-          },
-        )
-      ],
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          AddPostInput(
+              initialValue: title,
+              hintText: "Item Title",
+              onChanged: (value) => title = value,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please Enter Title";
+                }
+                return null;
+              }),
+          const SizedBox(
+            height: 20,
+          ),
+          AddPostInput(
+            initialValue: description,
+            hintText: "Description",
+            onChanged: (value) => description = value,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please Enter Description";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          AddPostInput(
+            initialValue: price == 0.0 ? "" : price.toString(),
+            hintText: "Price",
+            onChanged: (value) => price = double.parse(value),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please Enter Price";
+              } else {
+                try {
+                  double.parse(value);
+                  return null;
+                } catch (e) {
+                  return "Enter Correct Price";
+                }
+              }
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          AddPostInput(
+            initialValue: brand,
+            hintText: "Brand",
+            onChanged: (value) => brand = value,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please Enter Brand";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          AddPostDropDownInput(
+            initialValue: mainCategory,
+            hintText: "Category",
+            items: [...mainCategoryToShowOnDropDown],
+            onChanged: (value) => mainCategory = value,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please Select Main Category";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          AddPostDropDownInput(
+            initialValue: city,
+            hintText: "City",
+            items: [...cityToShowOnDropDown],
+            onChanged: (value) => city = value,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please Select City";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          PostButton(
+            isPost: false,
+            onTap: () {
+              if (formKey.currentState!.validate()) {
+                Map<String, dynamic> firstPageInputs =
+                    buildFirstPageInputValues();
+                widget.onNextPressed(firstPageInputs);
+              }
+            },
+          )
+        ],
+      ),
     );
   }
 

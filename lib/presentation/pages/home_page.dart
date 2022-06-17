@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Product> applyFilterToProducts(List<Product> products) {
-    if (!filterIsNotEmpty()) {
+    if (!filterIsNotEmpty() && searchKeyword.isEmpty) {
       return products;
     }
 

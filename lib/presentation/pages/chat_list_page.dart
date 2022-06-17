@@ -77,10 +77,10 @@ class _ChatListPageState extends State<ChatListPage> {
       builder:
           (BuildContext context, AsyncSnapshot<List<Conversation>> snapshot) {
         if (snapshot.hasError) {
-          return const Text('Something went wrong');
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: Text('Something went wrong'));
+        } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+          return const Center(child: Text('No chats found!!'));
+        } else if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
           );

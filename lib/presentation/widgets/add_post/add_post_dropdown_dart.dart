@@ -5,12 +5,14 @@ class AddPostDropDownInput extends StatefulWidget {
   final List<Map<String, String>> items;
   final Function onChanged;
   final String initialValue;
+  final Function validator;
   const AddPostDropDownInput({
     Key? key,
     required this.hintText,
     required this.items,
     required this.onChanged,
     this.initialValue = "",
+    required this.validator,
   }) : super(key: key);
 
   @override
@@ -28,64 +30,62 @@ class _AddPostDropDownInputState extends State<AddPostDropDownInput> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: DropdownButtonFormField(
-        value: selectedValue,
-        items: widget.items.map((item) {
-          return DropdownMenuItem(
-            value: item["value"],
-            child: Text(
-              item["preview"]!,
-              style: const TextStyle(
-                color: Color(0x893D3A3A),
-              ),
+    return DropdownButtonFormField(
+      value: selectedValue,
+      items: widget.items.map((item) {
+        return DropdownMenuItem(
+          value: item["value"],
+          child: Text(
+            item["preview"]!,
+            style: const TextStyle(
+              color: Color(0x893D3A3A),
             ),
-          );
-        }).toList(),
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 15,
+          ),
+        );
+      }).toList(),
+      style: const TextStyle(
+        color: Colors.black,
+        fontSize: 15,
+      ),
+      onChanged: (value) {
+        setState(() {
+          selectedValue = value.toString();
+        });
+        widget.onChanged(value);
+      },
+      validator: (value) => widget.validator(value),
+      decoration: InputDecoration(
+        labelText: widget.hintText,
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(16.0),
+          ),
+          borderSide: BorderSide(
+            color: Colors.black26,
+            width: 1,
+          ),
         ),
-        onChanged: (value) {
-          setState(() {
-            selectedValue = value.toString();
-          });
-          widget.onChanged(value);
-        },
-        decoration: InputDecoration(
-          labelText: widget.hintText,
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(16.0),
-            ),
-            borderSide: BorderSide(
-              color: Colors.black26,
-              width: 1,
-            ),
+        enabledBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(16.0),
           ),
-          enabledBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(16.0),
-            ),
-            borderSide: BorderSide(
-              color: Colors.black26,
-              width: 1,
-            ),
+          borderSide: BorderSide(
+            color: Colors.black26,
+            width: 1,
           ),
-          focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(16.0),
-            ),
-            borderSide: BorderSide(
-              color: Colors.black26,
-              width: 1,
-            ),
-          ),
-          contentPadding: const EdgeInsets.all(15),
-          filled: true,
-          fillColor: Colors.white54,
         ),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(16.0),
+          ),
+          borderSide: BorderSide(
+            color: Colors.black26,
+            width: 1,
+          ),
+        ),
+        contentPadding: const EdgeInsets.all(15),
+        filled: true,
+        fillColor: Colors.white54,
       ),
     );
   }

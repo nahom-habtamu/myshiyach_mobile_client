@@ -27,6 +27,8 @@ class _SignUpPageState extends State<SignUpPage> {
   String passwordRepeat = "";
   bool areTermsAndConditionsAgreed = false;
 
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,139 +36,179 @@ class _SignUpPageState extends State<SignUpPage> {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SignUpIntroContent(),
-                const SizedBox(
-                  height: 25,
-                ),
-                AuthInput(
-                  hintText: "Full Name",
-                  onChanged: (value) => {
-                    setState(() {
-                      fullName = value;
-                    })
-                  },
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                AuthInput(
-                  hintText: "Phone Number",
-                  onChanged: (value) => {
-                    setState(() {
-                      phoneNumber = value;
-                    })
-                  },
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                AuthInput(
-                  hintText: "Password",
-                  onChanged: (value) => {
-                    setState(() {
-                      password = value;
-                    })
-                  },
-                  obsecureText: true,
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                AuthInput(
-                  hintText: "Confirm Password",
-                  onChanged: (value) => {
-                    setState(() {
-                      passwordRepeat = value;
-                    })
-                  },
-                  obsecureText: true,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 15,
-                      height: 25,
-                      child: Transform.scale(
-                        scale: 0.75,
-                        child: Checkbox(
-                          value: areTermsAndConditionsAgreed,
-                          onChanged: (value) {
-                            setState(() {
-                              areTermsAndConditionsAgreed = value!;
-                            });
-                          },
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SignUpIntroContent(),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  AuthInput(
+                    hintText: "Full Name",
+                    onChanged: (value) => {
+                      setState(() {
+                        fullName = value;
+                      })
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Enter FullName";
+                      } else if (value.length < 5) {
+                        return "Please Enter Your Full Name";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  AuthInput(
+                    hintText: "Phone Number",
+                    onChanged: (value) => {
+                      setState(() {
+                        phoneNumber = value;
+                      })
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Enter PhoneNumber";
+                      } else if (value.length < 10) {
+                        return "Please Enter Correct Phone Number";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  AuthInput(
+                    hintText: "Password",
+                    onChanged: (value) => {
+                      setState(() {
+                        password = value;
+                      })
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Enter Password";
+                      } else if (value.length < 6) {
+                        return "Please Enter 6 or more characters";
+                      }
+                      return null;
+                    },
+                    obsecureText: true,
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  AuthInput(
+                    hintText: "Confirm Password",
+                    onChanged: (value) => {
+                      setState(() {
+                        passwordRepeat = value;
+                      })
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Enter Password";
+                      } else if (value.length < 6) {
+                        return "Please Enter 6 or more characters";
+                      } else if (value != password) {
+                        return "Password Don't Match";
+                      }
+                      return null;
+                    },
+                    obsecureText: true,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 15,
+                        height: 25,
+                        child: Transform.scale(
+                          scale: 0.75,
+                          child: Checkbox(
+                            value: areTermsAndConditionsAgreed,
+                            onChanged: (value) {
+                              setState(() {
+                                areTermsAndConditionsAgreed = value!;
+                              });
+                            },
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(4),
+                              ),
                             ),
+                            tristate: false,
+                            activeColor: const Color(0xff11435E),
                           ),
-                          tristate: false,
-                          activeColor: const Color(0xff11435E),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    const SignUpTermsAndServices()
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                VerifyPhoneNumberButton(
-                  phoneNumber: phoneNumber,
-                  renderActionButton: renderRegisterButton,
-                  renderErrorWidget: renderRegisterError,
-                ),
-                const SizedBox(height: 25),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacementNamed(
-                      context,
-                      LoginPage.routeName,
-                    );
-                  },
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: const Center(
-                      child: Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "Already have an account ? ",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 13,
-                                letterSpacing: 0.2,
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      const SignUpTermsAndServices()
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  VerifyPhoneNumberButton(
+                    onVerifyClicked: () {
+                      return formKey.currentState!.validate();
+                    },
+                    phoneNumber: phoneNumber,
+                    renderActionButton: renderRegisterButton,
+                    renderErrorWidget: renderRegisterError,
+                  ),
+                  const SizedBox(height: 25),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacementNamed(
+                        context,
+                        LoginPage.routeName,
+                      );
+                    },
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: const Center(
+                        child: Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "Already have an account ? ",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                  letterSpacing: 0.2,
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: ' Sign In ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xff11435E),
-                                fontSize: 13,
-                                letterSpacing: 0.2,
+                              TextSpan(
+                                text: ' Sign In ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff11435E),
+                                  fontSize: 13,
+                                  letterSpacing: 0.2,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-              ],
+                  const SizedBox(
+                    height: 30,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -204,6 +246,3 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
-
-
-

@@ -157,7 +157,7 @@ class _IntroPageState extends State<IntroPage> {
   GestureDetector renderSkipButton() {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, LoginPage.routeName);
+        Navigator.pushReplacementNamed(context, LoginPage.routeName);
       },
       child: Align(
         alignment: Alignment.topRight,

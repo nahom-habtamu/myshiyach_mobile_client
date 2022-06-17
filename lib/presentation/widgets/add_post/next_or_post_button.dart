@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'change_input_state_button.dart';
 
-class NextOrPostButton extends StatelessWidget {
-  final bool isThereAdditionalData;
+class PostButton extends StatelessWidget {
+  final bool isPost;
   final Function onTap;
-  const NextOrPostButton(
-      {Key? key, required this.isThereAdditionalData, required this.onTap})
+  const PostButton({Key? key, required this.onTap, this.isPost = true})
       : super(key: key);
 
   @override
@@ -14,7 +13,7 @@ class NextOrPostButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: ChangeInputButton(
-        text: isThereAdditionalData ? "Next" : "Post",
+        text: isPost ? "Post" : "Next",
         backgroundColor: const Color(0xFF010203),
         textColor: Colors.white,
         onTap: onTap,

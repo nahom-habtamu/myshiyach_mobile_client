@@ -6,11 +6,13 @@ class AuthInput extends StatefulWidget {
   final bool obsecureText;
   final String hintText;
   final Function(String) onChanged;
+  final Function validator;
   const AuthInput({
     Key? key,
     this.obsecureText = false,
     required this.hintText,
     required this.onChanged,
+    required this.validator,
   }) : super(key: key);
 
   @override
@@ -32,6 +34,7 @@ class _AuthInputState extends State<AuthInput> {
       obscureText: isPasswordVisible,
       style: loginInputTextStyle,
       onChanged: (value) => widget.onChanged(value),
+      validator: (value) => widget.validator(value),
       decoration: InputDecoration(
         labelText: widget.hintText,
         border: loginInputEnabledBorder,

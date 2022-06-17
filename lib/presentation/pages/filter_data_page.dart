@@ -19,15 +19,6 @@ class _FilterDataPageState extends State<FilterDataPage> {
   List<MainCategory> selectedMainCategories = [];
 
   @override
-  void initState() {
-    super.initState();
-    setState(() {
-      _currentPriceRangeValues = const RangeValues(0, 0);
-      selectedMainCategories = [];
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     var args = ModalRoute.of(context)!.settings.arguments as FilterPageArgument;
     return Scaffold(
@@ -106,6 +97,17 @@ class FilterCategories extends StatefulWidget {
 
 class _FilterCategoriesState extends State<FilterCategories> {
   List<MainCategory> selectedMainCategories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.categories.length == 1) {
+      setState(() {
+        selectedMainCategories = [...widget.categories];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

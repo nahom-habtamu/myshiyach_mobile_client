@@ -19,7 +19,9 @@ class ChangePasswordPage extends StatefulWidget {
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
   String password = '';
   String passwordRepeat = '';
-  String phoneNumber = "";
+  String phoneNumber = '';
+  final formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -53,34 +55,55 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 50),
       child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 40,
-            ),
-            renderChangePasswordPageHeaders(),
-            const SizedBox(
-              height: 55,
-            ),
-            AuthInput(
-              hintText: "Password",
-              onChanged: (value) => password = value,
-              obsecureText: true,
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            AuthInput(
-              hintText: "Password Repeat",
-              onChanged: (value) => password = value,
-              obsecureText: true,
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            renderChangePasswordButton()
-          ],
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 40,
+              ),
+              renderChangePasswordPageHeaders(),
+              const SizedBox(
+                height: 55,
+              ),
+              AuthInput(
+                hintText: "Password",
+                onChanged: (value) => password = value,
+                obsecureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please Enter Password";
+                  } else if (value.length < 6) {
+                    return "Please Enter 6 or more characters";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              AuthInput(
+                hintText: "Password Repeat",
+                onChanged: (value) => password = value,
+                obsecureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please Enter Password";
+                  } else if (value.length < 6) {
+                    return "Please Enter 6 or more characters";
+                  } else if (value != password) {
+                    return "Password Don't Match";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              renderChangePasswordButton()
+            ],
+          ),
         ),
       ),
     );
@@ -106,7 +129,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         }
         return CurvedButton(
           onPressed: () {
-            context.read<ChangePasswordCubit>().call(phoneNumber, password);
+            if (formKey.currentState!.validate()) {
+              context.read<ChangePasswordCubit>().call(phoneNumber, password);
+            }
           },
           text: 'Change Password',
         );
