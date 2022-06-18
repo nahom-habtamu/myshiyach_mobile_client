@@ -46,53 +46,6 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
       key: formKey,
       child: Column(
         children: [
-          AddPostInput(
-              initialValue: title,
-              hintText: "Item Title",
-              onChanged: (value) => title = value,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please Enter Title";
-                }
-                return null;
-              }),
-          const SizedBox(
-            height: 25,
-          ),
-          AddPostInput(
-            initialValue: description,
-            hintText: "Description",
-            onChanged: (value) => description = value,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Please Enter Description";
-              }
-              return null;
-            },
-          ),
-          const SizedBox(
-            height: 25,
-          ),
-          AddPostInput(
-            initialValue: price == 0.0 ? "" : price.toString(),
-            hintText: "Price",
-            onChanged: (value) => price = double.parse(value),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Please Enter Price";
-              } else {
-                try {
-                  double.parse(value);
-                  return null;
-                } catch (e) {
-                  return "Enter Correct Price";
-                }
-              }
-            },
-          ),
-          const SizedBox(
-            height: 25,
-          ),
           AddPostDropDownInput(
             initialValue: mainCategory,
             hintText: "Category",
@@ -126,6 +79,54 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
                 return "Please Select Sub Category";
               }
               return null;
+            },
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          AddPostInput(
+            initialValue: title,
+            hintText: "Item Title",
+            onChanged: (value) => title = value,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please Enter Title";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          AddPostInput(
+            initialValue: description,
+            hintText: "Description",
+            onChanged: (value) => description = value,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please Enter Description";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          AddPostInput(
+            initialValue: price == 0.0 ? "" : price.toString(),
+            hintText: "Price",
+            onChanged: (value) => price = double.parse(value),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please Enter Price";
+              } else {
+                try {
+                  double.parse(value);
+                  return null;
+                } catch (e) {
+                  return "Enter Correct Price";
+                }
+              }
             },
           ),
           const SizedBox(
