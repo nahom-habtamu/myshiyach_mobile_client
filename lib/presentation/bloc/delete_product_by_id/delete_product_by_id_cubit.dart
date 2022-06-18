@@ -7,6 +7,10 @@ class DeleteProductByIdCubit extends Cubit<DeleteProductByIdState> {
   final DeleteProductById deleteProductById;
   DeleteProductByIdCubit(this.deleteProductById) : super(DeleteProductEmpty());
 
+  void clear() {
+    emit(DeleteProductEmpty());
+  }
+
   void call(String id, String token) async {
     try {
       emit(DeleteProductEmpty());

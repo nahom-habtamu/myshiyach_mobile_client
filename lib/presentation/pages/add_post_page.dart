@@ -32,11 +32,9 @@ class _AddPostPageState extends State<AddPostPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      emptyAddPostState();
-      initializeCurrentUser();
-      initCategories();
-    });
+    emptyAddPostState();
+    initializeCurrentUser();
+    initCategories();
   }
 
   void emptyAddPostState() {
@@ -142,6 +140,7 @@ class _AddPostPageState extends State<AddPostPage> {
             ),
             padding: const EdgeInsets.only(top: 0, left: 25, right: 25),
             width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -180,17 +179,18 @@ class _AddPostPageState extends State<AddPostPage> {
     List<String> cities,
   ) {
     if (currentInputPageState == 0) {
-      return renderFirstPageInputs(categories, cities);
+      return renderFirstPageInputs(categories);
     } else if (currentInputPageState == 1) {
-      return renderSecondPageInputs(categories);
+      return renderSecondPageInputs(categories, cities);
     }
   }
 
-  renderSecondPageInputs(List<MainCategory> categories) {
+  renderSecondPageInputs(List<MainCategory> categories, List<String> cities) {
     var subCategoriesToDisplay =
         categories.elementAt(selectedMainCategoryIndex).subCategories.toList();
 
     return SecondPageInputs(
+      cities: cities,
       initalValue: mergedInputValues,
       subCategoriesToDisplay: subCategoriesToDisplay,
       onCancel: () {
@@ -218,12 +218,10 @@ class _AddPostPageState extends State<AddPostPage> {
 
   renderFirstPageInputs(
     List<MainCategory> categories,
-    List<String> cities,
   ) {
     return FirstPageInputs(
       initialValue: mergedInputValues,
       mainCategories: categories,
-      cities: cities,
       onNextPressed: (firstInputValues) {
         appendInputValue(firstInputValues);
         setState(() {

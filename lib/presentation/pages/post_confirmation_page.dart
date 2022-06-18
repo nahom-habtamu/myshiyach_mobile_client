@@ -63,7 +63,7 @@ class PostConfirmationPage extends StatelessWidget {
                       height: 15,
                     ),
                     Text(
-                      'Your ad has been Successfully placed, Our logistic team will contact with you soon.For any help, call (+251) 12345678',
+                      'Your ad has been Successfully placed, Our logistic team will contact with you soon. For any help, call (+251) 12345678',
                       style: TextStyle(
                         color: Color(0xff11435E),
                         fontSize: 15,
@@ -78,7 +78,9 @@ class PostConfirmationPage extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.pushReplacementNamed(
-                        context, MasterPage.routeName);
+                      context,
+                      MasterPage.routeName,
+                    );
                   },
                   child: const Text('Go to Homepage'),
                   style: ElevatedButton.styleFrom(

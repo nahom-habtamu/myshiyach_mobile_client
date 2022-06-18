@@ -142,29 +142,30 @@ class _EditPostPageState extends State<EditPostPage> {
                       height: 20,
                     ),
                     AddPostInput(
-                        hintText: "Title",
-                        onChanged: (value) => setState(() => title = value),
-                        initialValue: product!.title,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please Enter Title";
-                          }
-                          return null;
-                        }),
+                      hintText: "Title",
+                      onChanged: (value) => setState(() => title = value),
+                      initialValue: product!.title,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Enter Title";
+                        }
+                        return null;
+                      },
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
                     AddPostInput(
-                        hintText: "Description",
-                        onChanged: (value) =>
-                            setState(() => description = value),
-                        initialValue: product!.description,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please Enter Description";
-                          }
-                          return null;
-                        }),
+                      hintText: "Description",
+                      onChanged: (value) => setState(() => description = value),
+                      initialValue: product!.description,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Enter Description";
+                        }
+                        return null;
+                      },
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -296,6 +297,7 @@ class _EditPostPageState extends State<EditPostPage> {
 
       if (state is EditPostSuccessfull) {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
+          Navigator.pop(context);
           Navigator.pushReplacementNamed(
             context,
             PostDetailPage.routeName,

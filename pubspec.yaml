@@ -34,7 +34,7 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/success.png
+    - assets/
   fonts:
     - family: DMSans
       fonts:

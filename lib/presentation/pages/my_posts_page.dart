@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/presentation/pages/add_post_page.dart';
 
 import '../../domain/enitites/product.dart';
 import '../../domain/usecases/delete_product_by_id.dart';
@@ -10,6 +9,7 @@ import '../bloc/get_my_products/get_my_products_cubit.dart';
 import '../bloc/get_my_products/get_my_products_state.dart';
 import '../widgets/common/empty_state_content.dart';
 import '../widgets/common/post_card_list_item.dart';
+import 'add_post_page.dart';
 
 class MyPostsPage extends StatefulWidget {
   static String routeName = '/myPostsPage';
@@ -88,7 +88,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
   buildEmptyStateContent() {
     return EmptyStateContent(
       captionText: "No Products yet!",
-      hintText: "Expirence Adding products by cliking the button Below",
+      hintText: "Experience Adding products by cliking the button Below",
       buttonText: "Go To Add",
       onButtonClicked: () {
         Navigator.pushReplacementNamed(context, AddPostPage.routeName);

@@ -10,6 +10,10 @@ class LogOutCubit extends Cubit<LogOutState> {
     required this.storeUserCredentials,
   }) : super(LogOutNotTriggered());
 
+  void clear() {
+    emit(LogOutNotTriggered());
+  }
+
   void call() async {
     try {
       emit(LogOutNotTriggered());

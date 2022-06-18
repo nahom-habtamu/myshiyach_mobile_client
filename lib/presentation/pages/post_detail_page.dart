@@ -44,7 +44,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
           authToken = getToken();
           product = ModalRoute.of(context)!.settings.arguments as Product;
         });
-        context.read<HandleGoingToMessageCubit>().clearState();
+        context.read<HandleGoingToMessageCubit>().clear();
+        context.read<DeleteProductByIdCubit>().clear();
       });
     });
   }

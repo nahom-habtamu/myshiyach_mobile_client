@@ -24,6 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    context.read<LogOutCubit>().clear();
     var authState = context.read<AuthCubit>().state;
     if (authState is AuthSuccessfull) {
       currentUser = authState.currentUser;
@@ -78,13 +79,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     fontSize: 14,
                   ),
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Edit'),
-                ),
+                // const SizedBox(
+                //   height: 15,
+                // ),
+                // ElevatedButton(
+                //   onPressed: () {},
+                //   child: const Text('Edit'),
+                // ),
                 const SizedBox(
                   height: 35,
                 ),

@@ -19,7 +19,7 @@ class HandleGoingToMessageCubit extends Cubit<HandleGoingToMessageState> {
     required this.getUserById,
   }) : super(HandleGoingToMessageEmpty());
 
-  void clearState() {
+  void clear() {
     emit(HandleGoingToMessageEmpty());
   }
 

@@ -53,7 +53,7 @@ class _SplashPageState extends State<SplashPage> {
         }
         return const Center(
           child: Text(
-            'Men Ale',
+            'My Shiyach',
             style: TextStyle(
               color: Color(0xFF11435E),
               fontSize: 30,

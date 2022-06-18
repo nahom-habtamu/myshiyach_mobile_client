@@ -30,10 +30,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   fetchAllNeededToDisplayProductList() {
-    var state = context.read<DisplayAllProductsCubit>().state;
-    if (state is Empty || state is Error) {
-      context.read<DisplayAllProductsCubit>().call();
-    }
+    // var state = context.read<DisplayAllProductsCubit>().state;
+    // if (state is Empty || state is Error) {
+    context.read<DisplayAllProductsCubit>().call();
+    // }
   }
 
   @override

@@ -8,13 +8,11 @@ import '../../../domain/enitites/main_category.dart';
 class FirstPageInputs extends StatefulWidget {
   final Function onNextPressed;
   final List<MainCategory> mainCategories;
-  final List<String> cities;
   final Map<String, dynamic> initialValue;
   const FirstPageInputs({
     Key? key,
     required this.mainCategories,
     required this.onNextPressed,
-    required this.cities,
     required this.initialValue,
   }) : super(key: key);
 
@@ -26,9 +24,8 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
   String title = "";
   String description = "";
   double price = 0.0;
-  String brand = "";
+  String subCategory = "";
   String mainCategory = "";
-  String city = "";
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -37,18 +34,14 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
     title = widget.initialValue["title"] ?? "";
     description = widget.initialValue["description"] ?? "";
     price = widget.initialValue["price"] ?? 0;
-    brand = widget.initialValue["brand"] ?? "";
+    subCategory = widget.initialValue["subCategory"] ?? "";
     mainCategory = widget.initialValue["mainCategory"] ?? "";
-    city = widget.initialValue["city"] ?? "";
   }
 
   @override
   Widget build(BuildContext context) {
-    var mainCategoryToShowOnDropDown = widget.mainCategories
-        .map((m) => {"value": m.id, "preview": m.title})
-        .toList();
-    var cityToShowOnDropDown =
-        widget.cities.map((m) => {"value": m, "preview": m}).toList();
+    var mainCategoryToShowOnDropDown = buildMainCategoriesToDisplay();
+    var subCategoryToShowOnDropDown = buildSubCategoriesToDisplay();
     return Form(
       key: formKey,
       child: Column(
@@ -64,7 +57,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
                 return null;
               }),
           const SizedBox(
-            height: 20,
+            height: 25,
           ),
           AddPostInput(
             initialValue: description,
@@ -78,7 +71,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             },
           ),
           const SizedBox(
-            height: 20,
+            height: 25,
           ),
           AddPostInput(
             initialValue: price == 0.0 ? "" : price.toString(),
@@ -98,27 +91,18 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             },
           ),
           const SizedBox(
-            height: 20,
-          ),
-          AddPostInput(
-            initialValue: brand,
-            hintText: "Brand",
-            onChanged: (value) => brand = value,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Please Enter Brand";
-              }
-              return null;
-            },
-          ),
-          const SizedBox(
-            height: 20,
+            height: 25,
           ),
           AddPostDropDownInput(
             initialValue: mainCategory,
             hintText: "Category",
             items: [...mainCategoryToShowOnDropDown],
-            onChanged: (value) => mainCategory = value,
+            onChanged: (value) {
+              setState(() {
+                mainCategory = value;
+                subCategory = "";
+              });
+            },
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "Please Select Main Category";
@@ -127,22 +111,25 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             },
           ),
           const SizedBox(
-            height: 20,
+            height: 25,
           ),
           AddPostDropDownInput(
-            initialValue: city,
-            hintText: "City",
-            items: [...cityToShowOnDropDown],
-            onChanged: (value) => city = value,
+            key: Key(subCategory),
+            initialValue: subCategory,
+            items: subCategoryToShowOnDropDown,
+            hintText: "Sub Category",
+            onChanged: (value) => setState(
+              () => subCategory = value,
+            ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "Please Select City";
+                return "Please Select Sub Category";
               }
               return null;
             },
           ),
           const SizedBox(
-            height: 20,
+            height: 25,
           ),
           PostButton(
             isPost: false,
@@ -159,14 +146,29 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
     );
   }
 
+  List<Map<String, String>> buildMainCategoriesToDisplay() {
+    return widget.mainCategories
+        .map((m) => {"value": m.id, "preview": m.title})
+        .toList();
+  }
+
+  List<Map<String, String>> buildSubCategoriesToDisplay() {
+    return mainCategory.isNotEmpty
+        ? widget.mainCategories
+            .firstWhere((element) => element.id == mainCategory)
+            .subCategories
+            .map((m) => {"value": m.id, "preview": m.title})
+            .toList()
+        : [];
+  }
+
   Map<String, dynamic> buildFirstPageInputValues() {
     return {
       "title": title,
       "description": description,
       "price": price,
-      "brand": brand,
+      "subCategory": subCategory,
       "mainCategory": mainCategory,
-      "city": city,
     };
   }
 }

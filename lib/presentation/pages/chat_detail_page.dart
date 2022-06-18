@@ -171,9 +171,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   Future<void> handleScrollingToBottom() async {
     await Future.delayed(const Duration(milliseconds: 300));
     SchedulerBinding.instance?.addPostFrameCallback((_) {
-      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.fastOutSlowIn);
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn,
+      );
     });
   }
 
@@ -266,14 +268,15 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 ? const Color(0xff11435E)
                 : Colors.black12,
             borderRadius: BorderRadius.only(
-                topLeft: const Radius.circular(25),
-                topRight: const Radius.circular(25),
-                bottomLeft: message.senderId == strangerId
-                    ? const Radius.circular(25)
-                    : Radius.zero,
-                bottomRight: message.senderId != strangerId
-                    ? const Radius.circular(25)
-                    : Radius.zero),
+              topLeft: const Radius.circular(25),
+              topRight: const Radius.circular(25),
+              bottomLeft: message.senderId == strangerId
+                  ? const Radius.circular(25)
+                  : Radius.zero,
+              bottomRight: message.senderId != strangerId
+                  ? const Radius.circular(25)
+                  : Radius.zero,
+            ),
           ),
           padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
           child: Center(
