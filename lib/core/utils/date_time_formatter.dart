@@ -1,7 +1,6 @@
 class DateFormatterUtil {
-  final DateTime currentDate = DateTime.now();
-
-  String call(String dateTimeString) {
+  static String call(String dateTimeString) {
+    final DateTime currentDate = DateTime.now();
     final DateTime createdAt =
         DateTime.parse(dateTimeString.replaceAll(",", ""));
     final difference = createdAt.difference(currentDate);

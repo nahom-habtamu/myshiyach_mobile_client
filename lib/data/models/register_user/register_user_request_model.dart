@@ -10,9 +10,9 @@ class RegisterUserRequestModel {
   });
 
   Map<String, dynamic> toJson() => {
-        "fullName": fullName,
-        "password": password,
-        "phoneNumber": phoneNumber,
+        "fullName": fullName.trim(),
+        "password": password.trim(),
+        "phoneNumber": phoneNumber.trim(),
         "email": "",
       };
 }

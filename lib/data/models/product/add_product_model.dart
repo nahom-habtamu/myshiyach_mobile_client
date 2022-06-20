@@ -39,14 +39,14 @@ class AddProductModel {
   }
 
   Map<String, dynamic> toJson() => {
-        "title": title,
-        "description": description,
+        "title": title.trim(),
+        "description": description.trim(),
         "price": price,
         "mainCategory": mainCategory,
         "subCategory": subCategory,
-        "brand": brand,
+        "brand": brand.trim(),
         "state": state,
-        "city": city,
+        "city": city.trim(),
         "productImages": productImages,
         "other": other
       };

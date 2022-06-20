@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mnale_client/core/utils/price_formatter.dart';
 
 import '../../../core/utils/date_time_formatter.dart';
 import '../../../domain/enitites/product.dart';
@@ -121,7 +122,7 @@ class _ProductListItemState extends State<ProductListItem> {
         width: MediaQuery.of(context).size.width * 0.45,
         height: 18,
         child: Text(
-          '\$${price.toString()}',
+          '\$' + PriceFormatterUtil.formatToPrice(price),
           style: const TextStyle(
             color: Color(0xff34A853),
             fontSize: 16,
@@ -147,7 +148,7 @@ class _ProductListItemState extends State<ProductListItem> {
           ),
           Expanded(
             child: Text(
-              DateFormatterUtil().call(product.createdAt),
+              DateFormatterUtil.call(product.createdAt),
               style: const TextStyle(
                 color: Colors.grey,
                 fontSize: 12,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mnale_client/core/utils/price_formatter.dart';
 
 import 'add_post_dropdown_dart.dart';
 import 'add_post_input.dart';
@@ -115,13 +116,17 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
           AddPostInput(
             initialValue: price == 0.0 ? "" : price.toString(),
             hintText: "Price",
-            onChanged: (value) => price = double.parse(value),
+            onChanged: (value) => price = double.parse(
+              PriceFormatterUtil.deformatToPureNumber(value),
+            ),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "Please Enter Price";
               } else {
                 try {
-                  double.parse(value);
+                  double.parse(
+                    PriceFormatterUtil.deformatToPureNumber(value),
+                  );
                   return null;
                 } catch (e) {
                   return "Enter Correct Price";

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/core/utils/price_formatter.dart';
 
 import '../../core/utils/date_time_formatter.dart';
 import '../../data/models/conversation/add_conversation_model.dart';
@@ -115,8 +116,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                       width: 10,
                                     ),
                                     Text(
-                                      DateFormatterUtil()
-                                          .call(product!.createdAt),
+                                      DateFormatterUtil.call(
+                                        product!.createdAt,
+                                      ),
                                       style: const TextStyle(
                                         color: Colors.grey,
                                         fontSize: 12,
@@ -128,7 +130,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                   height: 10,
                                 ),
                                 Text(
-                                  '\$${product!.price.toString()}',
+                                  '\$' +
+                                      PriceFormatterUtil.formatToPrice(
+                                        product!.price,
+                                      ),
                                   style: const TextStyle(
                                     color: Color(0xff34A853),
                                     fontSize: 24,
