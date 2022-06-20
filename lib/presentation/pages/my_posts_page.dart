@@ -38,7 +38,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
       backgroundColor: const Color(0xffF1F1F1),
       appBar: AppBar(
         title: const Text(
-          'Profile',
+          'My Posts',
           style: TextStyle(
             color: Colors.black,
           ),
@@ -97,17 +97,37 @@ class _MyPostsPageState extends State<MyPostsPage> {
   }
 
   buildProductList(List<Product> products) {
-    return ListView.builder(
-      itemBuilder: (context, index) => PostCardListItem(
-        product: products[index],
-        onDissmissed: () {
-          context.read<DeleteProductById>().call(
-                products[index].id,
-                accessToken,
-              );
-        },
-      ),
-      itemCount: products.length,
+    return Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 15.0),
+          child: Text(
+            'Swipe To Delete',
+            style: TextStyle(
+              fontSize: 22,
+              fontStyle: FontStyle.italic,
+              color: Colors.black45,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) => PostCardListItem(
+              product: products[index],
+              onDissmissed: () {
+                context.read<DeleteProductById>().call(
+                      products[index].id,
+                      accessToken,
+                    );
+              },
+            ),
+            itemCount: products.length,
+          ),
+        ),
+      ],
     );
   }
 }

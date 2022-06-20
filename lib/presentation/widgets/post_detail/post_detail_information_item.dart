@@ -26,13 +26,18 @@ class PostDetailInformationItem extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        Text(
-          informationValue,
-          style: const TextStyle(
-            color: Color(0xff434648),
-            fontSize: 12,
-            height: 2,
-            fontWeight: FontWeight.w500,
+        Container(
+          padding: const EdgeInsets.all(5),
+          decoration:
+              BoxDecoration(border: Border.all(color: const Color(0xFFDBD7D7))),
+          child: Text(
+            informationValue,
+            style: const TextStyle(
+              color: Color(0xff434648),
+              fontSize: 12,
+              height: 2,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
         const SizedBox(

@@ -82,20 +82,38 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
   }
 
   buildProductList(List<Product> products) {
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return PostCardListItem(
-          product: products[index],
-          onDissmissed: () {
-            var updatedProducts = [...products];
-            updatedProducts
-                .removeWhere((element) => element.id == products[index].id);
-            updateDataInLocalSource(updatedProducts);
-            context.read<GetFavoriteProductsCubit>().execute();
-          },
-        );
-      },
-      itemCount: products.length,
+    return Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 15.0),
+          child: Text(
+            'Swipe To Delete',
+            style: TextStyle(
+              fontSize: 22,
+              fontStyle: FontStyle.italic,
+              color: Colors.black45,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              return PostCardListItem(
+                product: products[index],
+                onDissmissed: () {
+                  var updatedProducts = [...products];
+                  updatedProducts.removeWhere(
+                      (element) => element.id == products[index].id);
+                  updateDataInLocalSource(updatedProducts);
+                  context.read<GetFavoriteProductsCubit>().execute();
+                },
+              );
+            },
+            itemCount: products.length,
+          ),
+        ),
+      ],
     );
   }
 

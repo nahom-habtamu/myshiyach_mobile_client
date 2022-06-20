@@ -17,6 +17,7 @@ class DateFormatterUtil {
     if (differenceInHours >= 1 && differenceInHours < 24) {
       return "$differenceInHours hours ago";
     }
-    return "$differenceInDays days ago";
+
+    return "$differenceInDays ${differenceInDays == 1 ? "day" : "days"} ago";
   }
 }

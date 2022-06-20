@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/core/utils/price_formatter.dart';
 
 import '../../core/utils/date_time_formatter.dart';
+import '../../core/utils/price_formatter.dart';
 import '../../data/models/conversation/add_conversation_model.dart';
 import '../../domain/enitites/product.dart';
 import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
-import '../bloc/delete_product_by_id/delete_product_by_id_state.dart';
 import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_state.dart';
@@ -53,146 +52,177 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Post Detail',
-            style: TextStyle(
-              color: Colors.black,
-            ),
-          ),
-          backgroundColor: const Color(0xffF1F1F1),
-          elevation: 0,
-          centerTitle: true,
-        ),
-        body: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25),
-              topRight: Radius.circular(25),
-            ),
-          ),
-          child: product != null
-              ? Column(
-                  children: [
-                    PostDetailCarousel(
-                      items: [...product!.productImages],
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 25.0,
-                            right: 25.0,
-                            top: 15,
-                          ),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  product!.title,
-                                  style: const TextStyle(
-                                    color: Color(0xff11435E),
-                                    fontSize: 18,
-                                    height: 1.5,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.timer_sharp,
-                                      color: Colors.grey,
-                                      size: 15,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      DateFormatterUtil.call(
-                                        product!.createdAt,
-                                      ),
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  '\$' +
-                                      PriceFormatterUtil.formatToPrice(
-                                        product!.price,
-                                      ),
-                                  style: const TextStyle(
-                                    color: Color(0xff34A853),
-                                    fontSize: 24,
-                                    height: 1.5,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: PostDetailInformationItem(
-                                    informationKey: "Description",
-                                    informationValue: product!.description,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: PostDetailInformationItem(
-                                    informationKey: "City",
-                                    informationValue: product!.city,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                renderPostDetailButtonSection(),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+    return product == null
+        ? Container()
+        : SafeArea(
+            child: Scaffold(
+              appBar: AppBar(
+                title: const Text(
+                  'Post Detail',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                backgroundColor: const Color(0xffF1F1F1),
+                elevation: 0,
+                centerTitle: true,
+                actions: [
+                  if (currentUser!.id == product!.createdBy)
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(
+                          context,
+                          EditPostPage.routeName,
+                          arguments: product,
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.edit,
+                        color: Colors.black,
                       ),
                     )
-                  ],
-                )
-              : Container(),
-        ),
-      ),
-    );
+                ],
+              ),
+              body: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  ),
+                ),
+                child: product != null
+                    ? Column(
+                        children: [
+                          PostDetailCarousel(
+                            items: [...product!.productImages],
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 25.0,
+                                  right: 25.0,
+                                  top: 15,
+                                ),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color:
+                                                    const Color(0xFFDBD7D7))),
+                                        child: Text(
+                                          product!.title,
+                                          style: const TextStyle(
+                                            color: Color(0xff11435E),
+                                            fontSize: 18,
+                                            height: 1.5,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.timer_sharp,
+                                            color: Colors.grey,
+                                            size: 15,
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            DateFormatterUtil.call(
+                                              product!.createdAt,
+                                            ),
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color:
+                                                    const Color(0xFFDBD7D7))),
+                                        child: Text(
+                                          '\$' +
+                                              PriceFormatterUtil.formatToPrice(
+                                                product!.price,
+                                              ),
+                                          style: const TextStyle(
+                                            color: Color(0xff34A853),
+                                            fontSize: 24,
+                                            height: 1.5,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: PostDetailInformationItem(
+                                          informationKey: "Description",
+                                          informationValue:
+                                              product!.description,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: PostDetailInformationItem(
+                                          informationKey: "City",
+                                          informationValue: product!.city,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      renderPostDetailButtonSection(),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    : Container(),
+              ),
+            ),
+          );
   }
 
   Row renderPostDetailButtonSection() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        currentUser!.id != product!.createdBy
-            ? goToChatDetailButton(product!.createdBy)
-            : editPostButton(),
-        if (currentUser!.id == product!.createdBy)
-          deletePostButton(product!.id),
-      ],
-    );
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      currentUser!.id != product!.createdBy
+          ? goToChatDetailButton(product!.createdBy)
+          : Container()
+    ]);
   }
 
   BlocBuilder goToChatDetailButton(String postCreatedBy) {
@@ -234,31 +264,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
     });
   }
 
-  deletePostButton(String postId) {
-    return BlocBuilder<DeleteProductByIdCubit, DeleteProductByIdState>(
-      builder: (context, state) {
-        if (state is DeleteProductLoading) {
-          return const SizedBox(
-            height: 50,
-            width: 50,
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (state is DeleteProductLoaded) {
-          naviagateToMasterPage(context);
-        }
-        return CurvedButton(
-          onPressed: () {
-            context.read<DeleteProductByIdCubit>().call(postId, authToken!);
-          },
-          text: "Delete Post",
-          halfWidth: true,
-          backgroundColor: Colors.red,
-        );
-      },
-    );
-  }
-
   void naviagateToMasterPage(BuildContext context) {
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       Navigator.pushReplacementNamed(
@@ -282,19 +287,5 @@ class _PostDetailPageState extends State<PostDetailPage> {
       return authState.loginResult.token;
     }
     return null;
-  }
-
-  editPostButton() {
-    return CurvedButton(
-      onPressed: () {
-        Navigator.pushNamed(
-          context,
-          EditPostPage.routeName,
-          arguments: product!,
-        );
-      },
-      text: "Edit Post",
-      halfWidth: true,
-    );
   }
 }
