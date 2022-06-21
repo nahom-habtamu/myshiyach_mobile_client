@@ -9,7 +9,7 @@ import 'input_image_picker.dart';
 import 'next_or_post_button.dart';
 
 class SecondPageInputs extends StatefulWidget {
-  final Map<String, dynamic> initalValue;
+  final Map<String, dynamic> initialValue;
   final List<SubCategory> subCategoriesToDisplay;
   final Function onCancel;
   final List<String> cities;
@@ -20,7 +20,7 @@ class SecondPageInputs extends StatefulWidget {
     required this.subCategoriesToDisplay,
     required this.onCancel,
     required this.onPost,
-    required this.initalValue,
+    required this.initialValue,
     required this.cities,
   }) : super(key: key);
 
@@ -39,11 +39,11 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
   @override
   void initState() {
     super.initState();
-    postState = widget.initalValue["state"] ?? "";
-    city = widget.initalValue["city"] ?? "";
-    brand = widget.initalValue["brand"] ?? "";
+    postState = widget.initialValue["state"] ?? "";
+    city = widget.initialValue["city"] ?? "";
+    brand = widget.initialValue["brand"] ?? "";
     pickedImages = [
-      ...widget.initalValue["productImages"] ?? [],
+      ...widget.initialValue["productImages"] ?? [],
     ];
   }
 

@@ -9,29 +9,29 @@ abstract class StorageDataSource {
 class FirebaseStorageDataSource extends StorageDataSource {
   @override
   Future<List<String>> uploadFiles(List images) async {
-    final ref = FirebaseStorage.instance
-        .ref()
-        .child("product_images")
-        .child(DateTime.now().toString() + ".jpg");
-    var result = await uploadAllImages(images, ref);
+    var result = await uploadAllImages(images);
     return result;
   }
 
   Future<List<String>> uploadAllImages(
-      List<dynamic> images, Reference ref) async {
-    List<String> result = [];
+      List<dynamic> images) async {
+    List<String> uploadedFiles = [];
 
     for (var i = 0; i < images.length; i++) {
-      String url = await uploadSingleImage(images[i], ref);
-      result.add(url);
+      String myUrl = await uploadSingleImage(images[i]);
+      uploadedFiles = [...uploadedFiles, myUrl];
     }
-    return result;
+    return uploadedFiles;
   }
 
-  Future<String> uploadSingleImage(dynamic image, Reference ref) async {
+  Future<String> uploadSingleImage(dynamic image) async {
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child("product_images")
+        .child(DateTime.now().toString() + ".jpg");
+
     File file = File(image.path);
     var task = await ref.putFile(file);
-    var url = await task.ref.getDownloadURL();
-    return url;
+    return await task.ref.getDownloadURL();
   }
 }

@@ -191,7 +191,7 @@ class _AddPostPageState extends State<AddPostPage> {
 
     return SecondPageInputs(
       cities: cities,
-      initalValue: mergedInputValues,
+      initialValue: mergedInputValues,
       subCategoriesToDisplay: subCategoriesToDisplay,
       onCancel: () {
         setState(() {
