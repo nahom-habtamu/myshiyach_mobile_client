@@ -131,6 +131,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Product> applyFilterToProducts(List<Product> products) {
     if (!filterIsNotEmpty() && searchKeyword.isEmpty) {
+      products.sort((a, b) => a.createdAt.compareTo(b.createdAt));
       return products;
     }
 
@@ -142,13 +143,20 @@ class _HomePageState extends State<HomePage> {
               checkKeywordMatch(product),
         )
         .toList();
-    return filteredData;
+    filteredData.sort(
+      (a, b) => a.price.compareTo(b.price),
+    );
+
+    return filterValues!.orderByAscending
+        ? filteredData
+        : filteredData.reversed.toList();
   }
 
   bool filterIsNotEmpty() {
     return filterValues != null &&
         (filterValues!.categories.isNotEmpty ||
-            (filterValues!.maxValue != 0 && filterValues!.minValue != 0));
+            (filterValues!.maxValue != 0 && filterValues!.minValue != 0) ||
+            filterValues!.orderByAscending);
   }
 
   bool checkKeywordMatch(Product product) {

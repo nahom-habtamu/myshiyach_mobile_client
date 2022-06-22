@@ -16,7 +16,16 @@ class FilterDataPage extends StatefulWidget {
 
 class _FilterDataPageState extends State<FilterDataPage> {
   var _currentPriceRangeValues = const RangeValues(0, 0);
+  var orderByAscending = false;
   List<MainCategory> selectedMainCategories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    orderByAscending = false;
+    selectedMainCategories = [];
+    _currentPriceRangeValues = const RangeValues(0, 0);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +56,11 @@ class _FilterDataPageState extends State<FilterDataPage> {
                   _currentPriceRangeValues = value;
                 });
               },
+              orderByAscendingChanged: (value) {
+                setState(() {
+                  orderByAscending = value!;
+                });
+              },
             ),
             const SizedBox(
               height: 25,
@@ -68,6 +82,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
                       categories: selectedMainCategories,
                       maxValue: _currentPriceRangeValues.end,
                       minValue: _currentPriceRangeValues.start,
+                      orderByAscending: orderByAscending,
                     );
                     Navigator.pop(context, filterValues);
                   },

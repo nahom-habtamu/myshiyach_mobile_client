@@ -150,6 +150,7 @@ class _SearchBarState extends State<SearchBar> {
   bool filterIsNotEmpty() {
     return filterResult != null &&
         (filterResult!.categories.isNotEmpty ||
-            (filterResult!.maxValue != 0 && filterResult!.minValue != 0));
+            (filterResult!.maxValue != 0 && filterResult!.minValue != 0) ||
+            filterResult!.orderByAscending);
   }
 }
