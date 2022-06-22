@@ -80,19 +80,19 @@ class _ProductListItemState extends State<ProductListItem> {
   }
 
   SizedBox renderDescription(String description) {
-    var descriptionToShow =
-        description.length > 60 ? description.substring(0, 60) : description;
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.45,
+      height: 20,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5.0),
         child: Text(
-          descriptionToShow,
+          description,
           style: const TextStyle(
             color: Color(0xff888888),
             fontSize: 8,
             letterSpacing: 0.2,
           ),
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );
@@ -160,12 +160,14 @@ class _ProductListItemState extends State<ProductListItem> {
               widget.onTap();
             },
             child: CircleAvatar(
-              radius: 14,
+              radius: 22,
               backgroundColor: const Color(0xFFE9E1E1),
-              child: Icon(
-                widget.isFavorite ? Icons.favorite_border : Icons.favorite,
-                size: 20,
-                color: Colors.red,
+              child: Center(
+                child: Icon(
+                  widget.isFavorite ? Icons.favorite_border : Icons.favorite,
+                  size: 20,
+                  color: Colors.red,
+                ),
               ),
             ),
           ),
