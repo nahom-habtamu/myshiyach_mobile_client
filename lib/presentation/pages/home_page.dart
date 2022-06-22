@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/utils/date_time_formatter.dart';
 import '../../domain/enitites/product.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
@@ -131,7 +132,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Product> applyFilterToProducts(List<Product> products) {
     if (!filterIsNotEmpty() && searchKeyword.isEmpty) {
-      products.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+      products.sort((a, b) => compareCreatedAt(a, b));
       return products;
     }
 
@@ -150,6 +151,13 @@ class _HomePageState extends State<HomePage> {
     return filterValues!.orderByAscending
         ? filteredData
         : filteredData.reversed.toList();
+  }
+
+  int compareCreatedAt(Product a, Product b) {
+    var firstDate = DateFormatterUtil.parseDate(a.createdAt);
+    var secondDate = DateFormatterUtil.parseDate(b.createdAt);
+
+    return secondDate.compareTo(firstDate);
   }
 
   bool filterIsNotEmpty() {

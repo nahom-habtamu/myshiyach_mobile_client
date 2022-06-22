@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/enitites/product.dart';
-import '../../domain/usecases/delete_product_by_id.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
+import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../bloc/get_my_products/get_my_products_cubit.dart';
 import '../bloc/get_my_products/get_my_products_state.dart';
 import '../widgets/common/empty_state_content.dart';
@@ -118,7 +118,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
             itemBuilder: (context, index) => PostCardListItem(
               product: products[index],
               onDissmissed: () {
-                context.read<DeleteProductById>().call(
+                context.read<DeleteProductByIdCubit>().call(
                       products[index].id,
                       accessToken,
                     );

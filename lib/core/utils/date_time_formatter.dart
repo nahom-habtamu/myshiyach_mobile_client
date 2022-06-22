@@ -4,23 +4,27 @@ class DateFormatterUtil {
   static String call(String dateTimeString) {
     final DateTime currentDate = DateTime.now();
     final DateTime createdAt =
-        DateFormat('dd/MM/yyyy, HH:mm:ss a').parse(dateTimeString);
+        DateFormat('MM/dd/yyyy, HH:mm:ss a').parse(dateTimeString);
 
-    final difference = createdAt.difference(currentDate);
+    final difference = currentDate.difference(createdAt);
 
-    var differeneInMinutes = difference.inMinutes * -1;
-    var differenceInHours = difference.inHours * -1;
-    var differenceInDays = difference.inDays * -1;
+    var differeneInMinutes = difference.inMinutes;
+    var differenceInHours = difference.inHours;
+    var differenceInDays = difference.inDays;
 
-    if (differeneInMinutes < 2) return "Just Now";
+    if (differeneInMinutes <= 2) return "Just Now";
     if (differeneInMinutes > 2 && differeneInMinutes < 59) {
-      return "$differeneInMinutes minutes ago";
+      return "$differeneInMinutes mins ago";
     }
 
     if (differenceInHours >= 1 && differenceInHours < 24) {
-      return "$differenceInHours hours ago";
+      return "$differenceInHours ${differenceInHours == 1 ? "hour" : "hours"} ago";
     }
 
     return "$differenceInDays ${differenceInDays == 1 ? "day" : "days"} ago";
+  }
+
+  static DateTime parseDate(String dateTimeString) {
+    return DateFormat('MM/dd/yyyy, HH:mm:ss a').parse(dateTimeString);
   }
 }
