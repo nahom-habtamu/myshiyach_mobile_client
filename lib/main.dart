@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: AppLevelState.get(),
       child: MaterialApp(
-        title: 'Mnale',
+        title: 'My Shiyach',
         theme: ThemeData(
           primaryColor: const Color(0xff11435E),
           fontFamily: 'DMSans',

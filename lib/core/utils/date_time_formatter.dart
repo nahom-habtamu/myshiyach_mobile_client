@@ -1,8 +1,11 @@
+import 'package:intl/intl.dart';
+
 class DateFormatterUtil {
   static String call(String dateTimeString) {
     final DateTime currentDate = DateTime.now();
     final DateTime createdAt =
-        DateTime.parse(dateTimeString.replaceAll(",", ""));
+        DateFormat('dd/MM/yyyy, HH:mm:ss a').parse(dateTimeString);
+
     final difference = createdAt.difference(currentDate);
 
     var differeneInMinutes = difference.inMinutes * -1;
