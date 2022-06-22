@@ -27,8 +27,15 @@ class UpdateProductCubit extends Cubit<UpdateProductState> {
     try {
       emit(EditPostEmpty());
       emit(EditPostLoading());
-      var uploadedPictures = await uploadProductPictures.call(imagesToUpload);
-      editProductModel.productImages = [...uploadedPictures, ...productImages];
+      if (imagesToUpload.isNotEmpty) {
+        var uploadedPictures = await uploadProductPictures.call(imagesToUpload);
+        editProductModel.productImages = [
+          ...uploadedPictures,
+          ...productImages
+        ];
+      } else {
+        editProductModel.productImages = [...productImages];
+      }
       var product = await updateProduct.call(id, editProductModel, token);
       emit(EditPostSuccessfull(product));
     } catch (e) {

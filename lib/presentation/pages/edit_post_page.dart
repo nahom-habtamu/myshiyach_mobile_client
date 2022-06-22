@@ -274,7 +274,11 @@ class _EditPostPageState extends State<EditPostPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    renderSaveButton()
+                    renderSaveButton(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    renderEditError()
                   ],
                 ),
               ),
@@ -284,6 +288,18 @@ class _EditPostPageState extends State<EditPostPage> {
         return Container();
       },
     );
+  }
+
+  renderEditError() {
+    return BlocBuilder<UpdateProductCubit, UpdateProductState>(
+        builder: (context, state) {
+      if (state is EditPostError) {
+        return Center(
+          child: Text(state.message),
+        );
+      }
+      return Container();
+    });
   }
 
   renderSaveButton() {

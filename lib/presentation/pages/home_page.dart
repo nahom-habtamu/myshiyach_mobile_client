@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
       (a, b) => a.price.compareTo(b.price),
     );
 
-    return filterValues!.orderByAscending
+    return filterValues == null || filterValues!.orderByAscending
         ? filteredData
         : filteredData.reversed.toList();
   }
