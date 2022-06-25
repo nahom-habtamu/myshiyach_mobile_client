@@ -58,9 +58,7 @@ class _EditPostPageState extends State<EditPostPage> {
         price = product!.price;
         mainCategory = product!.mainCategory;
         subCategory = product!.subCategory;
-        brand = product!.brand;
         city = product!.city;
-        postState = product!.state;
       });
     });
   }
@@ -190,20 +188,20 @@ class _EditPostPageState extends State<EditPostPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    AddPostInput(
-                      hintText: "Brand",
-                      onChanged: (value) => setState(() => brand = value),
-                      initialValue: product!.brand,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please Enter Brand";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    // AddPostInput(
+                    //   hintText: "Brand",
+                    //   onChanged: (value) => setState(() => brand = value),
+                    //   initialValue: product!.brand,
+                    //   validator: (value) {
+                    //     if (value == null || value.isEmpty) {
+                    //       return "Please Enter Brand";
+                    //     }
+                    //     return null;
+                    //   },
+                    // ),
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
                     AddPostDropDownInput(
                       initialValue: postState,
                       items: postStateToShowOnDropdown,

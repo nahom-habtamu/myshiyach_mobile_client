@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mnale_client/core/utils/price_formatter.dart';
 
 import '../../../core/utils/date_time_formatter.dart';
+import '../../../core/utils/price_formatter.dart';
 import '../../../domain/enitites/product.dart';
 import '../../pages/post_detail_page.dart';
 

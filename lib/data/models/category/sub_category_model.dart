@@ -4,18 +4,15 @@ class SubCategoryModel extends SubCategory {
   SubCategoryModel({
     required String id,
     required String title,
-    required List<String> additionalData,
   }) : super(
           id: id,
           title: title,
-          additionalData: additionalData,
         );
 
   factory SubCategoryModel.fromJson(dynamic subCategoryJson) {
     return SubCategoryModel(
       id: subCategoryJson["_id"],
       title: subCategoryJson["title"],
-      additionalData: List<String>.from(subCategoryJson["additionalData"]),
     );
   }
 

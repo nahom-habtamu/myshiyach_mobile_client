@@ -8,13 +8,11 @@ class ProductModel extends Product {
     required double price,
     required String mainCategory,
     required String subCategory,
-    required String brand,
-    required String state,
     required String city,
     required String createdAt,
     required String createdBy,
     required List<String> productImages,
-    Map<String, dynamic>? other,
+    Map<String, dynamic>? productDetail,
   }) : super(
           id: id,
           title: title,
@@ -22,13 +20,11 @@ class ProductModel extends Product {
           price: price,
           mainCategory: mainCategory,
           subCategory: subCategory,
-          brand: brand,
-          state: state,
           city: city,
           createdAt: createdAt,
           createdBy: createdBy,
           productImages: productImages,
-          other: other,
+          productDetail: productDetail,
         );
 
   factory ProductModel.fromJson(dynamic jsonProduct) {
@@ -39,13 +35,13 @@ class ProductModel extends Product {
       price: (jsonProduct["price"] as num).toDouble(),
       mainCategory: jsonProduct["mainCategory"],
       subCategory: jsonProduct["subCategory"],
-      brand: jsonProduct["brand"],
       createdAt: jsonProduct["createdAt"],
       createdBy: jsonProduct["createdBy"],
-      state: jsonProduct["state"],
       city: jsonProduct["city"],
+      productDetail: jsonProduct["productDetail"] == null
+          ? null
+          : Map<String, dynamic>.from(jsonProduct["productDetail"]),
       productImages: List<String>.from(jsonProduct["productImages"]),
-      other: jsonProduct["other"] == null ? null : Map<String, dynamic>.from(jsonProduct["other"]),
     );
   }
 
@@ -57,13 +53,11 @@ class ProductModel extends Product {
       price: p.price,
       mainCategory: p.mainCategory,
       subCategory: p.subCategory,
-      brand: p.brand,
       createdAt: p.createdAt,
       createdBy: p.createdBy,
-      state: p.state,
       city: p.city,
       productImages: p.productImages,
-      other: p.other,
+      productDetail: p.productDetail,
     );
   }
 
@@ -74,13 +68,11 @@ class ProductModel extends Product {
         "price": price,
         "mainCategory": mainCategory,
         "subCategory": subCategory,
-        "brand": brand,
         "createdAt": createdAt,
         "createdBy": createdBy,
-        "state": state,
         "city": city,
         "productImages": productImages,
-        "other": other,
+        "productDetail": productDetail,
       };
 
   static List<ProductModel> parseProductsFromJson(dynamic jsonList) {

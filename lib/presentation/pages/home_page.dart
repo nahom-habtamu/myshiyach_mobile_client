@@ -173,9 +173,6 @@ class _HomePageState extends State<HomePage> {
         ) ||
         product.title.contains(
           RegExp(r'' + searchKeyword, caseSensitive: false),
-        ) ||
-        product.brand.contains(
-          RegExp(r'' + searchKeyword, caseSensitive: false),
         );
   }
 
