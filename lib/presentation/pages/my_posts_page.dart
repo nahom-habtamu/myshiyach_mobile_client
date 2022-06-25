@@ -25,7 +25,12 @@ class _MyPostsPageState extends State<MyPostsPage> {
   @override
   void initState() {
     super.initState();
+    initAccessTokenAndFetchMyPosts();
+  }
+
+  void initAccessTokenAndFetchMyPosts() {
     var authState = context.read<AuthCubit>().state;
+
     if (authState is AuthSuccessfull) {
       accessToken = authState.loginResult.token;
       context.read<GetMyProductsCubit>().call(authState.currentUser.id);
@@ -47,24 +52,19 @@ class _MyPostsPageState extends State<MyPostsPage> {
         elevation: 0,
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
           ),
-          padding: const EdgeInsets.only(
-            top: 25,
-            left: 25,
-            right: 25,
-          ),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.9,
-          child: buildMyPosts(),
         ),
+        padding:
+            const EdgeInsets.only(top: 25, left: 25, right: 25, bottom: 10),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.9,
+        child: buildMyPosts(),
       ),
     );
   }
@@ -113,7 +113,6 @@ class _MyPostsPageState extends State<MyPostsPage> {
         ),
         Expanded(
           child: ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (context, index) => PostCardListItem(
               product: products[index],
@@ -122,6 +121,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
                       products[index].id,
                       accessToken,
                     );
+                initAccessTokenAndFetchMyPosts();
               },
             ),
             itemCount: products.length,

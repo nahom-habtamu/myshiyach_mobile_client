@@ -23,7 +23,7 @@ class PostConfirmationPage extends StatelessWidget {
           centerTitle: true,
         ),
         body: Container(
-          height: MediaQuery.of(context).size.height * 0.8,
+          height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
