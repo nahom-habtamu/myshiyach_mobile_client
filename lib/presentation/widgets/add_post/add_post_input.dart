@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/services/thousands_separator_input_formatter.dart';
+
 class AddPostInput extends StatelessWidget {
   final Function onChanged;
   final Function validator;
   final String hintText;
   final dynamic initialValue;
+  final bool isPrice;
   const AddPostInput({
     Key? key,
     required this.hintText,
     required this.onChanged,
     this.initialValue,
     required this.validator,
+    this.isPrice = false,
   }) : super(key: key);
 
   @override
@@ -24,6 +28,7 @@ class AddPostInput extends StatelessWidget {
       textAlign: TextAlign.center,
       onChanged: (value) => onChanged(value),
       validator: (value) => validator(value),
+      inputFormatters: isPrice ? [ThousandsSeparatorInputFormatter()] : [],
       decoration: InputDecoration(
         labelText: hintText,
         border: const OutlineInputBorder(

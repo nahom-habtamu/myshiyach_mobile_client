@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mnale_client/core/utils/price_formatter.dart';
 
+import '../../../core/utils/price_formatter.dart';
+import '../../../domain/enitites/main_category.dart';
 import 'add_post_dropdown_dart.dart';
 import 'add_post_input.dart';
 import 'next_or_post_button.dart';
-import '../../../domain/enitites/main_category.dart';
 
 class FirstPageInputs extends StatefulWidget {
   final Function onNextPressed;
@@ -133,6 +133,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
                 }
               }
             },
+            isPrice: true,
           ),
           const SizedBox(
             height: 25,
