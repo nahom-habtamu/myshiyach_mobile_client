@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:mnale_client/presentation/pages/post_image_screen.dart';
 
 import 'carousel_image_changer_icon.dart';
 import 'page_counter.dart';
@@ -34,34 +35,47 @@ class _PostDetailCarouselState extends State<PostDetailCarousel> {
             },
           ),
           items: widget.items
-              .map((item) => Image.network(
+              .map(
+                (item) => GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      PostImageScreen.routeName,
+                      arguments: item,
+                    );
+                  },
+                  child: Image.network(
                     item,
                     fit: BoxFit.cover,
                     width: MediaQuery.of(context).size.width,
-                  ))
+                  ),
+                ),
+              )
               .toList(),
         ),
         PageCounter(
           currentPage: currentCarouselIndex,
           pageCount: widget.items.length,
         ),
-        CarouselImageChangerIcon(
-          isRightArrow: true,
-          onClick: () {
-            carouselController.previousPage(
-              duration: const Duration(seconds: 1),
-              curve: Curves.easeInOut,
-            );
-          },
-        ),
-        CarouselImageChangerIcon(
-          onClick: () {
-            carouselController.nextPage(
-              duration: const Duration(seconds: 1),
-              curve: Curves.easeInOut,
-            );
-          },
-        ),
+        if (widget.items.length > 1)
+          CarouselImageChangerIcon(
+            isRightArrow: true,
+            onClick: () {
+              carouselController.previousPage(
+                duration: const Duration(seconds: 1),
+                curve: Curves.easeInOut,
+              );
+            },
+          ),
+        if (widget.items.length > 1)
+          CarouselImageChangerIcon(
+            onClick: () {
+              carouselController.nextPage(
+                duration: const Duration(seconds: 1),
+                curve: Curves.easeInOut,
+              );
+            },
+          ),
       ],
     );
   }

@@ -15,6 +15,7 @@ import '../pages/my_posts_page.dart';
 import '../pages/otp_verification_page.dart';
 import '../pages/post_confirmation_page.dart';
 import '../pages/post_detail_page.dart';
+import '../pages/post_image_screen.dart';
 import '../pages/sign_up_page.dart';
 import '../pages/splash_page.dart';
 
@@ -38,6 +39,7 @@ class AppPages {
       PostConfirmationPage.routeName: (context) => const PostConfirmationPage(),
       OtpVerificationPage.routeName: (context) => const OtpVerificationPage(),
       FilterDataPage.routeName: (context) => const FilterDataPage(),
+      PostImageScreen.routeName: (context) => const PostImageScreen(),
     };
   }
 }
