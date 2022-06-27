@@ -4,11 +4,9 @@ class EditProductModel {
   final double? price;
   final String? mainCategory;
   final String? subCategory;
-  final String? brand;
-  final String? state;
   final String? city;
   List<String>? productImages;
-  Map<String, dynamic>? other;
+  Map<String, dynamic>? productDetail;
 
   EditProductModel({
     this.title,
@@ -16,11 +14,9 @@ class EditProductModel {
     this.price,
     this.mainCategory,
     this.subCategory,
-    this.brand,
-    this.state,
     this.city,
     this.productImages,
-    this.other,
+    this.productDetail,
   });
 
   Map<String, dynamic> toJson() => {
@@ -29,10 +25,8 @@ class EditProductModel {
         "price": price,
         "mainCategory": mainCategory,
         "subCategory": subCategory,
-        "brand": brand,
-        "state": state,
         "city": city,
         "productImages": productImages,
-        "other": other
+        "productDetail": productDetail
       };
 }

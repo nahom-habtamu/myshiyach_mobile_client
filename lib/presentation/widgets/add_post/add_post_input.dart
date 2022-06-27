@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../core/services/thousands_separator_input_formatter.dart';
 
@@ -28,7 +29,15 @@ class AddPostInput extends StatelessWidget {
       textAlign: TextAlign.center,
       onChanged: (value) => onChanged(value),
       validator: (value) => validator(value),
-      inputFormatters: isPrice ? [ThousandsSeparatorInputFormatter()] : [],
+      inputFormatters: isPrice
+          ? [
+              FilteringTextInputFormatter.digitsOnly,
+              ThousandsSeparatorInputFormatter()
+            ]
+          : [],
+      keyboardType: isPrice
+          ? const TextInputType.numberWithOptions(decimal: true)
+          : TextInputType.text,
       decoration: InputDecoration(
         labelText: hintText,
         border: const OutlineInputBorder(

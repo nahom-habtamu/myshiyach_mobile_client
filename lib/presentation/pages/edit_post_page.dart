@@ -37,9 +37,8 @@ class _EditPostPageState extends State<EditPostPage> {
   double price = 0.0;
   String mainCategory = "";
   String subCategory = "";
-  String brand = "";
   String city = "";
-  String postState = "";
+  Map<String, dynamic> productDetail = {};
 
   final formKey = GlobalKey<FormState>();
 
@@ -93,7 +92,7 @@ class _EditPostPageState extends State<EditPostPage> {
           elevation: 0,
           centerTitle: true,
         ),
-        body: renderMainContent(),
+        body: product == null ? Container() : renderMainContent(),
       ),
     );
   }
@@ -112,9 +111,7 @@ class _EditPostPageState extends State<EditPostPage> {
               buildMainCategoriesToDisplay(state.categories);
           var citiesToShowOnDropDown = buildCititesToDisplay(state.cities);
           var subCategoriesToShow = buildSubCategoryToDisplay(state.categories);
-          var postStateToShowOnDropdown = ["New", "Old", "Slightly Used"]
-              .map((m) => {"value": m, "preview": m})
-              .toList();
+
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(25.0),
@@ -188,37 +185,6 @@ class _EditPostPageState extends State<EditPostPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    // AddPostInput(
-                    //   hintText: "Brand",
-                    //   onChanged: (value) => setState(() => brand = value),
-                    //   initialValue: product!.brand,
-                    //   validator: (value) {
-                    //     if (value == null || value.isEmpty) {
-                    //       return "Please Enter Brand";
-                    //     }
-                    //     return null;
-                    //   },
-                    // ),
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
-                    AddPostDropDownInput(
-                      initialValue: postState,
-                      items: postStateToShowOnDropdown,
-                      hintText: "State",
-                      onChanged: (value) => setState(
-                        () => postState = value,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please Select Post State";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
                     AddPostDropDownInput(
                       initialValue: mainCategory,
                       items: mainCategoryToShowOnDropDown,
@@ -272,6 +238,7 @@ class _EditPostPageState extends State<EditPostPage> {
                     const SizedBox(
                       height: 20,
                     ),
+                    ...buildRequiredFeildsInput(state.categories),
                     renderSaveButton(),
                     const SizedBox(
                       height: 20,
@@ -286,6 +253,69 @@ class _EditPostPageState extends State<EditPostPage> {
         return Container();
       },
     );
+  }
+
+  List<Widget> buildRequiredFeildsInput(List<MainCategory> categories) {
+    var requiredFeilds = categories
+        .firstWhere((element) => element.id == mainCategory)
+        .requiredFeilds;
+    return requiredFeilds.map((e) {
+      if (e.isDropDown) {
+        return Column(
+          children: [
+            AddPostDropDownInput(
+              initialValue: product!.productDetail![e.objectKey],
+              hintText: e.objectKey,
+              items: [
+                ...e.dropDownValues
+                    .map((m) => {"value": m, "preview": m})
+                    .toList()
+              ],
+              onChanged: (value) {
+                handleRequiredFeildChanged(e.objectKey, value);
+              },
+              validator: (value) {
+                return validateRequiredFeild(e.objectKey, value);
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
+        );
+      } else {
+        return Column(
+          children: [
+            AddPostInput(
+              initialValue: product!.productDetail![e.objectKey],
+              hintText: e.objectKey,
+              onChanged: (value) {
+                handleRequiredFeildChanged(e.objectKey, value);
+              },
+              validator: (value) {
+                return validateRequiredFeild(e.objectKey, value);
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
+        );
+      }
+    }).toList();
+  }
+
+  handleRequiredFeildChanged(String objectKey, String? value) {
+    setState(() {
+      productDetail[objectKey] = value;
+    });
+  }
+
+  validateRequiredFeild(String objectKey, String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please Select" + objectKey;
+    }
+    return null;
   }
 
   renderEditError() {
@@ -335,15 +365,14 @@ class _EditPostPageState extends State<EditPostPage> {
     var imagesToUpload = [...pickedImages];
     var productImages = [...imagesAlreadyInProduct];
     var editProductModel = EditProductModel(
-      brand: brand,
       city: city,
       description: description,
       mainCategory: mainCategory,
       subCategory: subCategory,
       price: price,
       productImages: [],
-      state: postState,
       title: title,
+      productDetail: productDetail,
     );
 
     context.read<UpdateProductCubit>().call(

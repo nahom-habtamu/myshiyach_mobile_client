@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/enitites/sub_category.dart';
+import '../../../domain/enitites/main_category.dart';
 import '../edit_post/post_images.dart';
 import 'add_post_dropdown_dart.dart';
 import 'add_post_input.dart';
@@ -10,18 +10,18 @@ import 'next_or_post_button.dart';
 
 class SecondPageInputs extends StatefulWidget {
   final Map<String, dynamic> initialValue;
-  final List<SubCategory> subCategoriesToDisplay;
   final Function onCancel;
   final List<String> cities;
   final Function onPost;
+  final List<RequiredMainCategoryField> requiredFeilds;
 
   const SecondPageInputs({
     Key? key,
-    required this.subCategoriesToDisplay,
     required this.onCancel,
     required this.onPost,
     required this.initialValue,
     required this.cities,
+    this.requiredFeilds = const [],
   }) : super(key: key);
 
   @override
@@ -30,6 +30,7 @@ class SecondPageInputs extends StatefulWidget {
 
 class _SecondPageInputsState extends State<SecondPageInputs> {
   List<dynamic> pickedImages = [];
+  Map<String, dynamic> otherRequiredFeilds = {};
   String postState = "";
   String brand = "";
   String city = "";
@@ -49,12 +50,9 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
 
   @override
   Widget build(BuildContext context) {
-    var postStateToShowOnDropdown = ["New", "Old", "Slightly Used"]
-        .map((m) => {"value": m, "preview": m})
-        .toList();
+    print(widget.requiredFeilds);
     var cityToShowOnDropDown =
         widget.cities.map((m) => {"value": m, "preview": m}).toList();
-
     return Form(
       key: formKey,
       child: Column(
@@ -77,35 +75,6 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
             height: 30,
           ),
           AddPostDropDownInput(
-            initialValue: postState,
-            hintText: "Post State",
-            items: [...postStateToShowOnDropdown],
-            onChanged: (value) => postState = value,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Please Select Post State";
-              }
-              return null;
-            },
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          AddPostInput(
-            initialValue: brand,
-            hintText: "Brand",
-            onChanged: (value) => brand = value,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Please Enter Brand";
-              }
-              return null;
-            },
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          AddPostDropDownInput(
             initialValue: city,
             hintText: "City",
             items: [...cityToShowOnDropDown],
@@ -120,6 +89,7 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
           const SizedBox(
             height: 20,
           ),
+          renderRequiredFields(),
           Row(
             children: [
               CancelButton(onTap: widget.onCancel),
@@ -156,6 +126,74 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
       "city": city,
       "brand": brand,
       "productImages": pickedImages,
+      "productDetail": {...otherRequiredFeilds},
     };
+  }
+
+  renderRequiredFields() {
+    return Column(
+      children: [
+        ...buildRequiredFeildsInput(),
+      ],
+    );
+  }
+
+  List<Widget> buildRequiredFeildsInput() {
+    return widget.requiredFeilds.map((e) {
+      if (e.isDropDown) {
+        return Column(
+          children: [
+            AddPostDropDownInput(
+              initialValue: "",
+              hintText: e.objectKey,
+              items: [
+                ...e.dropDownValues
+                    .map((m) => {"value": m, "preview": m})
+                    .toList()
+              ],
+              onChanged: (value) {
+                handleRequiredFeildChanged(e.objectKey, value);
+              },
+              validator: (value) {
+                return validateRequiredFeild(e.objectKey, value);
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
+        );
+      } else {
+        return Column(
+          children: [
+            AddPostInput(
+              hintText: e.objectKey,
+              onChanged: (value) {
+                handleRequiredFeildChanged(e.objectKey, value);
+              },
+              validator: (value) {
+                return validateRequiredFeild(e.objectKey, value);
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
+        );
+      }
+    }).toList();
+  }
+
+  handleRequiredFeildChanged(String objectKey, String? value) {
+    setState(() {
+      otherRequiredFeilds[objectKey] = value;
+    });
+  }
+
+  validateRequiredFeild(String objectKey, String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please Select" + objectKey;
+    }
+    return null;
   }
 }

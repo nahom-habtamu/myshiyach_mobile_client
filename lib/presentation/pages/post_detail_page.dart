@@ -52,37 +52,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return product == null
-        ? Container()
-        : SafeArea(
+    return product != null
+        ? SafeArea(
             child: Scaffold(
-              appBar: AppBar(
-                title: const Text(
-                  'Post Detail',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-                backgroundColor: const Color(0xffF1F1F1),
-                elevation: 0,
-                centerTitle: true,
-                actions: [
-                  if (currentUser!.id == product!.createdBy)
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                          context,
-                          EditPostPage.routeName,
-                          arguments: product,
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.edit,
-                        color: Colors.black,
-                      ),
-                    )
-                ],
-              ),
+              appBar: renderAppBar(),
               body: Container(
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -91,130 +64,212 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     topRight: Radius.circular(25),
                   ),
                 ),
-                child: product != null
-                    ? Column(
-                        children: [
-                          PostDetailCarousel(
-                            items: [...product!.productImages],
+                child: Column(
+                  children: [
+                    PostDetailCarousel(
+                      items: [...product!.productImages],
+                    ),
+                    Expanded(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 25.0,
+                            right: 25.0,
+                            top: 15,
                           ),
-                          Expanded(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 25.0,
-                                  right: 25.0,
-                                  top: 15,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                renderTitle(),
+                                const SizedBox(
+                                  height: 20,
                                 ),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color:
-                                                    const Color(0xFFDBD7D7))),
-                                        child: Text(
-                                          product!.title,
-                                          style: const TextStyle(
-                                            color: Color(0xff11435E),
-                                            fontSize: 18,
-                                            height: 1.5,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.timer_sharp,
-                                            color: Colors.grey,
-                                            size: 15,
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            DateFormatterUtil.call(
-                                              product!.createdAt,
-                                            ),
-                                            style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color:
-                                                    const Color(0xFFDBD7D7))),
-                                        child: Text(
-                                          '\$' +
-                                              PriceFormatterUtil.formatToPrice(
-                                                product!.price,
-                                              ),
-                                          style: const TextStyle(
-                                            color: Color(0xff34A853),
-                                            fontSize: 24,
-                                            height: 1.5,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: PostDetailInformationItem(
-                                          informationKey: "Description",
-                                          informationValue:
-                                              product!.description,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: PostDetailInformationItem(
-                                          informationKey: "City",
-                                          informationValue: product!.city,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      renderPostDetailButtonSection(),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                    ],
-                                  ),
+                                renderTimeContent(),
+                                const SizedBox(
+                                  height: 10,
                                 ),
-                              ),
+                                renderPrice(),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                renderDescription(),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                renderCity(),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                renderOtherData(),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                renderPostDetailButtonSection(),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                              ],
                             ),
-                          )
-                        ],
-                      )
-                    : Container(),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          );
+          )
+        : Container();
+  }
+
+  SizedBox renderCity() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: PostDetailInformationItem(
+        informationKey: "City",
+        informationValue: product!.city,
+      ),
+    );
+  }
+
+  SizedBox renderDescription() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: PostDetailInformationItem(
+        informationKey: "Description",
+        informationValue: product!.description,
+      ),
+    );
+  }
+
+  Container renderPrice() {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: const Color(0xFFDBD7D7),
+        ),
+      ),
+      child: Text(
+        '\$' +
+            PriceFormatterUtil.formatToPrice(
+              product!.price,
+            ),
+        style: const TextStyle(
+          color: Color(0xff34A853),
+          fontSize: 24,
+          height: 1.5,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Row renderTimeContent() {
+    return Row(
+      children: [
+        const Icon(
+          Icons.timer_sharp,
+          color: Colors.grey,
+          size: 15,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Text(
+          DateFormatterUtil.call(
+            product!.createdAt,
+          ),
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 12,
+          ),
+        ),
+      ],
+    );
+  }
+
+  renderOtherData() {
+    return Column(
+      children: [...buildOtherDetail()],
+    );
+  }
+
+  buildOtherDetail() {
+    if (product!.productDetail == null || product!.productDetail!.isEmpty) {
+      return [];
+    }
+    return product!.productDetail!.entries
+        .toList()
+        .map(
+          (e) => Column(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: PostDetailInformationItem(
+                  informationKey: e.key,
+                  informationValue: e.value,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              )
+            ],
+          ),
+        )
+        .toList();
+  }
+
+  Container renderTitle() {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: const Color(0xFFDBD7D7),
+        ),
+      ),
+      child: Text(
+        product!.title,
+        style: const TextStyle(
+          color: Color(0xff11435E),
+          fontSize: 18,
+          height: 1.5,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+
+  AppBar renderAppBar() {
+    return AppBar(
+      title: const Text(
+        'Post Detail',
+        style: TextStyle(
+          color: Colors.black,
+        ),
+      ),
+      backgroundColor: const Color(0xffF1F1F1),
+      elevation: 0,
+      centerTitle: true,
+      actions: [
+        if (currentUser!.id == product!.createdBy)
+          IconButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(
+                context,
+                EditPostPage.routeName,
+                arguments: product,
+              );
+            },
+            icon: const Icon(
+              Icons.edit,
+              color: Colors.black,
+            ),
+          )
+      ],
+    );
   }
 
   Row renderPostDetailButtonSection() {

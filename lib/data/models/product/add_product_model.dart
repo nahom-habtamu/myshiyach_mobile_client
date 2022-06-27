@@ -4,11 +4,9 @@ class AddProductModel {
   final double price;
   final String mainCategory;
   final String subCategory;
-  final String brand;
-  final String state;
   final String city;
   List<String> productImages;
-  Map<String, dynamic>? other;
+  Map<String, dynamic>? productDetail;
 
   AddProductModel({
     required this.title,
@@ -16,11 +14,9 @@ class AddProductModel {
     required this.price,
     required this.mainCategory,
     required this.subCategory,
-    required this.brand,
-    required this.state,
     required this.city,
     required this.productImages,
-    this.other,
+    this.productDetail,
   });
 
   factory AddProductModel.fromJson(Map<String, dynamic> json) {
@@ -30,11 +26,9 @@ class AddProductModel {
       price: json["price"],
       mainCategory: json["mainCategory"],
       subCategory: json["subCategory"],
-      brand: json["brand"],
-      state: json["state"],
       city: json["city"],
       productImages: [],
-      other: json["other"],
+      productDetail: Map<String, dynamic>.from(json["productDetail"]),
     );
   }
 
@@ -44,10 +38,8 @@ class AddProductModel {
         "price": price,
         "mainCategory": mainCategory,
         "subCategory": subCategory,
-        "brand": brand.trim(),
-        "state": state,
         "city": city.trim(),
         "productImages": productImages,
-        "other": other
+        "productDetail": productDetail
       };
 }

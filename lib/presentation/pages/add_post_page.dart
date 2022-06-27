@@ -186,13 +186,13 @@ class _AddPostPageState extends State<AddPostPage> {
   }
 
   renderSecondPageInputs(List<MainCategory> categories, List<String> cities) {
-    var subCategoriesToDisplay =
-        categories.elementAt(selectedMainCategoryIndex).subCategories.toList();
+    var requiredFieldsBasedOnSelectedCategory =
+        categories.elementAt(selectedMainCategoryIndex).requiredFeilds;
 
     return SecondPageInputs(
       cities: cities,
       initialValue: mergedInputValues,
-      subCategoriesToDisplay: subCategoriesToDisplay,
+      requiredFeilds: requiredFieldsBasedOnSelectedCategory,
       onCancel: () {
         setState(() {
           currentInputPageState--;
@@ -226,6 +226,9 @@ class _AddPostPageState extends State<AddPostPage> {
         appendInputValue(firstInputValues);
         setState(() {
           currentInputPageState++;
+          selectedMainCategoryIndex = categories.indexWhere(
+            (element) => element.id == firstInputValues["mainCategory"],
+          );
         });
       },
     );
