@@ -50,7 +50,6 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.requiredFeilds);
     var cityToShowOnDropDown =
         widget.cities.map((m) => {"value": m, "preview": m}).toList();
     return Form(
@@ -91,6 +90,7 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
           ),
           renderRequiredFields(),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               CancelButton(onTap: widget.onCancel),
               PostButton(

@@ -35,9 +35,7 @@ class _SearchBarState extends State<SearchBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            height: 50,
-            width: MediaQuery.of(context).size.width * 0.73,
+          Expanded(
             child: TextFormField(
               style: const TextStyle(
                 color: Colors.black,
@@ -84,62 +82,65 @@ class _SearchBarState extends State<SearchBar> {
               ),
             ),
           ),
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.black12,
-              borderRadius: BorderRadius.all(
-                Radius.circular(5),
-              ),
-            ),
-            child: Stack(
-              children: [
-                IconButton(
-                  onPressed: () async {
-                    var maxValue =
-                        widget.products.map((e) => e.price).reduce(max);
-                    var minValue =
-                        widget.products.map((e) => e.price).reduce(min);
-
-                    var result = await Navigator.of(context).pushNamed(
-                      FilterDataPage.routeName,
-                      arguments: FilterPageArgument(
-                        categories: widget.categories,
-                        minValue: minValue,
-                        maxValue: maxValue,
-                      ),
-                    );
-                    setState(() {
-                      if (result != null) {
-                        filterResult = result as FilterPageArgument;
-                      }
-                    });
-                    widget.onSearchFilterApplied(result);
-                  },
-                  icon: const Icon(Icons.filter),
+          Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.black12,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
                 ),
-                filterIsNotEmpty()
-                    ? const Positioned(
-                        left: 2,
-                        top: 5,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 8,
-                          child: Center(
-                            child: Text(
-                              '1',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
+              ),
+              child: Stack(
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      var maxValue =
+                          widget.products.map((e) => e.price).reduce(max);
+                      var minValue =
+                          widget.products.map((e) => e.price).reduce(min);
+
+                      var result = await Navigator.of(context).pushNamed(
+                        FilterDataPage.routeName,
+                        arguments: FilterPageArgument(
+                          categories: widget.categories,
+                          minValue: minValue,
+                          maxValue: maxValue,
+                        ),
+                      );
+                      setState(() {
+                        if (result != null) {
+                          filterResult = result as FilterPageArgument;
+                        }
+                      });
+                      widget.onSearchFilterApplied(result);
+                    },
+                    icon: const Icon(Icons.filter),
+                  ),
+                  filterIsNotEmpty()
+                      ? const Positioned(
+                          left: 2,
+                          top: 5,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 8,
+                            child: Center(
+                              child: Text(
+                                '1',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    : Container(
-                        height: 0,
-                      )
-              ],
+                        )
+                      : Container(
+                          height: 0,
+                        )
+                ],
+              ),
             ),
           )
         ],

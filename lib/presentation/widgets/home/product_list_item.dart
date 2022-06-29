@@ -21,8 +21,11 @@ class ProductListItem extends StatefulWidget {
 }
 
 class _ProductListItemState extends State<ProductListItem> {
+  double heightOfMobile = 0.0;
+
   @override
   Widget build(BuildContext context) {
+    heightOfMobile = MediaQuery.of(context).size.height * 0.01;
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, PostDetailPage.routeName,
@@ -30,86 +33,82 @@ class _ProductListItemState extends State<ProductListItem> {
       },
       child: Container(
         margin: const EdgeInsets.all(5),
-        width: MediaQuery.of(context).size.width * 0.45,
-        height: 210,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
             Radius.circular(15),
           ),
         ),
-        child: Column(
-          children: [
-            renderProductListItemImage(widget.product.productImages.first),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    renderTitle(widget.product.title),
-                    renderDescription(widget.product.description),
-                    renderPrice(widget.product.price),
-                    renderCity(widget.product.city),
-                    renderTimerAndFavoriteIcon(widget.product)
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  SizedBox renderTitle(title) {
-    return SizedBox(
-      height: 15,
-      width: MediaQuery.of(context).size.width * 0.45,
-      child: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.w700,
-          fontSize: 12,
-          letterSpacing: 0.1,
-        ),
-      ),
-    );
-  }
-
-  SizedBox renderDescription(String description) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.45,
-      height: 20,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
-        child: Text(
-          description,
-          style: const TextStyle(
-            color: Color(0xff888888),
-            fontSize: 8,
-            letterSpacing: 0.2,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 3.0),
+          child: Column(
+            children: [
+              renderProductListItemImage(widget.product.productImages.first),
+              renderTitle(widget.product.title),
+              renderDescription(widget.product.description),
+              renderPrice(widget.product.price),
+              renderCity(widget.product.city),
+              renderTimerAndFavoriteIcon(widget.product),
+            ],
           ),
-          overflow: TextOverflow.ellipsis,
         ),
       ),
     );
   }
 
-  SizedBox renderCity(city) {
+  FittedBox renderTitle(title) {
+    return FittedBox(
+      fit: BoxFit.fitWidth,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.45,
+        child: Text(
+          title,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.1,
+            fontSize: heightOfMobile * 2,
+          ),
+          overflow: TextOverflow.clip,
+        ),
+      ),
+    );
+  }
+
+  FittedBox renderDescription(String description) {
+    return FittedBox(
+      fit: BoxFit.fitWidth,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.45,
+        height: heightOfMobile * 4,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: Text(
+            description,
+            style: const TextStyle(
+              color: Color(0xff888888),
+              fontSize: 10,
+              letterSpacing: 0.2,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+    );
+  }
+
+  renderCity(city) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.45,
-      height: 15,
       child: Text(
         city,
-        style: const TextStyle(
-          color: Color(0xff11435E),
-          fontSize: 8,
+        style: TextStyle(
+          color: const Color(0xff11435E),
+          fontSize: heightOfMobile * 1.5,
           letterSpacing: 0.2,
           fontWeight: FontWeight.bold,
         ),
+        overflow: TextOverflow.clip,
       ),
     );
   }
@@ -120,65 +119,63 @@ class _ProductListItemState extends State<ProductListItem> {
       child: Container(
         color: const Color(0xffF5FFF8),
         width: MediaQuery.of(context).size.width * 0.45,
-        height: 18,
         child: Text(
           '\$' + PriceFormatterUtil.formatToPrice(price),
-          style: const TextStyle(
-            color: Color(0xff34A853),
-            fontSize: 16,
+          style: TextStyle(
+            color: const Color(0xff34A853),
+            fontSize: heightOfMobile * 2.3,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.2,
           ),
+          overflow: TextOverflow.clip,
         ),
       ),
     );
   }
 
-  Expanded renderTimerAndFavoriteIcon(Product product) {
-    return Expanded(
-      child: Row(
-        children: [
-          const Icon(
-            Icons.access_time_rounded,
-            size: 18,
-            color: Colors.grey,
+  renderTimerAndFavoriteIcon(Product product) {
+    return Row(
+      children: [
+        const Icon(
+          Icons.access_time_rounded,
+          size: 18,
+          color: Colors.grey,
+        ),
+        const SizedBox(
+          width: 6,
+        ),
+        Expanded(
+          child: Text(
+            DateFormatterUtil.call(product.createdAt),
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: heightOfMobile * 1.8,
+            ),
           ),
-          const SizedBox(
-            width: 4,
-          ),
-          Expanded(
-            child: Text(
-              DateFormatterUtil.call(product.createdAt),
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 12,
+        ),
+        GestureDetector(
+          onTap: () {
+            widget.onTap();
+          },
+          child: CircleAvatar(
+            radius: heightOfMobile * 2,
+            backgroundColor: const Color(0xFFE9E1E1),
+            child: Center(
+              child: Icon(
+                widget.isFavorite ? Icons.favorite_border : Icons.favorite,
+                size: heightOfMobile * 3,
+                color: Colors.red,
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              widget.onTap();
-            },
-            child: CircleAvatar(
-              radius: 22,
-              backgroundColor: const Color(0xFFE9E1E1),
-              child: Center(
-                child: Icon(
-                  widget.isFavorite ? Icons.favorite_border : Icons.favorite,
-                  size: 20,
-                  color: Colors.red,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   SizedBox renderProductListItemImage(image) {
     return SizedBox(
-      height: 100,
+      height: heightOfMobile * 15,
       width: MediaQuery.of(context).size.width * 0.45,
       child: ClipRRect(
         borderRadius: const BorderRadius.only(

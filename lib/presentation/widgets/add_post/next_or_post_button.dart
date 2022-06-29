@@ -10,14 +10,11 @@ class PostButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-      child: ChangeInputButton(
-        text: isPost ? "Post" : "Next",
-        backgroundColor: const Color(0xFF010203),
-        textColor: Colors.white,
-        onTap: onTap,
-      ),
+    return ChangeInputButton(
+      text: isPost ? "Post" : "Next",
+      backgroundColor: const Color(0xFF010203),
+      textColor: Colors.white,
+      onTap: onTap,
     );
   }
 }

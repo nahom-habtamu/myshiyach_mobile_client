@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../../../domain/enitites/product.dart';
 import '../../../data/models/product/product_model.dart';
@@ -41,9 +42,14 @@ class _ProductListState extends State<ProductList> {
         context.read<DisplayAllProductsCubit>().call();
       },
       child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.83,
+          crossAxisSpacing: 5.0,
+          mainAxisSpacing: 5.0,
+          childAspectRatio: MediaQuery.of(context).size.width /
+              (MediaQuery.of(context).size.height) *
+              1.25,
         ),
         itemCount: widget.products.length,
         itemBuilder: (context, index) {
