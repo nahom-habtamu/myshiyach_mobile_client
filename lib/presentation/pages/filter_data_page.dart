@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/enitites/main_category.dart';
+import '../../domain/enitites/sub_category.dart';
 import '../screen_arguments/filter_page_argument.dart';
+import '../widgets/add_post/add_post_dropdown_dart.dart';
 import '../widgets/common/curved_button.dart';
 import '../widgets/filter/filter_by_price.dart';
 import '../widgets/filter/filter_categories.dart';
@@ -16,14 +18,13 @@ class FilterDataPage extends StatefulWidget {
 
 class _FilterDataPageState extends State<FilterDataPage> {
   var _currentPriceRangeValues = const RangeValues(0, 0);
-  var orderByAscending = false;
-  List<MainCategory> selectedMainCategories = [];
+  MainCategory? selectedMainCategory;
+  SubCategory? selectedSubCategory;
+  String? selectedBrand;
 
   @override
   void initState() {
     super.initState();
-    orderByAscending = false;
-    selectedMainCategories = [];
     _currentPriceRangeValues = const RangeValues(0, 0);
   }
 
@@ -44,55 +45,128 @@ class _FilterDataPageState extends State<FilterDataPage> {
         elevation: 1,
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          children: [
-            FilterByPrice(
-              maxValue: args.maxValue,
-              minValue: args.minValue,
-              onChanged: (value) {
-                setState(() {
-                  _currentPriceRangeValues = value;
-                });
-              },
-              orderByAscendingChanged: (value) {
-                setState(() {
-                  orderByAscending = value!;
-                });
-              },
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            FilterCategories(
-              categories: [...args.categories],
-              onSelectedCategoriesChanged: (value) {
-                setState(() {
-                  selectedMainCategories = [...value];
-                });
-              },
-            ),
-            Expanded(
-              child: Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: CurvedButton(
-                  onPressed: () {
-                    var filterValues = FilterPageArgument(
-                      categories: selectedMainCategories,
-                      maxValue: _currentPriceRangeValues.end,
-                      minValue: _currentPriceRangeValues.start,
-                      orderByAscending: orderByAscending,
-                    );
-                    Navigator.pop(context, filterValues);
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: Column(
+              children: [
+                FilterByPrice(
+                  maxValue: args.maxValue,
+                  minValue: args.minValue,
+                  onChanged: (value) {
+                    setState(() {
+                      _currentPriceRangeValues = value;
+                    });
                   },
-                  text: "Apply Filter",
                 ),
-              ),
-            )
-          ],
+                const SizedBox(
+                  height: 20,
+                ),
+                renderMainCategories(args),
+                const SizedBox(
+                  height: 20,
+                ),
+                renderSubCategories(args),
+                const SizedBox(
+                  height: 20,
+                ),
+                renderBrandDropdown(args),
+                const SizedBox(
+                  height: 20,
+                ),
+                renderApplyFiltersButton(),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
+  }
+
+  renderApplyFiltersButton() {
+    return CurvedButton(
+      onPressed: () {
+        var filterValues;
+        Navigator.pop(context, filterValues);
+      },
+      text: "Apply Filter",
+    );
+  }
+
+  FilterCategories renderMainCategories(FilterPageArgument args) {
+    return FilterCategories(
+      categories: [
+        ...args.categories,
+      ],
+      onSelectedCategoryChanged: (value) {
+        setState(() {
+          selectedMainCategory = value;
+          selectedSubCategory = null;
+          selectedBrand = null;
+        });
+      },
+      categoryType: "Main Category",
+    );
+  }
+
+  Visibility renderSubCategories(FilterPageArgument args) {
+    var subCategoriesToDisplay = selectedMainCategory != null
+        ? args.categories
+            .firstWhere((e) => e.id == selectedMainCategory!.id)
+            .subCategories
+        : [];
+    return Visibility(
+      visible: subCategoriesToDisplay.isNotEmpty,
+      child: FilterCategories(
+        categories: [...subCategoriesToDisplay],
+        onSelectedCategoryChanged: (value) {
+          setState(() {
+            selectedSubCategory = value;
+          });
+        },
+        categoryType: "Sub Category",
+      ),
+    );
+  }
+
+  renderBrandDropdown(FilterPageArgument args) {
+    var brandToDisplay = getBrandsForCategory(args.categories);
+    return Visibility(
+      visible: brandToDisplay != null,
+      child: AddPostDropDownInput(
+        hintText: "Select A Brand",
+        items: brandToDisplay ?? [],
+        onChanged: (value) {
+          setState(() {
+            selectedBrand = value;
+          });
+        },
+        validator: () {},
+      ),
+    );
+  }
+
+  List<Map<String, String>>? getBrandsForCategory(
+      List<MainCategory> categories) {
+    if (selectedMainCategory == null) return null;
+
+    var requiredFeildsContainingBrand = categories
+        .firstWhere((e) => e.id == selectedMainCategory!.id)
+        .requiredFeilds
+        .where((element) => element.objectKey == "brand")
+        .toList();
+
+    if (requiredFeildsContainingBrand.isEmpty) return null;
+
+    var brandToDisplay = requiredFeildsContainingBrand.first.dropDownValues
+        .map((m) => {"value": m, "preview": m})
+        .toList();
+
+    return brandToDisplay;
   }
 }

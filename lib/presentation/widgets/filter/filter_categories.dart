@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../../../domain/enitites/main_category.dart';
 import '../home/category_item.dart';
 
 class FilterCategories extends StatefulWidget {
-  final List<MainCategory> categories;
-  final Function onSelectedCategoriesChanged;
+  final String categoryType;
+  final List categories;
+  final Function onSelectedCategoryChanged;
   const FilterCategories({
     Key? key,
     required this.categories,
-    required this.onSelectedCategoriesChanged,
+    required this.onSelectedCategoryChanged,
+    required this.categoryType,
   }) : super(key: key);
 
   @override
@@ -17,14 +18,14 @@ class FilterCategories extends StatefulWidget {
 }
 
 class _FilterCategoriesState extends State<FilterCategories> {
-  List<MainCategory> selectedMainCategories = [];
+  dynamic selectedMainCategory;
 
   @override
   void initState() {
     super.initState();
     if (widget.categories.length == 1) {
       setState(() {
-        selectedMainCategories = [...widget.categories];
+        selectedMainCategory = widget.categories.first;
       });
     }
   }
@@ -46,47 +47,47 @@ class _FilterCategoriesState extends State<FilterCategories> {
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 15.0),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15.0),
             child: Text(
-              'Categories',
-              style: TextStyle(fontSize: 20),
+              widget.categoryType,
+              style: const TextStyle(fontSize: 20),
             ),
           ),
-          Wrap(
-            runAlignment: WrapAlignment.center,
-            runSpacing: 15.0,
-            spacing: 5,
-            children: [
-              ...widget.categories.map(
-                (e) => SizedBox(
-                  height: 50,
-                  width: 120,
-                  child: CategoryItem(
-                    category: e.title,
-                    isActive:
-                        selectedMainCategories.any((cat) => cat.id == e.id),
-                    onTap: () {
-                      setState(() {
-                        if (selectedMainCategories
-                            .any((cat) => cat.id == e.id)) {
-                          selectedMainCategories
-                              .removeWhere((cat) => cat.id == e.id);
-                        } else {
-                          selectedMainCategories.add(e);
-                        }
-                      });
-                      widget
-                          .onSelectedCategoriesChanged(selectedMainCategories);
-                    },
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                ...widget.categories.map(
+                  (e) => Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: SizedBox(
+                      height: 50,
+                      child: CategoryItem(
+                        category: e.title,
+                        isActive: selectedMainCategory != null &&
+                            selectedMainCategory!.id == e.id,
+                        onTap: () {
+                          setState(() {
+                            if (selectedMainCategory != null &&
+                                selectedMainCategory.id == e.id) {
+                              selectedMainCategory = null;
+                            } else {
+                              selectedMainCategory = e;
+                            }
+                          });
+                          widget
+                              .onSelectedCategoryChanged(selectedMainCategory);
+                        },
+                      ),
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 }
-

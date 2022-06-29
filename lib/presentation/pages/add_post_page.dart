@@ -102,7 +102,7 @@ class _AddPostPageState extends State<AddPostPage> {
               );
             } else {
               return const Center(
-                child: Text("EMPTY"),
+                child: Text("EMPTY CATEGORIES"),
               );
             }
           },

@@ -148,9 +148,7 @@ class _HomePageState extends State<HomePage> {
       (a, b) => a.price.compareTo(b.price),
     );
 
-    return filterValues == null || filterValues!.orderByAscending
-        ? filteredData
-        : filteredData.reversed.toList();
+    return filterValues == null ? filteredData : filteredData.reversed.toList();
   }
 
   int compareCreatedAt(Product a, Product b) {
@@ -163,8 +161,7 @@ class _HomePageState extends State<HomePage> {
   bool filterIsNotEmpty() {
     return filterValues != null &&
         (filterValues!.categories.isNotEmpty ||
-            (filterValues!.maxValue != 0 && filterValues!.minValue != 0) ||
-            filterValues!.orderByAscending);
+            (filterValues!.maxValue != 0 && filterValues!.minValue != 0));
   }
 
   bool checkKeywordMatch(Product product) {

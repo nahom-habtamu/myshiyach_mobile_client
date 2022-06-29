@@ -6,13 +6,11 @@ class FilterByPrice extends StatefulWidget {
   final double minValue;
   final double maxValue;
   final Function onChanged;
-  final Function orderByAscendingChanged;
   const FilterByPrice({
     Key? key,
     required this.onChanged,
     required this.minValue,
     required this.maxValue,
-    required this.orderByAscendingChanged,
   }) : super(key: key);
 
   @override
@@ -21,7 +19,6 @@ class FilterByPrice extends StatefulWidget {
 
 class _FilterByPriceState extends State<FilterByPrice> {
   var _currentRangeValues = const RangeValues(0, 0);
-  var orderAscending = false;
 
   @override
   Widget build(BuildContext context) {
@@ -88,25 +85,6 @@ class _FilterByPriceState extends State<FilterByPrice> {
             ),
           ),
           const SizedBox(height: 25),
-          Row(
-            children: [
-              const Expanded(
-                  child: Text(
-                'Order Ascending',
-                style: TextStyle(fontSize: 18),
-              )),
-              Checkbox(
-                tristate: false,
-                value: orderAscending,
-                onChanged: (value) {
-                  setState(() {
-                    orderAscending = value!;
-                  });
-                  widget.orderByAscendingChanged(orderAscending);
-                },
-              ),
-            ],
-          )
         ],
       ),
     );
