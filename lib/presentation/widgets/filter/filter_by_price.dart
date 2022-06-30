@@ -70,7 +70,7 @@ class _FilterByPriceState extends State<FilterByPrice> {
           ),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.9,
-            child: Row(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(

@@ -7,6 +7,7 @@ import '../widgets/add_post/add_post_dropdown_dart.dart';
 import '../widgets/common/curved_button.dart';
 import '../widgets/filter/filter_by_price.dart';
 import '../widgets/filter/filter_categories.dart';
+import '../widgets/filter/sort_value_picker.dart';
 
 class FilterDataPage extends StatefulWidget {
   static String routeName = '/filterDataPage';
@@ -61,25 +62,17 @@ class _FilterDataPageState extends State<FilterDataPage> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 renderMainCategories(args),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 renderSubCategories(args),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 renderBrandDropdown(args),
-                const SizedBox(
-                  height: 20,
-                ),
-                renderApplyFiltersButton(),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
+                renderConditionsCheckBoxWrapper(),
+                const SizedBox(height: 20),
+                renderFilterButtons(),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -88,13 +81,25 @@ class _FilterDataPageState extends State<FilterDataPage> {
     );
   }
 
-  renderApplyFiltersButton() {
-    return CurvedButton(
-      onPressed: () {
-        var filterValues;
-        Navigator.pop(context, filterValues);
-      },
-      text: "Apply Filter",
+  renderFilterButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        CurvedButton(
+          onPressed: () {},
+          text: "Remove Filters",
+          halfWidth: true,
+          backgroundColor: const Color(0xFF79140D),
+        ),
+        CurvedButton(
+          onPressed: () {
+            var filterValues;
+            Navigator.pop(context, filterValues);
+          },
+          text: "Apply Filter",
+          halfWidth: true,
+        ),
+      ],
     );
   }
 
@@ -168,5 +173,20 @@ class _FilterDataPageState extends State<FilterDataPage> {
         .toList();
 
     return brandToDisplay;
+  }
+
+  renderConditionsCheckBoxWrapper() {
+    return Column(
+      children: [
+        SortValuePicker(
+          sortingCriteriaTitle: "Price",
+          onSortingCriteriaChanged: (value) {},
+        ),
+        SortValuePicker(
+          sortingCriteriaTitle: "Date of Post",
+          onSortingCriteriaChanged: (value) {},
+        ),
+      ],
+    );
   }
 }
