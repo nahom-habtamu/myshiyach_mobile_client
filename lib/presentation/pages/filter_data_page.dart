@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../data/models/filter/filter_criteria_model.dart';
 import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/sub_category.dart';
 import '../screen_arguments/filter_page_argument.dart';
@@ -22,6 +23,8 @@ class _FilterDataPageState extends State<FilterDataPage> {
   MainCategory? selectedMainCategory;
   SubCategory? selectedSubCategory;
   String? selectedBrand;
+  bool? sortByPriceAscending;
+  bool? sortByCreatedByAscending;
 
   @override
   void initState() {
@@ -64,9 +67,15 @@ class _FilterDataPageState extends State<FilterDataPage> {
                 ),
                 const SizedBox(height: 20),
                 renderMainCategories(args),
-                const SizedBox(height: 20),
+                Visibility(
+                  child: const SizedBox(height: 20),
+                  visible: selectedMainCategory != null,
+                ),
                 renderSubCategories(args),
-                const SizedBox(height: 20),
+                Visibility(
+                  child: const SizedBox(height: 20),
+                  visible: selectedMainCategory != null,
+                ),
                 renderBrandDropdown(args),
                 const SizedBox(height: 20),
                 renderConditionsCheckBoxWrapper(),
@@ -93,7 +102,15 @@ class _FilterDataPageState extends State<FilterDataPage> {
         ),
         CurvedButton(
           onPressed: () {
-            var filterValues;
+            var filterValues = FilterCriteriaModel(
+              brand: selectedBrand,
+              mainCategory: selectedMainCategory,
+              subCategory: selectedSubCategory,
+              maxPrice: _currentPriceRangeValues.end,
+              minPrice: _currentPriceRangeValues.start,
+              sortByCreatedByAscending: sortByCreatedByAscending,
+              sortByPriceAscending: sortByPriceAscending,
+            );
             Navigator.pop(context, filterValues);
           },
           text: "Apply Filter",
@@ -180,11 +197,16 @@ class _FilterDataPageState extends State<FilterDataPage> {
       children: [
         SortValuePicker(
           sortingCriteriaTitle: "Price",
-          onSortingCriteriaChanged: (value) {},
+          onSortingCriteriaChanged: (value) => setState(
+            () => sortByPriceAscending = value,
+          ),
         ),
+        const SizedBox(height: 20),
         SortValuePicker(
           sortingCriteriaTitle: "Date of Post",
-          onSortingCriteriaChanged: (value) {},
+          onSortingCriteriaChanged: (value) => setState(
+            () => sortByCreatedByAscending = value,
+          ),
         ),
       ],
     );

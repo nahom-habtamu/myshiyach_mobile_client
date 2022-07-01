@@ -4,7 +4,7 @@ import '../home/category_item.dart';
 
 class SortValuePicker extends StatefulWidget {
   final String sortingCriteriaTitle;
-  final Function(int) onSortingCriteriaChanged;
+  final Function(bool?) onSortingCriteriaChanged;
   const SortValuePicker({
     Key? key,
     required this.sortingCriteriaTitle,
@@ -51,8 +51,10 @@ class _SortValuePickerState extends State<SortValuePicker> {
                   setState(() {
                     if (selectedSortValue == 0) {
                       selectedSortValue = -1;
+                      widget.onSortingCriteriaChanged(null);
                     } else {
                       selectedSortValue = 0;
+                      widget.onSortingCriteriaChanged(false);
                     }
                   });
                 },
@@ -61,11 +63,15 @@ class _SortValuePickerState extends State<SortValuePicker> {
                 category: "Ascending",
                 isActive: selectedSortValue == 1,
                 onTap: () {
-                  if (selectedSortValue == 1) {
-                    selectedSortValue = -1;
-                  } else {
-                    selectedSortValue = 1;
-                  }
+                  setState(() {
+                    if (selectedSortValue == 1) {
+                      selectedSortValue = -1;
+                      widget.onSortingCriteriaChanged(null);
+                    } else {
+                      selectedSortValue = 1;
+                      widget.onSortingCriteriaChanged(true);
+                    }
+                  });
                 },
               ),
             ],
