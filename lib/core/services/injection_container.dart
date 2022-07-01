@@ -1,10 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mnale_client/domain/usecases/change_password.dart';
-import 'package:mnale_client/domain/usecases/get_my_products.dart';
-import 'package:mnale_client/presentation/bloc/authenticate_phone_number/authenticate_phone_number.cubit.dart';
-import 'package:mnale_client/presentation/bloc/change_password/change_password_cubit.dart';
-import 'package:mnale_client/presentation/bloc/get_my_products/get_my_products_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -38,10 +33,12 @@ import '../../domain/contracts/token_service.dart';
 import '../../domain/contracts/user_service.dart';
 import '../../domain/usecases/add_message_to_conversation.dart';
 import '../../domain/usecases/authenticate_phone_number.dart';
+import '../../domain/usecases/change_password.dart';
 import '../../domain/usecases/create_conversation.dart';
 import '../../domain/usecases/create_product.dart';
 import '../../domain/usecases/delete_product_by_id.dart';
 import '../../domain/usecases/extract_token.dart';
+import '../../domain/usecases/filter_products.dart';
 import '../../domain/usecases/get_all_cities.dart';
 import '../../domain/usecases/get_all_conversations.dart';
 import '../../domain/usecases/get_all_products.dart';
@@ -49,6 +46,7 @@ import '../../domain/usecases/get_categories.dart';
 import '../../domain/usecases/get_conversation_by_id.dart';
 import '../../domain/usecases/get_conversation_by_members.dart';
 import '../../domain/usecases/get_favorite_products.dart';
+import '../../domain/usecases/get_my_products.dart';
 import '../../domain/usecases/get_stored_user_credentials.dart';
 import '../../domain/usecases/get_user_by_id.dart';
 import '../../domain/usecases/login.dart';
@@ -60,15 +58,19 @@ import '../../domain/usecases/upload_product_pictures.dart';
 import '../../domain/usecases/verify_phone_number.dart';
 import '../../presentation/bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
+import '../../presentation/bloc/authenticate_phone_number/authenticate_phone_number.cubit.dart';
+import '../../presentation/bloc/change_password/change_password_cubit.dart';
 import '../../presentation/bloc/create_product/create_product_cubit.dart';
 import '../../presentation/bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../../presentation/bloc/display_all_products/display_all_products_cubit.dart';
+import '../../presentation/bloc/filter/filter_products_cubit.dart';
 import '../../presentation/bloc/get_all_categories/get_all_categories_cubit.dart';
 import '../../presentation/bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import '../../presentation/bloc/get_all_products/get_all_products_cubit.dart';
 import '../../presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../../presentation/bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
+import '../../presentation/bloc/get_my_products/get_my_products_cubit.dart';
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../presentation/bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../../presentation/bloc/logout/logout_cubit.dart';
@@ -84,11 +86,12 @@ Future<void> init() async {
   // state
   sl.registerFactory(
     () => AuthCubit(
-        extractToken: sl(),
-        getCurrentUser: sl(),
-        login: sl(),
-        getStoredUserCredentials: sl(),
-        storeUserCredentials: sl()),
+      extractToken: sl(),
+      getCurrentUser: sl(),
+      login: sl(),
+      getStoredUserCredentials: sl(),
+      storeUserCredentials: sl(),
+    ),
   );
   sl.registerFactory(() => VerifyPhoneNumberCubit(sl()));
   sl.registerFactory(() => RegisterUserCubit(sl(), sl()));
@@ -118,6 +121,7 @@ Future<void> init() async {
   sl.registerFactory(() => DeleteProductByIdCubit(sl()));
   sl.registerFactory(() => GetAllCategoriesCubit(sl()));
   sl.registerFactory(() => ChangePasswordCubit(sl()));
+  sl.registerFactory(() => FilterProductsCubit(sl()));
   sl.registerFactory(() => HandleGoingToMessageCubit(
         createConversation: sl(),
         getConversationByMembers: sl(),
@@ -155,6 +159,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => StoreUserCredentials(sl()));
   sl.registerLazySingleton(() => GetMyProducts(sl()));
   sl.registerLazySingleton(() => ChangePassword(sl()));
+  sl.registerLazySingleton(() => FilterProducts());
 
   // repositories
 

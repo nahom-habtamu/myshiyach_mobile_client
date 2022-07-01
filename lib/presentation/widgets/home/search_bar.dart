@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../../data/models/filter/filter_criteria_model.dart';
 import '../../../domain/enitites/main_category.dart';
 import '../../../domain/enitites/product.dart';
 import '../../pages/filter_data_page.dart';
@@ -12,12 +13,15 @@ class SearchBar extends StatefulWidget {
   final List<MainCategory> categories;
   final List<Product> products;
   final Function onSearchQueryChanged;
+  final FilterCriteriaModel? initialFilterCriteria;
+
   const SearchBar({
     Key? key,
     required this.categories,
     required this.onSearchFilterApplied,
     required this.products,
     required this.onSearchQueryChanged,
+    required this.initialFilterCriteria,
   }) : super(key: key);
 
   @override
@@ -25,7 +29,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  FilterPageArgument? filterResult;
+  FilterCriteriaModel? filterResult;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +45,9 @@ class _SearchBarState extends State<SearchBar> {
                 color: Colors.black,
                 fontSize: 15,
               ),
-              onChanged: (value) => {widget.onSearchQueryChanged(value)},
+              onChanged: (value) => {
+                widget.onSearchQueryChanged(value),
+              },
               decoration: const InputDecoration(
                 labelText: "Search Item",
                 border: OutlineInputBorder(
@@ -93,52 +99,8 @@ class _SearchBarState extends State<SearchBar> {
               ),
               child: Stack(
                 children: [
-                  IconButton(
-                    onPressed: () async {
-                      var maxValue =
-                          widget.products.map((e) => e.price).reduce(max);
-                      var minValue =
-                          widget.products.map((e) => e.price).reduce(min);
-
-                      var result = await Navigator.of(context).pushNamed(
-                        FilterDataPage.routeName,
-                        arguments: FilterPageArgument(
-                          categories: widget.categories,
-                          minValue: minValue,
-                          maxValue: maxValue,
-                        ),
-                      );
-                      setState(() {
-                        if (result != null) {
-                          filterResult = result as FilterPageArgument;
-                        }
-                      });
-                      widget.onSearchFilterApplied(result);
-                    },
-                    icon: const Icon(Icons.filter),
-                  ),
-                  filterIsNotEmpty()
-                      ? const Positioned(
-                          left: 2,
-                          top: 5,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 8,
-                            child: Center(
-                              child: Text(
-                                '1',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(
-                          height: 0,
-                        )
+                  renderGoToFiltersButton(),
+                  renderActiveFilterIndicatingLabel()
                 ],
               ),
             ),
@@ -148,9 +110,58 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 
+  IconButton renderGoToFiltersButton() {
+    return IconButton(
+      onPressed: () async {
+        FilterPageArgument filterArgument = buildFilterPageArgument();
+        var result = await Navigator.of(context).pushNamed(
+          FilterDataPage.routeName,
+          arguments: filterArgument,
+        );
+        setState(() {
+          filterResult = result != null ? result as FilterCriteriaModel : null;
+        });
+        widget.onSearchFilterApplied(result);
+      },
+      icon: const Icon(Icons.filter),
+    );
+  }
+
+  Visibility renderActiveFilterIndicatingLabel() {
+    return Visibility(
+      visible: filterIsNotEmpty(),
+      child: const Positioned(
+        left: 2,
+        top: 5,
+        child: CircleAvatar(
+          backgroundColor: Colors.white,
+          radius: 8,
+          child: Center(
+            child: Text(
+              '1',
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  FilterPageArgument buildFilterPageArgument() {
+    var cities = widget.products.map((e) => e.city).toSet().toList();
+    var filterArgument = FilterPageArgument(
+      allCategories: widget.categories,
+      initialFilterCriteria: widget.initialFilterCriteria,
+      cities: cities,
+    );
+    return filterArgument;
+  }
+
   bool filterIsNotEmpty() {
-    return filterResult != null &&
-        (filterResult!.categories.isNotEmpty ||
-            (filterResult!.maxValue != 0 && filterResult!.minValue != 0));
+    return filterResult != null;
   }
 }

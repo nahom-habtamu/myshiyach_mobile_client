@@ -6,11 +6,13 @@ class FilterCategories extends StatefulWidget {
   final String categoryType;
   final List categories;
   final Function onSelectedCategoryChanged;
+  final dynamic initialSelectedCategory;
   const FilterCategories({
     Key? key,
     required this.categories,
     required this.onSelectedCategoryChanged,
     required this.categoryType,
+    required this.initialSelectedCategory,
   }) : super(key: key);
 
   @override
@@ -18,15 +20,18 @@ class FilterCategories extends StatefulWidget {
 }
 
 class _FilterCategoriesState extends State<FilterCategories> {
-  dynamic selectedMainCategory;
+  dynamic selectedCategory;
 
   @override
   void initState() {
     super.initState();
     if (widget.categories.length == 1) {
       setState(() {
-        selectedMainCategory = widget.categories.first;
+        selectedCategory = widget.categories.first;
       });
+    }
+    if (widget.initialSelectedCategory != null) {
+      selectedCategory = widget.initialSelectedCategory;
     }
   }
 
@@ -65,19 +70,18 @@ class _FilterCategoriesState extends State<FilterCategories> {
                       height: 50,
                       child: CategoryItem(
                         category: e.title,
-                        isActive: selectedMainCategory != null &&
-                            selectedMainCategory!.id == e.id,
+                        isActive: selectedCategory != null &&
+                            selectedCategory!.id == e.id,
                         onTap: () {
                           setState(() {
-                            if (selectedMainCategory != null &&
-                                selectedMainCategory.id == e.id) {
-                              selectedMainCategory = null;
+                            if (selectedCategory != null &&
+                                selectedCategory.id == e.id) {
+                              selectedCategory = null;
                             } else {
-                              selectedMainCategory = e;
+                              selectedCategory = e;
                             }
                           });
-                          widget
-                              .onSelectedCategoryChanged(selectedMainCategory);
+                          widget.onSelectedCategoryChanged(selectedCategory);
                         },
                       ),
                     ),

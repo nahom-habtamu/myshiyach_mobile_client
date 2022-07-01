@@ -80,85 +80,11 @@ class _FilterByPriceState extends State<FilterByPrice> {
               widget.onChanged(_currentRangeValues);
             },
           ),
-          MaterialButton(
-            onPressed: () {
-              _displayTextInputDialog();
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-              ),
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Min Price = ${_currentRangeValues.start.toInt()}\$',
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                  Text(
-                    'Max Price = ${_currentRangeValues.end.toInt()}\$',
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // PriceRangePickerDialog(),
           const SizedBox(height: 25),
         ],
       ),
     );
   }
-
-  Future<void> _displayTextInputDialog() async {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Price Control'),
-          content: SizedBox(
-            height: 170,
-            child: Column(
-              children: [
-                TextField(
-                  onChanged: (value) {
-                    setState(() {
-                      minPriceFromDialog = double.parse(value);
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    hintText: "Min Price",
-                  ),
-                ),
-                TextField(
-                  onChanged: (value) {
-                    setState(() {
-                      maxPriceFromDialog = double.parse(value);
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    hintText: "Max Price",
-                  ),
-                ),
-                const SizedBox(height: 15),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _currentRangeValues = RangeValues(
-                        minPriceFromDialog,
-                        maxPriceFromDialog,
-                      );
-                    });
-                    widget.onChanged(_currentRangeValues);
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Apply'),
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 }
+

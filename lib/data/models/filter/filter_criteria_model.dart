@@ -7,6 +7,7 @@ class FilterCriteriaModel {
   final MainCategory? mainCategory;
   final SubCategory? subCategory;
   final String? brand;
+  final String? city;
   final bool? sortByPriceAscending;
   final bool? sortByCreatedByAscending;
 
@@ -16,6 +17,7 @@ class FilterCriteriaModel {
     this.mainCategory,
     this.subCategory,
     this.brand,
+    this.city,
     this.sortByPriceAscending,
     this.sortByCreatedByAscending,
   });
@@ -28,6 +30,7 @@ class FilterCriteriaModel {
       MainCategory : ${mainCategory!.title} ,  
       SubCategory : ${subCategory!.title},  
       brand : $brand,  
+      city : $city,  
       sortByPriceAscending : $sortByPriceAscending,  
       sortByCreatedByAscending : $sortByCreatedByAscending,  
     }''';

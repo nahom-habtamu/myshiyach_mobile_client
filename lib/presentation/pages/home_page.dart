@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/utils/date_time_formatter.dart';
+import '../../data/models/filter/filter_criteria_model.dart';
 import '../../domain/enitites/product.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
-import '../screen_arguments/filter_page_argument.dart';
+import '../bloc/filter/filter_products_cubit.dart';
 import '../widgets/common/empty_state_content.dart';
 import '../widgets/home/product_list.dart';
 import '../widgets/home/search_bar.dart';
@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  FilterPageArgument? filterValues;
+  FilterCriteriaModel? filterValues;
   String searchKeyword = "";
 
   @override
@@ -31,10 +31,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   fetchAllNeededToDisplayProductList() {
-    // var state = context.read<DisplayAllProductsCubit>().state;
-    // if (state is Empty || state is Error) {
     context.read<DisplayAllProductsCubit>().call();
-    // }
   }
 
   @override
@@ -52,58 +49,78 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 25),
                 ),
               ),
-              BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
-                builder: (context, state) {
-                  if (state is Loaded) {
-                    return SearchBar(
-                      onSearchFilterApplied: (value) {
-                        setState(() {
-                          filterValues = value;
-                        });
-                      },
-                      onSearchQueryChanged: (value) {
-                        setState(() {
-                          searchKeyword = value.trim();
-                        });
-                      },
-                      categories: state.categories,
-                      products: state.products,
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-              BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
-                builder: (context, state) {
-                  if (state is Loaded) {
-                    var productsToDisplay =
-                        applyFilterToProducts(state.products);
-                    if (productsToDisplay.isEmpty) {
-                      return buildEmptyStateContent();
-                    }
-
-                    return buildProductList(productsToDisplay, state.favorites);
-                  } else if (state is Loading) {
-                    return const Expanded(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  } else if (state is Error) {
-                    return Text(
-                      state.message,
-                      style: const TextStyle(color: Colors.red),
-                    );
-                  } else {
-                    return buildEmptyStateContent();
-                  }
-                },
-              )
+              renderSearchAndFilterBar(),
+              renderProductBuilder()
             ],
           ),
         ),
       ),
+    );
+  }
+
+  BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>
+      renderSearchAndFilterBar() {
+    return BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
+      builder: (context, state) {
+        if (state is Loaded) {
+          return SearchBar(
+            onSearchFilterApplied: (value) {
+              setState(() {
+                filterValues = value;
+              });
+            },
+            onSearchQueryChanged: (value) {
+              setState(() {
+                searchKeyword = value.trim();
+              });
+            },
+            categories: state.categories,
+            products: state.products,
+            initialFilterCriteria: filterValues,
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+
+  BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>
+      renderProductBuilder() {
+    return BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
+      builder: (context, state) {
+        if (state is Loaded) {
+          return showProducts(state);
+        } else if (state is Loading) {
+          return const Expanded(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (state is Error) {
+          return Text(
+            state.message,
+            style: const TextStyle(color: Colors.red),
+          );
+        } else {
+          return buildEmptyStateContent();
+        }
+      },
+    );
+  }
+
+  showProducts(Loaded state) {
+    var productsToDisplay = filterValues == null
+        ? state.products
+        : context
+            .read<FilterProductsCubit>()
+            .call(state.products, filterValues!);
+    if (productsToDisplay.isEmpty) {
+      return buildEmptyStateContent();
+    }
+    return buildProductList(
+      productsToDisplay,
+      state.favorites,
     );
   }
 
@@ -130,40 +147,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Product> applyFilterToProducts(List<Product> products) {
-    if (!filterIsNotEmpty() && searchKeyword.isEmpty) {
-      products.sort((a, b) => compareCreatedAt(a, b));
-      return products;
-    }
-
-    var filteredData = products
-        .where(
-          (product) =>
-              checkMainCategoryMatch(product) &&
-              checkPriceMatch(product) &&
-              checkKeywordMatch(product),
-        )
-        .toList();
-    filteredData.sort(
-      (a, b) => a.price.compareTo(b.price),
-    );
-
-    return filterValues == null ? filteredData : filteredData.reversed.toList();
-  }
-
-  int compareCreatedAt(Product a, Product b) {
-    var firstDate = DateFormatterUtil.parseDate(a.createdAt);
-    var secondDate = DateFormatterUtil.parseDate(b.createdAt);
-
-    return secondDate.compareTo(firstDate);
-  }
-
-  bool filterIsNotEmpty() {
-    return filterValues != null &&
-        (filterValues!.categories.isNotEmpty ||
-            (filterValues!.maxValue != 0 && filterValues!.minValue != 0));
-  }
-
   bool checkKeywordMatch(Product product) {
     return product.description.contains(
           RegExp(r'' + searchKeyword, caseSensitive: false),
@@ -171,23 +154,5 @@ class _HomePageState extends State<HomePage> {
         product.title.contains(
           RegExp(r'' + searchKeyword, caseSensitive: false),
         );
-  }
-
-  bool checkPriceMatch(Product product) {
-    if (filterValues == null ||
-        (filterValues!.maxValue == 0 && filterValues!.minValue == 0)) {
-      return true;
-    }
-
-    return product.price <= filterValues!.maxValue &&
-        product.price >= filterValues!.minValue;
-  }
-
-  bool checkMainCategoryMatch(Product product) {
-    return filterValues?.categories == null || filterValues!.categories.isEmpty
-        ? true
-        : filterValues!.categories.any(
-            (cat) => cat.id == product.mainCategory,
-          );
   }
 }

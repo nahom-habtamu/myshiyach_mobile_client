@@ -4,10 +4,9 @@ import '../../data/models/filter/filter_criteria_model.dart';
 import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/sub_category.dart';
 import '../screen_arguments/filter_page_argument.dart';
-import '../widgets/add_post/add_post_dropdown_dart.dart';
 import '../widgets/common/curved_button.dart';
-import '../widgets/filter/filter_by_price.dart';
-import '../widgets/filter/filter_categories.dart';
+import '../widgets/filter/filter_drop_down_input.dart';
+import '../widgets/filter/price_range_input_dialog.dart';
 import '../widgets/filter/sort_value_picker.dart';
 
 class FilterDataPage extends StatefulWidget {
@@ -19,22 +18,45 @@ class FilterDataPage extends StatefulWidget {
 }
 
 class _FilterDataPageState extends State<FilterDataPage> {
-  var _currentPriceRangeValues = const RangeValues(0, 0);
+  FilterPageArgument args = FilterPageArgument.empty();
+  double? minPriceFromDialog = 0.0;
+  double? maxPriceFromDialog = 0.0;
   MainCategory? selectedMainCategory;
   SubCategory? selectedSubCategory;
   String? selectedBrand;
+  String? selectedCity;
   bool? sortByPriceAscending;
   bool? sortByCreatedByAscending;
 
   @override
   void initState() {
     super.initState();
-    _currentPriceRangeValues = const RangeValues(0, 0);
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        args = ModalRoute.of(context)!.settings.arguments as FilterPageArgument;
+      });
+      if (args.initialFilterCriteria != null) {
+        initalizeFilterCriteriaHolders();
+      }
+    });
+  }
+
+  void initalizeFilterCriteriaHolders() {
+    setState(() {
+      minPriceFromDialog = args.initialFilterCriteria!.minPrice;
+      maxPriceFromDialog = args.initialFilterCriteria!.maxPrice;
+      selectedMainCategory = args.initialFilterCriteria!.mainCategory;
+      selectedSubCategory = args.initialFilterCriteria!.subCategory;
+      selectedBrand = args.initialFilterCriteria!.brand;
+      selectedCity = args.initialFilterCriteria!.city;
+      sortByPriceAscending = args.initialFilterCriteria!.sortByPriceAscending;
+      sortByCreatedByAscending =
+          args.initialFilterCriteria!.sortByCreatedByAscending;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var args = ModalRoute.of(context)!.settings.arguments as FilterPageArgument;
     return Scaffold(
       backgroundColor: const Color(0xffF1F1F1),
       appBar: AppBar(
@@ -53,35 +75,37 @@ class _FilterDataPageState extends State<FilterDataPage> {
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(0.0),
+            padding: const EdgeInsets.all(15),
             child: Column(
               children: [
-                FilterByPrice(
-                  maxValue: args.maxValue,
-                  minValue: args.minValue,
-                  onChanged: (value) {
+                PriceRangeInputDialog(
+                  key: Key(
+                    (minPriceFromDialog! * maxPriceFromDialog!).toString(),
+                  ),
+                  initialMin: minPriceFromDialog!,
+                  initialMax: maxPriceFromDialog!,
+                  onChanged: (min, max) {
                     setState(() {
-                      _currentPriceRangeValues = value;
+                      minPriceFromDialog = min;
+                      maxPriceFromDialog = max;
                     });
                   },
                 ),
                 const SizedBox(height: 20),
-                renderMainCategories(args),
+                renderMainCategories(),
                 Visibility(
                   child: const SizedBox(height: 20),
                   visible: selectedMainCategory != null,
                 ),
-                renderSubCategories(args),
-                Visibility(
-                  child: const SizedBox(height: 20),
-                  visible: selectedMainCategory != null,
-                ),
-                renderBrandDropdown(args),
+                renderSubCategories(),
                 const SizedBox(height: 20),
                 renderConditionsCheckBoxWrapper(),
                 const SizedBox(height: 20),
-                renderFilterButtons(),
+                renderBrandDropdown(),
                 const SizedBox(height: 20),
+                renderCityDropdown(),
+                const SizedBox(height: 20),
+                renderFilterButtons(),
               ],
             ),
           ),
@@ -91,81 +115,131 @@ class _FilterDataPageState extends State<FilterDataPage> {
   }
 
   renderFilterButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        CurvedButton(
-          onPressed: () {},
-          text: "Remove Filters",
-          halfWidth: true,
-          backgroundColor: const Color(0xFF79140D),
-        ),
-        CurvedButton(
-          onPressed: () {
-            var filterValues = FilterCriteriaModel(
-              brand: selectedBrand,
-              mainCategory: selectedMainCategory,
-              subCategory: selectedSubCategory,
-              maxPrice: _currentPriceRangeValues.end,
-              minPrice: _currentPriceRangeValues.start,
-              sortByCreatedByAscending: sortByCreatedByAscending,
-              sortByPriceAscending: sortByPriceAscending,
-            );
-            Navigator.pop(context, filterValues);
-          },
-          text: "Apply Filter",
-          halfWidth: true,
-        ),
-      ],
-    );
-  }
-
-  FilterCategories renderMainCategories(FilterPageArgument args) {
-    return FilterCategories(
-      categories: [
-        ...args.categories,
-      ],
-      onSelectedCategoryChanged: (value) {
-        setState(() {
-          selectedMainCategory = value;
-          selectedSubCategory = null;
-          selectedBrand = null;
-        });
-      },
-      categoryType: "Main Category",
-    );
-  }
-
-  Visibility renderSubCategories(FilterPageArgument args) {
-    var subCategoriesToDisplay = selectedMainCategory != null
-        ? args.categories
-            .firstWhere((e) => e.id == selectedMainCategory!.id)
-            .subCategories
-        : [];
-    return Visibility(
-      visible: subCategoriesToDisplay.isNotEmpty,
-      child: FilterCategories(
-        categories: [...subCategoriesToDisplay],
-        onSelectedCategoryChanged: (value) {
-          setState(() {
-            selectedSubCategory = value;
-          });
-        },
-        categoryType: "Sub Category",
+    return Align(
+      alignment: FractionalOffset.bottomCenter,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          CurvedButton(
+            onPressed: () {
+              handleClearingFilter();
+            },
+            text: "Remove Filters",
+            halfWidth: true,
+            backgroundColor: Colors.transparent,
+          ),
+          CurvedButton(
+            onPressed: () {
+              var filterValues = FilterCriteriaModel(
+                brand: selectedBrand,
+                mainCategory: selectedMainCategory,
+                subCategory: selectedSubCategory,
+                city: selectedCity,
+                maxPrice: maxPriceFromDialog,
+                minPrice: minPriceFromDialog,
+                sortByCreatedByAscending: sortByCreatedByAscending,
+                sortByPriceAscending: sortByPriceAscending,
+              );
+              Navigator.pop(context, filterValues);
+            },
+            text: "Apply Filter",
+            halfWidth: true,
+          ),
+        ],
       ),
     );
   }
 
-  renderBrandDropdown(FilterPageArgument args) {
-    var brandToDisplay = getBrandsForCategory(args.categories);
+  void handleClearingFilter() {
+    setState(() {
+      selectedMainCategory = null;
+      selectedSubCategory = null;
+      selectedBrand = null;
+      selectedCity = null;
+      sortByPriceAscending = null;
+      sortByCreatedByAscending = null;
+      maxPriceFromDialog = 0.0;
+      minPriceFromDialog = 0.0;
+    });
+  }
+
+  renderMainCategories() {
+    return FilterDropDownInput(
+      key: Key(selectedMainCategory?.id ?? ""),
+      initialValue: selectedMainCategory?.id ?? "",
+      hintText: "Main Category",
+      items: args.allCategories
+          .map((m) => {"value": m.id, "preview": m.title})
+          .toList(),
+      onChanged: (value) {
+        var mainCategory = args.allCategories.firstWhere((e) => e.id == value);
+        setState(() {
+          selectedMainCategory = mainCategory;
+          selectedSubCategory = null;
+          selectedBrand = null;
+        });
+      },
+      validator: () {},
+    );
+  }
+
+  renderSubCategories() {
+    var subCategoriesToDisplay = selectedMainCategory != null
+        ? args.allCategories
+            .firstWhere((e) => e.id == selectedMainCategory!.id)
+            .subCategories
+        : <SubCategory>[];
+    return Visibility(
+      visible: subCategoriesToDisplay.isNotEmpty,
+      child: FilterDropDownInput(
+        key: Key(selectedSubCategory?.id ?? ""),
+        initialValue: selectedSubCategory?.id ?? "",
+        hintText: "Sub Category",
+        items: subCategoriesToDisplay
+            .map((m) => {"value": m.id, "preview": m.title})
+            .toList(),
+        onChanged: (value) {
+          var subCategory =
+              subCategoriesToDisplay.firstWhere((e) => e.id == value);
+          setState(() {
+            selectedSubCategory = subCategory;
+          });
+        },
+        validator: () {},
+      ),
+    );
+  }
+
+  renderBrandDropdown() {
+    var brandToDisplay = getBrandsForCategory(args.allCategories);
     return Visibility(
       visible: brandToDisplay != null,
-      child: AddPostDropDownInput(
+      child: FilterDropDownInput(
+        key: Key(selectedBrand ?? ""),
+        initialValue: selectedBrand ?? "",
         hintText: "Select A Brand",
         items: brandToDisplay ?? [],
         onChanged: (value) {
           setState(() {
             selectedBrand = value;
+          });
+        },
+        validator: () {},
+      ),
+    );
+  }
+
+  renderCityDropdown() {
+    return Visibility(
+      visible: args.cities.isNotEmpty,
+      child: FilterDropDownInput(
+        key: Key(selectedCity ?? ""),
+        initialValue: selectedCity ?? "",
+        hintText: "Select A City",
+        items: args.cities.map((m) => {"value": m, "preview": m}).toList(),
+        onChanged: (value) {
+          setState(() {
+            selectedCity = value;
           });
         },
         validator: () {},
@@ -196,6 +270,8 @@ class _FilterDataPageState extends State<FilterDataPage> {
     return Column(
       children: [
         SortValuePicker(
+          key: Key('$sortByPriceAscending price'),
+          initialValue: sortByPriceAscending,
           sortingCriteriaTitle: "Price",
           onSortingCriteriaChanged: (value) => setState(
             () => sortByPriceAscending = value,
@@ -203,6 +279,8 @@ class _FilterDataPageState extends State<FilterDataPage> {
         ),
         const SizedBox(height: 20),
         SortValuePicker(
+          key: Key('$sortByCreatedByAscending dateOfPost'),
+          initialValue: sortByCreatedByAscending,
           sortingCriteriaTitle: "Date of Post",
           onSortingCriteriaChanged: (value) => setState(
             () => sortByCreatedByAscending = value,

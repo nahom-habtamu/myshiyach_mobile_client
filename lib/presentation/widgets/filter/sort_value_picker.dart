@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../home/category_item.dart';
-
 class SortValuePicker extends StatefulWidget {
   final String sortingCriteriaTitle;
   final Function(bool?) onSortingCriteriaChanged;
+  final bool? initialValue;
   const SortValuePicker({
     Key? key,
     required this.sortingCriteriaTitle,
     required this.onSortingCriteriaChanged,
+    required this.initialValue,
   }) : super(key: key);
 
   @override
@@ -16,7 +16,16 @@ class SortValuePicker extends StatefulWidget {
 }
 
 class _SortValuePickerState extends State<SortValuePicker> {
-  int selectedSortValue = -1;
+  bool? selectedSortValue;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialValue != null) {
+      selectedSortValue = widget.initialValue;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,49 +39,43 @@ class _SortValuePickerState extends State<SortValuePicker> {
           ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(vertical: 25),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 15.0),
+            padding: const EdgeInsets.only(bottom: 5.0, top: 5),
             child: Text(
               widget.sortingCriteriaTitle,
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(
+                fontSize: 20,
+                fontStyle: FontStyle.italic,
+              ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          Column(
             children: [
-              CategoryItem(
-                category: "Descending",
-                isActive: selectedSortValue == 0,
-                onTap: () {
-                  setState(() {
-                    if (selectedSortValue == 0) {
-                      selectedSortValue = -1;
-                      widget.onSortingCriteriaChanged(null);
-                    } else {
-                      selectedSortValue = 0;
-                      widget.onSortingCriteriaChanged(false);
-                    }
-                  });
-                },
+              ListTile(
+                title: const Text("Order By Ascending"),
+                leading: Radio(
+                  value: true,
+                  groupValue: selectedSortValue,
+                  onChanged: (value) {
+                    setState(() => selectedSortValue = value as bool);
+                    widget.onSortingCriteriaChanged(selectedSortValue);
+                  },
+                ),
               ),
-              CategoryItem(
-                category: "Ascending",
-                isActive: selectedSortValue == 1,
-                onTap: () {
-                  setState(() {
-                    if (selectedSortValue == 1) {
-                      selectedSortValue = -1;
-                      widget.onSortingCriteriaChanged(null);
-                    } else {
-                      selectedSortValue = 1;
-                      widget.onSortingCriteriaChanged(true);
-                    }
-                  });
-                },
+              ListTile(
+                title: const Text("Order Descending"),
+                leading: Radio(
+                  value: false,
+                  groupValue: selectedSortValue,
+                  onChanged: (value) {
+                    setState(() => selectedSortValue = value as bool);
+                    widget.onSortingCriteriaChanged(selectedSortValue);
+                  },
+                ),
               ),
             ],
           ),
