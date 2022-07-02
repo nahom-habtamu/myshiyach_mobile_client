@@ -10,6 +10,7 @@ class FilterCriteriaModel {
   final String? city;
   final bool? sortByPriceAscending;
   final bool? sortByCreatedByAscending;
+  String? keyword;
 
   FilterCriteriaModel({
     required this.maxPrice,
@@ -20,6 +21,7 @@ class FilterCriteriaModel {
     required this.city,
     required this.sortByPriceAscending,
     required this.sortByCreatedByAscending,
+    required this.keyword,
   });
 
   FilterCriteriaModel.empty({
@@ -31,9 +33,25 @@ class FilterCriteriaModel {
     this.city,
     this.sortByPriceAscending,
     this.sortByCreatedByAscending,
+    this.keyword,
   });
 
-  bool isFilterCriteriaNull() {
+  static FilterCriteriaModel addKeyWord(
+      FilterCriteriaModel? original, String? keyword) {
+    return FilterCriteriaModel(
+      maxPrice: original?.maxPrice ?? 0.0,
+      minPrice: original?.minPrice ?? 0.0,
+      mainCategory: original?.mainCategory,
+      subCategory: original?.subCategory,
+      brand: original?.brand,
+      city: original?.city,
+      sortByPriceAscending: original?.sortByPriceAscending,
+      sortByCreatedByAscending: original?.sortByCreatedByAscending,
+      keyword: keyword,
+    );
+  }
+
+  bool areAllValuesNull() {
     return (maxPrice == null || maxPrice == 0.0) &&
         (minPrice == null || minPrice == 0.0) &&
         mainCategory == null &&

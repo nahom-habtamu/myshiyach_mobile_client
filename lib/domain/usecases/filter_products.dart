@@ -27,9 +27,13 @@ class FilterProducts {
         ? <Product>[]
         : _filterByPrice(filterCriteria, filteredByCity);
 
-    var sortedProduct = filteredByPrice.isEmpty
+    var filteredByKeyword = filteredByPrice.isEmpty
         ? <Product>[]
-        : _sortProduct(filterCriteria, filteredByPrice);
+        : _filterByKeyword(filterCriteria, filteredByPrice);
+
+    var sortedProduct = filteredByKeyword.isEmpty
+        ? <Product>[]
+        : _sortProduct(filterCriteria, filteredByKeyword);
 
     return sortedProduct;
   }
@@ -114,5 +118,26 @@ class FilterProducts {
     }
 
     return [...products];
+  }
+
+  List<Product> _filterByKeyword(
+    FilterCriteriaModel filterCriteria,
+    List<Product> products,
+  ) {
+    return products.where((p) => _matchByKeyword(filterCriteria, p)).toList();
+  }
+
+  bool _matchByKeyword(
+    FilterCriteriaModel filterCriteria,
+    Product product,
+  ) {
+    return filterCriteria.keyword == null
+        ? true
+        : product.description.contains(
+              RegExp(r'' + filterCriteria.keyword!, caseSensitive: false),
+            ) ||
+            product.title.contains(
+              RegExp(r'' + filterCriteria.keyword!, caseSensitive: false),
+            );
   }
 }

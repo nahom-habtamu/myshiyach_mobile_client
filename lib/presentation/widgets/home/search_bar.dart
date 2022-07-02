@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import '../../../data/models/filter/filter_criteria_model.dart';

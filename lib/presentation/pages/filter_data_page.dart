@@ -139,10 +139,11 @@ class _FilterDataPageState extends State<FilterDataPage> {
                 minPrice: minPriceFromDialog,
                 sortByCreatedByAscending: sortByCreatedByAscending,
                 sortByPriceAscending: sortByPriceAscending,
+                keyword: null,
               );
               Navigator.pop(
                 context,
-                filterValues.isFilterCriteriaNull() ? null : filterValues,
+                filterValues.areAllValuesNull() ? null : filterValues,
               );
             },
             text: "Apply Filter",

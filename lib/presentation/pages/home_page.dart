@@ -72,6 +72,9 @@ class _HomePageState extends State<HomePage> {
             onSearchQueryChanged: (value) {
               setState(() {
                 searchKeyword = value.trim();
+                var addedKeyword =
+                    FilterCriteriaModel.addKeyWord(filterValues, searchKeyword);
+                filterValues = addedKeyword;
               });
             },
             categories: state.categories,
@@ -145,14 +148,5 @@ class _HomePageState extends State<HomePage> {
     return Expanded(
       child: ProductList(products: products, favorites: favorites),
     );
-  }
-
-  bool checkKeywordMatch(Product product) {
-    return product.description.contains(
-          RegExp(r'' + searchKeyword, caseSensitive: false),
-        ) ||
-        product.title.contains(
-          RegExp(r'' + searchKeyword, caseSensitive: false),
-        );
   }
 }
