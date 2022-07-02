@@ -264,7 +264,7 @@ class _EditPostPageState extends State<EditPostPage> {
         return Column(
           children: [
             AddPostDropDownInput(
-              initialValue: product!.productDetail![e.objectKey],
+              initialValue: product?.productDetail?[e.objectKey] ?? "",
               hintText: e.objectKey,
               items: [
                 ...e.dropDownValues

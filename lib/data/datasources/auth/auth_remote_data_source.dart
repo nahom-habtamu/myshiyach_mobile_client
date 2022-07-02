@@ -25,7 +25,7 @@ class AuthRemoteDataSource extends AuthDataSource {
         json.decode(response.body),
       );
     }
-    throw Exception("User Not Found");
+    throw Exception(json.decode(response.body)["error"]);
   }
 
   @override

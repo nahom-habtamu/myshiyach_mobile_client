@@ -14,7 +14,7 @@ class PostImagesScreen extends StatelessWidget {
       child: PageView.builder(
         itemCount: images.length,
         itemBuilder: (context, index) => InteractiveViewer(
-          panEnabled: false, // Set it to false
+          panEnabled: false,
           boundaryMargin: const EdgeInsets.all(100),
           minScale: 1,
           maxScale: 5,
