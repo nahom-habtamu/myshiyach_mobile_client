@@ -140,7 +140,10 @@ class _FilterDataPageState extends State<FilterDataPage> {
                 sortByCreatedByAscending: sortByCreatedByAscending,
                 sortByPriceAscending: sortByPriceAscending,
               );
-              Navigator.pop(context, filterValues);
+              Navigator.pop(
+                context,
+                filterValues.isFilterCriteriaNull() ? null : filterValues,
+              );
             },
             text: "Apply Filter",
             halfWidth: true,
@@ -272,7 +275,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
         SortValuePicker(
           key: Key('$sortByPriceAscending price'),
           initialValue: sortByPriceAscending,
-          sortingCriteriaTitle: "Price",
+          sortingCriteriaTitle: "Sort by Price",
           onSortingCriteriaChanged: (value) => setState(
             () => sortByPriceAscending = value,
           ),
@@ -281,7 +284,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
         SortValuePicker(
           key: Key('$sortByCreatedByAscending dateOfPost'),
           initialValue: sortByCreatedByAscending,
-          sortingCriteriaTitle: "Date of Post",
+          sortingCriteriaTitle: "Sort by Date of Post",
           onSortingCriteriaChanged: (value) => setState(
             () => sortByCreatedByAscending = value,
           ),

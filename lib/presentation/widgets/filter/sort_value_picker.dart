@@ -48,33 +48,45 @@ class _SortValuePickerState extends State<SortValuePicker> {
             child: Text(
               widget.sortingCriteriaTitle,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontStyle: FontStyle.italic,
               ),
             ),
           ),
           Column(
             children: [
-              ListTile(
-                title: const Text("Order By Ascending"),
-                leading: Radio(
-                  value: true,
-                  groupValue: selectedSortValue,
-                  onChanged: (value) {
-                    setState(() => selectedSortValue = value as bool);
-                    widget.onSortingCriteriaChanged(selectedSortValue);
-                  },
+              SizedBox(
+                height: 40,
+                child: ListTile(
+                  title: const Text(
+                    "Ascending",
+                    style: TextStyle(fontSize: 13),
+                  ),
+                  leading: Radio(
+                    value: true,
+                    groupValue: selectedSortValue,
+                    onChanged: (value) {
+                      setState(() => selectedSortValue = value as bool);
+                      widget.onSortingCriteriaChanged(selectedSortValue);
+                    },
+                  ),
                 ),
               ),
-              ListTile(
-                title: const Text("Order Descending"),
-                leading: Radio(
-                  value: false,
-                  groupValue: selectedSortValue,
-                  onChanged: (value) {
-                    setState(() => selectedSortValue = value as bool);
-                    widget.onSortingCriteriaChanged(selectedSortValue);
-                  },
+              SizedBox(
+                height: 40,
+                child: ListTile(
+                  title: const Text(
+                    "Descending",
+                    style: TextStyle(fontSize: 13),
+                  ),
+                  leading: Radio(
+                    value: false,
+                    groupValue: selectedSortValue,
+                    onChanged: (value) {
+                      setState(() => selectedSortValue = value as bool);
+                      widget.onSortingCriteriaChanged(selectedSortValue);
+                    },
+                  ),
                 ),
               ),
             ],

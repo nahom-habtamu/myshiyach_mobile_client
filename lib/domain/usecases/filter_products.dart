@@ -19,11 +19,11 @@ class FilterProducts {
         ? <Product>[]
         : _filterByBrand(filterCriteria, filteredBySubCategory);
 
-    var filteredByCity = filteredBySubCategory.isEmpty
+    var filteredByCity = filteredByBrand.isEmpty
         ? <Product>[]
         : _filterByCity(filterCriteria, filteredByBrand);
 
-    var filteredByPrice = filteredByBrand.isEmpty
+    var filteredByPrice = filteredByCity.isEmpty
         ? <Product>[]
         : _filterByPrice(filterCriteria, filteredByCity);
 
@@ -75,7 +75,8 @@ class FilterProducts {
 
   List<Product> _filterByPrice(
       FilterCriteriaModel filterCriteria, List<Product> products) {
-    return filterCriteria.maxPrice == null || filterCriteria.minPrice == null
+    return isPriceNullOrEmpty(filterCriteria.maxPrice) ||
+            isPriceNullOrEmpty(filterCriteria.minPrice)
         ? products
         : products
             .where(
@@ -85,6 +86,8 @@ class FilterProducts {
             )
             .toList();
   }
+
+  bool isPriceNullOrEmpty(double? price) => price == null || price == 0.0;
 
   int _compareCreatedAt(Product a, Product b) {
     var firstDate = DateFormatterUtil.parseDate(a.createdAt);

@@ -12,8 +12,19 @@ class FilterCriteriaModel {
   final bool? sortByCreatedByAscending;
 
   FilterCriteriaModel({
-    this.maxPrice,
-    this.minPrice,
+    required this.maxPrice,
+    required this.minPrice,
+    required this.mainCategory,
+    required this.subCategory,
+    required this.brand,
+    required this.city,
+    required this.sortByPriceAscending,
+    required this.sortByCreatedByAscending,
+  });
+
+  FilterCriteriaModel.empty({
+    this.maxPrice = 0.0,
+    this.minPrice = 0.0,
     this.mainCategory,
     this.subCategory,
     this.brand,
@@ -21,6 +32,17 @@ class FilterCriteriaModel {
     this.sortByPriceAscending,
     this.sortByCreatedByAscending,
   });
+
+  bool isFilterCriteriaNull() {
+    return (maxPrice == null || maxPrice == 0.0) &&
+        (minPrice == null || minPrice == 0.0) &&
+        mainCategory == null &&
+        subCategory == null &&
+        brand == null &&
+        city == null &&
+        sortByPriceAscending == null &&
+        sortByCreatedByAscending == null;
+  }
 
   @override
   String toString() {
