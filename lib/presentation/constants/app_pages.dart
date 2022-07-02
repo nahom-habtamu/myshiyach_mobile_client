@@ -39,7 +39,7 @@ class AppPages {
       PostConfirmationPage.routeName: (context) => const PostConfirmationPage(),
       OtpVerificationPage.routeName: (context) => const OtpVerificationPage(),
       FilterDataPage.routeName: (context) => const FilterDataPage(),
-      PostImageScreen.routeName: (context) => const PostImageScreen(),
+      PostImagesScreen.routeName: (context) => const PostImagesScreen(),
     };
   }
 }

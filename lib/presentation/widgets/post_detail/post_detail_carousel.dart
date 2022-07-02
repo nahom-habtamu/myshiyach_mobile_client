@@ -40,8 +40,8 @@ class _PostDetailCarouselState extends State<PostDetailCarousel> {
                   onTap: () {
                     Navigator.pushNamed(
                       context,
-                      PostImageScreen.routeName,
-                      arguments: item,
+                      PostImagesScreen.routeName,
+                      arguments: widget.items,
                     );
                   },
                   child: Image.network(
