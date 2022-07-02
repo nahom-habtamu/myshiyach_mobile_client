@@ -48,6 +48,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
             color: Colors.black,
           ),
         ),
+        iconTheme: const IconThemeData(color: Colors.black),
         backgroundColor: const Color(0xffF1F1F1),
         elevation: 0,
         centerTitle: true,
