@@ -16,13 +16,13 @@ class SortValuePicker extends StatefulWidget {
 }
 
 class _SortValuePickerState extends State<SortValuePicker> {
-  bool? selectedSortValue;
+  int selectedSortValue = -1;
 
   @override
   void initState() {
     super.initState();
     if (widget.initialValue != null) {
-      selectedSortValue = widget.initialValue;
+      selectedSortValue = parseBoolToSortValue();
     }
   }
 
@@ -59,16 +59,27 @@ class _SortValuePickerState extends State<SortValuePicker> {
                 height: 40,
                 child: ListTile(
                   title: const Text(
+                    "None",
+                    style: TextStyle(fontSize: 13),
+                  ),
+                  leading: Radio(
+                    value: -1,
+                    groupValue: selectedSortValue,
+                    onChanged: (value) => handleValueChanged(value as int),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 40,
+                child: ListTile(
+                  title: const Text(
                     "Ascending",
                     style: TextStyle(fontSize: 13),
                   ),
                   leading: Radio(
-                    value: true,
+                    value: 0,
                     groupValue: selectedSortValue,
-                    onChanged: (value) {
-                      setState(() => selectedSortValue = value as bool);
-                      widget.onSortingCriteriaChanged(selectedSortValue);
-                    },
+                    onChanged: (value) => handleValueChanged(value as int),
                   ),
                 ),
               ),
@@ -80,12 +91,9 @@ class _SortValuePickerState extends State<SortValuePicker> {
                     style: TextStyle(fontSize: 13),
                   ),
                   leading: Radio(
-                    value: false,
+                    value: 1,
                     groupValue: selectedSortValue,
-                    onChanged: (value) {
-                      setState(() => selectedSortValue = value as bool);
-                      widget.onSortingCriteriaChanged(selectedSortValue);
-                    },
+                    onChanged: (value) => handleValueChanged(value as int),
                   ),
                 ),
               ),
@@ -94,5 +102,25 @@ class _SortValuePickerState extends State<SortValuePicker> {
         ],
       ),
     );
+  }
+
+  void handleValueChanged(int value) {
+    setState(() => selectedSortValue = value);
+    widget.onSortingCriteriaChanged(
+      parseSortValueToBool(selectedSortValue),
+    );
+  }
+
+  bool? parseSortValueToBool(int sortValue) {
+    if (sortValue == -1) return null;
+    if (sortValue == 1) return false;
+    return true;
+  }
+
+  int parseBoolToSortValue() {
+    if (widget.initialValue == null) return -1;
+    if (widget.initialValue == true) return 0;
+
+    return 1;
   }
 }
