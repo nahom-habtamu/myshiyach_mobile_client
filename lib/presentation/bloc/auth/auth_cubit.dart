@@ -26,7 +26,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthNotTriggered());
   }
 
-  void loginUser(LoginRequestModel? request, bool rememberMe) async {
+  void loginUser(LoginRequestModel? request) async {
     try {
       emit(AuthNotTriggered());
       emit(AuthLoading());
@@ -44,9 +44,8 @@ class AuthCubit extends Cubit<AuthState> {
         authResult.token,
       );
 
-      if (rememberMe) {
-        storeUserCredentials.call(request);
-      }
+      storeUserCredentials.call(request);
+
       emit(AuthSuccessfull(authResult, currentUser));
     } catch (e) {
       emit(AuthError(message: e.toString()));

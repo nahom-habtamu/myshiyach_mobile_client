@@ -21,7 +21,7 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context.read<AuthCubit>().loginUser(null, false);
+      context.read<AuthCubit>().loginUser(null);
     });
   }
 

@@ -120,23 +120,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Row renderRememberMeAndForgotPassword() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          children: [
-            renderCheckBox(),
-            const SizedBox(
-              width: 10,
-            ),
-            const Text(
-              'Remember Me',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
         GestureDetector(
           onTap: () {
             Navigator.pushNamed(
@@ -273,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
             userName: userName,
             password: password,
           );
-          context.read<AuthCubit>().loginUser(requestBody, rememberMe);
+          context.read<AuthCubit>().loginUser(requestBody);
         }
       },
       text: 'Login',
