@@ -57,56 +57,62 @@ class _FilterDataPageState extends State<FilterDataPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffF1F1F1),
-      appBar: AppBar(
-        title: const Text(
-          'Filters',
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        iconTheme: const IconThemeData(color: Colors.black),
+    return WillPopScope(
+      onWillPop: () async {
+        handleApplyingFilter();
+        return false;
+      },
+      child: Scaffold(
         backgroundColor: const Color(0xffF1F1F1),
-        elevation: 1,
-        centerTitle: true,
-      ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              children: [
-                PriceRangeInputDialog(
-                  key: Key(
-                    (minPriceFromDialog! * maxPriceFromDialog!).toString(),
+        appBar: AppBar(
+          title: const Text(
+            'Filters',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          iconTheme: const IconThemeData(color: Colors.black),
+          backgroundColor: const Color(0xffF1F1F1),
+          elevation: 1,
+          centerTitle: true,
+        ),
+        body: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  PriceRangeInputDialog(
+                    key: Key(
+                      (minPriceFromDialog! * maxPriceFromDialog!).toString(),
+                    ),
+                    initialMin: minPriceFromDialog!,
+                    initialMax: maxPriceFromDialog!,
+                    onChanged: (min, max) {
+                      setState(() {
+                        minPriceFromDialog = min;
+                        maxPriceFromDialog = max;
+                      });
+                    },
                   ),
-                  initialMin: minPriceFromDialog!,
-                  initialMax: maxPriceFromDialog!,
-                  onChanged: (min, max) {
-                    setState(() {
-                      minPriceFromDialog = min;
-                      maxPriceFromDialog = max;
-                    });
-                  },
-                ),
-                const SizedBox(height: 20),
-                renderMainCategories(),
-                Visibility(
-                  child: const SizedBox(height: 20),
-                  visible: selectedMainCategory != null,
-                ),
-                renderSubCategories(),
-                const SizedBox(height: 20),
-                renderConditionsCheckBoxWrapper(),
-                const SizedBox(height: 20),
-                renderBrandDropdown(),
-                const SizedBox(height: 20),
-                renderCityDropdown(),
-                const SizedBox(height: 20),
-                renderFilterButtons(),
-              ],
+                  const SizedBox(height: 20),
+                  renderMainCategories(),
+                  Visibility(
+                    child: const SizedBox(height: 20),
+                    visible: selectedMainCategory != null,
+                  ),
+                  renderSubCategories(),
+                  const SizedBox(height: 20),
+                  renderConditionsCheckBoxWrapper(),
+                  const SizedBox(height: 20),
+                  renderBrandDropdown(),
+                  const SizedBox(height: 20),
+                  renderCityDropdown(),
+                  const SizedBox(height: 20),
+                  renderFilterButtons(),
+                ],
+              ),
             ),
           ),
         ),
@@ -130,27 +136,31 @@ class _FilterDataPageState extends State<FilterDataPage> {
           ),
           CurvedButton(
             onPressed: () {
-              var filterValues = FilterCriteriaModel(
-                brand: selectedBrand,
-                mainCategory: selectedMainCategory,
-                subCategory: selectedSubCategory,
-                city: selectedCity,
-                maxPrice: maxPriceFromDialog,
-                minPrice: minPriceFromDialog,
-                sortByCreatedByAscending: sortByCreatedByAscending,
-                sortByPriceAscending: sortByPriceAscending,
-                keyword: null,
-              );
-              Navigator.pop(
-                context,
-                filterValues.areAllValuesNull() ? null : filterValues,
-              );
+              handleApplyingFilter();
             },
             text: "Apply Filter",
             halfWidth: true,
           ),
         ],
       ),
+    );
+  }
+
+  void handleApplyingFilter() {
+    var filterValues = FilterCriteriaModel(
+      brand: selectedBrand,
+      mainCategory: selectedMainCategory,
+      subCategory: selectedSubCategory,
+      city: selectedCity,
+      maxPrice: maxPriceFromDialog,
+      minPrice: minPriceFromDialog,
+      sortByCreatedByAscending: sortByCreatedByAscending,
+      sortByPriceAscending: sortByPriceAscending,
+      keyword: null,
+    );
+    Navigator.pop(
+      context,
+      filterValues.areAllValuesNull() ? null : filterValues,
     );
   }
 
