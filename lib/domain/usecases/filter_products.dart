@@ -67,7 +67,7 @@ class FilterProducts {
       FilterCriteriaModel filterCriteria, List<Product> products) {
     return filterCriteria.city == null
         ? products
-        : products.where((p) => p.city != filterCriteria.city).toList();
+        : products.where((p) => p.city == filterCriteria.city).toList();
   }
 
   bool _matchByBrand(Product p, FilterCriteriaModel filterCriteria) {
