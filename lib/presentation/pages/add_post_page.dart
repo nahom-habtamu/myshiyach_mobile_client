@@ -145,14 +145,11 @@ class _AddPostPageState extends State<AddPostPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(
-                  height: 25,
+                  height: 20,
                 ),
                 renderAppropriateInput(
                   categories,
                   cities,
-                ),
-                const SizedBox(
-                  height: 25,
                 ),
               ],
             ),

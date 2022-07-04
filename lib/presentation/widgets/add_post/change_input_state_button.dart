@@ -19,7 +19,7 @@ class ChangeInputButton extends StatelessWidget {
       onTap: () => onTap(),
       child: Container(
         height: 56,
-        width: MediaQuery.of(context).size.width * 0.42,
+        width: MediaQuery.of(context).size.width * 0.40,
         decoration: BoxDecoration(
           color: backgroundColor,
           border: Border.all(

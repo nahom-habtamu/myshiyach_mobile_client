@@ -65,7 +65,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             },
           ),
           const SizedBox(
-            height: 25,
+            height: 20,
           ),
           AddPostDropDownInput(
             key: Key(subCategory),
@@ -83,7 +83,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             },
           ),
           const SizedBox(
-            height: 25,
+            height: 20,
           ),
           AddPostInput(
             initialValue: title,
@@ -97,7 +97,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             },
           ),
           const SizedBox(
-            height: 25,
+            height: 20,
           ),
           AddPostInput(
             initialValue: description,
@@ -111,7 +111,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             },
           ),
           const SizedBox(
-            height: 25,
+            height: 20,
           ),
           AddPostInput(
             initialValue: price == 0.0 ? "" : price.toString(),
@@ -136,7 +136,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             isPrice: true,
           ),
           const SizedBox(
-            height: 25,
+            height: 20,
           ),
           PostButton(
             isPost: false,

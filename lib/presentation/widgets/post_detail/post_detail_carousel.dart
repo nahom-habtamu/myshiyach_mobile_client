@@ -62,18 +62,21 @@ class _PostDetailCarouselState extends State<PostDetailCarousel> {
   renderOneImageFallBack() {
     return Visibility(
       visible: !showCarousel,
-      child: GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(
-            context,
-            PostImagesScreen.routeName,
-            arguments: widget.items,
-          );
-        },
-        child: Image.network(
-          widget.items.first,
-          fit: BoxFit.cover,
-          width: MediaQuery.of(context).size.width,
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.3,
+        width: MediaQuery.of(context).size.width,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              PostImagesScreen.routeName,
+              arguments: widget.items,
+            );
+          },
+          child: Image.network(
+            widget.items.first,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );

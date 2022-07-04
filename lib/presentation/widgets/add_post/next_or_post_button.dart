@@ -12,7 +12,7 @@ class PostButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeInputButton(
       text: isPost ? "Post" : "Next",
-      backgroundColor: const Color(0xFF010203),
+      backgroundColor: const Color(0xff11435E),
       textColor: Colors.white,
       onTap: onTap,
     );

@@ -52,76 +52,77 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return product != null
-        ? SafeArea(
-            child: Scaffold(
-              appBar: renderAppBar(),
-              body: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    PostDetailCarousel(
-                      items: [...product!.productImages],
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 25.0,
-                            right: 25.0,
-                            top: 15,
-                          ),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                renderTitle(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                renderTimeContent(),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                renderPrice(),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                renderDescription(),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                renderCity(),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                renderOtherData(),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                renderPostDetailButtonSection(),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+    return SafeArea(
+      child: Visibility(
+        visible: product != null,
+        child: Scaffold(
+          appBar: renderAppBar(),
+          body: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                topRight: Radius.circular(25),
               ),
             ),
-          )
-        : Container();
+            child: Column(
+              children: [
+                PostDetailCarousel(
+                  items: [...product!.productImages],
+                ),
+                Expanded(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 25.0,
+                        right: 25.0,
+                        top: 15,
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            renderTitle(),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            renderTimeContent(),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            renderPrice(),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            renderDescription(),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            renderCity(),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            renderOtherData(),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            renderPostDetailButtonSection(),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   SizedBox renderCity() {
