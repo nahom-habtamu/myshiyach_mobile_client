@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/utils/date_time_formatter.dart';
+import '../../../domain/enitites/product.dart';
 import '../../../domain/usecases/get_all_products.dart';
 import '../../../domain/usecases/get_categories.dart';
 import '../../../domain/usecases/get_favorite_products.dart';
@@ -13,6 +15,12 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
       this.getAllProducts, this.getAllCategories, this.getFavoriteProducts)
       : super(Empty());
 
+  int _compareCreatedAt(Product a, Product b) {
+    var firstDate = DateFormatterUtil.parseDate(a.createdAt);
+    var secondDate = DateFormatterUtil.parseDate(b.createdAt);
+    return secondDate.compareTo(firstDate);
+  }
+
   void call() async {
     try {
       emit(Empty());
@@ -21,6 +29,7 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
       var favoriteProducts = await getFavoriteProducts.call();
       var categories = await getAllCategories.call();
       if (products.isNotEmpty && categories.isNotEmpty) {
+        sortProductByCreatedTime(products);
         emit(Loaded(products, categories, favoriteProducts));
       } else {
         emit(Empty());
@@ -30,4 +39,7 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
       rethrow;
     }
   }
+
+  void sortProductByCreatedTime(List<Product> products) =>
+      products.sort((a, b) => _compareCreatedAt(a, b));
 }
