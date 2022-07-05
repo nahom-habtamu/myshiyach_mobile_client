@@ -98,13 +98,11 @@ Future<void> init() async {
   sl.registerFactory(() => RegisterUserCubit(sl(), sl()));
   sl.registerFactory(() => DisplayAllProductsCubit(sl(), sl(), sl()));
   sl.registerFactory(() => GetAllProductsCubit(sl()));
-  sl.registerFactory(
-    () => GetFavoriteProductsCubit(
-      getFavoriteProducts: sl(),
-      getProductById: sl(),
-      setFavoriteProducts: sl(),
-    ),
-  );
+  sl.registerFactory(() => GetFavoriteProductsCubit(
+        getFavoriteProducts: sl(),
+        getProductById: sl(),
+        setFavoriteProducts: sl(),
+      ),);
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => GetMyProductsCubit(sl()));
   sl.registerFactory(() => AuthPhoneNumberCubit(sl()));

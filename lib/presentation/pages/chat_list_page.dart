@@ -21,7 +21,6 @@ class _ChatListPageState extends State<ChatListPage> {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       var authState = context.read<AuthCubit>().state;
-
       if (authState is AuthSuccessfull) {
         context.read<GetAllConversationsCubit>().call(
               authState.currentUser.id,
@@ -85,9 +84,12 @@ class _ChatListPageState extends State<ChatListPage> {
             child: CircularProgressIndicator(),
           );
         }
-        return ListView(
-          children:
-              snapshot.data!.map((e) => buildConversationItem(e)).toList(),
+        return ListView.builder(
+          itemBuilder: (context, index) {
+            var conversation = snapshot.data![index];
+            return buildConversationItem(conversation);
+          },
+          itemCount: snapshot.data!.length,
         );
       },
     );

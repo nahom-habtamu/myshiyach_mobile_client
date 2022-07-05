@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/enitites/conversation.dart';
+import '../../../domain/enitites/user.dart';
 import '../../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../../pages/chat_detail_page.dart';
 import '../../bloc/auth/auth_cubit.dart';
@@ -22,6 +23,8 @@ class ConversationItem extends StatefulWidget {
 }
 
 class _ConversationItemState extends State<ConversationItem> {
+  User? user;
+
   @override
   void initState() {
     super.initState();
@@ -30,13 +33,17 @@ class _ConversationItemState extends State<ConversationItem> {
     });
   }
 
-  void getStrangerInformation() {
+  void getStrangerInformation() async {
     var authState = context.read<AuthCubit>().state;
     if (authState is AuthSuccessfull) {
       var strangerId = getStrangerId(authState);
       var token = authState.loginResult.token;
       if (context.read<GetUserByIdCubit>().state is! GetUserByIdLoaded) {
-        context.read<GetUserByIdCubit>().call(strangerId, token);
+        var stranger =
+            await context.read<GetUserByIdCubit>().call(strangerId, token);
+        setState(() {
+          user = stranger;
+        });
       }
     }
   }
@@ -51,32 +58,16 @@ class _ConversationItemState extends State<ConversationItem> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetUserByIdCubit, GetUserByIdState>(
-      builder: (context, state) {
-        if (state is GetUserByIdLoaded) {
-          return renderMainContent(state);
-        } else if (state is GetUserByIdLoading) {
-          return renderLoadingWidget();
-        } else if (state is GetUserByIdError) {
-          return Center(
-            child: Text(state.message),
-          );
-        } else {
-          return const Center(
-            child: Text("EMPTY"),
-          );
-        }
-      },
-    );
+    return user == null ? renderLoadingWidget() : renderMainContent();
   }
 
-  GestureDetector renderMainContent(GetUserByIdLoaded state) {
+  renderMainContent() {
     return GestureDetector(
       onTap: () {
         context.read<GetConversationByIdCubit>().call(widget.conversation.id);
         var chatDetailPageArguments = ChatDetailPageArguments(
           conversationId: widget.conversation.id,
-          strangerUser: state.user,
+          strangerUser: user!,
         );
         Navigator.of(context).pushNamed(
           ChatDetailPage.routeName,
@@ -99,12 +90,12 @@ class _ConversationItemState extends State<ConversationItem> {
                 child: CircleAvatar(
                   backgroundColor: Colors.teal,
                   radius: 45,
-                  child: Text(state.user.fullName[0].toUpperCase()),
+                  child: Text(user!.fullName[0].toUpperCase()),
                 ),
               ),
               Expanded(
                 child: ListTile(
-                  title: Text(state.user.fullName),
+                  title: Text(user!.fullName),
                   subtitle: SizedBox(
                     height: 50,
                     width: 200,

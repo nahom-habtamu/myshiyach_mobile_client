@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/presentation/bloc/auth/auth_cubit.dart';
-import 'package:mnale_client/presentation/bloc/auth/auth_state.dart';
 
 import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/product.dart';
+import '../bloc/auth/auth_cubit.dart';
+import '../bloc/auth/auth_state.dart';
 import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import '../bloc/get_favorite_products/get_favorite_products_state.dart';
 import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
@@ -26,12 +26,12 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      fetchFavoriteProduct();
+      fetchFavoriteProducts();
       setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
     });
   }
 
-  void fetchFavoriteProduct() {
+  void fetchFavoriteProducts() {
     var authState = context.read<AuthCubit>().state;
     if (authState is AuthSuccessfull) {
       context.read<GetFavoriteProductsCubit>().execute(
@@ -117,7 +117,7 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
                   updatedProducts.removeWhere(
                       (element) => element.id == products[index].id);
                   updateDataInLocalSource(updatedProducts);
-                  fetchFavoriteProduct();
+                  fetchFavoriteProducts();
                 },
               );
             },
