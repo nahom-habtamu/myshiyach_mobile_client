@@ -47,6 +47,7 @@ import '../../domain/usecases/get_conversation_by_id.dart';
 import '../../domain/usecases/get_conversation_by_members.dart';
 import '../../domain/usecases/get_favorite_products.dart';
 import '../../domain/usecases/get_my_products.dart';
+import '../../domain/usecases/get_product_by_id.dart';
 import '../../domain/usecases/get_stored_user_credentials.dart';
 import '../../domain/usecases/get_user_by_id.dart';
 import '../../domain/usecases/login.dart';
@@ -97,7 +98,13 @@ Future<void> init() async {
   sl.registerFactory(() => RegisterUserCubit(sl(), sl()));
   sl.registerFactory(() => DisplayAllProductsCubit(sl(), sl(), sl()));
   sl.registerFactory(() => GetAllProductsCubit(sl()));
-  sl.registerFactory(() => GetFavoriteProductsCubit(sl()));
+  sl.registerFactory(
+    () => GetFavoriteProductsCubit(
+      getFavoriteProducts: sl(),
+      getProductById: sl(),
+      setFavoriteProducts: sl(),
+    ),
+  );
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => GetMyProductsCubit(sl()));
   sl.registerFactory(() => AuthPhoneNumberCubit(sl()));
@@ -160,6 +167,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetMyProducts(sl()));
   sl.registerLazySingleton(() => ChangePassword(sl()));
   sl.registerLazySingleton(() => FilterProducts());
+  sl.registerLazySingleton(() => GetProductById(sl()));
 
   // repositories
 

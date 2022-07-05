@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/presentation/bloc/auth/auth_cubit.dart';
+import 'package:mnale_client/presentation/bloc/auth/auth_state.dart';
 
 import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/product.dart';
@@ -24,9 +26,18 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context.read<GetFavoriteProductsCubit>().execute();
+      fetchFavoriteProduct();
       setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
     });
+  }
+
+  void fetchFavoriteProduct() {
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      context.read<GetFavoriteProductsCubit>().execute(
+            authState.loginResult.token,
+          );
+    }
   }
 
   @override
@@ -106,7 +117,7 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
                   updatedProducts.removeWhere(
                       (element) => element.id == products[index].id);
                   updateDataInLocalSource(updatedProducts);
-                  context.read<GetFavoriteProductsCubit>().execute();
+                  fetchFavoriteProduct();
                 },
               );
             },
