@@ -180,7 +180,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           width: 10,
         ),
         Text(
-          DateFormatterUtil.call(
+          DateFormatterUtil.formatProductCreatedAtTime(
             product!.createdAt,
           ),
           style: const TextStyle(

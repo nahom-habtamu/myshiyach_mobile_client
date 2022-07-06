@@ -16,8 +16,8 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
       : super(Empty());
 
   int _compareCreatedAt(Product a, Product b) {
-    var firstDate = DateFormatterUtil.parseDate(a.createdAt);
-    var secondDate = DateFormatterUtil.parseDate(b.createdAt);
+    var firstDate = DateFormatterUtil.parseProductCreatedDate(a.createdAt);
+    var secondDate = DateFormatterUtil.parseProductCreatedDate(b.createdAt);
     return secondDate.compareTo(firstDate);
   }
 

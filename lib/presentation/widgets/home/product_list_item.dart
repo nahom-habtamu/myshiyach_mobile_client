@@ -146,7 +146,7 @@ class _ProductListItemState extends State<ProductListItem> {
         ),
         Expanded(
           child: Text(
-            DateFormatterUtil.call(product.createdAt),
+            DateFormatterUtil.formatProductCreatedAtTime(product.createdAt),
             style: TextStyle(
               color: Colors.grey,
               fontSize: heightOfMobile * 1.8,

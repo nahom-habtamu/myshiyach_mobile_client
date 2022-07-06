@@ -55,8 +55,8 @@ class _ChatListPageState extends State<ChatListPage> {
           ),
           padding: const EdgeInsets.only(
             top: 25,
-            left: 25,
-            right: 25,
+            left: 10,
+            right: 10,
           ),
           width: MediaQuery.of(context).size.width,
           child:

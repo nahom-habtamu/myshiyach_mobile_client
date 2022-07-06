@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/utils/date_time_formatter.dart';
 import '../../../domain/enitites/conversation.dart';
 import '../../../domain/enitites/user.dart';
-import '../../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
-import '../../pages/chat_detail_page.dart';
 import '../../bloc/auth/auth_cubit.dart';
 import '../../bloc/auth/auth_state.dart';
+import '../../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../../bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../bloc/get_user_by_id/get_user_by_id_state.dart';
+import '../../pages/chat_detail_page.dart';
 import '../../screen_arguments/chat_detail_page_arguments.dart';
 
 class ConversationItem extends StatefulWidget {
@@ -82,16 +83,14 @@ class _ConversationItemState extends State<ConversationItem> {
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-          height: 100,
+          height: 60,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: CircleAvatar(
-                  backgroundColor: Colors.teal,
-                  radius: 45,
-                  child: Text(user!.fullName[0].toUpperCase()),
-                ),
+              CircleAvatar(
+                backgroundColor: Colors.teal,
+                radius: 35,
+                child: Text(user!.fullName[0].toUpperCase()),
               ),
               Expanded(
                 child: ListTile(
@@ -101,9 +100,18 @@ class _ConversationItemState extends State<ConversationItem> {
                     width: 200,
                     child: Text(
                       widget.conversation.messages.last.text,
-                      overflow: TextOverflow.fade,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  DateFormatterUtil.extractTimeFromDate(
+                    widget.conversation.messages.last.createdDateTime,
+                  ),
+                  style: const TextStyle(fontSize: 11),
                 ),
               )
             ],

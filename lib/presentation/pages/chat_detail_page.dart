@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/utils/date_time_formatter.dart';
 import '../../data/models/conversation/message_model.dart';
 import '../../domain/enitites/conversation.dart';
 import '../../domain/enitites/message.dart';
@@ -10,8 +11,10 @@ import '../bloc/add_message_to_conversation/add_message_to_conversation_cubit.da
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
-import '../constants/login_page_constants.dart';
 import '../screen_arguments/chat_detail_page_arguments.dart';
+import '../widgets/chat_detail/message_bubble.dart';
+import '../widgets/chat_detail/message_sending_tab.dart';
+import '../widgets/chat_detail/stanger_user_info.dart';
 
 class ChatDetailPage extends StatefulWidget {
   static String routeName = '/chatDetailPage';
@@ -26,7 +29,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   String messageContent = "";
   ChatDetailPageArguments? args;
   final ScrollController _scrollController = ScrollController();
-  final _controller = TextEditingController();
 
   @override
   void initState() {
@@ -49,7 +51,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Chat List Page',
+            'Chat Detail Page',
             style: TextStyle(
               color: Colors.black,
             ),
@@ -57,6 +59,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           backgroundColor: const Color(0xffF1F1F1),
           elevation: 0,
           centerTitle: true,
+          iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: BlocBuilder<GetConversationByIdCubit, Stream<Conversation>>(
           builder: (context, conversationStream) {
@@ -103,69 +106,88 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             height: 1,
             color: Colors.black12,
           ),
-          renderMessageBubbles(conversation),
-          renderMessageSender(conversation)
+          renderMessageBubblesAlongWithCreatedDate(conversation),
+          renderMessageSendingTab(conversation)
         ],
       ),
     );
   }
 
-  Padding renderMessageSender(Conversation conversation) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: SizedBox(
-        height: 50,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: TextFormField(
-                style: loginInputTextStyle.copyWith(fontSize: 14),
-                controller: _controller,
-                onChanged: (value) => messageContent = value,
-                decoration: const InputDecoration(
-                  labelText: "Enter Message",
-                  border: loginInputEnabledBorder,
-                  enabledBorder: loginInputEnabledBorder,
-                  focusedBorder: loginInputDisabledBorder,
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 18, vertical: 5),
-                ),
-                minLines: 1,
-                maxLines: 5,
-                keyboardType: TextInputType.multiline,
-              ),
+  bool compareMessageSentDate(String uniqueDate, String messageCreatedDate) {
+    return DateFormatterUtil.compareDates(uniqueDate, messageCreatedDate);
+  }
+
+  renderMessageBubblesAlongWithCreatedDate(Conversation conversation) {
+    var uniqueDates = buildUniqueDateFromMessages(conversation);
+    var generatedWidgets = List<ListTile>.generate(uniqueDates.length, (index) {
+      var messagesWithCurrentDate = conversation.messages
+          .where(
+            (m) => compareMessageSentDate(uniqueDates[index],
+                DateFormatterUtil.extractDateFromDateTime(m.createdDateTime)),
+          )
+          .toList();
+      return ListTile(
+        title: Container(
+          height: 20,
+          padding: const EdgeInsets.all(4),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
             ),
-            IconButton(
-              onPressed: () {
-                _controller.clear();
-                if (messageContent.isNotEmpty) handleAddingMessage();
-              },
-              icon: const Icon(
-                Icons.send,
-                size: 25,
-              ),
-            )
-          ],
+          ),
+          child: Text(
+            DateFormatterUtil.formatUniqueMessageCreatedDate(
+                uniqueDates[index]),
+            style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ),
+        subtitle: renderMessageBubbles(messagesWithCurrentDate),
+      );
+    });
+
+    return Expanded(
+      child: ListView.builder(
+        shrinkWrap: true,
+        controller: _scrollController,
+        itemBuilder: ((context, index) => generatedWidgets[index]),
+        itemCount: generatedWidgets.length,
       ),
     );
   }
 
-  void handleAddingMessage() async {
-    var messageToAdd = MessageModel(
-      text: messageContent,
-      senderId: currentUser!.id,
-      recieverId: args!.strangerUser.id,
-      createdDateTime: DateTime.now().toIso8601String(),
+  List<String> buildUniqueDateFromMessages(Conversation conversation) {
+    return conversation.messages
+        .map(
+            (e) => DateFormatterUtil.extractDateFromDateTime(e.createdDateTime))
+        .toSet()
+        .toList();
+  }
+
+  renderMessageSendingTab(Conversation conversation) {
+    return MessageSendingTab(
+      onMessageChanged: (value) => setState(() => messageContent = value),
+      onMessageSend: () => handleAddingMessage(),
     );
-    context
-        .read<AddMessageToConversationCubit>()
-        .call(args!.conversationId, messageToAdd);
-    await handleScrollingToBottom();
+  }
+
+  void handleAddingMessage() async {
+    if (messageContent.isNotEmpty) {
+      var messageToAdd = MessageModel(
+        text: messageContent,
+        senderId: currentUser!.id,
+        recieverId: args!.strangerUser.id,
+        createdDateTime: DateTime.now().toIso8601String(),
+      );
+      context
+          .read<AddMessageToConversationCubit>()
+          .call(args!.conversationId, messageToAdd);
+      await handleScrollingToBottom();
+    }
   }
 
   Future<void> handleScrollingToBottom() async {
@@ -179,120 +201,23 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     });
   }
 
-  Row renderChatDetailStrangerInfo() {
-    var splittedStrangerName = args!.strangerUser.fullName.split(" ");
-    var avatarContent = splittedStrangerName.first[0].toUpperCase() +
-        splittedStrangerName.last[0].toUpperCase();
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 15.0,
-            horizontal: 15,
-          ),
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.deepOrangeAccent,
-              borderRadius: BorderRadius.all(
-                Radius.circular(15),
-              ),
-            ),
-            width: 60,
-            height: 60,
-            child: Center(
-              child: Text(
-                avatarContent,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                args!.strangerUser.fullName,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                args!.strangerUser.email ?? "no email",
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 15,
-                ),
-              ),
-            ],
-          ),
-        )
-      ],
-    );
+  renderChatDetailStrangerInfo() {
+    return StrangerUserInfo(strangerUser: args!.strangerUser);
   }
 
-  renderMessageBubbles(Conversation conversation) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: ListView.builder(
-          shrinkWrap: true,
-          controller: _scrollController,
-          itemBuilder: (context, index) => renderMessageBubble(
-            conversation.messages[index],
-            args!.strangerUser.id,
-            conversation.messages[index].senderId == args!.strangerUser.id,
-          ),
-          itemCount: conversation.messages.length,
+  renderMessageBubbles(List<Message> messages) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (context, index) => MessageBubble(
+          message: messages[index],
+          strangerId: args!.strangerUser.id,
+          isSentByCurrentUser:
+              messages[index].senderId == args!.strangerUser.id,
         ),
-      ),
-    );
-  }
-
-  renderMessageBubble(Message message, String strangerId, bool isSent) {
-    return Align(
-      alignment:
-          isSent ? FractionalOffset.centerLeft : FractionalOffset.centerRight,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Container(
-          width: 200,
-          decoration: BoxDecoration(
-            color: message.senderId == strangerId
-                ? const Color(0xff11435E)
-                : Colors.black12,
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(25),
-              topRight: const Radius.circular(25),
-              bottomLeft: message.senderId == strangerId
-                  ? const Radius.circular(25)
-                  : Radius.zero,
-              bottomRight: message.senderId != strangerId
-                  ? const Radius.circular(25)
-                  : Radius.zero,
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
-          child: Center(
-            child: Text(
-              message.text,
-              style: TextStyle(
-                color: message.senderId == strangerId
-                    ? Colors.white
-                    : Colors.black,
-                fontSize: 14,
-                letterSpacing: -0.3,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
+        itemCount: messages.length,
       ),
     );
   }
