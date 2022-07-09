@@ -113,11 +113,7 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
               return PostCardListItem(
                 product: products[index],
                 onDissmissed: () {
-                  var updatedProducts = [...products];
-                  updatedProducts.removeWhere(
-                      (element) => element.id == products[index].id);
-                  updateDataInLocalSource(updatedProducts);
-                  fetchFavoriteProducts();
+                  handleProductDismissal(products, index);
                 },
               );
             },
@@ -126,6 +122,13 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
         ),
       ],
     );
+  }
+
+  void handleProductDismissal(List<Product> products, int index) {
+    var updatedProducts = [...products];
+    updatedProducts.removeWhere((element) => element.id == products[index].id);
+    updateDataInLocalSource(updatedProducts);
+    fetchFavoriteProducts();
   }
 
   void updateDataInLocalSource(List<Product> products) {

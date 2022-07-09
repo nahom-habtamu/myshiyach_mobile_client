@@ -183,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
             style: const TextStyle(color: Colors.red),
           );
         } else {
-          return const Text('');
+          return Container();
         }
       },
     );
