@@ -51,6 +51,21 @@ class FilterCriteriaModel {
     );
   }
 
+  static FilterCriteriaModel addMainCategory(
+      FilterCriteriaModel? original, MainCategory? mainCategory) {
+    return FilterCriteriaModel(
+      maxPrice: original?.maxPrice ?? 0.0,
+      minPrice: original?.minPrice ?? 0.0,
+      mainCategory: mainCategory,
+      subCategory: original?.subCategory,
+      brand: original?.brand,
+      city: original?.city,
+      sortByPriceAscending: original?.sortByPriceAscending,
+      sortByCreatedByAscending: original?.sortByCreatedByAscending,
+      keyword: original?.keyword,
+    );
+  }
+
   bool areAllValuesNull() {
     return (maxPrice == null || maxPrice == 0.0) &&
         (minPrice == null || minPrice == 0.0) &&

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/models/filter/filter_criteria_model.dart';
+import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
+import '../../data/models/filter/filter_criteria_model.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
 import '../bloc/filter/filter_products_cubit.dart';
 import '../widgets/common/empty_state_content.dart';
-import '../widgets/home/product_list.dart';
 import '../widgets/home/search_bar.dart';
+import '../widgets/home/product_list.dart';
+import '../widgets/home/category_item.dart';
 
 class HomePage extends StatefulWidget {
   static String routeName = "/homePage";
@@ -21,6 +23,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   FilterCriteriaModel? filterValues;
   String searchKeyword = "";
+  MainCategory? selectedMainCategory;
 
   @override
   void initState() {
@@ -50,7 +53,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               renderSearchAndFilterBar(),
-              renderProductBuilder()
+              renderCategories(),
+              renderProductBuilder(),
             ],
           ),
         ),
@@ -58,8 +62,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>
-      renderSearchAndFilterBar() {
+  renderSearchAndFilterBar() {
     return BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
       builder: (context, state) {
         if (state is Loaded) {
@@ -88,8 +91,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>
-      renderProductBuilder() {
+  renderProductBuilder() {
     return BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
       builder: (context, state) {
         if (state is Loaded) {
@@ -147,6 +149,50 @@ class _HomePageState extends State<HomePage> {
   buildProductList(List<Product> products, List<Product> favorites) {
     return Expanded(
       child: ProductList(products: products, favorites: favorites),
+    );
+  }
+
+  renderCategories() {
+    return BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
+      builder: (context, state) {
+        if (state is Loaded) {
+          return buildCategorySlider(state.categories);
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+
+  SingleChildScrollView buildCategorySlider(List<MainCategory> categories) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.only(bottom: 15),
+        child: Row(
+          children: categories
+              .map(
+                (e) => CategoryItem(
+                  category: e.title,
+                  isActive: selectedMainCategory?.id == e.id,
+                  onTap: () {
+                    setState(() {
+                      selectedMainCategory?.id == e.id
+                          ? selectedMainCategory = null
+                          : selectedMainCategory = e;
+                      var alteredFilter = FilterCriteriaModel.addMainCategory(
+                        filterValues,
+                        selectedMainCategory,
+                      );
+                      filterValues = alteredFilter;
+                    });
+                  },
+                ),
+              )
+              .toList(),
+        ),
+      ),
     );
   }
 }
