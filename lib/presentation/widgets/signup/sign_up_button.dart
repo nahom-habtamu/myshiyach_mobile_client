@@ -7,7 +7,7 @@ import '../../screen_arguments/sign_up_button_arguments.dart';
 import '../../bloc/register_user/register_user_cubit.dart';
 import '../../bloc/register_user/register_user_state.dart';
 import '../../pages/login_page.dart';
-import '../common/curved_button.dart';
+import '../common/action_button.dart';
 
 class SignUpButton extends StatelessWidget {
   final SignUpButtonArguments args;
@@ -28,7 +28,7 @@ class SignUpButton extends StatelessWidget {
         if (state is RegisterUserLoading) {
           return const Center(child: CircularProgressIndicator());
         } else {
-          return CurvedButton(
+          return ActionButton(
             onPressed: () {
               var credential = PhoneAuthProvider.credential(
                 verificationId: args.verificationId,

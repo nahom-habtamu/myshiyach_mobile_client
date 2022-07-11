@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/authenticate_phone_number/authenticate_phone_number.cubit.dart';
 import '../bloc/authenticate_phone_number/authenticate_phone_number_state.dart';
 import '../widgets/auth_input.dart';
-import '../widgets/common/curved_button.dart';
+import '../widgets/common/action_button.dart';
 import '../widgets/common/verify_phone_number_button.dart';
 import 'change_password_page.dart';
 
@@ -121,7 +121,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         });
       }
 
-      return CurvedButton(
+      return ActionButton(
         onPressed: () {
           var credential = PhoneAuthProvider.credential(
             verificationId: verificationId,

@@ -14,7 +14,7 @@ import '../bloc/update_product/update_product_state.dart';
 import '../widgets/add_post/add_post_dropdown_dart.dart';
 import '../widgets/add_post/add_post_input.dart';
 import '../widgets/add_post/input_image_picker.dart';
-import '../widgets/common/curved_button.dart';
+import '../widgets/common/action_button.dart';
 import '../widgets/edit_post/post_images.dart';
 import 'post_detail_page.dart';
 
@@ -349,7 +349,7 @@ class _EditPostPageState extends State<EditPostPage> {
         });
       }
 
-      return CurvedButton(
+      return ActionButton(
         onPressed: () {
           if (formKey.currentState!.validate()) {
             handleUpdatingProduct();

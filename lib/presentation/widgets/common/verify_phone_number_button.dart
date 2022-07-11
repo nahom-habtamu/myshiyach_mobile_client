@@ -7,7 +7,7 @@ import '../../bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import '../../bloc/verify_phone_number/verify_phone_number_state.dart';
 import '../../pages/otp_verification_page.dart';
 import '../../screen_arguments/otp_verification_page_argument.dart';
-import 'curved_button.dart';
+import 'action_button.dart';
 
 class VerifyPhoneNumberButton extends StatefulWidget {
   final String phoneNumber;
@@ -71,7 +71,7 @@ class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
               },
             );
           }
-          return CurvedButton(
+          return ActionButton(
             onPressed: () {
               if (widget.onVerifyClicked()) {
                 context

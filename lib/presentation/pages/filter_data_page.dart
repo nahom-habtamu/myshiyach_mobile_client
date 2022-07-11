@@ -4,7 +4,7 @@ import '../../data/models/filter/filter_criteria_model.dart';
 import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/sub_category.dart';
 import '../screen_arguments/filter_page_argument.dart';
-import '../widgets/common/curved_button.dart';
+import '../widgets/common/action_button.dart';
 import '../widgets/filter/filter_drop_down_input.dart';
 import '../widgets/filter/price_range_input_dialog.dart';
 import '../widgets/filter/sort_value_picker.dart';
@@ -126,7 +126,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          CurvedButton(
+          ActionButton(
             onPressed: () {
               handleClearingFilter();
             },
@@ -134,7 +134,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
             halfWidth: true,
             backgroundColor: Colors.transparent,
           ),
-          CurvedButton(
+          ActionButton(
             onPressed: () {
               handleApplyingFilter();
             },

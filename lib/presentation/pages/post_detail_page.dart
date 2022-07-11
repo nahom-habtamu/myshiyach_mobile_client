@@ -13,9 +13,8 @@ import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_state.dart';
-import '../widgets/common/curved_button.dart';
+import '../widgets/common/action_button.dart';
 import '../widgets/post_detail/post_detail_carousel.dart';
-import '../widgets/post_detail/post_detail_information_item.dart';
 import 'chat_detail_page.dart';
 import 'edit_post_page.dart';
 import 'master_page.dart';
@@ -58,6 +57,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         child: Scaffold(
           appBar: renderAppBar(),
           body: Container(
+            height: MediaQuery.of(context).size.height,
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -71,46 +71,55 @@ class _PostDetailPageState extends State<PostDetailPage> {
                   items: [...product!.productImages],
                 ),
                 Expanded(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 25.0,
-                        right: 25.0,
-                        top: 15,
-                      ),
-                      child: SingleChildScrollView(
+                  child: SingleChildScrollView(
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 15, left: 10, right: 10, bottom: 5),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            renderTitle(),
-                            const SizedBox(
-                              height: 20,
+                            IntrinsicHeight(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: ListTile(
+                                      title: Text(product!.title),
+                                      subtitle: const Text('Title'),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: ListTile(
+                                      title: Text(product!.city),
+                                      subtitle: const Text('City'),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                            renderTimeContent(),
-                            const SizedBox(
-                              height: 10,
+                            IntrinsicHeight(
+                              child: Row(
+                                children: [...buildOtherDetail()],
+                              ),
                             ),
-                            renderPrice(),
-                            const SizedBox(
-                              height: 10,
+                            IntrinsicHeight(
+                              child: ListTile(
+                                title: renderPrice(),
+                                subtitle: const Text('Price'),
+                              ),
                             ),
-                            renderDescription(),
-                            const SizedBox(
-                              height: 10,
+                            IntrinsicHeight(
+                              child: ListTile(
+                                title: Text(product!.description),
+                                subtitle: const Text('Description'),
+                              ),
                             ),
-                            renderCity(),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            renderOtherData(),
-                            const SizedBox(
-                              height: 10,
+                            IntrinsicHeight(
+                              child: ListTile(
+                                title: renderTimeContent(),
+                              ),
                             ),
                             renderPostDetailButtonSection(),
-                            const SizedBox(
-                              height: 10,
-                            ),
                           ],
                         ),
                       ),
@@ -125,45 +134,17 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  SizedBox renderCity() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: PostDetailInformationItem(
-        informationKey: "City",
-        informationValue: product!.city,
-      ),
-    );
-  }
-
-  SizedBox renderDescription() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: PostDetailInformationItem(
-        informationKey: "Description",
-        informationValue: product!.description,
-      ),
-    );
-  }
-
-  Container renderPrice() {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: const Color(0xFFDBD7D7),
-        ),
-      ),
-      child: Text(
-        '\$' +
-            PriceFormatterUtil.formatToPrice(
-              product!.price,
-            ),
-        style: const TextStyle(
-          color: Color(0xff34A853),
-          fontSize: 24,
-          height: 1.5,
-          fontWeight: FontWeight.bold,
-        ),
+  Text renderPrice() {
+    return Text(
+      '\$' +
+          PriceFormatterUtil.formatToPrice(
+            product!.price,
+          ),
+      style: const TextStyle(
+        color: Color(0xff34A853),
+        fontSize: 24,
+        height: 1.5,
+        fontWeight: FontWeight.bold,
       ),
     );
   }
@@ -192,12 +173,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  renderOtherData() {
-    return Column(
-      children: [...buildOtherDetail()],
-    );
-  }
-
   buildOtherDetail() {
     if (product!.productDetail == null || product!.productDetail!.isEmpty) {
       return [];
@@ -205,42 +180,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
     return product!.productDetail!.entries
         .toList()
         .map(
-          (e) => Column(
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: PostDetailInformationItem(
-                  informationKey: e.key,
-                  informationValue: e.value,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              )
-            ],
+          (e) => Expanded(
+            child: ListTile(
+              title: Text(e.value),
+              subtitle: Text(e.key),
+            ),
           ),
         )
         .toList();
-  }
-
-  Container renderTitle() {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: const Color(0xFFDBD7D7),
-        ),
-      ),
-      child: Text(
-        product!.title,
-        style: const TextStyle(
-          color: Color(0xff11435E),
-          fontSize: 18,
-          height: 1.5,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
   }
 
   AppBar renderAppBar() {
@@ -304,7 +251,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           );
         });
       }
-      return CurvedButton(
+      return ActionButton(
         onPressed: () {
           var addConversation = AddConversationModel(
             memberOne: currentUser!.id,
@@ -317,6 +264,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
               );
         },
         text: "Send Message",
+        isCurved: false,
       );
     });
   }

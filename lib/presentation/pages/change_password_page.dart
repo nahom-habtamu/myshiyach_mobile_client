@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/change_password/change_password_cubit.dart';
 import '../bloc/change_password/change_password_state.dart';
 import '../widgets/auth_input.dart';
-import '../widgets/common/curved_button.dart';
+import '../widgets/common/action_button.dart';
 import 'login_page.dart';
 
 class ChangePasswordPage extends StatefulWidget {
@@ -127,7 +127,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             );
           });
         }
-        return CurvedButton(
+        return ActionButton(
           onPressed: () {
             if (formKey.currentState!.validate()) {
               context.read<ChangePasswordCubit>().call(phoneNumber, password);

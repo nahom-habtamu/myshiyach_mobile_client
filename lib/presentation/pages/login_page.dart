@@ -6,7 +6,7 @@ import '../../data/models/login/login_request_model.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../widgets/auth_input.dart';
-import '../widgets/common/curved_button.dart';
+import '../widgets/common/action_button.dart';
 import 'forgot_password_page.dart';
 import 'master_page.dart';
 import 'sign_up_page.dart';
@@ -250,8 +250,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  CurvedButton renderLoginButton() {
-    return CurvedButton(
+  ActionButton renderLoginButton() {
+    return ActionButton(
       onPressed: () {
         if (formKey.currentState!.validate()) {
           var requestBody = LoginRequestModel(

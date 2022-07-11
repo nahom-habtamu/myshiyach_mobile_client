@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
-class CurvedButton extends StatelessWidget {
+class ActionButton extends StatelessWidget {
   final Function onPressed;
   final String text;
   final Color? backgroundColor;
   final bool halfWidth;
-  const CurvedButton({
+  final bool isCurved;
+  const ActionButton({
     Key? key,
     required this.onPressed,
     required this.text,
     this.backgroundColor,
     this.halfWidth = false,
+    this.isCurved = true,
   }) : super(key: key);
 
   @override
@@ -27,9 +29,9 @@ class CurvedButton extends StatelessWidget {
           textStyle: const TextStyle(
             color: Colors.white,
           ),
-          shape: const RoundedRectangleBorder(
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
-              Radius.circular(16),
+              Radius.circular(isCurved ? 16 : 0),
             ),
           ),
         ),
