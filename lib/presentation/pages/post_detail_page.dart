@@ -29,7 +29,6 @@ class PostDetailPage extends StatefulWidget {
 
 class _PostDetailPageState extends State<PostDetailPage> {
   Product? product;
-
   User? currentUser;
   String? authToken;
 
@@ -52,85 +51,86 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Visibility(
-        visible: product != null,
-        child: Scaffold(
-          appBar: renderAppBar(),
-          body: Container(
-            height: MediaQuery.of(context).size.height,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-              ),
-            ),
-            child: Column(
-              children: [
-                PostDetailCarousel(
-                  items: [...product!.productImages],
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 15, left: 10, right: 10, bottom: 5),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            IntrinsicHeight(
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: ListTile(
-                                      title: Text(product!.title),
-                                      subtitle: const Text('Title'),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: ListTile(
-                                      title: Text(product!.city),
-                                      subtitle: const Text('City'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            IntrinsicHeight(
-                              child: Row(
-                                children: [...buildOtherDetail()],
-                              ),
-                            ),
-                            IntrinsicHeight(
-                              child: ListTile(
-                                title: renderPrice(),
-                                subtitle: const Text('Price'),
-                              ),
-                            ),
-                            IntrinsicHeight(
-                              child: ListTile(
-                                title: Text(product!.description),
-                                subtitle: const Text('Description'),
-                              ),
-                            ),
-                            IntrinsicHeight(
-                              child: ListTile(
-                                title: renderTimeContent(),
-                              ),
-                            ),
-                            renderPostDetailButtonSection(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
+      child: Scaffold(
+        appBar: renderAppBar(),
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
             ),
           ),
+          child: product == null ? Container() : renderMainContent(),
         ),
       ),
+    );
+  }
+
+  Column renderMainContent() {
+    return Column(
+      children: [
+        PostDetailCarousel(
+          items: [...product!.productImages],
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 15, left: 5, right: 5, bottom: 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ListTile(
+                              title: Text(product!.title),
+                              subtitle: const Text('Title'),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: Text(product!.city),
+                              subtitle: const Text('City'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IntrinsicHeight(
+                      child: Row(
+                        children: [...buildOtherDetail()],
+                      ),
+                    ),
+                    IntrinsicHeight(
+                      child: ListTile(
+                        title: renderPrice(),
+                        subtitle: const Text('Price'),
+                      ),
+                    ),
+                    IntrinsicHeight(
+                      child: ListTile(
+                        title: Text(product!.description),
+                        subtitle: const Text('Description'),
+                      ),
+                    ),
+                    IntrinsicHeight(
+                      child: ListTile(
+                        title: renderTimeContent(),
+                      ),
+                    ),
+                    renderPostDetailButtonSection(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -203,8 +203,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
       elevation: 0,
       centerTitle: true,
       actions: [
-        if (currentUser!.id == product!.createdBy)
-          IconButton(
+        Visibility(
+          visible: product != null && currentUser!.id == product!.createdBy,
+          child: IconButton(
             onPressed: () {
               Navigator.pushReplacementNamed(
                 context,
@@ -216,7 +217,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
               Icons.edit,
               color: Colors.black,
             ),
-          )
+          ),
+        )
       ],
     );
   }
