@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      selectedMainCategory = filterValues?.mainCategory;
       fetchAllNeededToDisplayProductList();
     });
   }
@@ -70,6 +71,7 @@ class _HomePageState extends State<HomePage> {
             onSearchFilterApplied: (value) {
               setState(() {
                 filterValues = value;
+                selectedMainCategory = filterValues?.mainCategory;
               });
             },
             onSearchQueryChanged: (value) {
@@ -164,12 +166,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  SingleChildScrollView buildCategorySlider(List<MainCategory> categories) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.only(bottom: 15),
+  buildCategorySlider(List<MainCategory> categories) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.only(bottom: 15),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
         child: Row(
           children: categories
               .map(
@@ -177,16 +179,18 @@ class _HomePageState extends State<HomePage> {
                   category: e.title,
                   isActive: selectedMainCategory?.id == e.id,
                   onTap: () {
-                    setState(() {
-                      selectedMainCategory?.id == e.id
-                          ? selectedMainCategory = null
-                          : selectedMainCategory = e;
-                      var alteredFilter = FilterCriteriaModel.addMainCategory(
-                        filterValues,
-                        selectedMainCategory,
-                      );
-                      filterValues = alteredFilter;
-                    });
+                    setState(
+                      () {
+                        selectedMainCategory?.id == e.id
+                            ? selectedMainCategory = null
+                            : selectedMainCategory = e;
+                        var alteredFilter = FilterCriteriaModel.addMainCategory(
+                          filterValues,
+                          selectedMainCategory,
+                        );
+                        filterValues = alteredFilter;
+                      },
+                    );
                   },
                 ),
               )

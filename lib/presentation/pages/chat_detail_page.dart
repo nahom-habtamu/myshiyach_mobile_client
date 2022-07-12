@@ -34,6 +34,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   void initState() {
     super.initState();
     initializeCurrentUser();
+    handleScrollingToBottom();
   }
 
   void initializeCurrentUser() {

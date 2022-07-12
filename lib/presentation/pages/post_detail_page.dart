@@ -223,52 +223,55 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  Row renderPostDetailButtonSection() {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      currentUser!.id != product!.createdBy
-          ? goToChatDetailButton(product!.createdBy)
-          : Container()
-    ]);
+  renderPostDetailButtonSection() {
+    return currentUser!.id != product!.createdBy
+        ? goToChatDetailButton(product!.createdBy)
+        : Container();
   }
 
-  BlocBuilder goToChatDetailButton(String postCreatedBy) {
-    return BlocBuilder<HandleGoingToMessageCubit, HandleGoingToMessageState>(
-        builder: (context, state) {
-      if (state is HandleGoingToMessageLoading) {
-        return const SizedBox(
-          height: 50,
-          width: 50,
-          child: CircularProgressIndicator(),
-        );
-      }
-      if (state is HandleGoingToMessageSuccessfull) {
-        context.read<GetConversationByIdCubit>().call(
-              state.chatDetailPageArguments.conversationId,
-            );
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
-          Navigator.pushReplacementNamed(
-            context,
-            ChatDetailPage.routeName,
-            arguments: state.chatDetailPageArguments,
-          );
-        });
-      }
-      return ActionButton(
-        onPressed: () {
-          var addConversation = AddConversationModel(
-            memberOne: currentUser!.id,
-            memberTwo: postCreatedBy,
-          );
-          context.read<HandleGoingToMessageCubit>().call(
-                addConversation,
-                currentUser!.id,
-                authToken!,
+  goToChatDetailButton(String postCreatedBy) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.95,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          BlocBuilder<HandleGoingToMessageCubit, HandleGoingToMessageState>(
+            builder: (context, state) {
+              if (state is HandleGoingToMessageLoading) {
+                return const CircularProgressIndicator();
+              }
+              if (state is HandleGoingToMessageSuccessfull) {
+                context.read<GetConversationByIdCubit>().call(
+                      state.chatDetailPageArguments.conversationId,
+                    );
+                SchedulerBinding.instance!.addPostFrameCallback((_) {
+                  Navigator.pushReplacementNamed(
+                    context,
+                    ChatDetailPage.routeName,
+                    arguments: state.chatDetailPageArguments,
+                  );
+                });
+              }
+              return ActionButton(
+                onPressed: () {
+                  var addConversation = AddConversationModel(
+                    memberOne: currentUser!.id,
+                    memberTwo: postCreatedBy,
+                  );
+                  context.read<HandleGoingToMessageCubit>().call(
+                        addConversation,
+                        currentUser!.id,
+                        authToken!,
+                      );
+                },
+                text: "Send Message",
+                isCurved: false,
               );
-        },
-        text: "Send Message",
-        isCurved: false,
-      );
-    });
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   void naviagateToMasterPage(BuildContext context) {
