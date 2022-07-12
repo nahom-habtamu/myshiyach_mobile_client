@@ -7,6 +7,8 @@ import '../bloc/auth/auth_state.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../bloc/get_my_products/get_my_products_cubit.dart';
 import '../bloc/get_my_products/get_my_products_state.dart';
+import '../widgets/common/curved_container.dart';
+import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
 import '../widgets/common/post_card_list_item.dart';
 import 'add_post_page.dart';
@@ -40,31 +42,9 @@ class _MyPostsPageState extends State<MyPostsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF1F1F1),
-      appBar: AppBar(
-        title: const Text(
-          'My Posts',
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        iconTheme: const IconThemeData(color: Colors.black),
-        backgroundColor: const Color(0xffF1F1F1),
-        elevation: 0,
-        centerTitle: true,
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(40),
-            topRight: Radius.circular(40),
-          ),
-        ),
-        padding:
-            const EdgeInsets.only(top: 25, left: 25, right: 25, bottom: 10),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.9,
+      backgroundColor: const Color(0xff11435E),
+      appBar: const CustomAppBar(title: "My Posts"),
+      body: CurvedContainer(
         child: buildMyPosts(),
       ),
     );

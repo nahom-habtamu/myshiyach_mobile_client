@@ -15,6 +15,8 @@ import '../widgets/add_post/add_post_dropdown_dart.dart';
 import '../widgets/add_post/add_post_input.dart';
 import '../widgets/add_post/input_image_picker.dart';
 import '../widgets/common/action_button.dart';
+import '../widgets/common/curved_container.dart';
+import '../widgets/common/custom_app_bar.dart';
 import '../widgets/edit_post/post_images.dart';
 import 'post_detail_page.dart';
 
@@ -81,18 +83,13 @@ class _EditPostPageState extends State<EditPostPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Edit Post Page',
-            style: TextStyle(
-              color: Colors.black,
-            ),
-          ),
-          backgroundColor: const Color(0xffF1F1F1),
-          elevation: 0,
-          centerTitle: true,
-        ),
-        body: product == null ? Container() : renderMainContent(),
+        backgroundColor: const Color(0xff11435E),
+        appBar: const CustomAppBar(title: "Edit Post"),
+        body: product != null
+            ? CurvedContainer(
+                child: renderMainContent(),
+              )
+            : Container(),
       ),
     );
   }
@@ -113,139 +110,136 @@ class _EditPostPageState extends State<EditPostPage> {
           var subCategoriesToShow = buildSubCategoryToDisplay(state.categories);
 
           return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    renderPickedImages(),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    ImagePickerInput(
-                      hintText: "Pick Post Images",
-                      onImagePicked: (value) {
-                        setState(() {
-                          if (pickedImages.length + value.length <= 3) {
-                            pickedImages = [...pickedImages, ...value];
-                          }
-                        });
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    AddPostInput(
-                      hintText: "Title",
-                      onChanged: (value) => setState(() => title = value),
-                      initialValue: product!.title,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please Enter Title";
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  renderPickedImages(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ImagePickerInput(
+                    hintText: "Pick Post Images",
+                    onImagePicked: (value) {
+                      setState(() {
+                        if (pickedImages.length + value.length <= 3) {
+                          pickedImages = [...pickedImages, ...value];
                         }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    AddPostInput(
-                      hintText: "Description",
-                      onChanged: (value) => setState(() => description = value),
-                      initialValue: product!.description,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please Enter Description";
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  AddPostInput(
+                    hintText: "Title",
+                    onChanged: (value) => setState(() => title = value),
+                    initialValue: product!.title,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Enter Title";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  AddPostInput(
+                    hintText: "Description",
+                    onChanged: (value) => setState(() => description = value),
+                    initialValue: product!.description,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Enter Description";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  AddPostInput(
+                    hintText: "Price",
+                    onChanged: (value) =>
+                        setState(() => price = double.parse(value)),
+                    initialValue: product!.price.toString(),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Enter Price";
+                      } else {
+                        try {
+                          double.parse(value);
+                          return null;
+                        } catch (e) {
+                          return "Enter Correct Price";
                         }
-                        return null;
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  AddPostDropDownInput(
+                    initialValue: mainCategory,
+                    items: mainCategoryToShowOnDropDown,
+                    hintText: "Category",
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Select Main Category";
+                      }
+                      return null;
+                    },
+                    onChanged: (value) => setState(
+                      () {
+                        mainCategory = value;
+                        subCategory = "";
                       },
                     ),
-                    const SizedBox(
-                      height: 20,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  AddPostDropDownInput(
+                    key: Key(subCategory),
+                    initialValue: subCategory,
+                    items: subCategoriesToShow,
+                    hintText: "Sub Category",
+                    onChanged: (value) => setState(
+                      () => subCategory = value,
                     ),
-                    AddPostInput(
-                      hintText: "Price",
-                      onChanged: (value) =>
-                          setState(() => price = double.parse(value)),
-                      initialValue: product!.price.toString(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please Enter Price";
-                        } else {
-                          try {
-                            double.parse(value);
-                            return null;
-                          } catch (e) {
-                            return "Enter Correct Price";
-                          }
-                        }
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    AddPostDropDownInput(
-                      initialValue: mainCategory,
-                      items: mainCategoryToShowOnDropDown,
-                      hintText: "Category",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please Select Main Category";
-                        }
-                        return null;
-                      },
-                      onChanged: (value) => setState(
-                        () {
-                          mainCategory = value;
-                          subCategory = "";
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    AddPostDropDownInput(
-                      key: Key(subCategory),
-                      initialValue: subCategory,
-                      items: subCategoriesToShow,
-                      hintText: "Sub Category",
-                      onChanged: (value) => setState(
-                        () => subCategory = value,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please Select Sub Category";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    AddPostDropDownInput(
-                      initialValue: city,
-                      items: citiesToShowOnDropDown,
-                      hintText: "City",
-                      onChanged: (value) => setState(() => city = value),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please Select City";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    ...buildRequiredFeildsInput(state.categories),
-                    renderSaveButton(),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    renderEditError()
-                  ],
-                ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Select Sub Category";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  AddPostDropDownInput(
+                    initialValue: city,
+                    items: citiesToShowOnDropDown,
+                    hintText: "City",
+                    onChanged: (value) => setState(() => city = value),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Select City";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ...buildRequiredFeildsInput(state.categories),
+                  renderSaveButton(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  renderEditError()
+                ],
               ),
             ),
           );

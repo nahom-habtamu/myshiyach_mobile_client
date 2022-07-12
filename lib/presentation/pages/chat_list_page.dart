@@ -6,6 +6,8 @@ import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import '../widgets/chat_list/conversation_item.dart';
+import '../widgets/common/curved_container.dart';
+import '../widgets/common/custom_app_bar.dart';
 
 class ChatListPage extends StatefulWidget {
   static String routeName = "/chatPage";
@@ -33,32 +35,9 @@ class _ChatListPageState extends State<ChatListPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Chat List Page',
-            style: TextStyle(
-              color: Colors.black,
-            ),
-          ),
-          backgroundColor: const Color(0xffF1F1F1),
-          elevation: 0,
-          centerTitle: true,
-        ),
-        body: Container(
-          height: MediaQuery.of(context).size.height * 0.8,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
-            ),
-          ),
-          padding: const EdgeInsets.only(
-            top: 25,
-            left: 10,
-            right: 10,
-          ),
-          width: MediaQuery.of(context).size.width,
+        backgroundColor: const Color(0xff11435E),
+        appBar: const CustomAppBar(title: "Chat List"),
+        body: CurvedContainer(
           child:
               BlocBuilder<GetAllConversationsCubit, Stream<List<Conversation>>>(
             builder: (context, conversations) {

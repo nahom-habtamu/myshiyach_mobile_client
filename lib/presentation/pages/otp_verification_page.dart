@@ -38,7 +38,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 ),
               ),
               const SizedBox(
-                height: 50,
+                height: 25,
               ),
               const Text(
                 "An Authentication code has been sent to",

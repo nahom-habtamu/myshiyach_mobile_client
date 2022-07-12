@@ -8,6 +8,8 @@ import '../bloc/auth/auth_state.dart';
 import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import '../bloc/get_favorite_products/get_favorite_products_state.dart';
 import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../widgets/common/curved_container.dart';
+import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
 import '../widgets/common/post_card_list_item.dart';
 import 'master_page.dart';
@@ -44,48 +46,22 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xffF1F1F1),
-        appBar: AppBar(
-          title: const Text(
-            'Saved Posts',
-            style: TextStyle(
-              color: Colors.black,
-            ),
-          ),
-          backgroundColor: const Color(0xffF1F1F1),
-          elevation: 0,
-          centerTitle: true,
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.8,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              ),
-            ),
-            padding: const EdgeInsets.only(
-              top: 25,
-              left: 25,
-              right: 25,
-            ),
-            width: MediaQuery.of(context).size.width,
-            child:
-                BlocBuilder<GetFavoriteProductsCubit, GetFavoriteProductsState>(
-              builder: (context, state) {
-                if (state is Loaded) {
-                  return buildProductList(state.products);
-                } else if (state is Loading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return buildEmptyStateContent();
-                }
-              },
-            ),
+        backgroundColor: const Color(0xff11435E),
+        appBar: const CustomAppBar(title: "Saved Posts"),
+        body: CurvedContainer(
+          child:
+              BlocBuilder<GetFavoriteProductsCubit, GetFavoriteProductsState>(
+            builder: (context, state) {
+              if (state is Loaded) {
+                return buildProductList(state.products);
+              } else if (state is Loading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return buildEmptyStateContent();
+              }
+            },
           ),
         ),
       ),

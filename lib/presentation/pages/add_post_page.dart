@@ -13,6 +13,8 @@ import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cu
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_state.dart';
 import '../widgets/add_post/first_page_inputs.dart';
 import '../widgets/add_post/second_page_inputs.dart';
+import '../widgets/common/curved_container.dart';
+import '../widgets/common/custom_app_bar.dart';
 import 'post_confirmation_page.dart';
 
 class AddPostPage extends StatefulWidget {
@@ -72,46 +74,42 @@ class _AddPostPageState extends State<AddPostPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xffF1F1F1),
-        appBar: AppBar(
-          title: const Text(
-            'Post Information',
-            style: TextStyle(
-              color: Colors.black,
-            ),
-          ),
-          backgroundColor: const Color(0xffF1F1F1),
-          elevation: 0,
-          centerTitle: true,
-        ),
-        body: BlocBuilder<GetDataNeededToManagePostCubit,
-            GetDataNeededToManagePostState>(
-          builder: (context, state) {
-            if (state is Loaded) {
-              return renderMainContent(
-                state.categories,
-                state.cities,
-              );
-            } else if (state is Loading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is Error) {
-              return Center(
-                child: Text(state.message),
-              );
-            } else {
-              return const Center(
-                child: Text("EMPTY CATEGORIES"),
-              );
-            }
-          },
+        backgroundColor: const Color(0xff11435E),
+        appBar: const CustomAppBar(title: "Add Post"),
+        body: CurvedContainer(
+          child: SingleChildScrollView(child: renderMainContent()),
         ),
       ),
     );
   }
 
-  renderMainContent(
+  renderMainContent() {
+    return BlocBuilder<GetDataNeededToManagePostCubit,
+        GetDataNeededToManagePostState>(
+      builder: (context, state) {
+        if (state is Loaded) {
+          return renderAddPostForm(
+            state.categories,
+            state.cities,
+          );
+        } else if (state is Loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is Error) {
+          return Center(
+            child: Text(state.message),
+          );
+        } else {
+          return const Center(
+            child: Text("EMPTY CATEGORIES"),
+          );
+        }
+      },
+    );
+  }
+
+  renderAddPostForm(
     List<MainCategory> categories,
     List<String> cities,
   ) {
@@ -129,31 +127,17 @@ class _AddPostPageState extends State<AddPostPage> {
       }
 
       if (state is AddPostEmpty) {
-        return SingleChildScrollView(
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(40),
-                topRight: Radius.circular(40),
-              ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 20,
             ),
-            padding: const EdgeInsets.only(top: 0, left: 25, right: 25),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                renderAppropriateInput(
-                  categories,
-                  cities,
-                ),
-              ],
+            renderAppropriateInput(
+              categories,
+              cities,
             ),
-          ),
+          ],
         );
       } else if (state is AddPostLoading) {
         return const Center(

@@ -195,11 +195,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
       title: const Text(
         'Post Detail',
         style: TextStyle(
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
-      iconTheme: const IconThemeData(color: Colors.black),
-      backgroundColor: const Color(0xffF1F1F1),
+      iconTheme: const IconThemeData(color: Colors.white),
+      backgroundColor: const Color(0xff11435E),
       elevation: 0,
       centerTitle: true,
       actions: [
@@ -215,7 +215,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
             },
             icon: const Icon(
               Icons.edit,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         )

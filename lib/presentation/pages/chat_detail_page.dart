@@ -15,6 +15,8 @@ import '../screen_arguments/chat_detail_page_arguments.dart';
 import '../widgets/chat_detail/message_bubble.dart';
 import '../widgets/chat_detail/message_sending_tab.dart';
 import '../widgets/chat_detail/stanger_user_info.dart';
+import '../widgets/common/curved_container.dart';
+import '../widgets/common/custom_app_bar.dart';
 
 class ChatDetailPage extends StatefulWidget {
   static String routeName = '/chatDetailPage';
@@ -50,18 +52,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         ModalRoute.of(context)!.settings.arguments as ChatDetailPageArguments;
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Chat Detail Page',
-            style: TextStyle(
-              color: Colors.black,
-            ),
-          ),
-          backgroundColor: const Color(0xffF1F1F1),
-          elevation: 0,
-          centerTitle: true,
-          iconTheme: const IconThemeData(color: Colors.black),
-        ),
+        backgroundColor: const Color(0xff11435E),
+        appBar: const CustomAppBar(title: "Chat Detail"),
         body: BlocBuilder<GetConversationByIdCubit, Stream<Conversation>>(
           builder: (context, conversationStream) {
             return buildChatDetail(conversationStream);
@@ -89,17 +81,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     );
   }
 
-  Container renderMainContent(Conversation conversation) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(40),
-          topRight: Radius.circular(40),
-        ),
+  renderMainContent(Conversation conversation) {
+    return CurvedContainer(
+      padding: const EdgeInsets.only(
+        top: 25,
       ),
-      padding: const EdgeInsets.only(top: 5),
-      width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
           renderChatDetailStrangerInfo(),

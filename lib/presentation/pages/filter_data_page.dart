@@ -5,6 +5,8 @@ import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/sub_category.dart';
 import '../screen_arguments/filter_page_argument.dart';
 import '../widgets/common/action_button.dart';
+import '../widgets/common/curved_container.dart';
+import '../widgets/common/custom_app_bar.dart';
 import '../widgets/filter/filter_drop_down_input.dart';
 import '../widgets/filter/price_range_input_dialog.dart';
 import '../widgets/filter/sort_value_picker.dart';
@@ -63,24 +65,12 @@ class _FilterDataPageState extends State<FilterDataPage> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: const Color(0xffF1F1F1),
-        appBar: AppBar(
-          title: const Text(
-            'Filters',
-            style: TextStyle(
-              color: Colors.black,
-            ),
-          ),
-          iconTheme: const IconThemeData(color: Colors.black),
-          backgroundColor: const Color(0xffF1F1F1),
-          elevation: 1,
-          centerTitle: true,
-        ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
+        backgroundColor: const Color(0xff11435E),
+        appBar: const CustomAppBar(title: "Filters"),
+        body: CurvedContainer(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.all(5),
               child: Column(
                 children: [
                   PriceRangeInputDialog(
