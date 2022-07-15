@@ -17,4 +17,5 @@ abstract class ProductService {
     String token,
   );
   Future<List<ProductModel>> getProductsByCreatorId(String userId);
+  Future<ProductModel> refreshProduct(String id, String token);
 }

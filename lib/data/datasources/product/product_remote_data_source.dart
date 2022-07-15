@@ -131,4 +131,24 @@ class ProductRemoteDataSource extends ProductDataSource {
     }
     throw Exception("Couldn't Fetch Product");
   }
+
+  @override
+  Future<ProductModel> refreshProduct(String id, String token) async {
+    final String endPoint = '$baseUrl/products/refresh/$id';
+    final response = await http.patch(
+      Uri.parse(endPoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': token
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var product = ProductModel.fromJson(
+        json.decode(response.body),
+      );
+      return product;
+    }
+    throw Exception("Couldn't Refresh Product");
+  }
 }

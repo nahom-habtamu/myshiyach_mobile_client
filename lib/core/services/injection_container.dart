@@ -51,6 +51,7 @@ import '../../domain/usecases/get_product_by_id.dart';
 import '../../domain/usecases/get_stored_user_credentials.dart';
 import '../../domain/usecases/get_user_by_id.dart';
 import '../../domain/usecases/login.dart';
+import '../../domain/usecases/refresh_product.dart';
 import '../../domain/usecases/register_user.dart';
 import '../../domain/usecases/set_favorite_product.dart';
 import '../../domain/usecases/store_user_credentails.dart';
@@ -75,6 +76,7 @@ import '../../presentation/bloc/get_my_products/get_my_products_cubit.dart';
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../presentation/bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../../presentation/bloc/logout/logout_cubit.dart';
+import '../../presentation/bloc/refresh_product/refresh_product_cubit.dart';
 import '../../presentation/bloc/register_user/register_user_cubit.dart';
 import '../../presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../../presentation/bloc/update_product/update_product_cubit.dart';
@@ -127,6 +129,7 @@ Future<void> init() async {
   sl.registerFactory(() => GetAllCategoriesCubit(sl()));
   sl.registerFactory(() => ChangePasswordCubit(sl()));
   sl.registerFactory(() => FilterProductsCubit(sl()));
+  sl.registerFactory(() => RefreshProductCubit(sl()));
   sl.registerFactory(() => HandleGoingToMessageCubit(
         createConversation: sl(),
         getConversationByMembers: sl(),
@@ -166,6 +169,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ChangePassword(sl()));
   sl.registerLazySingleton(() => FilterProducts());
   sl.registerLazySingleton(() => GetProductById(sl()));
+  sl.registerLazySingleton(() => RefreshProduct(sl()));
 
   // repositories
 

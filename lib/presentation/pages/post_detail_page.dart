@@ -123,13 +123,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         children: [
                           Expanded(
                             child: ListTile(
-                              title: renderTimeContent(),
+                              title: renderTimeContent(product!.createdAt),
                               subtitle: const Text('Created'),
                             ),
                           ),
                           Expanded(
                             child: ListTile(
-                              title: renderTimeContent(),
+                              title: renderTimeContent(product!.refreshedAt),
                               subtitle: const Text('Updated'),
                             ),
                           ),
@@ -162,7 +162,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  Row renderTimeContent() {
+  Row renderTimeContent(String time) {
     return Row(
       children: [
         const Icon(
@@ -175,7 +175,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         ),
         Text(
           DateFormatterUtil.formatProductCreatedAtTime(
-            product!.createdAt,
+            time,
           ),
           style: const TextStyle(
             color: Colors.grey,

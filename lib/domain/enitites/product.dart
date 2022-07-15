@@ -7,6 +7,7 @@ class Product {
   final String subCategory;
   final String city;
   final String createdAt;
+  final String refreshedAt;
   final String createdBy;
   final List<String> productImages;
   Map<String, dynamic>? productDetail;
@@ -20,6 +21,7 @@ class Product {
     required this.subCategory,
     required this.city,
     required this.createdAt,
+    required this.refreshedAt,
     required this.createdBy,
     required this.productImages,
     this.productDetail,

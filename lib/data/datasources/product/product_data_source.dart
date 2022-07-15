@@ -14,4 +14,5 @@ abstract class ProductDataSource {
   );
   Future<List<ProductModel>> getProductsByCreatorId(String userId);
   Future<ProductModel> getProductById(String id, String token);
+  Future<ProductModel> refreshProduct(String id, String token);
 }
