@@ -119,8 +119,21 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       ),
                     ),
                     IntrinsicHeight(
-                      child: ListTile(
-                        title: renderTimeContent(),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ListTile(
+                              title: renderTimeContent(),
+                              subtitle: const Text('Created'),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: renderTimeContent(),
+                              subtitle: const Text('Updated'),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     renderPostDetailButtonSection(),

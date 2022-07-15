@@ -48,7 +48,7 @@ class _ProductListState extends State<ProductList> {
           mainAxisSpacing: 5.0,
           childAspectRatio: MediaQuery.of(context).size.width /
               (MediaQuery.of(context).size.height) *
-              1.25,
+              1.4,
         ),
         itemCount: widget.products.length,
         itemBuilder: (context, index) {

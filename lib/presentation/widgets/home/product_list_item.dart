@@ -45,7 +45,6 @@ class _ProductListItemState extends State<ProductListItem> {
             children: [
               renderProductListItemImage(widget.product.productImages.first),
               renderTitle(widget.product.title),
-              renderDescription(widget.product.description),
               renderPrice(widget.product.price),
               renderCity(widget.product.city),
               renderTimerAndFavoriteIcon(widget.product),
