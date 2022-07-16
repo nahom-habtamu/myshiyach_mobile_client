@@ -65,7 +65,13 @@ class PostContentToShow extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           child: ListTile(
-            subtitle: Text(product.description),
+            subtitle: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                product.description,
+                textAlign: TextAlign.justify,
+              ),
+            ),
             title: const Text('Description'),
           ),
         ),

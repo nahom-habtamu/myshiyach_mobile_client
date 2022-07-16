@@ -9,6 +9,7 @@ class AddPostInput extends StatelessWidget {
   final String hintText;
   final dynamic initialValue;
   final bool isPrice;
+  final bool isTextArea;
   const AddPostInput({
     Key? key,
     required this.hintText,
@@ -16,12 +17,14 @@ class AddPostInput extends StatelessWidget {
     this.initialValue,
     required this.validator,
     this.isPrice = false,
+    this.isTextArea = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       initialValue: initialValue,
+      maxLines: isTextArea ? 5 : 1,
       style: const TextStyle(
         color: Colors.black,
         fontSize: 15,

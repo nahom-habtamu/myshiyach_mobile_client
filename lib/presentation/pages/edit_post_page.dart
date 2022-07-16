@@ -147,6 +147,7 @@ class _EditPostPageState extends State<EditPostPage> {
                   ),
                   AddPostInput(
                     hintText: "Description",
+                    isTextArea: true,
                     onChanged: (value) => setState(() => description = value),
                     initialValue: product!.description,
                     validator: (value) {

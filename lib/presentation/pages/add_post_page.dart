@@ -93,9 +93,7 @@ class _AddPostPageState extends State<AddPostPage> {
             state.cities,
           );
         } else if (state is Loading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return renderLoadingSpinner();
         } else if (state is Error) {
           return Center(
             child: Text(state.message),
@@ -106,6 +104,13 @@ class _AddPostPageState extends State<AddPostPage> {
           );
         }
       },
+    );
+  }
+
+  SizedBox renderLoadingSpinner() {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.9,
+      child: const Center(child: CircularProgressIndicator()),
     );
   }
 
@@ -140,9 +145,7 @@ class _AddPostPageState extends State<AddPostPage> {
           ],
         );
       } else if (state is AddPostLoading) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return renderLoadingSpinner();
       } else {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
           Navigator.pushReplacementNamed(

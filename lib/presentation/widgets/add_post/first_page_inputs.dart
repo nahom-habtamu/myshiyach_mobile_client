@@ -103,6 +103,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             initialValue: description,
             hintText: "Description",
             onChanged: (value) => description = value,
+            isTextArea: true,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "Please Enter Description";

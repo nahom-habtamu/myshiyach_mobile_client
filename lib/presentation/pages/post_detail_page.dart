@@ -98,7 +98,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         });
       }
       return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.85,
+        height: MediaQuery.of(context).size.height * 0.9,
         child: PostContentToShow(
           product: product!,
           currentUser: currentUser!,
