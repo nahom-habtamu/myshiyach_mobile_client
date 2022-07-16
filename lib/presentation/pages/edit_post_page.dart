@@ -281,7 +281,7 @@ class _EditPostPageState extends State<EditPostPage> {
         return Column(
           children: [
             AddPostInput(
-              initialValue: product!.productDetail![e.objectKey],
+              initialValue: product!.productDetail?[e.objectKey] ?? '',
               hintText: e.objectKey,
               onChanged: (value) {
                 handleRequiredFeildChanged(e.objectKey, value);
