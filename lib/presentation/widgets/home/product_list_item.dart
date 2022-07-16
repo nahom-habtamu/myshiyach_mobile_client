@@ -39,17 +39,15 @@ class _ProductListItemState extends State<ProductListItem> {
             Radius.circular(15),
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 3.0),
-          child: Column(
-            children: [
-              renderProductListItemImage(widget.product.productImages.first),
-              renderTitle(widget.product.title),
-              renderPrice(widget.product.price),
-              renderCity(widget.product.city),
-              renderTimerAndFavoriteIcon(widget.product),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            renderProductListItemImage(widget.product.productImages.first),
+            renderTitle(widget.product.title),
+            renderPrice(widget.product.price),
+            renderCity(widget.product.city),
+            renderTimerAndFavoriteIcon(widget.product),
+          ],
         ),
       ),
     );
@@ -74,23 +72,20 @@ class _ProductListItemState extends State<ProductListItem> {
     );
   }
 
-  FittedBox renderDescription(String description) {
-    return FittedBox(
-      fit: BoxFit.fitWidth,
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.45,
-        height: heightOfMobile * 4,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5.0),
-          child: Text(
-            description,
-            style: const TextStyle(
-              color: Color(0xff888888),
-              fontSize: 10,
-              letterSpacing: 0.2,
-            ),
-            overflow: TextOverflow.ellipsis,
+  renderDescription(String description) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.45,
+      height: heightOfMobile * 4,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        child: Text(
+          description,
+          style: const TextStyle(
+            color: Color(0xff888888),
+            fontSize: 10,
+            letterSpacing: 0.2,
           ),
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );
@@ -104,7 +99,6 @@ class _ProductListItemState extends State<ProductListItem> {
         style: TextStyle(
           color: const Color(0xff11435E),
           fontSize: heightOfMobile * 1.5,
-          letterSpacing: 0.2,
           fontWeight: FontWeight.bold,
         ),
         overflow: TextOverflow.clip,
@@ -112,22 +106,18 @@ class _ProductListItemState extends State<ProductListItem> {
     );
   }
 
-  Padding renderPrice(price) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0),
-      child: Container(
-        color: const Color(0xffF5FFF8),
-        width: MediaQuery.of(context).size.width * 0.45,
-        child: Text(
-          '\$' + PriceFormatterUtil.formatToPrice(price),
-          style: TextStyle(
-            color: const Color(0xff34A853),
-            fontSize: heightOfMobile * 2.3,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.2,
-          ),
-          overflow: TextOverflow.clip,
+  renderPrice(price) {
+    return Container(
+      color: const Color(0xffF5FFF8),
+      width: MediaQuery.of(context).size.width * 0.45,
+      child: Text(
+        '\$' + PriceFormatterUtil.formatToPrice(price),
+        style: TextStyle(
+          color: const Color(0xff34A853),
+          fontSize: heightOfMobile * 2.3,
+          fontWeight: FontWeight.w700,
         ),
+        overflow: TextOverflow.clip,
       ),
     );
   }
@@ -135,9 +125,9 @@ class _ProductListItemState extends State<ProductListItem> {
   renderTimerAndFavoriteIcon(Product product) {
     return Row(
       children: [
-        const Icon(
+        Icon(
           Icons.access_time_rounded,
-          size: 18,
+          size: heightOfMobile * 2,
           color: Colors.grey,
         ),
         const SizedBox(
@@ -148,7 +138,7 @@ class _ProductListItemState extends State<ProductListItem> {
             DateFormatterUtil.formatProductCreatedAtTime(product.createdAt),
             style: TextStyle(
               color: Colors.grey,
-              fontSize: heightOfMobile * 1.8,
+              fontSize: heightOfMobile * 1.6,
             ),
           ),
         ),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/presentation/bloc/refresh_product/refresh_product_cubit.dart';
-import 'package:mnale_client/presentation/bloc/refresh_product/refresh_product_state.dart';
 
 import '../../core/utils/date_time_formatter.dart';
 import '../../core/utils/price_formatter.dart';
@@ -18,6 +16,8 @@ import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import '../bloc/get_favorite_products/get_favorite_products_state.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_state.dart';
+import '../bloc/refresh_product/refresh_product_cubit.dart';
+import '../bloc/refresh_product/refresh_product_state.dart';
 import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../widgets/common/action_button.dart';
 import '../widgets/post_detail/post_detail_carousel.dart';
@@ -103,7 +103,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       }
       if (state is RefreshPostError) {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
-          Scaffold.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Error on Refreshing Product'),
             ),
@@ -138,14 +138,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
                           children: [
                             Expanded(
                               child: ListTile(
-                                title: Text(product!.title),
-                                subtitle: const Text('Title'),
+                                subtitle: Text(product!.title),
+                                title: const Text('Title'),
                               ),
                             ),
                             Expanded(
                               child: ListTile(
-                                title: Text(product!.city),
-                                subtitle: const Text('City'),
+                                subtitle: Text(product!.city),
+                                title: const Text('City'),
                               ),
                             ),
                           ],
@@ -158,14 +158,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       ),
                       IntrinsicHeight(
                         child: ListTile(
-                          title: renderPrice(),
-                          subtitle: const Text('Price'),
-                        ),
-                      ),
-                      IntrinsicHeight(
-                        child: ListTile(
-                          title: Text(product!.description),
-                          subtitle: const Text('Description'),
+                          subtitle: renderPrice(),
+                          title: const Text('Price'),
                         ),
                       ),
                       IntrinsicHeight(
@@ -173,19 +167,41 @@ class _PostDetailPageState extends State<PostDetailPage> {
                           children: [
                             Expanded(
                               child: ListTile(
-                                title: renderTimeContent(product!.createdAt),
-                                subtitle: const Text('Created'),
+                                subtitle: renderTimeContent(product!.createdAt),
+                                title: const Text('Created'),
                               ),
                             ),
                             Expanded(
                               child: ListTile(
-                                title: renderTimeContent(product!.refreshedAt),
-                                subtitle: const Text('Updated'),
+                                subtitle:
+                                    renderTimeContent(product!.refreshedAt),
+                                title: const Text('Updated'),
                               ),
                             ),
                           ],
                         ),
                       ),
+                      IntrinsicHeight(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 15.0),
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: const BoxDecoration(boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFFC7C4C4),
+                                blurRadius: 10,
+                                spreadRadius: 5,
+                              )
+                            ], color: Colors.white),
+                            child: ListTile(
+                              subtitle: Text(product!.description),
+                              title: const Text('Description'),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
                       renderPostDetailButtonSection(),
                     ],
                   ),
@@ -213,27 +229,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  Row renderTimeContent(String time) {
-    return Row(
-      children: [
-        const Icon(
-          Icons.timer_sharp,
-          color: Colors.grey,
-          size: 15,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Text(
-          DateFormatterUtil.formatProductCreatedAtTime(
-            time,
-          ),
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: 12,
-          ),
-        ),
-      ],
+  renderTimeContent(String time) {
+    return Text(
+      DateFormatterUtil.formatProductCreatedAtTime(
+        time,
+      ),
+      style: const TextStyle(
+        color: Colors.grey,
+        fontSize: 12,
+      ),
     );
   }
 
