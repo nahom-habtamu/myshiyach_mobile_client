@@ -9,6 +9,7 @@ import '../bloc/logout/logout_cubit.dart';
 import '../bloc/logout/logout_state.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
+import '../widgets/common/post_card_list_item.dart';
 import '../widgets/profile/setting_item.dart';
 import '../widgets/profile/settings_item_header.dart';
 import 'login_page.dart';
@@ -156,8 +157,16 @@ class _ProfilePageState extends State<ProfilePage> {
             return SettingItem(
               title: "Logout",
               leadingIcon: Icons.exit_to_app,
-              onPressed: () {
-                context.read<LogOutCubit>().call();
+              onPressed: () async {
+                var result = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const PopupDialog(
+                      content: "Are you sure you want to logout?",
+                    );
+                  },
+                );
+                if (result) context.read<LogOutCubit>().call();
               },
             );
           },
