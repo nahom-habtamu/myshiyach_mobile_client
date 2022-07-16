@@ -79,7 +79,7 @@ class PostCardListItem extends StatelessWidget {
                       height: 40,
                       child: Text(
                         product.description,
-                        overflow: TextOverflow.clip,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
