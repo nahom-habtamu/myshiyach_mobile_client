@@ -28,6 +28,7 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   FilterCriteriaModel? filterResult;
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +40,7 @@ class _SearchBarState extends State<SearchBar> {
         children: [
           Expanded(
             child: TextFormField(
+              controller: _controller,
               style: const TextStyle(
                 color: Colors.black,
                 fontSize: 15,
@@ -46,9 +48,9 @@ class _SearchBarState extends State<SearchBar> {
               onChanged: (value) => {
                 widget.onSearchQueryChanged(value),
               },
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: "Search Item",
-                border: OutlineInputBorder(
+                border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(16.0),
                   ),
@@ -57,7 +59,7 @@ class _SearchBarState extends State<SearchBar> {
                     width: 1,
                   ),
                 ),
-                enabledBorder: OutlineInputBorder(
+                enabledBorder: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(16.0),
                   ),
@@ -66,7 +68,7 @@ class _SearchBarState extends State<SearchBar> {
                     width: 1,
                   ),
                 ),
-                focusedBorder: OutlineInputBorder(
+                focusedBorder: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(16.0),
                   ),
@@ -75,12 +77,22 @@ class _SearchBarState extends State<SearchBar> {
                     width: 1,
                   ),
                 ),
-                prefixIcon: Icon(
+                prefixIcon: const Icon(
                   Icons.search,
                   size: 30,
                 ),
+                suffixIcon: IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    _controller.text = "";
+                    widget.onSearchQueryChanged("");
+                  },
+                ),
                 isDense: true,
-                contentPadding: EdgeInsets.all(15),
+                contentPadding: const EdgeInsets.all(15),
                 filled: true,
                 fillColor: Colors.white,
               ),
