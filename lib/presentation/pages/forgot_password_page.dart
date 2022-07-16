@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/authenticate_phone_number/authenticate_phone_number.cubit.dart';
 import '../bloc/authenticate_phone_number/authenticate_phone_number_state.dart';
-import '../widgets/auth_input.dart';
 import '../widgets/common/action_button.dart';
+import '../widgets/common/phone_number_input.dart';
 import '../widgets/common/verify_phone_number_button.dart';
 import 'change_password_page.dart';
 
@@ -47,17 +47,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               const SizedBox(
                 height: 55,
               ),
-              AuthInput(
-                hintText: "Phone Number",
+              PhoneNumberInput(
                 onChanged: (value) => setState(() => phoneNumber = value),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please Enter PhoneNumber";
-                  } else if (value.length < 10) {
-                    return "Please Enter Correct Phone Number";
-                  }
-                  return null;
-                },
               ),
               const SizedBox(
                 height: 30,

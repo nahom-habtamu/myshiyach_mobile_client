@@ -7,6 +7,7 @@ import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../widgets/auth_input.dart';
 import '../widgets/common/action_button.dart';
+import '../widgets/common/phone_number_input.dart';
 import 'forgot_password_page.dart';
 import 'master_page.dart';
 import 'sign_up_page.dart';
@@ -57,17 +58,8 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 55,
               ),
-              AuthInput(
-                hintText: "Phone Number",
+              PhoneNumberInput(
                 onChanged: (value) => setState(() => userName = value),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please Enter PhoneNumber";
-                  } else if (value.length < 10) {
-                    return "Please Enter Correct Phone Number";
-                  }
-                  return null;
-                },
               ),
               const SizedBox(
                 height: 25,

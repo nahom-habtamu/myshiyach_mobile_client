@@ -6,6 +6,7 @@ import '../bloc/register_user/register_user_cubit.dart';
 import '../bloc/register_user/register_user_state.dart';
 import '../screen_arguments/sign_up_button_arguments.dart';
 import '../widgets/auth_input.dart';
+import '../widgets/common/phone_number_input.dart';
 import '../widgets/common/verify_phone_number_button.dart';
 import '../widgets/signup/sign_up_button.dart';
 import '../widgets/signup/sign_up_intro_content.dart';
@@ -64,21 +65,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   const SizedBox(
                     height: 25,
                   ),
-                  AuthInput(
-                    hintText: "Phone Number",
-                    onChanged: (value) => {
-                      setState(() {
-                        phoneNumber = value;
-                      })
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please Enter PhoneNumber";
-                      } else if (value.length < 10) {
-                        return "Please Enter Correct Phone Number";
-                      }
-                      return null;
-                    },
+                  PhoneNumberInput(
+                    onChanged: (value) => setState(() => phoneNumber = value),
                   ),
                   const SizedBox(
                     height: 25,
