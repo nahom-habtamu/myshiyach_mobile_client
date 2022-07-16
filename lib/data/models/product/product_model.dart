@@ -38,7 +38,7 @@ class ProductModel extends Product {
       mainCategory: jsonProduct["mainCategory"],
       subCategory: jsonProduct["subCategory"],
       createdAt: jsonProduct["createdAt"],
-      refreshedAt: jsonProduct["updatedAt"],
+      refreshedAt: jsonProduct["refreshedAt"],
       createdBy: jsonProduct["createdBy"],
       city: jsonProduct["city"],
       productDetail: jsonProduct["productDetail"] == null
@@ -73,7 +73,7 @@ class ProductModel extends Product {
         "mainCategory": mainCategory,
         "subCategory": subCategory,
         "createdAt": createdAt,
-        "updatedAt": refreshedAt,
+        "refreshedAt": refreshedAt,
         "createdBy": createdBy,
         "city": city,
         "productImages": productImages,

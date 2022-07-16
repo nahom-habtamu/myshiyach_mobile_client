@@ -36,7 +36,6 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
       }
     } catch (e) {
       emit(Error(message: e.toString()));
-      rethrow;
     }
   }
 
