@@ -10,6 +10,7 @@ class AddPostInput extends StatelessWidget {
   final dynamic initialValue;
   final bool isPrice;
   final bool isTextArea;
+  final int sizeLimit;
   const AddPostInput({
     Key? key,
     required this.hintText,
@@ -18,6 +19,7 @@ class AddPostInput extends StatelessWidget {
     required this.validator,
     this.isPrice = false,
     this.isTextArea = false,
+    this.sizeLimit = 0,
   }) : super(key: key);
 
   @override
@@ -35,9 +37,10 @@ class AddPostInput extends StatelessWidget {
       inputFormatters: isPrice
           ? [
               FilteringTextInputFormatter.digitsOnly,
-              ThousandsSeparatorInputFormatter()
+              ThousandsSeparatorInputFormatter(),
+              LengthLimitingTextInputFormatter(sizeLimit != 0 ? sizeLimit : -1)
             ]
-          : [],
+          : [LengthLimitingTextInputFormatter(sizeLimit != 0 ? sizeLimit : -1)],
       keyboardType: isPrice
           ? const TextInputType.numberWithOptions(decimal: true)
           : TextInputType.text,

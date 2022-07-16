@@ -133,6 +133,7 @@ class _EditPostPageState extends State<EditPostPage> {
                   ),
                   AddPostInput(
                     hintText: "Title",
+                    sizeLimit: 30,
                     onChanged: (value) => setState(() => title = value),
                     initialValue: product!.title,
                     validator: (value) {
@@ -162,6 +163,7 @@ class _EditPostPageState extends State<EditPostPage> {
                   ),
                   AddPostInput(
                     hintText: "Price",
+                    sizeLimit: 12,
                     onChanged: (value) =>
                         setState(() => price = double.parse(value)),
                     initialValue: product!.price.toString(),

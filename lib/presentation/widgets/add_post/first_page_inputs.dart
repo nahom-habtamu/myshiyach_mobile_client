@@ -88,6 +88,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
           AddPostInput(
             initialValue: title,
             hintText: "Item Title",
+            sizeLimit: 30,
             onChanged: (value) => title = value,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -120,6 +121,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             onChanged: (value) => price = double.parse(
               PriceFormatterUtil.deformatToPureNumber(value),
             ),
+            sizeLimit: 12,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "Please Enter Price";
