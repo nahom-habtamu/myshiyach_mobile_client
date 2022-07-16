@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/presentation/bloc/refresh_product/refresh_product_cubit.dart';
+import 'package:mnale_client/presentation/bloc/refresh_product/refresh_product_state.dart';
 
 import '../../core/utils/date_time_formatter.dart';
 import '../../core/utils/price_formatter.dart';
 import '../../data/models/conversation/add_conversation_model.dart';
+import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/product.dart';
 import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
+import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
+import '../bloc/get_favorite_products/get_favorite_products_state.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_state.dart';
+import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../widgets/common/action_button.dart';
 import '../widgets/post_detail/post_detail_carousel.dart';
 import 'chat_detail_page.dart';
@@ -31,6 +37,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Product? product;
   User? currentUser;
   String? authToken;
+  List<Product> favoriteProducts = [];
 
   @override
   void initState() {
@@ -44,107 +51,151 @@ class _PostDetailPageState extends State<PostDetailPage> {
         });
         context.read<HandleGoingToMessageCubit>().clear();
         context.read<DeleteProductByIdCubit>().clear();
+        context.read<GetFavoriteProductsCubit>().execute(authToken!);
+        context.read<RefreshProductCubit>().clear();
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: renderAppBar(),
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25),
-              topRight: Radius.circular(25),
+    return BlocBuilder<GetFavoriteProductsCubit, GetFavoriteProductsState>(
+      builder: (context, state) {
+        if (state is Loading || product == null) {
+          return const SafeArea(
+            child: Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        }
+        if (state is Loaded) {
+          favoriteProducts = [...state.products];
+        }
+        return SafeArea(
+          child: Scaffold(
+            appBar: renderAppBar(),
+            body: Container(
+              height: MediaQuery.of(context).size.height,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                ),
+              ),
+              child: renderMainContent(),
             ),
           ),
-          child: product == null ? Container() : renderMainContent(),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Column renderMainContent() {
-    return Column(
-      children: [
-        PostDetailCarousel(
-          items: [...product!.productImages],
-        ),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 15, left: 5, right: 5, bottom: 5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IntrinsicHeight(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ListTile(
-                              title: Text(product!.title),
-                              subtitle: const Text('Title'),
+  renderMainContent() {
+    return BlocBuilder<RefreshProductCubit, RefreshProductState>(
+        builder: (context, state) {
+      if (state is RefreshPostLoading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      if (state is RefreshPostError) {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+          Scaffold.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Error on Refreshing Product'),
+            ),
+          );
+        });
+      }
+
+      if (state is RefreshPostSuccessfull) {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+          setState(() {
+            product = state.product;
+          });
+        });
+      }
+
+      return Column(
+        children: [
+          PostDetailCarousel(
+            items: [...product!.productImages],
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 15, left: 5, right: 5, bottom: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: ListTile(
+                                title: Text(product!.title),
+                                subtitle: const Text('Title'),
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: ListTile(
-                              title: Text(product!.city),
-                              subtitle: const Text('City'),
+                            Expanded(
+                              child: ListTile(
+                                title: Text(product!.city),
+                                subtitle: const Text('City'),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    IntrinsicHeight(
-                      child: Row(
-                        children: [...buildOtherDetail()],
+                      IntrinsicHeight(
+                        child: Row(
+                          children: [...buildOtherDetail()],
+                        ),
                       ),
-                    ),
-                    IntrinsicHeight(
-                      child: ListTile(
-                        title: renderPrice(),
-                        subtitle: const Text('Price'),
+                      IntrinsicHeight(
+                        child: ListTile(
+                          title: renderPrice(),
+                          subtitle: const Text('Price'),
+                        ),
                       ),
-                    ),
-                    IntrinsicHeight(
-                      child: ListTile(
-                        title: Text(product!.description),
-                        subtitle: const Text('Description'),
+                      IntrinsicHeight(
+                        child: ListTile(
+                          title: Text(product!.description),
+                          subtitle: const Text('Description'),
+                        ),
                       ),
-                    ),
-                    IntrinsicHeight(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ListTile(
-                              title: renderTimeContent(product!.createdAt),
-                              subtitle: const Text('Created'),
+                      IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: ListTile(
+                                title: renderTimeContent(product!.createdAt),
+                                subtitle: const Text('Created'),
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: ListTile(
-                              title: renderTimeContent(product!.refreshedAt),
-                              subtitle: const Text('Updated'),
+                            Expanded(
+                              child: ListTile(
+                                title: renderTimeContent(product!.refreshedAt),
+                                subtitle: const Text('Updated'),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    renderPostDetailButtonSection(),
-                  ],
+                      renderPostDetailButtonSection(),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        )
-      ],
-    );
+          )
+        ],
+      );
+    });
   }
 
   Text renderPrice() {
@@ -218,20 +269,31 @@ class _PostDetailPageState extends State<PostDetailPage> {
       actions: [
         Visibility(
           visible: product != null && currentUser!.id == product!.createdBy,
-          child: IconButton(
-            onPressed: () {
-              Navigator.pushReplacementNamed(
-                context,
-                EditPostPage.routeName,
-                arguments: product,
-              );
+          child: PopupMenuButton<String>(
+            onSelected: (value) => handleAppBarMenuClicked(value),
+            itemBuilder: (BuildContext context) {
+              var duplicate = favoriteProducts
+                  .where((element) => element.id == product!.id)
+                  .toList();
+
+              var contentToShowOnPopup = duplicate.isEmpty
+                  ? {'Edit', 'Refresh', "Save"}
+                  : {
+                      'Edit',
+                      'Refresh',
+                    };
+              return contentToShowOnPopup.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(
+                    choice,
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                );
+              }).toList();
             },
-            icon: const Icon(
-              Icons.edit,
-              color: Colors.white,
-            ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -287,7 +349,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  void naviagateToMasterPage(BuildContext context) {
+  void naviagateToMasterPage() {
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       Navigator.pushReplacementNamed(
         context,
@@ -310,5 +372,40 @@ class _PostDetailPageState extends State<PostDetailPage> {
       return authState.loginResult.token;
     }
     return null;
+  }
+
+  handleAppBarMenuClicked(String value) {
+    switch (value) {
+      case "Edit":
+        Navigator.pushReplacementNamed(
+          context,
+          EditPostPage.routeName,
+          arguments: product,
+        );
+        break;
+      case "Refresh":
+        refreshProduct(product!);
+        break;
+      case "Save":
+        updateFavorites(product!);
+        break;
+      default:
+    }
+  }
+
+  void updateFavorites(Product product) {
+    setState(() {
+      favoriteProducts = [...favoriteProducts, product];
+    });
+    List<ProductModel> favoritesToSave =
+        favoriteProducts.map((e) => ProductModel.fromProduct(e)).toList();
+    context
+        .read<SetFavoriteProductsCubit>()
+        .setFavoriteProducts
+        .call(favoritesToSave);
+  }
+
+  void refreshProduct(Product product) {
+    context.read<RefreshProductCubit>().call(product.id, authToken!);
   }
 }
