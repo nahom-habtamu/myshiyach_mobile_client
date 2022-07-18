@@ -5,6 +5,7 @@ import '../../data/models/register_user/register_user_request_model.dart';
 import '../bloc/register_user/register_user_cubit.dart';
 import '../bloc/register_user/register_user_state.dart';
 import '../screen_arguments/sign_up_button_arguments.dart';
+import '../utils/show_toast.dart';
 import '../widgets/auth_input.dart';
 import '../widgets/common/phone_number_input.dart';
 import '../widgets/common/verify_phone_number_button.dart';
@@ -149,7 +150,15 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   VerifyPhoneNumberButton(
                     onVerifyClicked: () {
-                      return formKey.currentState!.validate();
+                      if (areTermsAndConditionsAgreed) {
+                        return formKey.currentState!.validate();
+                      } else {
+                        showToast(
+                          context,
+                          'You should agree with our terms to continue',
+                        );
+                        return false;
+                      }
                     },
                     phoneNumber: phoneNumber,
                     renderActionButton: renderRegisterButton,

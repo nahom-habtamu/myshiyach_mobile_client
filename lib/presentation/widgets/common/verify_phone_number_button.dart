@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import '../../bloc/verify_phone_number/verify_phone_number_state.dart';
 import '../../pages/otp_verification_page.dart';
 import '../../screen_arguments/otp_verification_page_argument.dart';
+import '../../utils/show_toast.dart';
 import 'action_button.dart';
 
 class VerifyPhoneNumberButton extends StatefulWidget {
@@ -41,13 +41,9 @@ class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
     return BlocBuilder<VerifyPhoneNumberCubit, VerifyPhoneNumberState>(
       builder: (context, state) {
         if (state is Error) {
-          Fluttertoast.showToast(
-            msg: "Phone Verification Failed",
-            toastLength: Toast.LENGTH_LONG,
-            timeInSecForIosWeb: 1,
-            backgroundColor: const Color(0xFFA70606),
-            textColor: Colors.white,
-            fontSize: 16.0,
+          showToast(
+            context,
+            "Phone Verification Failed",
           );
         }
         if (state is Loading) {
