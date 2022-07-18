@@ -30,10 +30,9 @@ class PostContentToShow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                renderCityAndTitle(),
-                renderOtherDetail(),
-                renderPrice(),
-                renderProductTimes(),
+                const SizedBox(height: 15),
+                renderContentOtherThanDescription(context),
+                const SizedBox(height: 15),
                 renderDescription(context),
                 const SizedBox(height: 15),
                 renderPostDetailButtonSection(),
@@ -43,6 +42,37 @@ class PostContentToShow extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+
+  IntrinsicHeight renderContentOtherThanDescription(BuildContext context) {
+    return IntrinsicHeight(
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 25.0),
+          width: MediaQuery.of(context).size.width * 0.95,
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xFFC7C4C4),
+                blurRadius: 15,
+                spreadRadius: 1,
+              )
+            ],
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child: Column(
+            children: [
+              renderCityAndTitle(),
+              renderOtherDetail(),
+              renderPrice(),
+              renderProductTimes(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

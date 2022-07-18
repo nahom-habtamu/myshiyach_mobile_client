@@ -112,7 +112,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     var duplicate = favoriteProducts.where((e) => e.id == product!.id).toList();
     return PostDetailAppBar(
       onAppBarMenuClicked: (value) => handleAppBarMenuClicked(value),
-      isFavorite: duplicate.isNotEmpty,
+      isFavorite: duplicate.isEmpty,
       showActions: product != null && currentUser!.id == product!.createdBy,
     );
   }
