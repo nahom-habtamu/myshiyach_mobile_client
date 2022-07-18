@@ -121,7 +121,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             onChanged: (value) => price = double.parse(
               PriceFormatterUtil.deformatToPureNumber(value),
             ),
-            sizeLimit: 12,
+            sizeLimit: 13,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return "Please Enter Price";

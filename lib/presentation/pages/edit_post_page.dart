@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/utils/price_formatter.dart';
 import '../../data/models/product/edit_product_model.dart';
 import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
@@ -163,16 +164,22 @@ class _EditPostPageState extends State<EditPostPage> {
                   ),
                   AddPostInput(
                     hintText: "Price",
-                    sizeLimit: 12,
-                    onChanged: (value) =>
-                        setState(() => price = double.parse(value)),
-                    initialValue: product!.price.toString(),
+                    sizeLimit: 13,
+                    isPrice: true,
+                    onChanged: (value) => setState(
+                      () => price = double.parse(
+                        PriceFormatterUtil.deformatToPureNumber(value),
+                      ),
+                    ),
+                    initialValue:
+                        PriceFormatterUtil.formatToPrice(product!.price),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please Enter Price";
                       } else {
                         try {
-                          double.parse(value);
+                          double.parse(
+                              PriceFormatterUtil.deformatToPureNumber(value));
                           return null;
                         } catch (e) {
                           return "Enter Correct Price";

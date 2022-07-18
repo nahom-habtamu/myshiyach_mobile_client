@@ -94,8 +94,8 @@ class FilterProducts {
   bool isPriceNullOrEmpty(double? price) => price == null || price == 0.0;
 
   int _compareCreatedAt(Product a, Product b) {
-    var firstDate = DateFormatterUtil.parseProductCreatedDate(a.createdAt);
-    var secondDate = DateFormatterUtil.parseProductCreatedDate(b.createdAt);
+    var firstDate = DateFormatterUtil.parseProductCreatedDate(a.refreshedAt);
+    var secondDate = DateFormatterUtil.parseProductCreatedDate(b.refreshedAt);
     return secondDate.compareTo(firstDate);
   }
 
