@@ -12,6 +12,10 @@ class RegisterUserCubit extends Cubit<RegisterUserState> {
   RegisterUserCubit(this.registerUser, this.authenticatePhoneNumber)
       : super(RegisterUserEmpty());
 
+  void clear() {
+    emit(RegisterUserEmpty());
+  }
+
   void signUpUser(
       RegisterUserRequestModel request, PhoneAuthCredential credential) async {
     try {

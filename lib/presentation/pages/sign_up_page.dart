@@ -219,6 +219,7 @@ class _SignUpPageState extends State<SignUpPage> {
       password: password,
       phoneNumber: phoneNumber,
     );
+    print(registerUserRequest.toString());
     var args = SignUpButtonArguments(
       registerUserRequest: registerUserRequest,
       pin: pin,

@@ -41,10 +41,13 @@ class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
     return BlocBuilder<VerifyPhoneNumberCubit, VerifyPhoneNumberState>(
       builder: (context, state) {
         if (state is Error) {
-          showToast(
-            context,
-            "Phone Verification Failed",
-          );
+          SchedulerBinding.instance!.addPostFrameCallback((_) {
+            showToast(
+              context,
+              "Phone Verification Failed",
+            );
+            context.read<VerifyPhoneNumberCubit>().clear();
+          });
         }
         if (state is Loading) {
           return const Center(child: CircularProgressIndicator());

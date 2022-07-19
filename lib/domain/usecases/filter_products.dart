@@ -93,7 +93,7 @@ class FilterProducts {
 
   bool isPriceNullOrEmpty(double? price) => price == null || price == 0.0;
 
-  int _compareCreatedAt(Product a, Product b) {
+  int _compareRefreshedAt(Product a, Product b) {
     var firstDate = DateFormatterUtil.parseProductCreatedDate(a.refreshedAt);
     var secondDate = DateFormatterUtil.parseProductCreatedDate(b.refreshedAt);
     return secondDate.compareTo(firstDate);
@@ -113,8 +113,8 @@ class FilterProducts {
 
     if (filterCriteria.sortByCreatedByAscending != null) {
       products.sort(((a, b) => filterCriteria.sortByCreatedByAscending!
-          ? _compareCreatedAt(a, b)
-          : _compareCreatedAt(b, a)));
+          ? _compareRefreshedAt(a, b)
+          : _compareRefreshedAt(b, a)));
     }
 
     return [...products];
