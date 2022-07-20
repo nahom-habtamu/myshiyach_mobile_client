@@ -23,6 +23,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      context.read<AuthPhoneNumberCubit>().clear();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,

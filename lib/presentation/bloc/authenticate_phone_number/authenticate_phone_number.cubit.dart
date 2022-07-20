@@ -9,6 +9,10 @@ class AuthPhoneNumberCubit extends Cubit<AuthPhoneNumberState> {
   AuthPhoneNumberCubit(this.authenticatePhoneNumber)
       : super(AuthPhoneNumberEmpty());
 
+  void clear() {
+    emit(AuthPhoneNumberEmpty());
+  }
+
   Future<void> call(PhoneAuthCredential credential) async {
     try {
       emit(AuthPhoneNumberEmpty());

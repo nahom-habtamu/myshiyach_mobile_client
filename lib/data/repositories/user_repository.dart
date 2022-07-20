@@ -30,6 +30,6 @@ class UserRepository extends UserService {
 
   @override
   Future<void> changePassword(String phoneNumber, String password) {
-    return remoteDataSource.changePassword("+251926849888", password);
+    return remoteDataSource.changePassword(phoneNumber, password);
   }
 }

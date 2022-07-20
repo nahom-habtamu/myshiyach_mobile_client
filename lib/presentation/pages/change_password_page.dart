@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/change_password/change_password_cubit.dart';
 import '../bloc/change_password/change_password_state.dart';
+import '../utils/show_toast.dart';
 import '../widgets/auth_input.dart';
 import '../widgets/common/action_button.dart';
 import 'login_page.dart';
@@ -118,7 +119,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             child: CircularProgressIndicator(),
           );
         }
-
+        if (state is ChangePasswordError) {
+          SchedulerBinding.instance!.addPostFrameCallback((_) {
+            showToast(context, "Password Not Changed");
+          });
+        }
         if (state is ChangePasswordSuccessfull) {
           SchedulerBinding.instance!.addPostFrameCallback((_) {
             Navigator.pushReplacementNamed(
