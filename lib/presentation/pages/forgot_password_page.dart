@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../bloc/authenticate_phone_number/authenticate_phone_number.cubit.dart';
 import '../bloc/authenticate_phone_number/authenticate_phone_number_state.dart';
@@ -78,21 +79,21 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   Column renderForgotPasswordPageHeaders() {
     return Column(
-      children: const [
+      children: [
         Text(
-          "Forgot Your Password ?",
-          style: TextStyle(
+          AppLocalizations.of(context).forgotPassowordHeaderOne,
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 28,
             fontWeight: FontWeight.w600,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
         Text(
-          'Type Your Phone Number To Start',
-          style: TextStyle(
+          AppLocalizations.of(context).forgotPassowordHeaderTwo,
+          style: const TextStyle(
             color: Colors.black54,
             fontSize: 20,
           ),
@@ -128,7 +129,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           );
           context.read<AuthPhoneNumberCubit>().call(credential);
         },
-        text: 'Submit',
+        text: AppLocalizations.of(context).forgotPasswordOtpVerifyButtonText,
       );
     });
   }

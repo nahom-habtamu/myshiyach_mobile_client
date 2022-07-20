@@ -99,7 +99,9 @@ class _ConversationItemState extends State<ConversationItem> {
                     height: 50,
                     width: 200,
                     child: Text(
-                      widget.conversation.messages.last.text,
+                      widget.conversation.messages.isEmpty
+                          ? ""
+                          : widget.conversation.messages.last.text,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -108,9 +110,11 @@ class _ConversationItemState extends State<ConversationItem> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  DateFormatterUtil.extractTimeFromDate(
-                    widget.conversation.messages.last.createdDateTime,
-                  ),
+                  widget.conversation.messages.isEmpty
+                      ? ""
+                      : DateFormatterUtil.extractTimeFromDate(
+                          widget.conversation.messages.last.createdDateTime,
+                        ),
                   style: const TextStyle(fontSize: 11),
                 ),
               )

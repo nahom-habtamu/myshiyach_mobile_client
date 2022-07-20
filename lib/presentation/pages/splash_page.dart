@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
@@ -51,10 +52,10 @@ class _SplashPageState extends State<SplashPage> {
             );
           });
         }
-        return const Center(
+        return Center(
           child: Text(
-            'My Shiyach',
-            style: TextStyle(
+            AppLocalizations.of(context).appTitle,
+            style: const TextStyle(
               color: Color(0xFF11435E),
               fontSize: 30,
               fontWeight: FontWeight.w700,

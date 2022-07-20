@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../domain/enitites/conversation.dart';
 import '../bloc/auth/auth_cubit.dart';
@@ -36,7 +37,9 @@ class _ChatListPageState extends State<ChatListPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xff11435E),
-        appBar: const CustomAppBar(title: "Chat List"),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).chatListAppBarText,
+        ),
         body: CurvedContainer(
           child:
               BlocBuilder<GetAllConversationsCubit, Stream<List<Conversation>>>(

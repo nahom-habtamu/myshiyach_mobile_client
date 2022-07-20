@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../core/utils/date_time_formatter.dart';
 import '../../data/models/conversation/message_model.dart';
@@ -53,7 +54,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xff11435E),
-        appBar: const CustomAppBar(title: "Chat Detail"),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).chatDetailAppBarText,
+        ),
         body: BlocBuilder<GetConversationByIdCubit, Stream<Conversation>>(
           builder: (context, conversationStream) {
             return buildChatDetail(conversationStream);
@@ -68,7 +71,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       stream: conversationStream,
       builder: (BuildContext context, AsyncSnapshot<Conversation> snapshot) {
         if (snapshot.hasError) {
-          return const Text('Something went wrong');
+          return Text(AppLocalizations.of(context).chatDetailFetchError);
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {

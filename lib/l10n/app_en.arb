@@ -1,0 +1,76 @@
+{
+    "language" : "English",
+    "appTitle" : "My Shiyach",
+
+    "addPostAppBarText" : "Add Post",
+    "addPostEmptyCategories" : "Empty Categories",
+    "addPostMainCategoryInputHint" : "Category",
+    "addPostSubCategoryInputHint" : "Sub Category",
+    "addPostTitleInputHint" : "Title",
+    "addPostDescriptionInputHint" : "Description",
+    "addPostPriceInputHint" : "Price",
+    "addPostPickImagesInputHint" : "Pick Images",
+    "addPostButtonCancelText" : "Cancel",
+    "addPostButtonPostText" : "Post",
+    "addPostButtonNextText" : "Next",
+
+    "changePasswordIntroHeaderOne" : "Change Your Password?",
+    "changePasswordIntroHeaderTwo" : "Type in your new password here .",
+    "changePasswordInputHint" : "Password",
+    "changePasswordRepeatInputHint" : "Password Repeat",
+    "changePasswordInputValidationEmptyText" : "Please Enter Password",
+    "changePasswordInputValidationTooShortText" 
+        : "Please Enter 6 or more characters",
+    "changePasswordInputValidationNotMatchText" : "Passwords Don't Match",
+    "changePasswordErrorText" : "Change Password Failed!!!",
+    "changePasswordButtonText" : "Change Password",
+
+
+    "chatDetailAppBarText" : "Chat Detail",
+    "chatDetailMessageInputHint" : "Send Message",
+    "chatDetailFetchError" : "Error In Fetching Messages",
+
+    "chatListAppBarText" : "Chat List",
+
+
+    "filterAppBarText" : "Filters",
+    "filterMaxPriceText" : "Max Price",
+    "filterMinPriceText" : "Min Price",
+    "filterMainCategoryInputHint": "Main Category",
+    "filterSubCategoryInputHint": "Sub Category",
+    "filterBrandInputHint": "Brand",
+    "filterCityInputHint": "City",
+    "filterSortByPriceText" : "Sort By Price",
+    "filterSortByDateOfPostText" : "Sort By Date Of Post",
+    "filterAscendingText" : "Ascending",
+    "filterDescendingText" : "Descending",
+    "filterNoneText" : "None",
+    "filterRemoveButtonText" : "Remove Filters",
+    "filterApplyButtonText" : "Apply Filters",
+    "filterModalHeaderText" : "Price Control",
+
+    "forgotPassowordPhoneInputHintText" : "Enter Phone",
+    "forgotPassowordButtonText" : "Continue",
+    "forgotPassowordHeaderOne" : "Forgot Your Password ?",
+    "forgotPassowordHeaderTwo" : "Type Your Phone Number To Start",
+    "forgotPasswordOtpVerifyButtonText" : "Submit",
+
+    "homeHeader" : "Products",
+    "homeSearchBarHint" : "Search Item",
+    "homeEmptyProductText" : "No Products yet Found!",
+    "homeRetryFetchProductButtonLabel" : "Hit The button Below Reload",
+    "homeRetryFetchProductButtonText" : "Reload",
+
+    "introPageHeaderOne" : "Easy Process",
+    "introPageDescriptionOne" : "Find all your needs in one place.  We provide every service to make your experience smooth.",
+    "introPageHeaderTwo" : "Expert People",
+    "introPageDescriptionTwo" : "We have the best in class individuals working just for you. They are well trained and capable of handling anything you need.",
+    "introPageHeaderThree" : "Appreciation",
+    "introPageDescriptionThree" : "You will get what you need , therefore you will be satisfied",
+    "introPageSkipButtonText" : "Skip",
+    "introPageNextButtonText" : "Next",
+
+
+    "verifyPhoneNumberButtonText" : "Continue",
+    "verifyPhoneNumberErrorText" : "Phone Verification Failed"
+}

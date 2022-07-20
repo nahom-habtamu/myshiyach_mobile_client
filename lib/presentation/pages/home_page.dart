@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
@@ -46,11 +47,11 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(25),
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 22.0),
+              Padding(
+                padding: const EdgeInsets.only(top: 22.0),
                 child: Text(
-                  'Products',
-                  style: TextStyle(fontSize: 25),
+                  AppLocalizations.of(context).homeHeader,
+                  style: const TextStyle(fontSize: 25),
                 ),
               ),
               renderSearchAndFilterBar(),
@@ -136,9 +137,11 @@ class _HomePageState extends State<HomePage> {
       child: Center(
         child: SingleChildScrollView(
           child: EmptyStateContent(
-            captionText: "No Products yet Found!",
-            hintText: "Hit The button Below Reload",
-            buttonText: "Reload",
+            captionText: AppLocalizations.of(context).homeEmptyProductText,
+            hintText:
+                AppLocalizations.of(context).homeRetryFetchProductButtonLabel,
+            buttonText:
+                AppLocalizations.of(context).homeRetryFetchProductButtonText,
             onButtonClicked: () {
               context.read<DisplayAllProductsCubit>().call();
             },

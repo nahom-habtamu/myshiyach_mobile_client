@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../data/models/filter/filter_criteria_model.dart';
 import '../../domain/enitites/main_category.dart';
@@ -66,7 +67,9 @@ class _FilterDataPageState extends State<FilterDataPage> {
       },
       child: Scaffold(
         backgroundColor: const Color(0xff11435E),
-        appBar: const CustomAppBar(title: "Filters"),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).filterAppBarText,
+        ),
         body: CurvedContainer(
           child: SingleChildScrollView(
             child: Padding(
@@ -120,7 +123,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
             onPressed: () {
               handleClearingFilter();
             },
-            text: "Remove Filters",
+            text: AppLocalizations.of(context).filterRemoveButtonText,
             halfWidth: true,
             backgroundColor: Colors.transparent,
           ),
@@ -128,7 +131,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
             onPressed: () {
               handleApplyingFilter();
             },
-            text: "Apply Filter",
+            text: AppLocalizations.of(context).filterRemoveButtonText,
             halfWidth: true,
           ),
         ],
@@ -171,7 +174,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
     return FilterDropDownInput(
       key: Key(selectedMainCategory?.id ?? ""),
       initialValue: selectedMainCategory?.id ?? "",
-      hintText: "Main Category",
+      hintText: AppLocalizations.of(context).filterMainCategoryInputHint,
       items: args.allCategories
           .map((m) => {"value": m.id, "preview": m.title})
           .toList(),
@@ -198,7 +201,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
       child: FilterDropDownInput(
         key: Key(selectedSubCategory?.id ?? ""),
         initialValue: selectedSubCategory?.id ?? "",
-        hintText: "Sub Category",
+        hintText: AppLocalizations.of(context).filterSubCategoryInputHint,
         items: subCategoriesToDisplay
             .map((m) => {"value": m.id, "preview": m.title})
             .toList(),
@@ -221,7 +224,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
       child: FilterDropDownInput(
         key: Key(selectedBrand ?? ""),
         initialValue: selectedBrand ?? "",
-        hintText: "Select A Brand",
+        hintText: AppLocalizations.of(context).filterBrandInputHint,
         items: brandToDisplay ?? [],
         onChanged: (value) {
           setState(() {
@@ -239,7 +242,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
       child: FilterDropDownInput(
         key: Key(selectedCity ?? ""),
         initialValue: selectedCity ?? "",
-        hintText: "Select A City",
+        hintText: AppLocalizations.of(context).filterCityInputHint,
         items: args.cities.map((m) => {"value": m, "preview": m}).toList(),
         onChanged: (value) {
           setState(() {
@@ -276,7 +279,8 @@ class _FilterDataPageState extends State<FilterDataPage> {
         SortValuePicker(
           key: Key('$sortByPriceAscending price'),
           initialValue: sortByPriceAscending,
-          sortingCriteriaTitle: "Sort by Price",
+          sortingCriteriaTitle:
+              AppLocalizations.of(context).filterSortByPriceText,
           onSortingCriteriaChanged: (value) => setState(
             () => sortByPriceAscending = value,
           ),
@@ -285,7 +289,8 @@ class _FilterDataPageState extends State<FilterDataPage> {
         SortValuePicker(
           key: Key('$sortByCreatedByAscending dateOfPost'),
           initialValue: sortByCreatedByAscending,
-          sortingCriteriaTitle: "Sort by Date of Post",
+          sortingCriteriaTitle:
+              AppLocalizations.of(context).filterSortByDateOfPostText,
           onSortingCriteriaChanged: (value) => setState(
             () => sortByCreatedByAscending = value,
           ),

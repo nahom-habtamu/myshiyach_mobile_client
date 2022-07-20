@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../data/models/filter/filter_criteria_model.dart';
 import '../../../domain/enitites/main_category.dart';
@@ -49,7 +50,7 @@ class _SearchBarState extends State<SearchBar> {
                 widget.onSearchQueryChanged(value),
               },
               decoration: InputDecoration(
-                labelText: "Search Item",
+                labelText: AppLocalizations.of(context).homeSearchBarHint,
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(16.0),

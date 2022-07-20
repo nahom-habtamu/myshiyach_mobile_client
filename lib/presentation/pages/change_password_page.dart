@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../bloc/change_password/change_password_cubit.dart';
 import '../bloc/change_password/change_password_state.dart';
@@ -69,14 +70,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 height: 55,
               ),
               AuthInput(
-                hintText: "Password",
+                hintText: AppLocalizations.of(context).changePasswordInputHint,
                 onChanged: (value) => password = value,
                 obsecureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Please Enter Password";
+                    return AppLocalizations.of(context)
+                        .changePasswordInputValidationEmptyText;
                   } else if (value.length < 6) {
-                    return "Please Enter 6 or more characters";
+                    return AppLocalizations.of(context)
+                        .changePasswordInputValidationTooShortText;
                   }
                   return null;
                 },
@@ -85,16 +88,20 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 height: 25,
               ),
               AuthInput(
-                hintText: "Password Repeat",
+                hintText:
+                    AppLocalizations.of(context).changePasswordRepeatInputHint,
                 onChanged: (value) => password = value,
                 obsecureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Please Enter Password";
+                    return AppLocalizations.of(context)
+                        .changePasswordInputValidationEmptyText;
                   } else if (value.length < 6) {
-                    return "Please Enter 6 or more characters";
+                    return AppLocalizations.of(context)
+                        .changePasswordInputValidationTooShortText;
                   } else if (value != password) {
-                    return "Password Don't Match";
+                    return AppLocalizations.of(context)
+                        .changePasswordInputValidationNotMatchText;
                   }
                   return null;
                 },
@@ -121,7 +128,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         }
         if (state is ChangePasswordError) {
           SchedulerBinding.instance!.addPostFrameCallback((_) {
-            showToast(context, "Password Not Changed");
+            showToast(
+              context,
+              AppLocalizations.of(context).changePasswordErrorText,
+            );
           });
         }
         if (state is ChangePasswordSuccessfull) {
@@ -138,7 +148,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               context.read<ChangePasswordCubit>().call(phoneNumber, password);
             }
           },
-          text: 'Change Password',
+          text: AppLocalizations.of(context).changePasswordButtonText,
         );
       },
     );
@@ -146,21 +156,21 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   Column renderChangePasswordPageHeaders() {
     return Column(
-      children: const [
+      children: [
         Text(
-          "Change Your Password?",
-          style: TextStyle(
+          AppLocalizations.of(context).changePasswordIntroHeaderOne,
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 28,
             fontWeight: FontWeight.w600,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
         Text(
-          'Type in your new password here .',
-          style: TextStyle(
+          AppLocalizations.of(context).changePasswordIntroHeaderTwo,
+          style: const TextStyle(
             color: Colors.black54,
             fontSize: 20,
           ),

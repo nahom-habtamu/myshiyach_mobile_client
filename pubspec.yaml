@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   get_it: ^7.2.0
   flutter_bloc: ^8.0.1
   equatable: ^2.0.3
@@ -50,3 +52,4 @@ flutter:
         - asset: fonts/DMSans-MediumItalic.ttf
           style: italic
   uses-material-design: true
+  generate: true

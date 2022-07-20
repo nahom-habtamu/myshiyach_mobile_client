@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'login_page.dart';
 
@@ -12,27 +13,34 @@ class IntroPage extends StatefulWidget {
 
 class _IntroPageState extends State<IntroPage> {
   int currentInformationIndex = 0;
+  dynamic introData = [];
 
-  var introData = [
-    {
-      'image': "assets/1.png",
-      'header': "Easy Process",
-      'description':
-          'Find all your needs in one place.  We provide every service to make your experience smooth.'
-    },
-    {
-      'image': "assets/2.png",
-      'header': "Expert People",
-      'description':
-          'We have the best in class individuals working just for you. They are well trained and capable of handling anything you need.'
-    },
-    {
-      'image': "assets/3.png",
-      'header': "Appreciation",
-      'description':
-          'You will get what you need , therefore you will be satisfied'
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      setState(() {
+        introData = [
+          {
+            'image': "assets/1.png",
+            'header': AppLocalizations.of(context).introPageHeaderOne,
+            'description': AppLocalizations.of(context).introPageDescriptionOne
+          },
+          {
+            'image': "assets/2.png",
+            'header': AppLocalizations.of(context).introPageHeaderTwo,
+            'description': AppLocalizations.of(context).introPageDescriptionTwo
+          },
+          {
+            'image': "assets/3.png",
+            'header': AppLocalizations.of(context).introPageHeaderThree,
+            'description':
+                AppLocalizations.of(context).introPageDescriptionThree
+          },
+        ];
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +114,9 @@ class _IntroPageState extends State<IntroPage> {
                         );
                       }
                     },
-                    child: const Text('Next'),
+                    child: Text(
+                      AppLocalizations.of(context).introPageNextButtonText,
+                    ),
                     style: ElevatedButton.styleFrom(
                       primary: const Color(0xff11435E),
                       textStyle: const TextStyle(
@@ -169,10 +179,10 @@ class _IntroPageState extends State<IntroPage> {
               Radius.circular(20),
             ),
           ),
-          child: const Center(
+          child: Center(
             child: Text(
-              'Skip',
-              style: TextStyle(
+              AppLocalizations.of(context).introPageSkipButtonText,
+              style: const TextStyle(
                 color: Color(0xFF11435E),
                 fontSize: 14,
               ),

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'core/services/injection_container.dart' as di;
 import 'presentation/constants/app_level_state.dart';
@@ -21,7 +22,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: AppLevelState.get(),
       child: MaterialApp(
-        title: 'My Shiyach',
+        title: "My Shiyach",
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
           primaryColor: const Color(0xff11435E),
           fontFamily: 'DMSans',

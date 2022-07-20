@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../constants/login_page_constants.dart';
 
@@ -33,15 +34,16 @@ class _MessageSendingTabState extends State<MessageSendingTab> {
                 style: loginInputTextStyle.copyWith(fontSize: 14),
                 controller: _controller,
                 onChanged: (value) => widget.onMessageChanged(value),
-                decoration: const InputDecoration(
-                  labelText: "Enter Message",
+                decoration: InputDecoration(
+                  labelText:
+                      AppLocalizations.of(context).chatDetailMessageInputHint,
                   border: loginInputEnabledBorder,
                   enabledBorder: loginInputEnabledBorder,
                   focusedBorder: loginInputDisabledBorder,
                   filled: true,
                   fillColor: Colors.white,
                   contentPadding:
-                      EdgeInsets.symmetric(horizontal: 18, vertical: 5),
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
                 ),
                 minLines: 1,
                 maxLines: 5,

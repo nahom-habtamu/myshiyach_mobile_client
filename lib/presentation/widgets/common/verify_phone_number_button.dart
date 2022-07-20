@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import '../../bloc/verify_phone_number/verify_phone_number_state.dart';
@@ -44,7 +45,7 @@ class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
           SchedulerBinding.instance!.addPostFrameCallback((_) {
             showToast(
               context,
-              "Phone Verification Failed",
+              AppLocalizations.of(context).verifyPhoneNumberErrorText,
             );
             context.read<VerifyPhoneNumberCubit>().clear();
           });
@@ -78,7 +79,7 @@ class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
                     .verify(widget.phoneNumber);
               }
             },
-            text: 'Continue',
+            text: AppLocalizations.of(context).verifyPhoneNumberButtonText,
           );
         }
       },

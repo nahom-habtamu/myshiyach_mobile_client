@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PriceRangeInputDialog extends StatefulWidget {
   final double initialMin;
@@ -48,7 +49,7 @@ class _PriceRangeInputDialogState extends State<PriceRangeInputDialog> {
             Padding(
               padding: const EdgeInsets.all(3.0),
               child: Text(
-                'Min Price = $minPriceFromDialog\$',
+                '${AppLocalizations.of(context).filterMinPriceText} = $minPriceFromDialog\$',
                 style: const TextStyle(fontSize: 15),
               ),
             ),
@@ -58,7 +59,7 @@ class _PriceRangeInputDialogState extends State<PriceRangeInputDialog> {
             Padding(
               padding: const EdgeInsets.all(3.0),
               child: Text(
-                'Max Price = $maxPriceFromDialog\$',
+                '${AppLocalizations.of(context).filterMaxPriceText} = $maxPriceFromDialog\$',
                 style: const TextStyle(fontSize: 15),
               ),
             ),
@@ -73,7 +74,7 @@ class _PriceRangeInputDialogState extends State<PriceRangeInputDialog> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Price Control'),
+          title: Text(AppLocalizations.of(context).filterModalHeaderText),
           content: SizedBox(
             height: 170,
             child: Column(
@@ -86,8 +87,8 @@ class _PriceRangeInputDialogState extends State<PriceRangeInputDialog> {
                       }
                     });
                   },
-                  decoration: const InputDecoration(
-                    hintText: "Min Price",
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context).filterMinPriceText,
                   ),
                 ),
                 TextField(
@@ -98,8 +99,8 @@ class _PriceRangeInputDialogState extends State<PriceRangeInputDialog> {
                       }
                     });
                   },
-                  decoration: const InputDecoration(
-                    hintText: "Max Price",
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context).filterMaxPriceText,
                   ),
                 ),
                 const SizedBox(height: 15),
