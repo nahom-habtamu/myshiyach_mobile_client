@@ -18,32 +18,33 @@ class _IntroPageState extends State<IntroPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      setState(() {
-        introData = [
-          {
-            'image': "assets/1.png",
-            'header': AppLocalizations.of(context).introPageHeaderOne,
-            'description': AppLocalizations.of(context).introPageDescriptionOne
-          },
-          {
-            'image': "assets/2.png",
-            'header': AppLocalizations.of(context).introPageHeaderTwo,
-            'description': AppLocalizations.of(context).introPageDescriptionTwo
-          },
-          {
-            'image': "assets/3.png",
-            'header': AppLocalizations.of(context).introPageHeaderThree,
-            'description':
-                AppLocalizations.of(context).introPageDescriptionThree
-          },
-        ];
-      });
+  }
+
+  void initData() {
+    setState(() {
+      introData = [
+        {
+          'image': "assets/1.png",
+          'header': AppLocalizations.of(context).introPageHeaderOne,
+          'description': AppLocalizations.of(context).introPageDescriptionOne
+        },
+        {
+          'image': "assets/2.png",
+          'header': AppLocalizations.of(context).introPageHeaderTwo,
+          'description': AppLocalizations.of(context).introPageDescriptionTwo
+        },
+        {
+          'image': "assets/3.png",
+          'header': AppLocalizations.of(context).introPageHeaderThree,
+          'description': AppLocalizations.of(context).introPageDescriptionThree
+        },
+      ];
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    initData();
     return SafeArea(
       child: Scaffold(
         body: Padding(
