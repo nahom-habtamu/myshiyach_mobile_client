@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
@@ -13,7 +14,9 @@ class PostConfirmationPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xff11435E),
-        appBar: const CustomAppBar(title: "Post Confirmation"),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).postConfirmationAppBarText,
+        ),
         body: CurvedContainer(
           child: renderContent(context),
         ),
@@ -35,24 +38,25 @@ class PostConfirmationPage extends StatelessWidget {
         ),
         SizedBox(
           child: Column(
-            children: const [
-              SizedBox(
+            children: [
+              const SizedBox(
                 height: 15,
               ),
               Text(
-                'Ad Placed',
-                style: TextStyle(
+                AppLocalizations.of(context).postConfirmationAdPlaced,
+                style: const TextStyle(
                   color: Color(0xff11435E),
                   fontSize: 36,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Text(
-                'Your ad has been Successfully placed, Our logistic team will contact with you soon. For any help, call (+251) 12345678',
-                style: TextStyle(
+                AppLocalizations.of(context)
+                    .postConfirmationAdPlacedSuccessfull,
+                style: const TextStyle(
                   color: Color(0xff11435E),
                   fontSize: 15,
                 ),
@@ -72,7 +76,10 @@ class PostConfirmationPage extends StatelessWidget {
                   MasterPage.routeName,
                 );
               },
-              child: const Text('Go to Homepage'),
+              child: Text(
+                AppLocalizations.of(context)
+                    .postConfirmationGoToHomePageButtonText,
+              ),
               style: ElevatedButton.styleFrom(
                 primary: const Color(0xff11435E),
                 textStyle: const TextStyle(

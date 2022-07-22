@@ -233,8 +233,8 @@ class _SignUpPageState extends State<SignUpPage> {
     return BlocBuilder<RegisterUserCubit, RegisterUserState>(
       builder: (context, state) {
         if (state is RegisterUserError) {
-          return Center(
-            child: Text(state.message),
+          return const Center(
+            child: Text("Registration Failed"),
           );
         } else {
           return Container();

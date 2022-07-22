@@ -9,7 +9,7 @@ import '../bloc/logout/logout_cubit.dart';
 import '../bloc/logout/logout_state.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
-import '../widgets/common/post_card_list_item.dart';
+import '../widgets/common/pop_up_dialog.dart';
 import '../widgets/profile/setting_item.dart';
 import '../widgets/profile/settings_item_header.dart';
 import 'login_page.dart';
@@ -80,13 +80,13 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         const SettingItem(
           leadingIcon: Icons.payment,
-          subTitle: "Add your credit & debit cards",
           title: "Payment Methods",
+          subTitle: "Add your credit & debit cards",
         ),
         SettingItem(
           leadingIcon: Icons.my_library_add,
-          subTitle: "Manage Your Posts",
           title: "My Posts",
+          subTitle: "Manage Your Posts",
           onPressed: () {
             Navigator.pushNamed(
               context,

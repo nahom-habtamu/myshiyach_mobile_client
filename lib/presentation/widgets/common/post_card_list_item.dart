@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../domain/enitites/product.dart';
 import '../../pages/post_detail_page.dart';
+import 'pop_up_dialog.dart';
 
 class PostCardListItem extends StatelessWidget {
   final Product product;
@@ -93,31 +94,3 @@ class PostCardListItem extends StatelessWidget {
   }
 }
 
-class PopupDialog extends StatelessWidget {
-  final String content;
-  const PopupDialog({
-    Key? key,
-    required this.content,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text("Confirm"),
-      content: Text(content),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: const Text(
-            "CONFIRM",
-            style: TextStyle(color: Colors.red),
-          ),
-        ),
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text("CANCEL"),
-        ),
-      ],
-    );
-  }
-}
