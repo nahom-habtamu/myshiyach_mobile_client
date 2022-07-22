@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../constants/login_page_constants.dart';
 
@@ -21,13 +22,13 @@ class _PhoneNumberInputState extends State<PhoneNumberInput> {
       initialCountryCode: "ET",
       style: loginInputTextStyle,
       onChanged: (phone) => widget.onChanged(phone.completeNumber),
-      decoration: const InputDecoration(
-        labelText: "Enter Phone",
+      decoration: InputDecoration(
+        labelText: AppLocalizations.of(context).loginPhoneNumberHint,
         border: loginInputEnabledBorder,
         enabledBorder: loginInputEnabledBorder,
         focusedBorder: loginInputDisabledBorder,
         isDense: true,
-        contentPadding: EdgeInsets.all(18),
+        contentPadding: const EdgeInsets.all(18),
         filled: true,
         fillColor: Colors.white,
       ),

@@ -70,6 +70,24 @@
     "introPageSkipButtonText" : "Skip",
     "introPageNextButtonText" : "Next",
 
+    "loginPageHeaderOne" : "Let's Start Shopping",
+    "loginPageHeaderTwo" : "Login to start using the app",
+    "loginPhoneNumberHint" : "Enter Phone",
+    "loginPhoneNumberError" : "Invalid PhoneNumber",
+    "loginPasswordHint" : "Password",
+    "loginPasswordEmptyError" : "Enter Password",
+    "loginPasswordTooShortError" : "Please Enter 6 or more characters",
+    "loginForgotPasswordText" : "Forgot Password ?",
+    "loginDontHaveAccountText" : "Don't Have an Account",
+    "loginSignUpText" : " Sign Up ",
+    "loginButtonText" : "Login",
+
+    "masterNavigationBarTextOne" : "Home",
+    "masterNavigationBarTextTwo" : "Chat",
+    "masterNavigationBarTextThree" : "Add Post",
+    "masterNavigationBarTextFour" : "Saved",
+    "masterNavigationBarTextFive" : "Profile",
+
 
     "verifyPhoneNumberButtonText" : "Continue",
     "verifyPhoneNumberErrorText" : "Phone Verification Failed"

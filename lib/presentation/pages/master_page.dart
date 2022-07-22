@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'add_post_page.dart';
 import 'chat_list_page.dart';
@@ -36,26 +37,26 @@ class _MasterPageState extends State<MasterPage> {
     return Scaffold(
       body: pagesToShow.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.pentagon_rounded),
-            label: 'Home',
+            icon: const Icon(Icons.pentagon_rounded),
+            label: AppLocalizations.of(context).masterNavigationBarTextOne,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chat',
+            icon: const Icon(Icons.chat),
+            label: AppLocalizations.of(context).masterNavigationBarTextTwo,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.all_inbox),
-            label: 'Add Post',
+            icon: const Icon(Icons.all_inbox),
+            label: AppLocalizations.of(context).masterNavigationBarTextThree,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.save),
-            label: 'Saved',
+            icon: const Icon(Icons.save),
+            label: AppLocalizations.of(context).masterNavigationBarTextFour,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Profile',
+            icon: const Icon(Icons.settings),
+            label: AppLocalizations.of(context).masterNavigationBarTextFive,
           ),
         ],
         currentIndex: _selectedIndex,
