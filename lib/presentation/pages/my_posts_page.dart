@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../domain/enitites/product.dart';
 import '../bloc/auth/auth_cubit.dart';
@@ -43,7 +44,8 @@ class _MyPostsPageState extends State<MyPostsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff11435E),
-      appBar: const CustomAppBar(title: "My Posts"),
+      appBar: CustomAppBar(
+          title: AppLocalizations.of(context).myPostsPageAppBarText),
       body: CurvedContainer(
         child: buildMyPosts(),
       ),
@@ -68,9 +70,9 @@ class _MyPostsPageState extends State<MyPostsPage> {
 
   buildEmptyStateContent() {
     return EmptyStateContent(
-      captionText: "No Products yet!",
-      hintText: "Experience Adding products by cliking the button Below",
-      buttonText: "Go To Add",
+      captionText: AppLocalizations.of(context).myPostsPageEmptyCaptionText,
+      hintText: AppLocalizations.of(context).myPostsPageEmptyHintText,
+      buttonText: AppLocalizations.of(context).myPostsPageEmptyButtonText,
       onButtonClicked: () {
         Navigator.pushReplacementNamed(context, AddPostPage.routeName);
       },
@@ -80,11 +82,11 @@ class _MyPostsPageState extends State<MyPostsPage> {
   buildProductList(List<Product> products) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: Text(
-            'Swipe To Delete',
-            style: TextStyle(
+            AppLocalizations.of(context).myPostsPageSwipeToDelete,
+            style: const TextStyle(
               fontSize: 22,
               fontStyle: FontStyle.italic,
               color: Colors.black45,

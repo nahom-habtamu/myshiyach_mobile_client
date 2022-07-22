@@ -87,7 +87,15 @@
     "masterNavigationBarTextThree" : "Add Post",
     "masterNavigationBarTextFour" : "Saved",
     "masterNavigationBarTextFive" : "Profile",
+    
+    "myPostsPageAppBarText" : "My Posts",
+    "myPostsPageEmptyCaptionText" : "No Products yet!",
+    "myPostsPageEmptyHintText" : "Experience Adding products by cliking the button Below",
+    "myPostsPageEmptyButtonText" : "Go To Add",
+    "myPostsPageSwipeToDelete" : "Swipe To Delete",
 
+    "otpVerificationHeaderOne" : "OTP Verification",
+    "otpVerificationHeaderTwo" : "An Authentication code has been sent to",
 
     "verifyPhoneNumberButtonText" : "Continue",
     "verifyPhoneNumberErrorText" : "Phone Verification Failed"

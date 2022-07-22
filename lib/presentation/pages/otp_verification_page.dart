@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../screen_arguments/otp_verification_page_argument.dart';
 import '../widgets/otp_input.dart';
@@ -28,9 +29,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: const Text(
-                  'OTP Verification',
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context).otpVerificationHeaderOne,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
@@ -40,9 +41,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               const SizedBox(
                 height: 25,
               ),
-              const Text(
-                "An Authentication code has been sent to",
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context).otpVerificationHeaderTwo,
+                style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 14,
                   letterSpacing: 0.3,
