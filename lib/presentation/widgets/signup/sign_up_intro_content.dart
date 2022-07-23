@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUpIntroContent extends StatelessWidget {
   const SignUpIntroContent({
@@ -17,9 +18,9 @@ class SignUpIntroContent extends StatelessWidget {
           ),
           SizedBox(
             width: MediaQuery.of(context).size.width,
-            child: const Text(
-              'Register',
-              style: TextStyle(
+            child: Text(
+              AppLocalizations.of(context).signUpPageRegisterText,
+              style: const TextStyle(
                 color: Color(0xff11435E),
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -30,9 +31,9 @@ class SignUpIntroContent extends StatelessWidget {
           const SizedBox(
             height: 30,
           ),
-          const Text(
-            'Getting Started',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context).signUpPageHeaderOne,
+            style: const TextStyle(
               color: Color(0xff11435E),
               fontSize: 36,
               fontWeight: FontWeight.w700,
@@ -41,9 +42,9 @@ class SignUpIntroContent extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          const Text(
-            'Seems you are new here,\nLet\'s set up your profile.',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context).signUpPageHeaderTwo,
+            style: const TextStyle(
               color: Colors.grey,
               fontSize: 22,
               height: 1.3,

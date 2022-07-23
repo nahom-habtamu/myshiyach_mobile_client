@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUpTermsAndServices extends StatelessWidget {
   const SignUpTermsAndServices({
@@ -7,20 +8,20 @@ class SignUpTermsAndServices extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text.rich(
+    return Text.rich(
       TextSpan(
-        style: TextStyle(fontSize: 12),
+        style: const TextStyle(fontSize: 12),
         children: [
           TextSpan(
-            text: "By creating an account, you agree to our\n",
-            style: TextStyle(
+            text: AppLocalizations.of(context).signUpTermsAndConditionOne,
+            style: const TextStyle(
               color: Colors.grey,
               letterSpacing: 0.2,
             ),
           ),
           TextSpan(
-            text: 'Term and Conditions ',
-            style: TextStyle(
+            text: AppLocalizations.of(context).signUpTermsAndConditionTwo,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               color: Color(0xff11435E),
               letterSpacing: 0.2,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
@@ -39,7 +40,9 @@ class _ProfilePageState extends State<ProfilePage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xff11435E),
-        appBar: const CustomAppBar(title: "Profile"),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).profilePageAppBarText,
+        ),
         body: CurvedContainer(
           child: SingleChildScrollView(
             child: renderContent(),
@@ -74,19 +77,21 @@ class _ProfilePageState extends State<ProfilePage> {
         const SizedBox(
           height: 35,
         ),
-        const SettingsItemHeader(content: "General"),
+        SettingsItemHeader(
+          content: AppLocalizations.of(context).profilePageGeneralHeaderText,
+        ),
         const SizedBox(
           height: 15,
         ),
-        const SettingItem(
+        SettingItem(
           leadingIcon: Icons.payment,
-          title: "Payment Methods",
-          subTitle: "Add your credit & debit cards",
+          title: AppLocalizations.of(context).profilePagePaymentTitle,
+          subTitle: AppLocalizations.of(context).profilePagePaymentSubTitle,
         ),
         SettingItem(
           leadingIcon: Icons.my_library_add,
-          title: "My Posts",
-          subTitle: "Manage Your Posts",
+          title: AppLocalizations.of(context).profilePageMyPostsTitle,
+          subTitle: AppLocalizations.of(context).profilePageMyPostsSubTitle,
           onPressed: () {
             Navigator.pushNamed(
               context,
@@ -94,50 +99,56 @@ class _ProfilePageState extends State<ProfilePage> {
             );
           },
         ),
-        const SettingItem(
-          title: "Locations",
-          subTitle: "Add your home & work  locations",
+        SettingItem(
+          title: AppLocalizations.of(context).profilePageLocationTitle,
+          subTitle: AppLocalizations.of(context).profilePageLocationSubTitle,
           leadingIcon: Icons.location_on,
         ),
-        const SettingItem(
-          title: "Add Social Account",
-          subTitle: "Add Facebook, Instagram, Twitter etc ",
+        SettingItem(
+          title: AppLocalizations.of(context).profilePageAccountTitle,
+          subTitle: AppLocalizations.of(context).profilePageAccountSubTitle,
           leadingIcon: Icons.camera_alt,
         ),
-        const SettingItem(
-          title: "Refer to Friends",
-          subTitle: "Refer to friends for a chance of winning",
+        SettingItem(
+          title: AppLocalizations.of(context).profilePageReferTitle,
+          subTitle: AppLocalizations.of(context).profilePageReferSubTitle,
           leadingIcon: Icons.share,
         ),
         const SizedBox(
           height: 25,
         ),
-        const SettingsItemHeader(content: "Notifications"),
+        SettingsItemHeader(
+          content:
+              AppLocalizations.of(context).profilePageNotificationsHeaderText,
+        ),
         const SizedBox(
           height: 15,
         ),
-        const SettingItem(
-          title: "Push Notifications",
-          subTitle: "For daily update and others.",
+        SettingItem(
+          title: AppLocalizations.of(context).profilePageNotificationsTitle,
+          subTitle:
+              AppLocalizations.of(context).profilePageNotificationsSubTitle,
           leadingIcon: Icons.notifications,
           trailingIconType: "SWITCH",
         ),
-        const SettingItem(
-          title: "Promotional Notifications",
-          subTitle: "New Campaign & Offers",
+        SettingItem(
+          title: AppLocalizations.of(context).profilePagePromotionTitle,
+          subTitle: AppLocalizations.of(context).profilePagePromotionSubTitle,
           leadingIcon: Icons.notifications,
           trailingIconType: "SWITCH",
         ),
         const SizedBox(
           height: 25,
         ),
-        const SettingsItemHeader(content: "More"),
+        SettingsItemHeader(
+          content: AppLocalizations.of(context).profilePageMoreHeaderText,
+        ),
         const SizedBox(
           height: 15,
         ),
-        const SettingItem(
-          title: "Contact Us",
-          subTitle: "For More Information",
+        SettingItem(
+          title: AppLocalizations.of(context).profilePageContactTitle,
+          subTitle: AppLocalizations.of(context).profilePageContactSubTitle,
           leadingIcon: Icons.call,
         ),
         BlocBuilder<LogOutCubit, LogOutState>(
@@ -155,14 +166,15 @@ class _ProfilePageState extends State<ProfilePage> {
               );
             }
             return SettingItem(
-              title: "Logout",
+              title: AppLocalizations.of(context).profilePageLogoutHeader,
               leadingIcon: Icons.exit_to_app,
               onPressed: () async {
                 var result = await showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return const PopupDialog(
-                      content: "Are you sure you want to logout?",
+                    return PopupDialog(
+                      content:
+                          AppLocalizations.of(context).profileLogoutPopUpHeader,
                     );
                   },
                 );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/product.dart';
@@ -47,7 +48,9 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xff11435E),
-        appBar: const CustomAppBar(title: "Saved Posts"),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).savedPostsAppBarText,
+        ),
         body: CurvedContainer(
           child:
               BlocBuilder<GetFavoriteProductsCubit, GetFavoriteProductsState>(
@@ -71,11 +74,11 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
   buildProductList(List<Product> products) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: Text(
-            'Swipe To Delete',
-            style: TextStyle(
+            AppLocalizations.of(context).savedPostsSwipeToDelete,
+            style: const TextStyle(
               fontSize: 22,
               fontStyle: FontStyle.italic,
               color: Colors.black45,
@@ -116,9 +119,9 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
 
   Widget buildEmptyStateContent() {
     return EmptyStateContent(
-      captionText: "No saved Products yet!",
-      hintText: "Hit the heart icon to save a product",
-      buttonText: "Start Ordering",
+      captionText: AppLocalizations.of(context).savedPostsEmptyCaptionText,
+      hintText: AppLocalizations.of(context).savedPostsEmptyHintText,
+      buttonText: AppLocalizations.of(context).savedPostsEmptyButtonText,
       onButtonClicked: () {
         Navigator.pushReplacementNamed(context, MasterPage.routeName);
       },

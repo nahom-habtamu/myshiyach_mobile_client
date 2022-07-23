@@ -85,8 +85,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content:
-                  Text(AppLocalizations.of(context).postDetailRefreshError),
+              content: Text(
+                AppLocalizations.of(context).postDetailRefreshError,
+              ),
             ),
           );
         });

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../data/models/register_user/register_user_request_model.dart';
 import '../bloc/register_user/register_user_cubit.dart';
@@ -48,7 +49,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 25,
                   ),
                   AuthInput(
-                    hintText: "Full Name",
+                    hintText: AppLocalizations.of(context).signUpFullNameHint,
                     onChanged: (value) => {
                       setState(() {
                         fullName = value;
@@ -56,9 +57,11 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please Enter FullName";
+                        return AppLocalizations.of(context)
+                            .signUpFullNameEmptyError;
                       } else if (value.length < 5) {
-                        return "Please Enter Your Full Name";
+                        return AppLocalizations.of(context)
+                            .signUpFullNameTooShort;
                       }
                       return null;
                     },
@@ -73,7 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 25,
                   ),
                   AuthInput(
-                    hintText: "Password",
+                    hintText: AppLocalizations.of(context).signUpPasswordHint,
                     onChanged: (value) => {
                       setState(() {
                         password = value;
@@ -81,9 +84,11 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please Enter Password";
+                        return AppLocalizations.of(context)
+                            .signUpPasswordEmptyError;
                       } else if (value.length < 6) {
-                        return "Please Enter 6 or more characters";
+                        return AppLocalizations.of(context)
+                            .signUpPasswordTooShort;
                       }
                       return null;
                     },
@@ -93,7 +98,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 25,
                   ),
                   AuthInput(
-                    hintText: "Confirm Password",
+                    hintText: AppLocalizations.of(context).signUpPassRepeatHint,
                     onChanged: (value) => {
                       setState(() {
                         passwordRepeat = value;
@@ -101,11 +106,14 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please Enter Password";
+                        return AppLocalizations.of(context)
+                            .signUpPassRepeatEmptyError;
                       } else if (value.length < 6) {
-                        return "Please Enter 6 or more characters";
+                        return AppLocalizations.of(context)
+                            .signUpPassRepeatTooShort;
                       } else if (value != password) {
-                        return "Password Don't Match";
+                        return AppLocalizations.of(context)
+                            .signUpPassRepeatNotMatch;
                       }
                       return null;
                     },
@@ -155,7 +163,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       } else {
                         showToast(
                           context,
-                          'You should agree with our terms to continue',
+                          AppLocalizations.of(context)
+                              .signUpTermsAndConditionError,
                         );
                         return false;
                       }
@@ -174,21 +183,22 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      child: const Center(
+                      child: Center(
                         child: Text.rich(
                           TextSpan(
                             children: [
                               TextSpan(
-                                text: "Already have an account ? ",
-                                style: TextStyle(
+                                text: AppLocalizations.of(context)
+                                    .signUpAlreadyHaveAnAccount,
+                                style: const TextStyle(
                                   color: Colors.grey,
                                   fontSize: 13,
                                   letterSpacing: 0.2,
                                 ),
                               ),
                               TextSpan(
-                                text: ' Sign In ',
-                                style: TextStyle(
+                                text: AppLocalizations.of(context).signInText,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xff11435E),
                                   fontSize: 13,
@@ -233,8 +243,8 @@ class _SignUpPageState extends State<SignUpPage> {
     return BlocBuilder<RegisterUserCubit, RegisterUserState>(
       builder: (context, state) {
         if (state is RegisterUserError) {
-          return const Center(
-            child: Text("Registration Failed"),
+          return Center(
+            child: Text(AppLocalizations.of(context).signUpFailedErrorMessage),
           );
         } else {
           return Container();
