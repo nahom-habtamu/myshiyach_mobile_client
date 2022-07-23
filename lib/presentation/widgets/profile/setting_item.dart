@@ -6,6 +6,8 @@ class SettingItem extends StatelessWidget {
   final IconData leadingIcon;
   final String trailingIconType;
   final Function? onPressed;
+  final Function? onValueChanged;
+  final bool value;
 
   const SettingItem({
     Key? key,
@@ -14,6 +16,8 @@ class SettingItem extends StatelessWidget {
     required this.leadingIcon,
     this.trailingIconType = "ARROW",
     this.onPressed,
+    this.onValueChanged,
+    this.value = false,
   }) : super(key: key);
 
   @override
@@ -50,8 +54,12 @@ class SettingItem extends StatelessWidget {
                 size: 18,
               )
             : Switch(
-                value: true,
-                onChanged: (value) {},
+                value: value,
+                onChanged: (value) {
+                  if (onValueChanged != null) {
+                    onValueChanged!(value);
+                  }
+                },
               ),
         leading: Icon(leadingIcon),
         onTap: () {

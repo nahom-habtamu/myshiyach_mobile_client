@@ -154,6 +154,8 @@
     "profilePageMoreHeaderText" : "ተጨማሪ",
     "profilePageContactTitle" : "እኛን ማግኘት ይሻሉ?",
     "profilePageContactSubTitle" : "ለተጨማሪ መረጃ",
+    "profilePageLanguageTitle" : "ቋንቋ መቀየር",
+    "profilePageLanguageSubTitle" : "የመተግበሪያውን ቋንቋ አማርኛ ወይም እንግሊዝኛ ቋንቋ ማድረግ ይችላሉ",
     "profilePageLogoutHeader" : "ከመተግበሪያ ውጣ",
     "profileLogoutPopUpHeader" : "ከመተግበሪያው መውጣት ይፈልጋሉ?",
 

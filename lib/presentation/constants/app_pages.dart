@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mnale_client/presentation/pages/profile_page.dart';
 
 import '../pages/add_post_page.dart';
 import '../pages/change_password_page.dart';
@@ -40,6 +41,7 @@ class AppPages {
       OtpVerificationPage.routeName: (context) => const OtpVerificationPage(),
       FilterDataPage.routeName: (context) => const FilterDataPage(),
       PostImagesScreen.routeName: (context) => const PostImagesScreen(),
+      ProfilePage.routeName: (context) => const ProfilePage(),
     };
   }
 }

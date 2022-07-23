@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mnale_client/presentation/bloc/change_language/change_language_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -100,11 +101,13 @@ Future<void> init() async {
   sl.registerFactory(() => RegisterUserCubit(sl(), sl()));
   sl.registerFactory(() => DisplayAllProductsCubit(sl(), sl(), sl()));
   sl.registerFactory(() => GetAllProductsCubit(sl()));
-  sl.registerFactory(() => GetFavoriteProductsCubit(
-        getFavoriteProducts: sl(),
-        getProductById: sl(),
-        setFavoriteProducts: sl(),
-      ),);
+  sl.registerFactory(
+    () => GetFavoriteProductsCubit(
+      getFavoriteProducts: sl(),
+      getProductById: sl(),
+      setFavoriteProducts: sl(),
+    ),
+  );
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
   sl.registerFactory(() => GetMyProductsCubit(sl()));
   sl.registerFactory(() => AuthPhoneNumberCubit(sl()));
@@ -130,6 +133,7 @@ Future<void> init() async {
   sl.registerFactory(() => ChangePasswordCubit(sl()));
   sl.registerFactory(() => FilterProductsCubit(sl()));
   sl.registerFactory(() => RefreshProductCubit(sl()));
+  sl.registerFactory(() => ChangeLanguageCubit(sl()));
   sl.registerFactory(() => HandleGoingToMessageCubit(
         createConversation: sl(),
         getConversationByMembers: sl(),

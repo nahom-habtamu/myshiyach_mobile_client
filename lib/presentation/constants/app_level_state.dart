@@ -4,6 +4,7 @@ import '../../core/services/injection_container.dart';
 import '../bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/authenticate_phone_number/authenticate_phone_number.cubit.dart';
+import '../bloc/change_language/change_language_cubit.dart';
 import '../bloc/change_password/change_password_cubit.dart';
 import '../bloc/create_product/create_product_cubit.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
@@ -96,6 +97,9 @@ class AppLevelState {
       ),
       BlocProvider(
         create: (_) => sl<RefreshProductCubit>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<ChangeLanguageCubit>(),
       )
     ];
   }

@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
+import '../bloc/change_language/change_language_cubit.dart';
 import '../bloc/logout/logout_cubit.dart';
 import '../bloc/logout/logout_state.dart';
 import '../widgets/common/curved_container.dart';
@@ -17,6 +18,7 @@ import 'login_page.dart';
 import 'my_posts_page.dart';
 
 class ProfilePage extends StatefulWidget {
+  static String routeName = '/profilePage';
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
@@ -150,6 +152,25 @@ class _ProfilePageState extends State<ProfilePage> {
           title: AppLocalizations.of(context).profilePageContactTitle,
           subTitle: AppLocalizations.of(context).profilePageContactSubTitle,
           leadingIcon: Icons.call,
+        ),
+        BlocBuilder<ChangeLanguageCubit, String>(
+          builder: (context, state) {
+            return SettingItem(
+              title: AppLocalizations.of(context).profilePageLanguageTitle,
+              subTitle:
+                  AppLocalizations.of(context).profilePageLanguageSubTitle,
+              leadingIcon: Icons.language,
+              trailingIconType: "SWITCH",
+              value: state == "am",
+              onValueChanged: (value) {
+                if (value) {
+                  context.read<ChangeLanguageCubit>().call("am");
+                } else {
+                  context.read<ChangeLanguageCubit>().call("en");
+                }
+              },
+            );
+          },
         ),
         BlocBuilder<LogOutCubit, LogOutState>(
           builder: (context, state) {
