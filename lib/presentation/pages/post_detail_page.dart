@@ -84,8 +84,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
       if (state is RefreshPostError) {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Error on Refreshing Product'),
+            SnackBar(
+              content:
+                  Text(AppLocalizations.of(context).postDetailRefreshError),
             ),
           );
         });
@@ -135,21 +136,22 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   handleAppBarMenuClicked(String value) {
-    switch (value) {
-      case "Edit":
-        Navigator.pushReplacementNamed(
-          context,
-          EditPostPage.routeName,
-          arguments: product,
-        );
-        break;
-      case "Refresh":
-        refreshProduct(product!);
-        break;
-      case "Save":
-        updateFavorites(product!);
-        break;
-      default:
+    List<String> values = [
+      AppLocalizations.of(context).postDetailEditText,
+      AppLocalizations.of(context).postDetailRefreshText,
+      AppLocalizations.of(context).postDetailSaveText,
+    ];
+
+    if (value == values[0]) {
+      Navigator.pushReplacementNamed(
+        context,
+        EditPostPage.routeName,
+        arguments: product,
+      );
+    } else if (value == values[1]) {
+      refreshProduct(product!);
+    } else if (value == values[2]) {
+      updateFavorites(product!);
     }
   }
 

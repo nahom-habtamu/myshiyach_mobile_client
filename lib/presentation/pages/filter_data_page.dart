@@ -131,7 +131,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
             onPressed: () {
               handleApplyingFilter();
             },
-            text: AppLocalizations.of(context).filterRemoveButtonText,
+            text: AppLocalizations.of(context).filterApplyButtonText,
             halfWidth: true,
           ),
         ],

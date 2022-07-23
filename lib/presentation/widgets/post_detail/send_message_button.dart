@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../data/models/conversation/add_conversation_model.dart';
 import '../../../domain/enitites/product.dart';
@@ -60,7 +61,8 @@ class SendMessageButton extends StatelessWidget {
                           authToken,
                         );
                   },
-                  text: "Send Message",
+                  text:
+                      AppLocalizations.of(context).postDetailSendMessageButton,
                   isCurved: false,
                 );
               },

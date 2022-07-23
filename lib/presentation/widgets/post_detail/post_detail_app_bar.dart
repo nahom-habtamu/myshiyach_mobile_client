@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PostDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showActions;
@@ -14,9 +15,9 @@ class PostDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text(
-        'Post Detail',
-        style: TextStyle(
+      title: Text(
+        AppLocalizations.of(context).forgotPassowordHeaderOne,
+        style: const TextStyle(
           color: Colors.white,
         ),
       ),
@@ -31,10 +32,14 @@ class PostDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
             onSelected: (value) => onAppBarMenuClicked(value),
             itemBuilder: (BuildContext context) {
               var contentToShowOnPopup = isFavorite
-                  ? {'Edit', 'Refresh', "Save"}
+                  ? {
+                      AppLocalizations.of(context).postDetailEditText,
+                      AppLocalizations.of(context).postDetailRefreshText,
+                      AppLocalizations.of(context).postDetailSaveText,
+                    }
                   : {
-                      'Edit',
-                      'Refresh',
+                      AppLocalizations.of(context).postDetailEditText,
+                      AppLocalizations.of(context).postDetailRefreshText,
                     };
               return contentToShowOnPopup.map((String choice) {
                 return PopupMenuItem<String>(

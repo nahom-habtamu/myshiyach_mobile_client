@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../core/utils/date_time_formatter.dart';
 import '../../../core/utils/price_formatter.dart';
@@ -65,10 +66,10 @@ class PostContentToShow extends StatelessWidget {
           ),
           child: Column(
             children: [
-              renderCityAndTitle(),
+              renderCityAndTitle(context),
               renderOtherDetail(),
-              renderPrice(),
-              renderProductTimes(),
+              renderPrice(context),
+              renderProductTimes(context),
             ],
           ),
         ),
@@ -102,7 +103,7 @@ class PostContentToShow extends StatelessWidget {
                 textAlign: TextAlign.justify,
               ),
             ),
-            title: const Text('Description'),
+            title: Text(AppLocalizations.of(context).postDetailDescriptionText),
           ),
         ),
       ),
@@ -117,20 +118,21 @@ class PostContentToShow extends StatelessWidget {
     );
   }
 
-  IntrinsicHeight renderProductTimes() {
+  IntrinsicHeight renderProductTimes(context) {
     return IntrinsicHeight(
       child: Row(
         children: [
           Expanded(
             child: ListTile(
               subtitle: renderTimeContent(product.createdAt),
-              title: const Text('Created'),
+              title: Text(AppLocalizations.of(context).postDetailCreatedAtText),
             ),
           ),
           Expanded(
             child: ListTile(
               subtitle: renderTimeContent(product.refreshedAt),
-              title: const Text('Last Updated'),
+              title:
+                  Text(AppLocalizations.of(context).postDetailRefreshedAtText),
             ),
           ),
         ],
@@ -138,20 +140,20 @@ class PostContentToShow extends StatelessWidget {
     );
   }
 
-  IntrinsicHeight renderCityAndTitle() {
+  IntrinsicHeight renderCityAndTitle(context) {
     return IntrinsicHeight(
       child: Row(
         children: [
           Expanded(
             child: ListTile(
               subtitle: Text(product.title),
-              title: const Text('Title'),
+              title: Text(AppLocalizations.of(context).postDetailTitleText),
             ),
           ),
           Expanded(
             child: ListTile(
               subtitle: Text(product.city),
-              title: const Text('City'),
+              title: Text(AppLocalizations.of(context).postDetailCityText),
             ),
           ),
         ],
@@ -159,7 +161,7 @@ class PostContentToShow extends StatelessWidget {
     );
   }
 
-  renderPrice() {
+  renderPrice(context) {
     return IntrinsicHeight(
       child: ListTile(
         subtitle: Text(
@@ -174,7 +176,7 @@ class PostContentToShow extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        title: const Text('Price'),
+        title: Text(AppLocalizations.of(context).postDetailPriceText),
       ),
     );
   }

@@ -25,7 +25,7 @@ class PageCounter extends StatelessWidget {
               color: Colors.white,
             ),
             Text(
-              '${currentPage + 1} of $pageCount',
+              '${currentPage + 1} / $pageCount',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 12,

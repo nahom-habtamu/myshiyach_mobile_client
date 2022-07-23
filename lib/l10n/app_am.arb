@@ -108,7 +108,7 @@
     "postDetailRefreshText" : "አድስ",
     "postDetailSaveText" : "አስቀመጥ",
     "postDetailRefreshError" : "እቃውን ማደስ አልተሳካም",
-    "postDetailDescriptionText" : "ማብራሪአ",
+    "postDetailDescriptionText" : "ማብራሪያ",
     "postDetailTitleText" : "ርእስ",
     "postDetailPriceText" : "ዋጋ",
     "postDetailCityText" : "ከተማ",
@@ -141,7 +141,7 @@
     "profilePageMoreHeaderText" : "ተጨማሪ",
     "profilePageContactTitle" : "እኛን ማግኘት ይሻሉ?",
     "profilePageContactSubTitle" : "ለተጨማሪ መረጃ",
-    "profilePageLogoutHeader" : "ከመተግበሪአ ውጣ",
+    "profilePageLogoutHeader" : "ከመተግበሪያ ውጣ",
     "profileLogoutPopUpHeader" : "ከመተግበሪያው መውጣት ይፈልጋሉ?",
 
     "savedPostsAppBarText" : "የተቀመጡ እቃዎች",
@@ -170,6 +170,6 @@
     "signInText" : " ወደ ማረጋገጫ ",
     "signUpFailedErrorMessage" : "መለያ መፍጠር አልተሳካም",
 
-    "verifyPhoneNumberButtonText" : "ቅጥል",
+    "verifyPhoneNumberButtonText" : "ቀጥል",
     "verifyPhoneNumberErrorText" : "ስልክ ቁጥር ማረጋገጥ አልተሳካም"
 }

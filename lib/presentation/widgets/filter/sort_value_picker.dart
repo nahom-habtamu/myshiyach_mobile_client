@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SortValuePicker extends StatefulWidget {
   final String sortingCriteriaTitle;
@@ -58,9 +59,9 @@ class _SortValuePickerState extends State<SortValuePicker> {
               SizedBox(
                 height: 40,
                 child: ListTile(
-                  title: const Text(
-                    "None",
-                    style: TextStyle(fontSize: 13),
+                  title: Text(
+                    AppLocalizations.of(context).filterNoneText,
+                    style: const TextStyle(fontSize: 13),
                   ),
                   leading: Radio(
                     value: -1,
@@ -72,9 +73,9 @@ class _SortValuePickerState extends State<SortValuePicker> {
               SizedBox(
                 height: 40,
                 child: ListTile(
-                  title: const Text(
-                    "Ascending",
-                    style: TextStyle(fontSize: 13),
+                  title: Text(
+                    AppLocalizations.of(context).filterAscendingText,
+                    style: const TextStyle(fontSize: 13),
                   ),
                   leading: Radio(
                     value: 0,
@@ -86,9 +87,9 @@ class _SortValuePickerState extends State<SortValuePicker> {
               SizedBox(
                 height: 40,
                 child: ListTile(
-                  title: const Text(
-                    "Descending",
-                    style: TextStyle(fontSize: 13),
+                  title: Text(
+                    AppLocalizations.of(context).filterDescendingText,
+                    style: const TextStyle(fontSize: 13),
                   ),
                   leading: Radio(
                     value: 1,
