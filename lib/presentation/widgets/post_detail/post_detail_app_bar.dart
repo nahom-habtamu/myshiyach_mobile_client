@@ -16,7 +16,7 @@ class PostDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(
-        AppLocalizations.of(context).forgotPassowordHeaderOne,
+        AppLocalizations.of(context).postDetailAppBarText,
         style: const TextStyle(
           color: Colors.white,
         ),

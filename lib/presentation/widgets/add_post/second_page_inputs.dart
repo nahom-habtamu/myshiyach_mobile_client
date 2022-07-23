@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../domain/enitites/main_category.dart';
 import '../edit_post/post_images.dart';
@@ -61,7 +62,8 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
             height: 30,
           ),
           ImagePickerInput(
-            hintText: "Images",
+            hintText:
+                AppLocalizations.of(context).commonPickImagesInputHintText,
             onImagePicked: (value) {
               setState(() {
                 if (pickedImages.length + value.length <= 3) {
@@ -75,12 +77,12 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
           ),
           AddPostDropDownInput(
             initialValue: city,
-            hintText: "City",
+            hintText: AppLocalizations.of(context).commonCityInputHintText,
             items: [...cityToShowOnDropDown],
             onChanged: (value) => city = value,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "Please Select City";
+                return AppLocalizations.of(context).commonCityInputHintText;
               }
               return null;
             },

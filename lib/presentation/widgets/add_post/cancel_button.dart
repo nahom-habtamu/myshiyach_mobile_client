@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'change_input_state_button.dart';
 
@@ -9,7 +10,7 @@ class CancelButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeInputButton(
-      text: "Cancel",
+      text: AppLocalizations.of(context).addPostButtonCancelText,
       onTap: () {
         onTap();
       },

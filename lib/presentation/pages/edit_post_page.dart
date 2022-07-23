@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../core/utils/price_formatter.dart';
 import '../../data/models/product/edit_product_model.dart';
@@ -85,7 +86,9 @@ class _EditPostPageState extends State<EditPostPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xff11435E),
-        appBar: const CustomAppBar(title: "Edit Post"),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).editPostAppBarText,
+        ),
         body: product != null
             ? CurvedContainer(
                 child: renderMainContent(),
@@ -120,7 +123,8 @@ class _EditPostPageState extends State<EditPostPage> {
                     height: 20,
                   ),
                   ImagePickerInput(
-                    hintText: "Pick Post Images",
+                    hintText: AppLocalizations.of(context)
+                        .commonPickImagesInputHintText,
                     onImagePicked: (value) {
                       setState(() {
                         if (pickedImages.length + value.length <= 3) {
@@ -133,13 +137,15 @@ class _EditPostPageState extends State<EditPostPage> {
                     height: 20,
                   ),
                   AddPostInput(
-                    hintText: "Title",
+                    hintText:
+                        AppLocalizations.of(context).commonTitleInputHintText,
                     sizeLimit: 30,
                     onChanged: (value) => setState(() => title = value),
                     initialValue: product!.title,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please Enter Title";
+                        return AppLocalizations.of(context)
+                            .commonTitleInputEmptyText;
                       }
                       return null;
                     },
@@ -148,13 +154,15 @@ class _EditPostPageState extends State<EditPostPage> {
                     height: 20,
                   ),
                   AddPostInput(
-                    hintText: "Description",
+                    hintText: AppLocalizations.of(context)
+                        .commonDescriptionInputHintText,
                     isTextArea: true,
                     onChanged: (value) => setState(() => description = value),
                     initialValue: product!.description,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please Enter Description";
+                        return AppLocalizations.of(context)
+                            .commonDescriptionInputEmptyText;
                       }
                       return null;
                     },
@@ -163,7 +171,8 @@ class _EditPostPageState extends State<EditPostPage> {
                     height: 20,
                   ),
                   AddPostInput(
-                    hintText: "Price",
+                    hintText:
+                        AppLocalizations.of(context).commonPriceInputHintText,
                     sizeLimit: 13,
                     isPrice: true,
                     onChanged: (value) => setState(
@@ -175,14 +184,16 @@ class _EditPostPageState extends State<EditPostPage> {
                         PriceFormatterUtil.formatToPrice(product!.price),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please Enter Price";
+                        return AppLocalizations.of(context)
+                            .commonPriceInputEmptyText;
                       } else {
                         try {
                           double.parse(
                               PriceFormatterUtil.deformatToPureNumber(value));
                           return null;
                         } catch (e) {
-                          return "Enter Correct Price";
+                          return AppLocalizations.of(context)
+                              .commonPriceInputIncorrectError;
                         }
                       }
                     },
@@ -193,10 +204,12 @@ class _EditPostPageState extends State<EditPostPage> {
                   AddPostDropDownInput(
                     initialValue: mainCategory,
                     items: mainCategoryToShowOnDropDown,
-                    hintText: "Category",
+                    hintText: AppLocalizations.of(context)
+                        .commonMainCategoryInputHintText,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please Select Main Category";
+                        return AppLocalizations.of(context)
+                            .commonMainCategoryInputEmptyText;
                       }
                       return null;
                     },
@@ -214,13 +227,15 @@ class _EditPostPageState extends State<EditPostPage> {
                     key: Key(subCategory),
                     initialValue: subCategory,
                     items: subCategoriesToShow,
-                    hintText: "Sub Category",
+                    hintText: AppLocalizations.of(context)
+                        .commonSubCategoryInputHintText,
                     onChanged: (value) => setState(
                       () => subCategory = value,
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please Select Sub Category";
+                        return AppLocalizations.of(context)
+                            .commonSubCategoryInputEmptyText;
                       }
                       return null;
                     },
@@ -231,11 +246,13 @@ class _EditPostPageState extends State<EditPostPage> {
                   AddPostDropDownInput(
                     initialValue: city,
                     items: citiesToShowOnDropDown,
-                    hintText: "City",
+                    hintText:
+                        AppLocalizations.of(context).commonCityInputHintText,
                     onChanged: (value) => setState(() => city = value),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please Select City";
+                        return AppLocalizations.of(context)
+                            .commonCityInputEmptyText;
                       }
                       return null;
                     },
@@ -327,7 +344,7 @@ class _EditPostPageState extends State<EditPostPage> {
         builder: (context, state) {
       if (state is EditPostError) {
         return Center(
-          child: Text(state.message),
+          child: Text(AppLocalizations.of(context).editPostError),
         );
       }
       return Container();
@@ -359,7 +376,7 @@ class _EditPostPageState extends State<EditPostPage> {
             handleUpdatingProduct();
           }
         },
-        text: "Save Changes",
+        text: AppLocalizations.of(context).editPostSaveButtonText,
       );
     });
   }

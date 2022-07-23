@@ -36,11 +36,11 @@ class _ImagePickerInputState extends State<ImagePickerInput> {
             width: 1,
           ),
         ),
-        child: const Padding(
-          padding: EdgeInsets.all(15.0),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
           child: Text(
-            'Pick Images',
-            style: TextStyle(
+            widget.hintText,
+            style: const TextStyle(
               color: Color.fromARGB(146, 0, 0, 0),
               fontSize: 15,
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../data/models/product/add_product_model.dart';
 import '../../domain/enitites/main_category.dart';
@@ -75,7 +76,9 @@ class _AddPostPageState extends State<AddPostPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xff11435E),
-        appBar: const CustomAppBar(title: "Add Post"),
+        appBar: CustomAppBar(
+          title: AppLocalizations.of(context).addPostAppBarText,
+        ),
         body: CurvedContainer(
           child: SingleChildScrollView(child: renderMainContent()),
         ),

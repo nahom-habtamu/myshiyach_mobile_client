@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../core/utils/price_formatter.dart';
 import '../../../domain/enitites/main_category.dart';
@@ -49,7 +50,8 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
         children: [
           AddPostDropDownInput(
             initialValue: mainCategory,
-            hintText: "Category",
+            hintText:
+                AppLocalizations.of(context).commonMainCategoryInputHintText,
             items: [...mainCategoryToShowOnDropDown],
             onChanged: (value) {
               setState(() {
@@ -59,7 +61,8 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             },
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "Please Select Main Category";
+                return AppLocalizations.of(context)
+                    .commonMainCategoryInputEmptyText;
               }
               return null;
             },
@@ -71,13 +74,15 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             key: Key(subCategory),
             initialValue: subCategory,
             items: subCategoryToShowOnDropDown,
-            hintText: "Sub Category",
+            hintText:
+                AppLocalizations.of(context).commonSubCategoryInputHintText,
             onChanged: (value) => setState(
               () => subCategory = value,
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "Please Select Sub Category";
+                return AppLocalizations.of(context)
+                    .commonSubCategoryInputEmptyText;
               }
               return null;
             },
@@ -87,12 +92,12 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
           ),
           AddPostInput(
             initialValue: title,
-            hintText: "Item Title",
+            hintText: AppLocalizations.of(context).commonTitleInputHintText,
             sizeLimit: 30,
             onChanged: (value) => title = value,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "Please Enter Title";
+                return AppLocalizations.of(context).commonTitleInputEmptyText;
               }
               return null;
             },
@@ -102,12 +107,14 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
           ),
           AddPostInput(
             initialValue: description,
-            hintText: "Description",
+            hintText:
+                AppLocalizations.of(context).commonDescriptionInputHintText,
             onChanged: (value) => description = value,
             isTextArea: true,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "Please Enter Description";
+                return AppLocalizations.of(context)
+                    .commonDescriptionInputHintText;
               }
               return null;
             },
@@ -117,14 +124,14 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
           ),
           AddPostInput(
             initialValue: price == 0.0 ? "" : price.toString(),
-            hintText: "Price",
+            hintText: AppLocalizations.of(context).commonPriceInputHintText,
             onChanged: (value) => price = double.parse(
               PriceFormatterUtil.deformatToPureNumber(value),
             ),
             sizeLimit: 13,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "Please Enter Price";
+                return AppLocalizations.of(context).commonPriceInputHintText;
               } else {
                 try {
                   double.parse(
@@ -132,7 +139,8 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
                   );
                   return null;
                 } catch (e) {
-                  return "Enter Correct Price";
+                  return AppLocalizations.of(context)
+                      .commonPriceInputIncorrectError;
                 }
               }
             },

@@ -4,12 +4,6 @@
 
     "addPostAppBarText" : "Add Post",
     "addPostEmptyCategories" : "Empty Categories",
-    "addPostMainCategoryInputHint" : "Category",
-    "addPostSubCategoryInputHint" : "Sub Category",
-    "addPostTitleInputHint" : "Title",
-    "addPostDescriptionInputHint" : "Description",
-    "addPostPriceInputHint" : "Price",
-    "addPostPickImagesInputHint" : "Pick Images",
     "addPostButtonCancelText" : "Cancel",
     "addPostButtonPostText" : "Post",
     "addPostButtonNextText" : "Next",
@@ -25,7 +19,6 @@
     "changePasswordErrorText" : "Change Password Failed!!!",
     "changePasswordButtonText" : "Change Password",
 
-
     "chatDetailAppBarText" : "Chat Detail",
     "chatDetailMessageInputHint" : "Send Message",
     "chatDetailFetchError" : "Error In Fetching Messages",
@@ -35,6 +28,24 @@
     "chatListFetchEmpty" : "No chats found!!",
     "chatListFetchLoadingText" : "Loading...",
 
+    "commonMainCategoryInputHintText" : "Category",
+    "commonMainCategoryInputEmptyText" : "Please Select Main Category",
+    "commonSubCategoryInputHintText" : "Sub Category",
+    "commonSubCategoryInputEmptyText" : "Please Select Sub Category",
+    "commonTitleInputHintText" : "Title",
+    "commonTitleInputEmptyText" : "Please Enter Title",
+    "commonDescriptionInputHintText" : "Description",
+    "commonDescriptionInputEmptyText" : "Please Enter Description",
+    "commonPriceInputHintText" : "Price",
+    "commonPriceInputEmptyText" : "Please Enter Price",
+    "commonPriceInputIncorrectError" : "Enter Correct Price",
+    "commonPickImagesInputHintText" : "Pick Images",
+    "commonCityInputHintText" : "City",
+    "commonCityInputEmptyText" : "Please Enter City",
+
+    "editPostAppBarText" : "Edit Post",
+    "editPostSaveButtonText" : "Save Changes",
+    "editPostError" : "Error In Editing the Product",
 
     "filterAppBarText" : "Filters",
     "filterMaxPriceText" : "Max Price",

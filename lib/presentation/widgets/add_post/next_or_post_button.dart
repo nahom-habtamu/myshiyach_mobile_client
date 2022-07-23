@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'change_input_state_button.dart';
 
@@ -11,7 +12,9 @@ class PostButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeInputButton(
-      text: isPost ? "Post" : "Next",
+      text: isPost
+          ? AppLocalizations.of(context).addPostButtonPostText
+          : AppLocalizations.of(context).addPostButtonNextText,
       backgroundColor: const Color(0xff11435E),
       textColor: Colors.white,
       onTap: onTap,
