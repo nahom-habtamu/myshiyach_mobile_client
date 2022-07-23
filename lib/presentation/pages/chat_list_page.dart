@@ -58,9 +58,17 @@ class _ChatListPageState extends State<ChatListPage> {
       builder:
           (BuildContext context, AsyncSnapshot<List<Conversation>> snapshot) {
         if (snapshot.hasError) {
-          return const Center(child: Text('Something went wrong'));
+          return Center(
+            child: Text(
+              AppLocalizations.of(context).chatListFetchFailedError,
+            ),
+          );
         } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No chats found!!'));
+          return Center(
+            child: Text(
+              AppLocalizations.of(context).chatListFetchEmpty,
+            ),
+          );
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),

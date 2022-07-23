@@ -31,6 +31,9 @@
     "chatDetailFetchError" : "Error In Fetching Messages",
 
     "chatListAppBarText" : "Chat List",
+    "chatListFetchFailedError" : "Something went wrong",
+    "chatListFetchEmpty" : "No chats found!!",
+    "chatListFetchLoadingText" : "Loading...",
 
 
     "filterAppBarText" : "Filters",

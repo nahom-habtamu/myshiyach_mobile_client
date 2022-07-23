@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../core/utils/date_time_formatter.dart';
 import '../../../domain/enitites/conversation.dart';
@@ -135,8 +136,8 @@ class _ConversationItemState extends State<ConversationItem> {
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         height: 100,
-        child: const Center(
-          child: Text('Loading...'),
+        child: Center(
+          child: Text(AppLocalizations.of(context).chatListFetchLoadingText),
         ),
       ),
     );

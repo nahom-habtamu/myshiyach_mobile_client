@@ -25,13 +25,14 @@
     "changePasswordErrorText" : "ሚስጥር ቁጥር መቀየር አልተሳካም!!!",
     "changePasswordButtonText" : "ሚስጥር ቁጥር ቀይር",
 
-
     "chatDetailAppBarText" : "የውይይት ዝርዝር",
     "chatDetailMessageInputHint" : "መልእክት ላክ",
     "chatDetailFetchError" : "መልእክቶችን ማምጣት አልተቻለም",
 
     "chatListAppBarText" : "ውይይቶች",
-
+    "chatListFetchFailedError" : "ውይይቶችን ማግኘት አልተቻለም",
+    "chatListFetchEmpty" : "ምንም ውይይቶች የለዎትም!!",
+    "chatListFetchLoadingText" : "ትንሽ ይጠብቁ",
 
     "filterAppBarText" : "ማጣሪያዎች",
     "filterMaxPriceText" : "ትልቅ ዋጋ",
@@ -66,7 +67,7 @@
     "introPageHeaderTwo" : "እጅግ የሰለጠኑ ሰዎች",
     "introPageDescriptionTwo" : "ለእርስዎ ብቻ የሚሰሩ ፣ በደንብ የሰለጠኑ እና የሚፈልጉትን ማንኛውንም ነገር የማስተናገድ ችሎታ አላቸው።",
     "introPageHeaderThree" : "አድናቆት",
-    "introPageDescriptionThree" : "የሚፈልጉትን ያገኛሉ, ስለዚህ እርስዎም ደስ ይሰኛሉ"፣
+    "introPageDescriptionThree" : "የሚፈልጉትን ያገኛሉ, ስለዚህ እርስዎም ደስ ይሰኛሉ",
     "introPageSkipButtonText" : "እለፍ",
     "introPageNextButtonText" : "ቀጣይ",
 
@@ -105,7 +106,7 @@
     "postDetailAppBarText" : "የእቃ ዝርዝር",
     "postDetailEditText" : "ማስተካከያ",
     "postDetailRefreshText" : "አድስ",
-    "postDetailSaveText" : "አስቀመጥ"
+    "postDetailSaveText" : "አስቀመጥ",
     "postDetailRefreshError" : "እቃውን ማደስ አልተሳካም",
     "postDetailDescriptionText" : "ማብራሪአ",
     "postDetailTitleText" : "ርእስ",

@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
         title: "My Shiyach",
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('am'),
         theme: ThemeData(
           primaryColor: const Color(0xff11435E),
           fontFamily: 'DMSans',
