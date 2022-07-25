@@ -17,7 +17,7 @@ class UserRemoteDataSource {
     );
 
     if (response.statusCode < 200 && response.statusCode > 300) {
-      throw Exception("Registration Failed");
+      throw Exception("User Not Found");
     }
     return UserModel.fromJson(json.decode(response.body));
   }

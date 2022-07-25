@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'presentation/bloc/change_language/change_language_cubit.dart';
 
 import 'core/services/injection_container.dart' as di;
+import 'core/services/injection_container.dart';
+import 'presentation/bloc/change_language/change_language_cubit.dart';
 import 'presentation/constants/app_level_state.dart';
 import 'presentation/constants/app_pages.dart';
 import 'presentation/pages/splash_page.dart';
-import 'core/services/injection_container.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

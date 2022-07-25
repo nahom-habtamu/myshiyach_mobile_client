@@ -118,6 +118,7 @@
 
     "postDetailAppBarText" : "Post Detail",
     "postDetailEditText" : "Edit",
+    "postDetailDeleteText" : "Delete",
     "postDetailRefreshText" : "Refresh",
     "postDetailSaveText" : "Save",
     "postDetailRefreshError" : "Error on Refreshing Product",
@@ -129,6 +130,8 @@
     "postDetailBrandText" : "Brand",
     "postDetailCreatedAtText" : "Created",
     "postDetailRefreshedAtText" : "Last Updated",
+    "postDetailOwnerPhoneNumberText" : "Phone Number",
+    "postDetailOwnerNameText" : "Creator Name",
     "postDetailSendMessageButton" : "Send Message",
 
     "profilePageAppBarText" : "Profile",

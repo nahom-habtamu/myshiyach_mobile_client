@@ -74,6 +74,7 @@ import '../../presentation/bloc/get_conversation_by_id.dart/get_conversation_by_
 import '../../presentation/bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import '../../presentation/bloc/get_my_products/get_my_products_cubit.dart';
+import '../../presentation/bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../presentation/bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../../presentation/bloc/logout/logout_cubit.dart';
@@ -134,11 +135,19 @@ Future<void> init() async {
   sl.registerFactory(() => FilterProductsCubit(sl()));
   sl.registerFactory(() => RefreshProductCubit(sl()));
   sl.registerFactory(() => ChangeLanguageCubit(sl()));
-  sl.registerFactory(() => HandleGoingToMessageCubit(
-        createConversation: sl(),
-        getConversationByMembers: sl(),
-        getUserById: sl(),
-      ));
+  sl.registerFactory(
+    () => GetPostDetailContentCubit(
+      getFavoriteProducts: sl(),
+      getUserById: sl(),
+    ),
+  );
+  sl.registerFactory(
+    () => HandleGoingToMessageCubit(
+      createConversation: sl(),
+      getConversationByMembers: sl(),
+      getUserById: sl(),
+    ),
+  );
   sl.registerFactory(
     () => CreateProductCubit(
       createProduct: sl(),

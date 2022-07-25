@@ -118,6 +118,7 @@
 
     "postDetailAppBarText" : "የእቃ ዝርዝር",
     "postDetailEditText" : "ማስተካከያ",
+    "postDetailDeleteText" : "ደምስስ",
     "postDetailRefreshText" : "አድስ",
     "postDetailSaveText" : "አስቀመጥ",
     "postDetailRefreshError" : "እቃውን ማደስ አልተሳካም",
@@ -129,6 +130,8 @@
     "postDetailBrandText" : "ብራንድ",
     "postDetailCreatedAtText" : "የተለጠፈበት ሰአት",
     "postDetailRefreshedAtText" : "የታደሰበት ሰአት",
+    "postDetailOwnerPhoneNumberText" : "ስልክ ቁጥር",
+    "postDetailOwnerNameText" : "የእቃው ባለቤት ስም",
     "postDetailSendMessageButton" : "መልእክት ይላኩ",
 
     "profilePageAppBarText" : "መገለጫ",

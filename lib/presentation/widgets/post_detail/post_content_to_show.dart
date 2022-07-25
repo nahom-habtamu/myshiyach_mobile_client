@@ -11,12 +11,14 @@ import 'send_message_button.dart';
 class PostContentToShow extends StatelessWidget {
   final Product product;
   final User currentUser;
+  final User? postCreator;
   final String authToken;
   const PostContentToShow({
     Key? key,
     required this.product,
     required this.currentUser,
     required this.authToken,
+    required this.postCreator,
   }) : super(key: key);
 
   @override
@@ -69,6 +71,7 @@ class PostContentToShow extends StatelessWidget {
               renderCityAndTitle(context),
               renderOtherDetail(),
               renderPrice(context),
+              renderCreatorInformation(context),
               renderProductTimes(context),
             ],
           ),
@@ -114,6 +117,28 @@ class PostContentToShow extends StatelessWidget {
     return IntrinsicHeight(
       child: Row(
         children: [...buildOtherDetail()],
+      ),
+    );
+  }
+
+  IntrinsicHeight renderCreatorInformation(context) {
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          Expanded(
+            child: ListTile(
+              subtitle: Text(postCreator?.fullName ?? ""),
+              title: Text(AppLocalizations.of(context).postDetailOwnerNameText),
+            ),
+          ),
+          Expanded(
+            child: ListTile(
+              subtitle: Text(postCreator?.phoneNumber ?? ""),
+              title: Text(
+                  AppLocalizations.of(context).postDetailOwnerPhoneNumberText),
+            ),
+          ),
+        ],
       ),
     );
   }

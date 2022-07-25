@@ -8,8 +8,9 @@ import '../../domain/enitites/product.dart';
 import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
-import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
-import '../bloc/get_favorite_products/get_favorite_products_state.dart';
+import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
+import '../bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
+import '../bloc/get_post_detail_content/get_post_detail_content_state.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/refresh_product/refresh_product_cubit.dart';
 import '../bloc/refresh_product/refresh_product_state.dart';
@@ -31,7 +32,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   User? currentUser;
   String? authToken;
   List<Product> favoriteProducts = [];
-
+  User? userWhoCreatedProduct;
   @override
   void initState() {
     super.initState();
@@ -47,13 +48,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
       product = ModalRoute.of(context)!.settings.arguments as Product;
     });
     context.read<HandleGoingToMessageCubit>().clear();
-    context.read<GetFavoriteProductsCubit>().execute(authToken!);
+    context
+        .read<GetPostDetailContentCubit>()
+        .execute(product!.createdBy, authToken!);
     context.read<RefreshProductCubit>().clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetFavoriteProductsCubit, GetFavoriteProductsState>(
+    return BlocBuilder<GetPostDetailContentCubit, GetPostDetailContentState>(
       builder: (context, state) {
         if (state is Loading || product == null) {
           return const Scaffold(
@@ -63,7 +66,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
           );
         }
         if (state is Loaded) {
-          favoriteProducts = [...state.products];
+          favoriteProducts = [...state.favoriteProducts];
+          userWhoCreatedProduct = state.postCreator;
         }
         return Scaffold(
           appBar: renderAppBar(),
@@ -106,6 +110,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           product: product!,
           currentUser: currentUser!,
           authToken: authToken!,
+          postCreator: userWhoCreatedProduct,
         ),
       );
     });
@@ -141,6 +146,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       AppLocalizations.of(context).postDetailEditText,
       AppLocalizations.of(context).postDetailRefreshText,
       AppLocalizations.of(context).postDetailSaveText,
+      AppLocalizations.of(context).postDetailDeleteText,
     ];
 
     if (value == values[0]) {
@@ -153,6 +159,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
       refreshProduct(product!);
     } else if (value == values[2]) {
       updateFavorites(product!);
+      context
+          .read<GetPostDetailContentCubit>()
+          .execute(product!.createdBy, authToken!);
+    } else if (value == values[3]) {
+      deleteProduct(product!);
     }
   }
 
@@ -170,5 +181,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   void refreshProduct(Product product) {
     context.read<RefreshProductCubit>().call(product.id, authToken!);
+  }
+
+  void deleteProduct(Product product) {
+    context.read<DeleteProductByIdCubit>().call(product.id, authToken!);
   }
 }
