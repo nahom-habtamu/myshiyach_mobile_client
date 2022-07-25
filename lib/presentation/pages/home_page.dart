@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mnale_client/presentation/widgets/common/curved_container.dart';
+import 'package:mnale_client/presentation/widgets/common/custom_app_bar.dart';
 
 import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
@@ -43,17 +45,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(25),
+        backgroundColor: const Color(0xff11435E),
+        appBar: CustomAppBar(title: AppLocalizations.of(context).homeHeader),
+        body: CurvedContainer(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 22.0),
-                child: Text(
-                  AppLocalizations.of(context).homeHeader,
-                  style: const TextStyle(fontSize: 25),
-                ),
-              ),
               renderSearchAndFilterBar(),
               renderCategories(),
               renderProductBuilder(),
