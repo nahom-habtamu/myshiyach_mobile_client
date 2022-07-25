@@ -165,13 +165,10 @@ class PostContentToShow extends StatelessWidget {
     return IntrinsicHeight(
       child: ListTile(
         subtitle: Text(
-          '\$' +
-              PriceFormatterUtil.formatToPrice(
-                product.price,
-              ),
+          PriceFormatterUtil.formatToPrice(product.price) + ' Birr',
           style: const TextStyle(
             color: Color(0xff34A853),
-            fontSize: 24,
+            fontSize: 18,
             height: 1.5,
             fontWeight: FontWeight.bold,
           ),
@@ -202,8 +199,8 @@ class PostContentToShow extends StatelessWidget {
         .map(
           (e) => Expanded(
             child: ListTile(
-              title: Text(e.value),
-              subtitle: Text(e.key),
+              title: Text(e.key),
+              subtitle: Text(e.value),
             ),
           ),
         )

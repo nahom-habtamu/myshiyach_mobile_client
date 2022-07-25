@@ -111,10 +111,10 @@ class _ProductListItemState extends State<ProductListItem> {
       color: const Color(0xffF5FFF8),
       width: MediaQuery.of(context).size.width * 0.45,
       child: Text(
-        '\$' + PriceFormatterUtil.formatToPrice(price),
+        PriceFormatterUtil.formatToPrice(price) + ' Birr',
         style: TextStyle(
           color: const Color(0xff34A853),
-          fontSize: heightOfMobile * 2.3,
+          fontSize: heightOfMobile * 1.8,
           fontWeight: FontWeight.w700,
         ),
         overflow: TextOverflow.clip,
