@@ -24,6 +24,10 @@ class DateFormatterUtil {
     return "$differenceInDays ${differenceInDays == 1 ? "day" : "days"} ago";
   }
 
+  static DateTime parseMessageCreatedDate(String dateTimeString) {
+    return DateTime.parse(dateTimeString);
+  }
+
   static DateTime parseProductCreatedDate(String dateTimeString) {
     return DateFormat('MM/dd/yyyy, HH:mm:ss a').parse(dateTimeString);
   }

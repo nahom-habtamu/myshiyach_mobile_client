@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../models/conversation/message_model.dart';
-import '../../models/conversation/conversation_model.dart';
 import '../../models/conversation/add_conversation_model.dart';
+import '../../models/conversation/conversation_model.dart';
+import '../../models/conversation/message_model.dart';
 import 'conversation_data_source.dart';
 
 class ConversationFirebaseDataSource extends ConversationDataSource {
@@ -13,11 +13,16 @@ class ConversationFirebaseDataSource extends ConversationDataSource {
 
   @override
   Stream<List<ConversationModel>> getAllConversations(String currentUserId) {
-    return conversations!.snapshots().map((snapshot) => snapshot.docs
-        .map((doc) => ConversationModel.fromDocumentSnapshot(doc))
-        .where((con) =>
-            con.memberOne == currentUserId || con.memberTwo == currentUserId)
-        .toList());
+    return conversations!.snapshots().map(
+          (snapshot) => snapshot.docs
+              .map((doc) => ConversationModel.fromDocumentSnapshot(doc))
+              .where((con) =>
+                  (con.memberOne == currentUserId ||
+                      con.memberTwo == currentUserId) &&
+                  con.messages.isNotEmpty)
+              .toList()
+        );
+
   }
 
   @override

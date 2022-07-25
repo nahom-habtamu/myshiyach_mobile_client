@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../core/utils/date_time_formatter.dart';
 import '../../domain/enitites/conversation.dart';
+import '../../domain/enitites/message.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/get_all_conversations/get_all_conversations_cubit.dart';
@@ -74,15 +76,28 @@ class _ChatListPageState extends State<ChatListPage> {
             child: CircularProgressIndicator(),
           );
         }
+
+        var sortedConvos = [...snapshot.data!];
+        sortedConvos.sort(
+            ((a, b) => _compareMessages(a.messages.last, b.messages.last)));
+
         return ListView.builder(
           itemBuilder: (context, index) {
-            var conversation = snapshot.data![index];
+            var conversation = sortedConvos[index];
             return buildConversationItem(conversation);
           },
-          itemCount: snapshot.data!.length,
+          itemCount: sortedConvos.length,
         );
       },
     );
+  }
+
+  int _compareMessages(Message a, Message b) {
+    var firstDate =
+        DateFormatterUtil.parseMessageCreatedDate(a.createdDateTime);
+    var secondDate =
+        DateFormatterUtil.parseMessageCreatedDate(b.createdDateTime);
+    return secondDate.compareTo(firstDate);
   }
 
   Widget buildConversationItem(Conversation conversation) {
