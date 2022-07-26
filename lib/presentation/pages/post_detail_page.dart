@@ -3,7 +3,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/product.dart';
 import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
@@ -14,7 +13,6 @@ import '../bloc/get_post_detail_content/get_post_detail_content_state.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/refresh_product/refresh_product_cubit.dart';
 import '../bloc/refresh_product/refresh_product_state.dart';
-import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../widgets/post_detail/post_content_to_show.dart';
 import '../widgets/post_detail/post_detail_app_bar.dart';
 import 'edit_post_page.dart';
@@ -31,8 +29,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Product? product;
   User? currentUser;
   String? authToken;
-  List<Product> favoriteProducts = [];
-  User? userWhoCreatedProduct;
+
   @override
   void initState() {
     super.initState();
@@ -48,36 +45,38 @@ class _PostDetailPageState extends State<PostDetailPage> {
       product = ModalRoute.of(context)!.settings.arguments as Product;
     });
     context.read<HandleGoingToMessageCubit>().clear();
+    context.read<RefreshProductCubit>().clear();
     context
         .read<GetPostDetailContentCubit>()
         .execute(product!.createdBy, authToken!);
-    context.read<RefreshProductCubit>().clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetPostDetailContentCubit, GetPostDetailContentState>(
-      builder: (context, state) {
-        if (state is Loading || product == null) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-        if (state is Loaded) {
-          favoriteProducts = [...state.favoriteProducts];
-          userWhoCreatedProduct = state.postCreator;
-        }
-        return Scaffold(
-          appBar: renderAppBar(),
-          body: renderBody(),
-        );
-      },
+    return SafeArea(
+      child: Scaffold(
+        appBar: renderAppBar(),
+        body: BlocBuilder<GetPostDetailContentCubit, GetPostDetailContentState>(
+          builder: (context, state) {
+            if (state is Loading || product == null) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is Error) {
+              return Center(
+                child: Text(state.message),
+              );
+            } else if (state is Loaded) {
+              return renderBody(state.favoriteProducts, state.postCreator);
+            }
+            return Container();
+          },
+        ),
+      ),
     );
   }
 
-  renderBody() {
+  renderBody(List<Product> favorites, User postCreator) {
     return BlocBuilder<RefreshProductCubit, RefreshProductState>(
         builder: (context, state) {
       if (state is RefreshPostLoading) {
@@ -110,17 +109,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
           product: product!,
           currentUser: currentUser!,
           authToken: authToken!,
-          postCreator: userWhoCreatedProduct,
+          postCreator: postCreator,
         ),
       );
     });
   }
 
   renderAppBar() {
-    var duplicate = favoriteProducts.where((e) => e.id == product!.id).toList();
+    // var duplicate = favoriteProducts.where((e) => e.id == product!.id).toList();
     return PostDetailAppBar(
       onAppBarMenuClicked: (value) => handleAppBarMenuClicked(value),
-      isFavorite: duplicate.isEmpty,
       showActions: product != null && currentUser!.id == product!.createdBy,
     );
   }
@@ -145,7 +143,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
     List<String> values = [
       AppLocalizations.of(context).postDetailEditText,
       AppLocalizations.of(context).postDetailRefreshText,
-      AppLocalizations.of(context).postDetailSaveText,
       AppLocalizations.of(context).postDetailDeleteText,
     ];
 
@@ -158,26 +155,21 @@ class _PostDetailPageState extends State<PostDetailPage> {
     } else if (value == values[1]) {
       refreshProduct(product!);
     } else if (value == values[2]) {
-      updateFavorites(product!);
-      context
-          .read<GetPostDetailContentCubit>()
-          .execute(product!.createdBy, authToken!);
-    } else if (value == values[3]) {
       deleteProduct(product!);
     }
   }
 
-  void updateFavorites(Product product) {
-    setState(() {
-      favoriteProducts = [...favoriteProducts, product];
-    });
-    List<ProductModel> favoritesToSave =
-        favoriteProducts.map((e) => ProductModel.fromProduct(e)).toList();
-    context
-        .read<SetFavoriteProductsCubit>()
-        .setFavoriteProducts
-        .call(favoritesToSave);
-  }
+  // void updateFavorites(Product product) {
+  //   setState(() {
+  //     favoriteProducts = [...favoriteProducts, product];
+  //   });
+  //   List<ProductModel> favoritesToSave =
+  //       favoriteProducts.map((e) => ProductModel.fromProduct(e)).toList();
+  //   context
+  //       .read<SetFavoriteProductsCubit>()
+  //       .setFavoriteProducts
+  //       .call(favoritesToSave);
+  // }
 
   void refreshProduct(Product product) {
     context.read<RefreshProductCubit>().call(product.id, authToken!);

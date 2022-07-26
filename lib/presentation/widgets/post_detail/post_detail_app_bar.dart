@@ -4,12 +4,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class PostDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showActions;
   final Function(String) onAppBarMenuClicked;
-  final bool isFavorite;
   const PostDetailAppBar({
     Key? key,
     this.showActions = false,
     required this.onAppBarMenuClicked,
-    this.isFavorite = false,
   }) : super(key: key);
 
   @override
@@ -31,18 +29,11 @@ class PostDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: PopupMenuButton<String>(
             onSelected: (value) => onAppBarMenuClicked(value),
             itemBuilder: (BuildContext context) {
-              var contentToShowOnPopup = isFavorite
-                  ? {
-                      AppLocalizations.of(context).postDetailEditText,
-                      AppLocalizations.of(context).postDetailSaveText,
-                      AppLocalizations.of(context).postDetailDeleteText,
-                      AppLocalizations.of(context).postDetailRefreshText,
-                    }
-                  : {
-                      AppLocalizations.of(context).postDetailEditText,
-                      AppLocalizations.of(context).postDetailDeleteText,
-                      AppLocalizations.of(context).postDetailRefreshText,
-                    };
+              var contentToShowOnPopup = {
+                AppLocalizations.of(context).postDetailEditText,
+                AppLocalizations.of(context).postDetailDeleteText,
+                AppLocalizations.of(context).postDetailRefreshText,
+              };
               return contentToShowOnPopup.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
