@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mnale_client/presentation/widgets/common/curved_container.dart';
-import 'package:mnale_client/presentation/widgets/common/custom_app_bar.dart';
 
+import '../../data/models/filter/filter_criteria_model.dart';
 import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
-import '../../data/models/filter/filter_criteria_model.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
 import '../bloc/filter/filter_products_cubit.dart';
+import '../widgets/common/curved_container.dart';
+import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
-import '../widgets/home/search_bar.dart';
-import '../widgets/home/product_list.dart';
 import '../widgets/home/category_item.dart';
+import '../widgets/home/product_list.dart';
+import '../widgets/home/search_bar.dart';
 
 class HomePage extends StatefulWidget {
   static String routeName = "/homePage";
@@ -43,18 +43,16 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xff11435E),
-        appBar: CustomAppBar(title: AppLocalizations.of(context).homeHeader),
-        body: CurvedContainer(
-          child: Column(
-            children: [
-              renderSearchAndFilterBar(),
-              renderCategories(),
-              renderProductBuilder(),
-            ],
-          ),
+    return Scaffold(
+      backgroundColor: const Color(0xff11435E),
+      appBar: CustomAppBar(title: AppLocalizations.of(context).homeHeader),
+      body: CurvedContainer(
+        child: Column(
+          children: [
+            renderSearchAndFilterBar(),
+            renderCategories(),
+            renderProductBuilder(),
+          ],
         ),
       ),
     );

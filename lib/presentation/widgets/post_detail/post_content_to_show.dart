@@ -53,7 +53,7 @@ class PostContentToShow extends StatelessWidget {
       child: Align(
         alignment: Alignment.center,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 25.0),
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
           width: MediaQuery.of(context).size.width * 0.95,
           decoration: const BoxDecoration(
             boxShadow: [
@@ -115,8 +115,8 @@ class PostContentToShow extends StatelessWidget {
 
   IntrinsicHeight renderOtherDetail() {
     return IntrinsicHeight(
-      child: Row(
-        children: [...buildOtherDetail()],
+      child: Column(
+        children: buildOtherDetail(),
       ),
     );
   }
@@ -126,13 +126,13 @@ class PostContentToShow extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: ListTile(
+            child: DetailItem(
               subtitle: Text(postCreator?.fullName ?? ""),
               title: Text(AppLocalizations.of(context).postDetailOwnerNameText),
             ),
           ),
           Expanded(
-            child: ListTile(
+            child: DetailItem(
               subtitle: Text(postCreator?.phoneNumber ?? ""),
               title: Text(
                   AppLocalizations.of(context).postDetailOwnerPhoneNumberText),
@@ -148,13 +148,13 @@ class PostContentToShow extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: ListTile(
+            child: DetailItem(
               subtitle: renderTimeContent(product.createdAt),
               title: Text(AppLocalizations.of(context).postDetailCreatedAtText),
             ),
           ),
           Expanded(
-            child: ListTile(
+            child: DetailItem(
               subtitle: renderTimeContent(product.refreshedAt),
               title:
                   Text(AppLocalizations.of(context).postDetailRefreshedAtText),
@@ -170,13 +170,13 @@ class PostContentToShow extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: ListTile(
+            child: DetailItem(
               subtitle: Text(product.title),
               title: Text(AppLocalizations.of(context).postDetailTitleText),
             ),
           ),
           Expanded(
-            child: ListTile(
+            child: DetailItem(
               subtitle: Text(product.city),
               title: Text(AppLocalizations.of(context).postDetailCityText),
             ),
@@ -188,7 +188,7 @@ class PostContentToShow extends StatelessWidget {
 
   renderPrice(context) {
     return IntrinsicHeight(
-      child: ListTile(
+      child: DetailItem(
         subtitle: Text(
           PriceFormatterUtil.formatToPrice(product.price) + ' Birr',
           style: const TextStyle(
@@ -215,21 +215,54 @@ class PostContentToShow extends StatelessWidget {
     );
   }
 
-  buildOtherDetail() {
+  List<Widget> buildOtherDetail() {
     if (product.productDetail == null || product.productDetail!.isEmpty) {
       return [];
     }
-    return product.productDetail!.entries
-        .toList()
-        .map(
-          (e) => Expanded(
-            child: ListTile(
-              title: Text(e.key),
-              subtitle: Text(e.value),
-            ),
+    List<dynamic> chunks = sliceArrayToDifferentArrays();
+    return List<Widget>.generate(
+      chunks.length,
+      (index) {
+        List<Widget> items = buildWidgetListFromMap(chunks[index]);
+        return IntrinsicHeight(
+          child: Row(
+            children: items,
           ),
-        )
-        .toList();
+        );
+      },
+    );
+  }
+
+  List<Widget> buildWidgetListFromMap(dynamic chunk) {
+    return List<Widget>.from(
+      chunk
+          .map(
+            (e) => Expanded(
+              child: DetailItem(
+                title: Text(e.key),
+                subtitle: Text(e.value),
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  List<dynamic> sliceArrayToDifferentArrays() {
+    var originalList = product.productDetail!.entries.toList();
+    var chunks = [];
+    int chunkSize = 2;
+    for (var i = 0; i < originalList.length; i += chunkSize) {
+      chunks.add(
+        originalList.sublist(
+          i,
+          i + chunkSize > originalList.length
+              ? originalList.length
+              : i + chunkSize,
+        ),
+      );
+    }
+    return chunks;
   }
 
   renderPostDetailButtonSection() {
@@ -237,6 +270,42 @@ class PostContentToShow extends StatelessWidget {
       currentUser: currentUser,
       product: product,
       authToken: authToken,
+    );
+  }
+}
+
+class DetailItem extends StatelessWidget {
+  final Widget title;
+  final Widget subtitle;
+  const DetailItem({
+    Key? key,
+    required this.title,
+    required this.subtitle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 8,
+      ),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFFECE9E9),
+              blurRadius: 1,
+              spreadRadius: 1,
+            )
+          ],
+        ),
+        child: ListTile(
+          subtitle: subtitle,
+          title: title,
+        ),
+      ),
     );
   }
 }
