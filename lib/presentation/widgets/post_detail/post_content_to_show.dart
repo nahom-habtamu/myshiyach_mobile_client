@@ -5,7 +5,9 @@ import '../../../core/utils/date_time_formatter.dart';
 import '../../../core/utils/price_formatter.dart';
 import '../../../domain/enitites/product.dart';
 import '../../../domain/enitites/user.dart';
+import 'detail_item.dart';
 import 'post_detail_carousel.dart';
+import 'save_to_favorite_button.dart';
 import 'send_message_button.dart';
 
 class PostContentToShow extends StatelessWidget {
@@ -33,7 +35,6 @@ class PostContentToShow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 15),
                 renderContentOtherThanDescription(context),
                 const SizedBox(height: 15),
                 renderDescription(context),
@@ -73,6 +74,7 @@ class PostContentToShow extends StatelessWidget {
               renderPrice(context),
               renderCreatorInformation(context),
               renderProductTimes(context),
+              const SaveToFavoritesButton()
             ],
           ),
         ),
@@ -274,38 +276,3 @@ class PostContentToShow extends StatelessWidget {
   }
 }
 
-class DetailItem extends StatelessWidget {
-  final Widget title;
-  final Widget subtitle;
-  const DetailItem({
-    Key? key,
-    required this.title,
-    required this.subtitle,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 8,
-      ),
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xFFECE9E9),
-              blurRadius: 1,
-              spreadRadius: 1,
-            )
-          ],
-        ),
-        child: ListTile(
-          subtitle: subtitle,
-          title: title,
-        ),
-      ),
-    );
-  }
-}
