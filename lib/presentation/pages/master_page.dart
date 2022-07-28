@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../bloc/auth/auth_cubit.dart';
+import '../bloc/auth/auth_state.dart';
+import '../bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import 'add_post_page.dart';
 import 'chat_list_page.dart';
 import 'home_page.dart';
@@ -33,29 +37,76 @@ class _MasterPageState extends State<MasterPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      context.read<GetAllConversationsCubit>().call(
+            authState.currentUser.id,
+          );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: pagesToShow.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: const Icon(Icons.pentagon_rounded),
+            icon: const Icon(
+              Icons.pentagon_rounded,
+              size: 28,
+            ),
             label: AppLocalizations.of(context).masterNavigationBarTextOne,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.chat),
+            icon: Stack(
+              children: const [
+                Icon(
+                  Icons.chat,
+                  size: 25,
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.red,
+                    radius: 7,
+                    child: Center(
+                      child: Text(
+                        "2",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             label: AppLocalizations.of(context).masterNavigationBarTextTwo,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.all_inbox),
+            icon: const Icon(
+              Icons.all_inbox,
+              size: 28,
+            ),
             label: AppLocalizations.of(context).masterNavigationBarTextThree,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.save),
+            icon: const Icon(
+              Icons.save,
+              size: 28,
+            ),
             label: AppLocalizations.of(context).masterNavigationBarTextFour,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.settings),
+            icon: const Icon(
+              Icons.settings,
+              size: 28,
+            ),
             label: AppLocalizations.of(context).masterNavigationBarTextFive,
           ),
         ],

@@ -64,6 +64,8 @@ class _ConversationItemState extends State<ConversationItem> {
   }
 
   renderMainContent() {
+    var unreadMessages =
+        widget.conversation.messages.where((m) => !m.isSeen).toList();
     return GestureDetector(
       onTap: () {
         context.read<GetConversationByIdCubit>().call(widget.conversation.id);
@@ -108,16 +110,33 @@ class _ConversationItemState extends State<ConversationItem> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  widget.conversation.messages.isEmpty
-                      ? ""
-                      : DateFormatterUtil.extractTimeFromDate(
-                          widget.conversation.messages.last.createdDateTime,
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      widget.conversation.messages.isEmpty
+                          ? ""
+                          : DateFormatterUtil.extractTimeFromDate(
+                              widget.conversation.messages.last.createdDateTime,
+                            ),
+                      style: const TextStyle(fontSize: 11),
+                    ),
+                  ),
+                  CircleAvatar(
+                    backgroundColor: Colors.red,
+                    radius: 9,
+                    child: Center(
+                      child: Text(
+                        unreadMessages.length.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
                         ),
-                  style: const TextStyle(fontSize: 11),
-                ),
+                      ),
+                    ),
+                  ),
+                ],
               )
             ],
           ),

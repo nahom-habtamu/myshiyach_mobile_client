@@ -6,11 +6,13 @@ class MessageModel extends Message {
     required String senderId,
     required String recieverId,
     required String createdDateTime,
+    required bool isSeen,
   }) : super(
           text: text,
           senderId: senderId,
           recieverId: recieverId,
           createdDateTime: createdDateTime,
+          isSeen: isSeen,
         );
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
@@ -18,7 +20,8 @@ class MessageModel extends Message {
       text: json["text"],
       senderId: json["senderId"],
       recieverId: json["recieverId"],
-      createdDateTime: json["createdDateTime"]
+      createdDateTime: json["createdDateTime"],
+      isSeen: json["isSeen"],
     );
   }
 
@@ -26,7 +29,8 @@ class MessageModel extends Message {
         "text": text,
         "senderId": senderId,
         "recieverId": recieverId,
-        "createdDateTime": createdDateTime
+        "createdDateTime": createdDateTime,
+        "isSeen": isSeen,
       };
 
   static List<MessageModel> parseMessagesFromJson(dynamic jsonList) {

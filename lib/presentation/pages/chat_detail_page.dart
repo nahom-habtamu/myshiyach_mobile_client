@@ -172,6 +172,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         senderId: currentUser!.id,
         recieverId: args!.strangerUser.id,
         createdDateTime: DateTime.now().toIso8601String(),
+        isSeen: false,
       );
       context
           .read<AddMessageToConversationCubit>()
