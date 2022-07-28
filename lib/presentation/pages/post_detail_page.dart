@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/product.dart';
 import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
@@ -13,6 +14,7 @@ import '../bloc/get_post_detail_content/get_post_detail_content_state.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/refresh_product/refresh_product_cubit.dart';
 import '../bloc/refresh_product/refresh_product_state.dart';
+import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../widgets/post_detail/post_content_to_show.dart';
 import '../widgets/post_detail/post_detail_app_bar.dart';
 import 'edit_post_page.dart';
@@ -103,9 +105,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
           });
         });
       }
+      var duplicate = favorites.where((e) => e.id == product!.id).toList();
       return SizedBox(
         height: MediaQuery.of(context).size.height * 0.9,
         child: PostContentToShow(
+          isFavorite: duplicate.isNotEmpty,
+          handleSaveToFavorite: () => updateFavorites(favorites, product!),
           product: product!,
           currentUser: currentUser!,
           authToken: authToken!,
@@ -116,7 +121,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   renderAppBar() {
-    // var duplicate = favoriteProducts.where((e) => e.id == product!.id).toList();
     return PostDetailAppBar(
       onAppBarMenuClicked: (value) => handleAppBarMenuClicked(value),
       showActions: product != null && currentUser!.id == product!.createdBy,
@@ -159,17 +163,37 @@ class _PostDetailPageState extends State<PostDetailPage> {
     }
   }
 
-  // void updateFavorites(Product product) {
-  //   setState(() {
-  //     favoriteProducts = [...favoriteProducts, product];
-  //   });
-  //   List<ProductModel> favoritesToSave =
-  //       favoriteProducts.map((e) => ProductModel.fromProduct(e)).toList();
-  //   context
-  //       .read<SetFavoriteProductsCubit>()
-  //       .setFavoriteProducts
-  //       .call(favoritesToSave);
-  // }
+  void updateFavorites(List<Product> favoriteProducts, Product product) {
+    var duplicate = favoriteProducts.where((e) => e.id == product.id).toList();
+    List<ProductModel> favoritesToSave = [];
+    if (duplicate.isEmpty) {
+      favoritesToSave = buildListWithProductAdded(favoriteProducts, product);
+    } else {
+      favoritesToSave = buildListWithProductRemoved(favoriteProducts, product);
+    }
+    context
+        .read<SetFavoriteProductsCubit>()
+        .setFavoriteProducts
+        .call(favoritesToSave);
+    context
+        .read<GetPostDetailContentCubit>()
+        .execute(product.createdBy, authToken!);
+  }
+
+  List<ProductModel> buildListWithProductRemoved(
+    List<Product> favoriteProducts,
+    Product product,
+  ) {
+    var removed = favoriteProducts.where((e) => e.id != product.id).toList();
+    return removed.map((e) => ProductModel.fromProduct(e)).toList();
+  }
+
+  List<ProductModel> buildListWithProductAdded(
+      List<Product> favoriteProducts, Product product) {
+    return [...favoriteProducts, product]
+        .map((e) => ProductModel.fromProduct(e))
+        .toList();
+  }
 
   void refreshProduct(Product product) {
     context.read<RefreshProductCubit>().call(product.id, authToken!);

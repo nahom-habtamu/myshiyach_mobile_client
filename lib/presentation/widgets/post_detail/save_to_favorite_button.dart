@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SaveToFavoritesButton extends StatelessWidget {
+  final bool isFavorite;
+  final Function onPressed;
   const SaveToFavoritesButton({
     Key? key,
+    required this.onPressed,
+    required this.isFavorite,
   }) : super(key: key);
 
   @override
@@ -12,11 +16,11 @@ class SaveToFavoritesButton extends StatelessWidget {
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: OutlinedButton(
-          onPressed: () {},
+          onPressed: () => onPressed(),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              CircleAvatar(
+            children: [
+              const CircleAvatar(
                 radius: 15,
                 backgroundColor: Color(0xFFE6E2E2),
                 child: Icon(
@@ -24,12 +28,12 @@ class SaveToFavoritesButton extends StatelessWidget {
                   color: Color.fromARGB(255, 255, 0, 1),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 8,
               ),
               Text(
-                'Add To Favorites',
-                style: TextStyle(fontSize: 16),
+                isFavorite ? 'Remove From Favorites' : 'Add To Favorites',
+                style: const TextStyle(fontSize: 16),
               ),
             ],
           ),

@@ -15,12 +15,16 @@ class PostContentToShow extends StatelessWidget {
   final User currentUser;
   final User? postCreator;
   final String authToken;
+  final Function handleSaveToFavorite;
+  final bool isFavorite;
   const PostContentToShow({
     Key? key,
     required this.product,
     required this.currentUser,
     required this.authToken,
     required this.postCreator,
+    required this.handleSaveToFavorite,
+    required this.isFavorite,
   }) : super(key: key);
 
   @override
@@ -74,7 +78,10 @@ class PostContentToShow extends StatelessWidget {
               renderPrice(context),
               renderCreatorInformation(context),
               renderProductTimes(context),
-              const SaveToFavoritesButton()
+              SaveToFavoritesButton(
+                isFavorite: isFavorite,
+                onPressed: handleSaveToFavorite,
+              )
             ],
           ),
         ),
@@ -275,4 +282,3 @@ class PostContentToShow extends StatelessWidget {
     );
   }
 }
-
