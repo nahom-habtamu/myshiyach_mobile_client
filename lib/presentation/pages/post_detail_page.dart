@@ -201,5 +201,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   void deleteProduct(Product product) {
     context.read<DeleteProductByIdCubit>().call(product.id, authToken!);
+    Navigator.pop(context);
   }
 }
