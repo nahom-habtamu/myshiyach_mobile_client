@@ -26,7 +26,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<AuthPhoneNumberCubit>().clear();
     });
   }
@@ -112,7 +112,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       }
 
       if (state is AuthPhoneNumberSuccessfull) {
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacementNamed(
             context,
             ChangePasswordPage.routeName,

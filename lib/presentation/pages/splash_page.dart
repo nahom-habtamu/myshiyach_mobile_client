@@ -68,7 +68,7 @@ class _SplashPageState extends State<SplashPage> {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is AuthSuccessfull) {
-          SchedulerBinding.instance!.addPostFrameCallback((_) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacementNamed(
               context,
               MasterPage.routeName,
@@ -76,7 +76,7 @@ class _SplashPageState extends State<SplashPage> {
           });
         }
         if (state is AuthError) {
-          SchedulerBinding.instance!.addPostFrameCallback((_) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacementNamed(
               context,
               IntroPage.routeName,

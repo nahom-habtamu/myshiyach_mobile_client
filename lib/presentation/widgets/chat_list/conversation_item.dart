@@ -30,7 +30,7 @@ class _ConversationItemState extends State<ConversationItem> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getStrangerInformation();
     });
   }
@@ -67,9 +67,8 @@ class _ConversationItemState extends State<ConversationItem> {
   }
 
   renderMainContent() {
-    print(currentUserId);
     var unreadMessages = widget.conversation.messages
-        .where((m) => !m.isSeen && m.recieverId == currentUserId)
+        .where((m) => m.isSeen && m.recieverId == currentUserId)
         .toList();
     return GestureDetector(
       onTap: () {

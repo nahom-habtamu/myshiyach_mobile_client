@@ -175,7 +175,7 @@ class _ProfilePageState extends State<ProfilePage> {
         BlocBuilder<LogOutCubit, LogOutState>(
           builder: (context, state) {
             if (state is LogOutSuccessfull) {
-              SchedulerBinding.instance!.addPostFrameCallback((_) {
+              SchedulerBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushReplacementNamed(
                   context,
                   LoginPage.routeName,

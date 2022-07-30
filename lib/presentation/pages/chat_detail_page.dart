@@ -93,7 +93,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   }
 
   void markAllMessagesAsRead(Conversation conversation) {
-    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       context
           .read<MarkMessagesAsReadCubit>()
           .call(currentUser!.id, conversation);
@@ -199,7 +199,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   Future<void> handleScrollingToBottom() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 500),

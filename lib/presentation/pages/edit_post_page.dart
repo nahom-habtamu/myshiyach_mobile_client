@@ -361,7 +361,7 @@ class _EditPostPageState extends State<EditPostPage> {
       }
 
       if (state is EditPostSuccessfull) {
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacementNamed(
             context,
             PostDetailPage.routeName,
