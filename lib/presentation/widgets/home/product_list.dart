@@ -26,7 +26,7 @@ class _ProductListState extends State<ProductList> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
       setState(() {
         favorites = [...widget.favorites];

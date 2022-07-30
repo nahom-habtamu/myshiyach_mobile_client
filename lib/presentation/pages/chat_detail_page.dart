@@ -37,7 +37,20 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   void initState() {
     super.initState();
     initializeCurrentUser();
-    handleScrollingToBottom();
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        bool isTop = _scrollController.position.pixels == 0;
+        if (!isTop) {
+          print("CHANGE MESSAGE VISIBLITY HERE");
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void initializeCurrentUser() {
@@ -183,7 +196,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   Future<void> handleScrollingToBottom() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 500),

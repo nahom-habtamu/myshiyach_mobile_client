@@ -18,7 +18,7 @@ class SignUpButton extends StatelessWidget {
     return BlocBuilder<RegisterUserCubit, RegisterUserState>(
       builder: (context, state) {
         if (state is RegisterUserSuccessfull) {
-          SchedulerBinding.instance.addPostFrameCallback((_) {
+          SchedulerBinding.instance!.addPostFrameCallback((_) {
             Navigator.pushReplacementNamed(
               context,
               LoginPage.routeName,

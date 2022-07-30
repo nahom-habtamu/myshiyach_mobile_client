@@ -24,7 +24,7 @@ class _ChatListPageState extends State<ChatListPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       var authState = context.read<AuthCubit>().state;
       if (authState is AuthSuccessfull) {
         context.read<GetAllConversationsCubit>().call(
