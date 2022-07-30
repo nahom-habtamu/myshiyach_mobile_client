@@ -68,7 +68,7 @@ class _ConversationItemState extends State<ConversationItem> {
 
   renderMainContent() {
     var unreadMessages = widget.conversation.messages
-        .where((m) => m.isSeen && m.recieverId == currentUserId)
+        .where((m) => !m.isSeen && m.recieverId == currentUserId)
         .toList();
     return GestureDetector(
       onTap: () {

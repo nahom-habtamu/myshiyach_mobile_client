@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../domain/enitites/conversation.dart';
 import '../../../domain/usecases/mark_messages_as_read.dart';
 
 class MarkMessagesAsReadCubit extends Cubit<void> {
@@ -11,8 +10,8 @@ class MarkMessagesAsReadCubit extends Cubit<void> {
 
   void call(
     String currentUserId,
-    Conversation conversation,
+    String conversationId
   ) {
-    markMessagesAsRead.call(currentUserId, conversation);
+    markMessagesAsRead.call(currentUserId, conversationId);
   }
 }

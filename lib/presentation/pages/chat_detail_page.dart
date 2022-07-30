@@ -37,13 +37,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   @override
   void initState() {
     super.initState();
-    initializeCurrentUser();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
+    Future.delayed(Duration.zero, () {
+      args =
+          ModalRoute.of(context)!.settings.arguments as ChatDetailPageArguments;
+      initializeCurrentUser();
+      markAllMessagesAsRead(args!.conversationId);
+    });
   }
 
   void initializeCurrentUser() {
@@ -54,9 +53,13 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    args =
-        ModalRoute.of(context)!.settings.arguments as ChatDetailPageArguments;
     return SafeArea(
       child: Scaffold(
         backgroundColor: const Color(0xff11435E),
@@ -86,18 +89,15 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           );
         }
 
-        markAllMessagesAsRead(snapshot.data!);
         return renderMainContent(snapshot.data!);
       },
     );
   }
 
-  void markAllMessagesAsRead(Conversation conversation) {
-    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      context
-          .read<MarkMessagesAsReadCubit>()
-          .call(currentUser!.id, conversation);
-    });
+  void markAllMessagesAsRead(String conversationId) {
+    context
+        .read<MarkMessagesAsReadCubit>()
+        .call(currentUser!.id, conversationId);
   }
 
   renderMainContent(Conversation conversation) {

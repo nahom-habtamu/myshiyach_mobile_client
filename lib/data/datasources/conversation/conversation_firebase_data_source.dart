@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../domain/enitites/conversation.dart';
 import '../../models/conversation/add_conversation_model.dart';
 import '../../models/conversation/conversation_model.dart';
 import '../../models/conversation/message_model.dart';
@@ -94,21 +93,36 @@ class ConversationFirebaseDataSource extends ConversationDataSource {
 
   @override
   void markAllMessagesAsRead(
-      String currentUserId, Conversation conversation) async {
-    var readMessages = conversation.messages.map(
-      (e) {
-        return MessageModel(
-          text: e.text,
-          senderId: e.senderId,
-          recieverId: e.recieverId,
-          createdDateTime: e.createdDateTime,
-          isSeen: e.recieverId == currentUserId || !e.isSeen ? true : false,
-        ).toJson();
-      },
-    ).toList();
+      String currentUserId, String conversationId) async {
+    var conversation = await conversations!
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => ConversationModel.fromDocumentSnapshot(doc))
+            .firstWhere((element) => element.id == conversationId))
+        .first;
 
-    conversations!.doc(conversation.id).update({
-      "messages": [...readMessages]
-    });
+    if (_hasUnreadMessages(conversation, currentUserId)) {
+      var readMessages = conversation.messages.map(
+        (e) {
+          return MessageModel(
+            text: e.text,
+            senderId: e.senderId,
+            recieverId: e.recieverId,
+            createdDateTime: e.createdDateTime,
+            isSeen: e.recieverId == currentUserId || !e.isSeen ? true : false,
+          ).toJson();
+        },
+      ).toList();
+
+      conversations!.doc(conversationId).update({
+        "messages": [...readMessages]
+      });
+    }
   }
+
+  bool _hasUnreadMessages(
+          ConversationModel conversation, String currentUserId) =>
+      conversation.messages
+          .where((e) => e.recieverId == currentUserId || !e.isSeen)
+          .isNotEmpty;
 }
