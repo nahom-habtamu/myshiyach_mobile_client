@@ -21,7 +21,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<AuthCubit>().loginUser(null);
     });
   }
@@ -37,7 +37,7 @@ class _SplashPageState extends State<SplashPage> {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is AuthSuccessfull) {
-          SchedulerBinding.instance!.addPostFrameCallback((_) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacementNamed(
               context,
               MasterPage.routeName,
@@ -45,7 +45,7 @@ class _SplashPageState extends State<SplashPage> {
           });
         }
         if (state is AuthError) {
-          SchedulerBinding.instance!.addPostFrameCallback((_) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacementNamed(
               context,
               IntroPage.routeName,

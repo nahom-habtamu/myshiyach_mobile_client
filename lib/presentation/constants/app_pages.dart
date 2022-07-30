@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mnale_client/presentation/pages/profile_page.dart';
 
 import '../pages/add_post_page.dart';
 import '../pages/change_password_page.dart';
@@ -13,10 +12,12 @@ import '../pages/intro_page.dart';
 import '../pages/login_page.dart';
 import '../pages/master_page.dart';
 import '../pages/my_posts_page.dart';
+import '../pages/offline_page.dart';
 import '../pages/otp_verification_page.dart';
 import '../pages/post_confirmation_page.dart';
 import '../pages/post_detail_page.dart';
 import '../pages/post_image_screen.dart';
+import '../pages/profile_page.dart';
 import '../pages/sign_up_page.dart';
 import '../pages/splash_page.dart';
 
@@ -42,6 +43,7 @@ class AppPages {
       FilterDataPage.routeName: (context) => const FilterDataPage(),
       PostImagesScreen.routeName: (context) => const PostImagesScreen(),
       ProfilePage.routeName: (context) => const ProfilePage(),
+      OfflinePage.routeName: (context) => const OfflinePage(),
     };
   }
 }
