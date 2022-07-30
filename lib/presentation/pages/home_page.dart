@@ -99,11 +99,10 @@ class _HomePageState extends State<HomePage> {
               child: CircularProgressIndicator(),
             ),
           );
+        } else if (state is NoNetwork) {
+          return buildNoNetworkContent();
         } else if (state is Error) {
-          return Text(
-            state.message,
-            style: const TextStyle(color: Colors.red),
-          );
+          return buildErrorContent();
         } else {
           return buildEmptyStateContent();
         }
@@ -123,6 +122,43 @@ class _HomePageState extends State<HomePage> {
     return buildProductList(
       productsToDisplay,
       state.favorites,
+    );
+  }
+
+  Widget buildNoNetworkContent() {
+    return Expanded(
+      child: Center(
+        child: SingleChildScrollView(
+          child: EmptyStateContent(
+            captionText: "No Network",
+            hintText:
+                "Please Connect To Network to continue using this application",
+            buttonText:
+                AppLocalizations.of(context).homeRetryFetchProductButtonText,
+            onButtonClicked: () {
+              context.read<DisplayAllProductsCubit>().call();
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildErrorContent() {
+    return Expanded(
+      child: Center(
+        child: SingleChildScrollView(
+          child: EmptyStateContent(
+            captionText: "Something went wrong",
+            hintText:
+                "Something went wrong in feching the products . Try again later",
+            buttonText: "Retry",
+            onButtonClicked: () {
+              context.read<DisplayAllProductsCubit>().call();
+            },
+          ),
+        ),
+      ),
     );
   }
 

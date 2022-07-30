@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/services/network_info.dart';
 import '../../../core/utils/date_time_formatter.dart';
 import '../../../domain/enitites/product.dart';
 import '../../../domain/usecases/get_all_products.dart';
@@ -11,9 +12,13 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
   final GetAllProducts getAllProducts;
   final GetAllCategories getAllCategories;
   final GetFavoriteProducts getFavoriteProducts;
+  final NetworkInfo networkInfo;
   DisplayAllProductsCubit(
-      this.getAllProducts, this.getAllCategories, this.getFavoriteProducts)
-      : super(Empty());
+    this.getAllProducts,
+    this.getAllCategories,
+    this.getFavoriteProducts,
+    this.networkInfo,
+  ) : super(Empty());
 
   int _compareCreatedAt(Product a, Product b) {
     var firstDate = DateFormatterUtil.parseProductCreatedDate(a.refreshedAt);
@@ -23,17 +28,24 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
 
   void call() async {
     try {
-      emit(Empty());
-      emit(Loading());
-      var products = await getAllProducts.call();
-      var favoriteProducts = await getFavoriteProducts.call();
-      var categories = await getAllCategories.call();
-      if (products.isNotEmpty && categories.isNotEmpty) {
-        sortProductByCreatedTime(products);
-        emit(Loaded(products, categories, favoriteProducts));
-      } else {
+
+      if(await networkInfo.isConnected()){
         emit(Empty());
+        emit(Loading());
+        var products = await getAllProducts.call();
+        var favoriteProducts = await getFavoriteProducts.call();
+        var categories = await getAllCategories.call();
+        if (products.isNotEmpty && categories.isNotEmpty) {
+          sortProductByCreatedTime(products);
+          emit(Loaded(products, categories, favoriteProducts));
+        } else {
+          emit(Empty());
+        }
       }
+      else {
+        emit(NoNetwork());
+      }
+
     } catch (e) {
       emit(Error(message: e.toString()));
     }

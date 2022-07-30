@@ -6,6 +6,8 @@ class GetMyProductsEmpty extends GetMyProductsState {}
 
 class GetMyProductsLoading extends GetMyProductsState {}
 
+class GetMyProductsNoNetwork extends GetMyProductsState {}
+
 class GetMyProductsLoaded extends GetMyProductsState {
   final List<Product> products;
   GetMyProductsLoaded(this.products);

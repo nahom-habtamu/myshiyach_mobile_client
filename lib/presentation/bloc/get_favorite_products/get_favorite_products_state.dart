@@ -6,6 +6,8 @@ class Empty extends GetFavoriteProductsState {}
 
 class Loading extends GetFavoriteProductsState {}
 
+class NoNetwork extends GetFavoriteProductsState {}
+
 class Loaded extends GetFavoriteProductsState {
   final List<Product> products;
   Loaded(this.products);

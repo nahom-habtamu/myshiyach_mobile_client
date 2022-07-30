@@ -16,6 +16,7 @@ import '../widgets/add_post/first_page_inputs.dart';
 import '../widgets/add_post/second_page_inputs.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
+import '../widgets/common/empty_state_content.dart';
 import 'post_confirmation_page.dart';
 
 class AddPostPage extends StatefulWidget {
@@ -97,16 +98,62 @@ class _AddPostPageState extends State<AddPostPage> {
           );
         } else if (state is Loading) {
           return renderLoadingSpinner();
+        } else if (state is NoNetwork) {
+          return renderNoNetwork();
         } else if (state is Error) {
-          return Center(
-            child: Text(state.message),
-          );
+          return renderError();
         } else {
-          return const Center(
-            child: Text("EMPTY CATEGORIES"),
-          );
+          return renderEmpty();
         }
       },
+    );
+  }
+
+  renderEmpty() {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.8,
+      child: Center(
+        child: EmptyStateContent(
+          captionText: "Empty Categories",
+          onButtonClicked: () {
+            initCategories();
+          },
+          hintText: "Please Wait until categories are added by admins",
+          buttonText: "Retry",
+        ),
+      ),
+    );
+  }
+
+  renderError() {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.8,
+      child: Center(
+        child: EmptyStateContent(
+          captionText: "Something went wrong",
+          onButtonClicked: () {
+            initCategories();
+          },
+          hintText: "Something went wrong in fetching categories",
+          buttonText: "Retry",
+        ),
+      ),
+    );
+  }
+
+  renderNoNetwork() {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.8,
+      child: Center(
+        child: EmptyStateContent(
+          captionText: "No Network Connection",
+          onButtonClicked: () {
+            initCategories();
+          },
+          hintText: "Please Connect to network to fetch conversations",
+          buttonText: "Retry",
+        ),
+      ),
     );
   }
 

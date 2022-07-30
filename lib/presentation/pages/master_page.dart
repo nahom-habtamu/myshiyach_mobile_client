@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mnale_client/presentation/bloc/get_all_conversations/get_all_conversations_state.dart';
 
 import '../../domain/enitites/conversation.dart';
 import '../bloc/auth/auth_cubit.dart';
@@ -109,56 +110,64 @@ class _MasterPageState extends State<MasterPage> {
 
   BottomNavigationBarItem renderChatItem(BuildContext context) {
     return BottomNavigationBarItem(
-      icon: BlocBuilder<GetAllConversationsCubit, Stream<List<Conversation>>>(
+      icon: BlocBuilder<GetAllConversationsCubit, GetAllConversationsState>(
         builder: (context, conversationStream) {
-          return StreamBuilder<List<Conversation>>(
-            stream: conversationStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasError ||
-                  snapshot.data == null ||
-                  snapshot.data!.isEmpty) {
-                return const Icon(
-                  Icons.chat,
-                  size: 25,
-                );
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Icon(
-                  Icons.chat,
-                  size: 25,
-                );
-              }
-
-              int unreadMessagesCount = buildUnreadMessages(snapshot.data);
-              return Stack(
-                children: [
-                  const Icon(
+          if (conversationStream is GetAllConversationStateLoaded) {
+            return StreamBuilder<List<Conversation>>(
+              stream: conversationStream.conversation,
+              builder: (context, snapshot) {
+                if (snapshot.hasError ||
+                    snapshot.data == null ||
+                    snapshot.data!.isEmpty) {
+                  return const Icon(
                     Icons.chat,
                     size: 25,
-                  ),
-                  Visibility(
-                    visible: unreadMessagesCount > 0,
-                    child: Positioned(
-                      top: 2,
-                      left: 5,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.red,
-                        radius: 6.5,
-                        child: Center(
-                          child: Text(
-                            unreadMessagesCount.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
+                  );
+                } else if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return const Icon(
+                    Icons.chat,
+                    size: 25,
+                  );
+                }
+
+                int unreadMessagesCount = buildUnreadMessages(snapshot.data);
+                return Stack(
+                  children: [
+                    const Icon(
+                      Icons.chat,
+                      size: 25,
+                    ),
+                    Visibility(
+                      visible: unreadMessagesCount > 0,
+                      child: Positioned(
+                        top: 2,
+                        left: 5,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.red,
+                          radius: 6.5,
+                          child: Center(
+                            child: Text(
+                              unreadMessagesCount.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            },
-          );
+                  ],
+                );
+              },
+            );
+          } else {
+            return const Icon(
+              Icons.chat,
+              size: 25,
+            );
+          }
         },
       ),
       label: AppLocalizations.of(context).masterNavigationBarTextTwo,

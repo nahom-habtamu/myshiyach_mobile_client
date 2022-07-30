@@ -6,6 +6,7 @@ abstract class DisplayAllProductsState {}
 class Empty extends DisplayAllProductsState {}
 
 class Loading extends DisplayAllProductsState {}
+class NoNetwork extends DisplayAllProductsState {}
 
 class Loaded extends DisplayAllProductsState {
   final List<Product> products;

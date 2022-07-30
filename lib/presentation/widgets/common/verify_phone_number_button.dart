@@ -41,6 +41,11 @@ class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
   Widget build(BuildContext context) {
     return BlocBuilder<VerifyPhoneNumberCubit, VerifyPhoneNumberState>(
       builder: (context, state) {
+        if (state is NoNetwork) {
+          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+            showToast(context, "No Network");
+          });
+        }
         if (state is Error) {
           SchedulerBinding.instance.addPostFrameCallback((_) {
             showToast(

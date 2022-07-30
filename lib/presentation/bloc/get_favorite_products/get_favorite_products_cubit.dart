@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/services/network_info.dart';
 import '../../../data/models/product/product_model.dart';
 import '../../../domain/enitites/product.dart';
 import '../../../domain/usecases/get_favorite_products.dart';
@@ -11,23 +12,29 @@ class GetFavoriteProductsCubit extends Cubit<GetFavoriteProductsState> {
   final GetFavoriteProducts getFavoriteProducts;
   final SetFavoriteProducts setFavoriteProducts;
   final GetProductById getProductById;
-  GetFavoriteProductsCubit({
-    required this.getFavoriteProducts,
-    required this.getProductById,
-    required this.setFavoriteProducts,
-  }) : super(Loading());
+  final NetworkInfo networkInfo;
+  GetFavoriteProductsCubit(
+      {required this.getFavoriteProducts,
+      required this.getProductById,
+      required this.setFavoriteProducts,
+      required this.networkInfo})
+      : super(Loading());
 
   void execute(String token) async {
     try {
-      emit(Empty());
-      emit(Loading());
-      var products = await getFavoriteProducts.call();
-      List<Product> checkedProducts =
-          await _getExisingProducts(products, token);
-      if (checkedProducts.isNotEmpty) {
-        emit(Loaded(checkedProducts));
-      } else {
+      if (await networkInfo.isConnected()) {
         emit(Empty());
+        emit(Loading());
+        var products = await getFavoriteProducts.call();
+        List<Product> checkedProducts =
+            await _getExisingProducts(products, token);
+        if (checkedProducts.isNotEmpty) {
+          emit(Loaded(checkedProducts));
+        } else {
+          emit(Empty());
+        }
+      } else {
+        emit(NoNetwork());
       }
     } catch (e) {
       emit(Error(message: e.toString()));

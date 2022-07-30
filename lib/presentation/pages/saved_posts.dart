@@ -61,6 +61,12 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
+              }
+              if (state is Error) {
+                return buildErrorContent();
+              }
+              if (state is NoNetwork) {
+                return buildNoNetworkContent();
               } else {
                 return buildEmptyStateContent();
               }
@@ -124,6 +130,28 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
       buttonText: AppLocalizations.of(context).savedPostsEmptyButtonText,
       onButtonClicked: () {
         Navigator.pushReplacementNamed(context, MasterPage.routeName);
+      },
+    );
+  }
+
+  Widget buildNoNetworkContent() {
+    return EmptyStateContent(
+      captionText: "No Network",
+      hintText: "Please connect to the internet ",
+      buttonText: "Retry",
+      onButtonClicked: () {
+        fetchFavoriteProducts();
+      },
+    );
+  }
+
+  Widget buildErrorContent() {
+    return EmptyStateContent(
+      captionText: "Something went wrong",
+      hintText: "Something went wrong on displaying data .",
+      buttonText: "Retry",
+      onButtonClicked: () {
+        fetchFavoriteProducts();
       },
     );
   }

@@ -6,6 +6,8 @@ class RefreshPostEmpty extends RefreshProductState {}
 
 class RefreshPostLoading extends RefreshProductState {}
 
+class RefreshPostNoNetwork extends RefreshProductState {}
+
 class RefreshPostSuccessfull extends RefreshProductState {
   final Product product;
   RefreshPostSuccessfull(this.product);

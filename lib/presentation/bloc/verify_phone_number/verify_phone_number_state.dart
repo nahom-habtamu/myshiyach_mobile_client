@@ -4,6 +4,8 @@ class Empty extends VerifyPhoneNumberState {}
 
 class Loading extends VerifyPhoneNumberState {}
 
+class NoNetwork extends VerifyPhoneNumberState {}
+
 class CodeSent extends VerifyPhoneNumberState {
   final String verificationId;
   CodeSent(this.verificationId);

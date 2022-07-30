@@ -8,9 +8,11 @@ import '../../domain/enitites/message.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/get_all_conversations/get_all_conversations_cubit.dart';
+import '../bloc/get_all_conversations/get_all_conversations_state.dart';
 import '../widgets/chat_list/conversation_item.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
+import '../widgets/common/empty_state_content.dart';
 
 class ChatListPage extends StatefulWidget {
   static String routeName = "/chatPage";
@@ -25,13 +27,17 @@ class _ChatListPageState extends State<ChatListPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      var authState = context.read<AuthCubit>().state;
-      if (authState is AuthSuccessfull) {
-        context.read<GetAllConversationsCubit>().call(
-              authState.currentUser.id,
-            );
-      }
+      fetchConversations();
     });
+  }
+
+  void fetchConversations() {
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      context.read<GetAllConversationsCubit>().call(
+            authState.currentUser.id,
+          );
+    }
   }
 
   @override
@@ -44,11 +50,21 @@ class _ChatListPageState extends State<ChatListPage> {
         ),
         body: CurvedContainer(
           child:
-              BlocBuilder<GetAllConversationsCubit, Stream<List<Conversation>>>(
-            builder: (context, conversations) {
-              return buildConversationList(conversations);
-            },
-          ),
+              BlocBuilder<GetAllConversationsCubit, GetAllConversationsState>(
+                  builder: (context, state) {
+            if (state is GetAllConversationStateLoaded) {
+              return buildConversationList(state.conversation);
+            } else {
+              return EmptyStateContent(
+                captionText: "No Network Connection",
+                onButtonClicked: () {
+                  fetchConversations();
+                },
+                hintText: "Please Connect to network to fetch conversations",
+                buttonText: "Retry",
+              );
+            }
+          }),
         ),
       ),
     );

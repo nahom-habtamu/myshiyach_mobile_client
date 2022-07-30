@@ -7,6 +7,8 @@ class Empty extends GetPostDetailContentState {}
 
 class Loading extends GetPostDetailContentState {}
 
+class NoNetwork extends GetPostDetailContentState {}
+
 class Loaded extends GetPostDetailContentState {
   final List<Product> favoriteProducts;
   final User postCreator;

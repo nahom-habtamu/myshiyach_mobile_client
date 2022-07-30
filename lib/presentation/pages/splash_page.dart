@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
+import '../widgets/common/empty_state_content.dart';
 import 'intro_page.dart';
 import 'master_page.dart';
 
@@ -22,12 +23,6 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     context.read<AuthCubit>().loginUser(null);
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +50,11 @@ class _SplashPageState extends State<SplashPage> {
             );
           });
         }
-        return renderNoNetwork();
+
+        if (state is AuthNoNetwork) {
+          return renderNoNetwork();
+        }
+        return renderAppTitle();
       },
     );
   }
@@ -74,37 +73,16 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   renderNoNetwork() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 150,
-          height: 150,
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(25),
-            ),
-            child: Image.asset(
-              'assets/no_network.png',
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 35,
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.7,
-          child: const Text(
-            'Please Connect to the internet to continue using the application',
-            style: TextStyle(
-              color: Color(0xFF11435E),
-              fontSize: 22,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        )
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: EmptyStateContent(
+        captionText: "No Network",
+        onButtonClicked: () {
+          context.read<AuthCubit>().loginUser(null);
+        },
+        hintText: "Please Connect to network to keep using the application",
+        buttonText: "Retry",
+      ),
     );
   }
 }

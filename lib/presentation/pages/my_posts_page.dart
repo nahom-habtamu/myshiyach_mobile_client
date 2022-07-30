@@ -28,14 +28,20 @@ class _MyPostsPageState extends State<MyPostsPage> {
   @override
   void initState() {
     super.initState();
-    initAccessTokenAndFetchMyPosts();
+    initAccessToken();
+    fetchMyPosts();
   }
 
-  void initAccessTokenAndFetchMyPosts() {
+  void initAccessToken() {
     var authState = context.read<AuthCubit>().state;
-
     if (authState is AuthSuccessfull) {
       accessToken = authState.loginResult.token;
+    }
+  }
+
+  void fetchMyPosts() {
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
       context.read<GetMyProductsCubit>().call(authState.currentUser.id);
     }
   }
@@ -61,6 +67,10 @@ class _MyPostsPageState extends State<MyPostsPage> {
           return const Center(
             child: CircularProgressIndicator(),
           );
+        } else if (state is GetMyProductsError) {
+          return buildErrorContent();
+        } else if (state is GetMyProductsNoNetwork) {
+          return buildNoNetworkContent();
         } else {
           return buildEmptyStateContent();
         }
@@ -75,6 +85,28 @@ class _MyPostsPageState extends State<MyPostsPage> {
       buttonText: AppLocalizations.of(context).myPostsPageEmptyButtonText,
       onButtonClicked: () {
         Navigator.pushReplacementNamed(context, AddPostPage.routeName);
+      },
+    );
+  }
+
+  buildNoNetworkContent() {
+    return EmptyStateContent(
+      captionText: "No Network",
+      hintText: "Please connect to continue fetching your posts",
+      buttonText: "Retry",
+      onButtonClicked: () {
+        fetchMyPosts();
+      },
+    );
+  }
+
+  buildErrorContent() {
+    return EmptyStateContent(
+      captionText: "Something Went Wrong",
+      hintText: "Something went wrong in fetching data",
+      buttonText: "Retry",
+      onButtonClicked: () {
+        fetchMyPosts();
       },
     );
   }
@@ -104,7 +136,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
                       products[index].id,
                       accessToken,
                     );
-                initAccessTokenAndFetchMyPosts();
+                fetchMyPosts();
               },
             ),
             itemCount: products.length,

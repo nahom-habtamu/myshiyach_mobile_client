@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -242,6 +243,11 @@ class _SignUpPageState extends State<SignUpPage> {
   BlocBuilder<RegisterUserCubit, RegisterUserState> renderRegisterError() {
     return BlocBuilder<RegisterUserCubit, RegisterUserState>(
       builder: (context, state) {
+        if (state is RegisterUserNoNetwork) {
+          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+            showToast(context, "No Network");
+          });
+        }
         if (state is RegisterUserError) {
           return Center(
             child: Text(AppLocalizations.of(context).signUpFailedErrorMessage),

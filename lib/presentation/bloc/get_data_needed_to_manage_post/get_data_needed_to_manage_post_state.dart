@@ -6,6 +6,8 @@ class Empty extends GetDataNeededToManagePostState {}
 
 class Loading extends GetDataNeededToManagePostState {}
 
+class NoNetwork extends GetDataNeededToManagePostState {}
+
 class Loaded extends GetDataNeededToManagePostState {
   final List<MainCategory> categories;
   final List<String> cities;

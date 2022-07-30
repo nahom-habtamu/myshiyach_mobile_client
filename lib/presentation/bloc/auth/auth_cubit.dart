@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/core/services/network_info.dart';
 
 import '../../../data/models/login/login_request_model.dart';
 import '../../../domain/usecases/extract_token.dart';
@@ -14,13 +15,15 @@ class AuthCubit extends Cubit<AuthState> {
   final ExtractToken extractToken;
   final StoreUserCredentials storeUserCredentials;
   final GetStoredUserCredentials getStoredUserCredentials;
-  AuthCubit({
-    required this.login,
-    required this.getCurrentUser,
-    required this.extractToken,
-    required this.storeUserCredentials,
-    required this.getStoredUserCredentials,
-  }) : super(AuthNotTriggered());
+  final NetworkInfo networkInfo;
+  AuthCubit(
+      {required this.login,
+      required this.getCurrentUser,
+      required this.extractToken,
+      required this.storeUserCredentials,
+      required this.getStoredUserCredentials,
+      required this.networkInfo})
+      : super(AuthNotTriggered());
 
   void clear() {
     emit(AuthNotTriggered());
@@ -28,25 +31,26 @@ class AuthCubit extends Cubit<AuthState> {
 
   void loginUser(LoginRequestModel? request) async {
     try {
-      emit(AuthNotTriggered());
-      emit(AuthLoading());
+      if (await networkInfo.isConnected()) {
+        emit(AuthLoading());
 
-      request ??= await getStoredUserCredentials.call();
+        request ??= await getStoredUserCredentials.call();
 
-      if (request!.userName.isEmpty || request.password.isEmpty) {
-        throw Exception("Invalid Credentials");
+        if (request!.userName.isEmpty || request.password.isEmpty) {
+          throw Exception("Invalid Credentials");
+        }
+
+        var authResult = await login.call(request);
+        var decodedToken = extractToken.call(authResult.token);
+        var currentUser = await getCurrentUser.call(
+          decodedToken["sub"],
+          authResult.token,
+        );
+        storeUserCredentials.call(request);
+        emit(AuthSuccessfull(authResult, currentUser));
+      } else {
+        emit(AuthNoNetwork());
       }
-
-      var authResult = await login.call(request);
-      var decodedToken = extractToken.call(authResult.token);
-      var currentUser = await getCurrentUser.call(
-        decodedToken["sub"],
-        authResult.token,
-      );
-
-      storeUserCredentials.call(request);
-
-      emit(AuthSuccessfull(authResult, currentUser));
     } catch (e) {
       emit(AuthError(message: e.toString()));
     }

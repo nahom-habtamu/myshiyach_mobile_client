@@ -7,6 +7,8 @@ class AuthNotTriggered extends AuthState {}
 
 class AuthLoading extends AuthState {}
 
+class AuthNoNetwork extends AuthState {}
+
 class AuthSuccessfull extends AuthState {
   final LoginResult loginResult;
   final User currentUser;

@@ -13,6 +13,7 @@ import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cu
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_state.dart';
 import '../bloc/update_product/update_product_cubit.dart';
 import '../bloc/update_product/update_product_state.dart';
+import '../utils/show_toast.dart';
 import '../widgets/add_post/add_post_dropdown_dart.dart';
 import '../widgets/add_post/add_post_input.dart';
 import '../widgets/add_post/input_image_picker.dart';
@@ -359,7 +360,11 @@ class _EditPostPageState extends State<EditPostPage> {
           child: CircularProgressIndicator(),
         );
       }
-
+      if (state is EditPostNoNetwork) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          showToast(context, "Please Connect To Network");
+        });
+      }
       if (state is EditPostSuccessfull) {
         SchedulerBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacementNamed(

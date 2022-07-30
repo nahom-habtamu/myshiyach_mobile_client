@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mnale_client/domain/usecases/mark_messages_as_read.dart';
-import 'package:mnale_client/presentation/bloc/mark_messages_as_read/mark_messages_as_read_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -53,6 +51,7 @@ import '../../domain/usecases/get_product_by_id.dart';
 import '../../domain/usecases/get_stored_user_credentials.dart';
 import '../../domain/usecases/get_user_by_id.dart';
 import '../../domain/usecases/login.dart';
+import '../../domain/usecases/mark_messages_as_read.dart';
 import '../../domain/usecases/refresh_product.dart';
 import '../../domain/usecases/register_user.dart';
 import '../../domain/usecases/set_favorite_product.dart';
@@ -80,6 +79,7 @@ import '../../presentation/bloc/get_post_detail_content/get_post_detail_content_
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../presentation/bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../../presentation/bloc/logout/logout_cubit.dart';
+import '../../presentation/bloc/mark_messages_as_read/mark_messages_as_read_cubit.dart';
 import '../../presentation/bloc/refresh_product/refresh_product_cubit.dart';
 import '../../presentation/bloc/register_user/register_user_cubit.dart';
 import '../../presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
@@ -98,36 +98,33 @@ Future<void> init() async {
       login: sl(),
       getStoredUserCredentials: sl(),
       storeUserCredentials: sl(),
+      networkInfo: sl(),
     ),
   );
-  sl.registerFactory(() => VerifyPhoneNumberCubit(sl()));
-  sl.registerFactory(() => RegisterUserCubit(sl(), sl()));
-  sl.registerFactory(() => DisplayAllProductsCubit(sl(), sl(), sl()));
+  sl.registerFactory(() => VerifyPhoneNumberCubit(sl(), sl()));
+  sl.registerFactory(() => RegisterUserCubit(sl(), sl(), sl()));
+  sl.registerFactory(() => DisplayAllProductsCubit(sl(), sl(), sl(), sl()));
   sl.registerFactory(() => GetAllProductsCubit(sl()));
   sl.registerFactory(
     () => GetFavoriteProductsCubit(
-      getFavoriteProducts: sl(),
-      getProductById: sl(),
-      setFavoriteProducts: sl(),
-    ),
+        getFavoriteProducts: sl(),
+        getProductById: sl(),
+        setFavoriteProducts: sl(),
+        networkInfo: sl()),
   );
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
-  sl.registerFactory(() => GetMyProductsCubit(sl()));
+  sl.registerFactory(() => GetMyProductsCubit(sl(), sl()));
   sl.registerFactory(() => AuthPhoneNumberCubit(sl()));
   sl.registerFactory(() => LogOutCubit(storeUserCredentials: sl()));
   sl.registerFactory(
     () => UpdateProductCubit(
-      updateProduct: sl(),
-      uploadProductPictures: sl(),
-    ),
+        updateProduct: sl(), uploadProductPictures: sl(), networkInfo: sl()),
   );
   sl.registerFactory(
     () => GetDataNeededToManagePostCubit(
-      getAllCategories: sl(),
-      getAllCities: sl(),
-    ),
+        getAllCategories: sl(), getAllCities: sl(), networkInfo: sl()),
   );
-  sl.registerFactory(() => GetAllConversationsCubit(sl()));
+  sl.registerFactory(() => GetAllConversationsCubit(sl(), sl()));
   sl.registerFactory(() => GetUserByIdCubit(sl()));
   sl.registerFactory(() => AddMessageToConversationCubit(sl()));
   sl.registerFactory(() => GetConversationByIdCubit(sl()));
@@ -135,14 +132,12 @@ Future<void> init() async {
   sl.registerFactory(() => GetAllCategoriesCubit(sl()));
   sl.registerFactory(() => ChangePasswordCubit(sl()));
   sl.registerFactory(() => FilterProductsCubit(sl()));
-  sl.registerFactory(() => RefreshProductCubit(sl()));
+  sl.registerFactory(() => RefreshProductCubit(sl(), sl()));
   sl.registerFactory(() => ChangeLanguageCubit(sl()));
   sl.registerFactory(() => MarkMessagesAsReadCubit(sl()));
   sl.registerFactory(
     () => GetPostDetailContentCubit(
-      getFavoriteProducts: sl(),
-      getUserById: sl(),
-    ),
+        getFavoriteProducts: sl(), getUserById: sl(), networkInfo: sl()),
   );
   sl.registerFactory(
     () => HandleGoingToMessageCubit(

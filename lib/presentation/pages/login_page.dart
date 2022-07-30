@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mnale_client/presentation/utils/show_toast.dart';
 
 import '../../data/models/login/login_request_model.dart';
 import '../bloc/auth/auth_cubit.dart';
@@ -138,6 +139,11 @@ class _LoginPageState extends State<LoginPage> {
   BlocBuilder<AuthCubit, AuthState> renderLoginResult() {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
+        if (state is AuthNoNetwork) {
+          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+            showToast(context, "Please Connect To Network");
+          });
+        }
         if (state is AuthSuccessfull) {
           SchedulerBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacementNamed(
