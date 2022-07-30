@@ -21,6 +21,7 @@ import '../bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
 import '../bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/logout/logout_cubit.dart';
+import '../bloc/mark_messages_as_read/mark_messages_as_read_cubit.dart';
 import '../bloc/refresh_product/refresh_product_cubit.dart';
 import '../bloc/register_user/register_user_cubit.dart';
 import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
@@ -101,6 +102,9 @@ class AppLevelState {
       ),
       BlocProvider(
         create: (_) => sl<ChangeLanguageCubit>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<MarkMessagesAsReadCubit>(),
       ),
       BlocProvider(
         create: (_) => sl<GetPostDetailContentCubit>(),

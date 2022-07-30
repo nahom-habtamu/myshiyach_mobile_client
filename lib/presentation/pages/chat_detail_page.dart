@@ -12,6 +12,7 @@ import '../bloc/add_message_to_conversation/add_message_to_conversation_cubit.da
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
+import '../bloc/mark_messages_as_read/mark_messages_as_read_cubit.dart';
 import '../screen_arguments/chat_detail_page_arguments.dart';
 import '../widgets/chat_detail/message_bubble.dart';
 import '../widgets/chat_detail/message_sending_tab.dart';
@@ -37,14 +38,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   void initState() {
     super.initState();
     initializeCurrentUser();
-    _scrollController.addListener(() {
-      if (_scrollController.position.atEdge) {
-        bool isTop = _scrollController.position.pixels == 0;
-        if (!isTop) {
-          print("CHANGE MESSAGE VISIBLITY HERE");
-        }
-      }
-    });
   }
 
   @override
@@ -92,9 +85,19 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             child: CircularProgressIndicator(),
           );
         }
+
+        markAllMessagesAsRead(snapshot.data!);
         return renderMainContent(snapshot.data!);
       },
     );
+  }
+
+  void markAllMessagesAsRead(Conversation conversation) {
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      context
+          .read<MarkMessagesAsReadCubit>()
+          .call(currentUser!.id, conversation);
+    });
   }
 
   renderMainContent(Conversation conversation) {

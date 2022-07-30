@@ -1,8 +1,9 @@
 import '../../domain/contracts/conversation_service.dart';
+import '../../domain/enitites/conversation.dart';
 import '../datasources/conversation/conversation_data_source.dart';
-import '../models/conversation/message_model.dart';
-import '../models/conversation/conversation_model.dart';
 import '../models/conversation/add_conversation_model.dart';
+import '../models/conversation/conversation_model.dart';
+import '../models/conversation/message_model.dart';
 
 class ConversationRepository extends ConversationService {
   final ConversationDataSource remoteDataSource;
@@ -36,5 +37,10 @@ class ConversationRepository extends ConversationService {
     String memberTwoId,
   ) {
     return remoteDataSource.getConversationByMembers(memberOneId, memberTwoId);
+  }
+
+  @override
+  void markAllMessagesAsRead(String currentUserId, Conversation conversation) {
+    remoteDataSource.markAllMessagesAsRead(currentUserId,conversation);
   }
 }

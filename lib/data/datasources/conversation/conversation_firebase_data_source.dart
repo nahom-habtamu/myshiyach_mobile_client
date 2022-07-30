@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../domain/enitites/conversation.dart';
 import '../../models/conversation/add_conversation_model.dart';
 import '../../models/conversation/conversation_model.dart';
 import '../../models/conversation/message_model.dart';
@@ -89,5 +90,25 @@ class ConversationFirebaseDataSource extends ConversationDataSource {
               ),
         )
         .first;
+  }
+
+  @override
+  void markAllMessagesAsRead(
+      String currentUserId, Conversation conversation) async {
+    var readMessages = conversation.messages.map(
+      (e) {
+        return MessageModel(
+          text: e.text,
+          senderId: e.senderId,
+          recieverId: e.recieverId,
+          createdDateTime: e.createdDateTime,
+          isSeen: e.recieverId == currentUserId || !e.isSeen ? true : false,
+        ).toJson();
+      },
+    ).toList();
+
+    conversations!.doc(conversation.id).update({
+      "messages": [...readMessages]
+    });
   }
 }

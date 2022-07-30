@@ -1,3 +1,4 @@
+import '../../../domain/enitites/conversation.dart';
 import '../../models/conversation/add_conversation_model.dart';
 import '../../models/conversation/conversation_model.dart';
 import '../../models/conversation/message_model.dart';
@@ -11,4 +12,7 @@ abstract class ConversationDataSource {
     MessageModel messageToAdd,
   );
   Future<ConversationModel> createConversation(AddConversationModel addConversationModel);
+  void markAllMessagesAsRead(
+    String currentUserId,Conversation conversation
+  );
 }

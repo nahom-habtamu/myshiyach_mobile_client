@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mnale_client/presentation/bloc/change_language/change_language_cubit.dart';
+import 'package:mnale_client/domain/usecases/mark_messages_as_read.dart';
+import 'package:mnale_client/presentation/bloc/mark_messages_as_read/mark_messages_as_read_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -62,6 +63,7 @@ import '../../domain/usecases/verify_phone_number.dart';
 import '../../presentation/bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
 import '../../presentation/bloc/authenticate_phone_number/authenticate_phone_number.cubit.dart';
+import '../../presentation/bloc/change_language/change_language_cubit.dart';
 import '../../presentation/bloc/change_password/change_password_cubit.dart';
 import '../../presentation/bloc/create_product/create_product_cubit.dart';
 import '../../presentation/bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
@@ -135,6 +137,7 @@ Future<void> init() async {
   sl.registerFactory(() => FilterProductsCubit(sl()));
   sl.registerFactory(() => RefreshProductCubit(sl()));
   sl.registerFactory(() => ChangeLanguageCubit(sl()));
+  sl.registerFactory(() => MarkMessagesAsReadCubit(sl()));
   sl.registerFactory(
     () => GetPostDetailContentCubit(
       getFavoriteProducts: sl(),
@@ -183,6 +186,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FilterProducts());
   sl.registerLazySingleton(() => GetProductById(sl()));
   sl.registerLazySingleton(() => RefreshProduct(sl()));
+  sl.registerLazySingleton(() => MarkMessagesAsRead(sl()));
 
   // repositories
 

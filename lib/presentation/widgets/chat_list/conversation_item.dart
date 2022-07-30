@@ -25,8 +25,8 @@ class ConversationItem extends StatefulWidget {
 }
 
 class _ConversationItemState extends State<ConversationItem> {
-  User? user;
-
+  User? strangerUser;
+  String? currentUserId;
   @override
   void initState() {
     super.initState();
@@ -40,11 +40,14 @@ class _ConversationItemState extends State<ConversationItem> {
     if (authState is AuthSuccessfull) {
       var strangerId = getStrangerId(authState);
       var token = authState.loginResult.token;
+      setState(() {
+        currentUserId = authState.currentUser.id;
+      });
       if (context.read<GetUserByIdCubit>().state is! GetUserByIdLoaded) {
         var stranger =
             await context.read<GetUserByIdCubit>().call(strangerId, token);
         setState(() {
-          user = stranger;
+          strangerUser = stranger;
         });
       }
     }
@@ -60,18 +63,20 @@ class _ConversationItemState extends State<ConversationItem> {
 
   @override
   Widget build(BuildContext context) {
-    return user == null ? renderLoadingWidget() : renderMainContent();
+    return strangerUser == null ? renderLoadingWidget() : renderMainContent();
   }
 
   renderMainContent() {
-    var unreadMessages =
-        widget.conversation.messages.where((m) => !m.isSeen).toList();
+    print(currentUserId);
+    var unreadMessages = widget.conversation.messages
+        .where((m) => !m.isSeen && m.recieverId == currentUserId)
+        .toList();
     return GestureDetector(
       onTap: () {
         context.read<GetConversationByIdCubit>().call(widget.conversation.id);
         var chatDetailPageArguments = ChatDetailPageArguments(
           conversationId: widget.conversation.id,
-          strangerUser: user!,
+          strangerUser: strangerUser!,
         );
         Navigator.of(context).pushNamed(
           ChatDetailPage.routeName,
@@ -93,11 +98,11 @@ class _ConversationItemState extends State<ConversationItem> {
               CircleAvatar(
                 backgroundColor: Colors.teal,
                 radius: 35,
-                child: Text(user!.fullName[0].toUpperCase()),
+                child: Text(strangerUser!.fullName[0].toUpperCase()),
               ),
               Expanded(
                 child: ListTile(
-                  title: Text(user!.fullName),
+                  title: Text(strangerUser!.fullName),
                   subtitle: SizedBox(
                     height: 50,
                     width: 200,
@@ -123,15 +128,18 @@ class _ConversationItemState extends State<ConversationItem> {
                       style: const TextStyle(fontSize: 11),
                     ),
                   ),
-                  CircleAvatar(
-                    backgroundColor: Colors.red,
-                    radius: 9,
-                    child: Center(
-                      child: Text(
-                        unreadMessages.length.toString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
+                  Visibility(
+                    visible: unreadMessages.isNotEmpty,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.red,
+                      radius: 9,
+                      child: Center(
+                        child: Text(
+                          unreadMessages.length.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ),

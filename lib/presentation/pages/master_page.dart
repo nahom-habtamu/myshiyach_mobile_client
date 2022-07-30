@@ -22,10 +22,11 @@ class MasterPage extends StatefulWidget {
 
 class _MasterPageState extends State<MasterPage> {
   int _selectedIndex = 0;
-
+  String? currentUserId;
   @override
   void initState() {
     super.initState();
+    getCurrentUser();
     getAllConversation();
   }
 
@@ -41,6 +42,15 @@ class _MasterPageState extends State<MasterPage> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void getCurrentUser() {
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      setState(() {
+        currentUserId = authState.currentUser.id;
+      });
+    }
   }
 
   void getAllConversation() {
@@ -158,9 +168,10 @@ class _MasterPageState extends State<MasterPage> {
   int buildUnreadMessages(List<Conversation>? data) {
     var totalUnreadMessagesCount = 0;
     for (var conversation in data!) {
-      var unreadMessagesInConversation =
-          conversation.messages.where((m) => !m.isSeen).toList();
-      totalUnreadMessagesCount += unreadMessagesInConversation.length;
+      var unreadMessagesInConversation = conversation.messages
+          .where((m) => !m.isSeen && m.recieverId == currentUserId)
+          .toList();
+      if (unreadMessagesInConversation.isNotEmpty) totalUnreadMessagesCount++;
     }
 
     return totalUnreadMessagesCount;
