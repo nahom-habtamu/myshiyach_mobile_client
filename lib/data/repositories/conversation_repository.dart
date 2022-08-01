@@ -26,7 +26,8 @@ class ConversationRepository extends ConversationService {
   }
 
   @override
-  Future<ConversationModel> createConversation(AddConversationModel addConversationModel) {
+  Future<ConversationModel> createConversation(
+      AddConversationModel addConversationModel) {
     return remoteDataSource.createConversation(addConversationModel);
   }
 
@@ -40,6 +41,6 @@ class ConversationRepository extends ConversationService {
 
   @override
   void markAllMessagesAsRead(String currentUserId, String conversationId) {
-    remoteDataSource.markAllMessagesAsRead(currentUserId,conversationId);
+    remoteDataSource.markAllMessagesAsRead(currentUserId, conversationId);
   }
 }

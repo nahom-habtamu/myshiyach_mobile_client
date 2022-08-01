@@ -140,12 +140,12 @@ class _LoginPageState extends State<LoginPage> {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is AuthNoNetwork) {
-          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+          SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
             showToast(context, "Please Connect To Network");
           });
         }
         if (state is AuthSuccessfull) {
-          SchedulerBinding.instance.addPostFrameCallback((_) {
+          SchedulerBinding.instance!.addPostFrameCallback((_) {
             Navigator.pushReplacementNamed(
               context,
               MasterPage.routeName,

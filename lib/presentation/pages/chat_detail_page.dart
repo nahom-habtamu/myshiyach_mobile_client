@@ -199,7 +199,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   Future<void> handleScrollingToBottom() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 500),

@@ -32,7 +32,7 @@ class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       context.read<VerifyPhoneNumberCubit>().clear();
     });
   }
@@ -42,12 +42,12 @@ class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
     return BlocBuilder<VerifyPhoneNumberCubit, VerifyPhoneNumberState>(
       builder: (context, state) {
         if (state is NoNetwork) {
-          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+          SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
             showToast(context, "No Network");
           });
         }
         if (state is Error) {
-          SchedulerBinding.instance.addPostFrameCallback((_) {
+          SchedulerBinding.instance!.addPostFrameCallback((_) {
             showToast(
               context,
               AppLocalizations.of(context).verifyPhoneNumberErrorText,
@@ -66,7 +66,7 @@ class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
               renderErrorWidget: widget.renderErrorWidget,
             );
 
-            SchedulerBinding.instance.addPostFrameCallback(
+            SchedulerBinding.instance!.addPostFrameCallback(
               (_) {
                 Navigator.pushReplacementNamed(
                   context,

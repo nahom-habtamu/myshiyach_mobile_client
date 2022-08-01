@@ -116,7 +116,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         );
       }
       if (state is RefreshPostError) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -132,7 +132,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       }
 
       if (state is RefreshPostSuccessfull) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
           setState(() {
             product = state.product;
           });

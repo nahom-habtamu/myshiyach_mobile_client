@@ -197,7 +197,7 @@ class _AddPostPageState extends State<AddPostPage> {
       } else if (state is AddPostLoading) {
         return renderLoadingSpinner();
       } else {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
           Navigator.pushReplacementNamed(
             context,
             PostConfirmationPage.routeName,

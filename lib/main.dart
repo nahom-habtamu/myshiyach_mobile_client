@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
       providers: AppLevelState.get(),
       child: BlocBuilder<ChangeLanguageCubit, String>(
         builder: (context, state) {
-          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+          SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
             setState(() {
               _locale = Locale(state);
             });

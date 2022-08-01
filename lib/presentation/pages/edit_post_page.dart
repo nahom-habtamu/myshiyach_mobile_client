@@ -361,12 +361,12 @@ class _EditPostPageState extends State<EditPostPage> {
         );
       }
       if (state is EditPostNoNetwork) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
           showToast(context, "Please Connect To Network");
         });
       }
       if (state is EditPostSuccessfull) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
           Navigator.pushReplacementNamed(
             context,
             PostDetailPage.routeName,

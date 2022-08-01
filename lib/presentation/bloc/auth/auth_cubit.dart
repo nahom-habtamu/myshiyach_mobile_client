@@ -16,14 +16,14 @@ class AuthCubit extends Cubit<AuthState> {
   final StoreUserCredentials storeUserCredentials;
   final GetStoredUserCredentials getStoredUserCredentials;
   final NetworkInfo networkInfo;
-  AuthCubit(
-      {required this.login,
-      required this.getCurrentUser,
-      required this.extractToken,
-      required this.storeUserCredentials,
-      required this.getStoredUserCredentials,
-      required this.networkInfo})
-      : super(AuthNotTriggered());
+  AuthCubit({
+    required this.login,
+    required this.getCurrentUser,
+    required this.extractToken,
+    required this.storeUserCredentials,
+    required this.getStoredUserCredentials,
+    required this.networkInfo,
+  }) : super(AuthNotTriggered());
 
   void clear() {
     emit(AuthNotTriggered());
