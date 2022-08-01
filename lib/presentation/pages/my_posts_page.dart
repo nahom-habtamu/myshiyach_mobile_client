@@ -11,6 +11,8 @@ import '../bloc/get_my_products/get_my_products_state.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
+import '../widgets/common/error_content.dart';
+import '../widgets/common/no_network_content.dart';
 import '../widgets/common/post_card_list_item.dart';
 import 'add_post_page.dart';
 
@@ -51,7 +53,8 @@ class _MyPostsPageState extends State<MyPostsPage> {
     return Scaffold(
       backgroundColor: const Color(0xff11435E),
       appBar: CustomAppBar(
-          title: AppLocalizations.of(context).myPostsPageAppBarText),
+        title: AppLocalizations.of(context).myPostsPageAppBarText,
+      ),
       body: CurvedContainer(
         child: buildMyPosts(),
       ),
@@ -79,7 +82,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
   }
 
   buildEmptyStateContent() {
-    return EmptyStateContent(
+    return FallBackContent(
       captionText: AppLocalizations.of(context).myPostsPageEmptyCaptionText,
       hintText: AppLocalizations.of(context).myPostsPageEmptyHintText,
       buttonText: AppLocalizations.of(context).myPostsPageEmptyButtonText,
@@ -90,24 +93,14 @@ class _MyPostsPageState extends State<MyPostsPage> {
   }
 
   buildNoNetworkContent() {
-    return EmptyStateContent(
-      captionText: "No Network",
-      hintText: "Please connect to continue fetching your posts",
-      buttonText: "Retry",
-      onButtonClicked: () {
-        fetchMyPosts();
-      },
+    return NoNetworkContent(
+      onButtonClicked: () => fetchMyPosts(),
     );
   }
 
   buildErrorContent() {
-    return EmptyStateContent(
-      captionText: "Something Went Wrong",
-      hintText: "Something went wrong in fetching data",
-      buttonText: "Retry",
-      onButtonClicked: () {
-        fetchMyPosts();
-      },
+    return ErrorContent(
+      onButtonClicked: () => fetchMyPosts(),
     );
   }
 

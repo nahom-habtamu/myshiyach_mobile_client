@@ -12,7 +12,7 @@ import '../bloc/get_all_conversations/get_all_conversations_state.dart';
 import '../widgets/chat_list/conversation_item.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
-import '../widgets/common/empty_state_content.dart';
+import '../widgets/common/no_network_content.dart';
 
 class ChatListPage extends StatefulWidget {
   static String routeName = "/chatPage";
@@ -55,13 +55,8 @@ class _ChatListPageState extends State<ChatListPage> {
             if (state is GetAllConversationStateLoaded) {
               return buildConversationList(state.conversation);
             } else {
-              return EmptyStateContent(
-                captionText: "No Network Connection",
-                onButtonClicked: () {
-                  fetchConversations();
-                },
-                hintText: "Please Connect to network to fetch conversations",
-                buttonText: "Retry",
+              return NoNetworkContent(
+                onButtonClicked: () => fetchConversations(),
               );
             }
           }),

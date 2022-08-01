@@ -15,7 +15,8 @@ import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/refresh_product/refresh_product_cubit.dart';
 import '../bloc/refresh_product/refresh_product_state.dart';
 import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
-import '../widgets/common/empty_state_content.dart';
+import '../widgets/common/error_content.dart';
+import '../widgets/common/no_network_content.dart';
 import '../widgets/post_detail/post_content_to_show.dart';
 import '../widgets/post_detail/post_detail_app_bar.dart';
 import 'edit_post_page.dart';
@@ -82,13 +83,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
   buildNoNetworkContent() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: EmptyStateContent(
-        captionText: "No Network",
-        hintText: "Please connect to continue viewing your post",
-        buttonText: "Retry",
-        onButtonClicked: () {
-          initalizeNeededData();
-        },
+      child: NoNetworkContent(
+        onButtonClicked: () => initalizeNeededData(),
       ),
     );
   }
@@ -96,13 +92,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
   buildErrorContent() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: EmptyStateContent(
-        captionText: "Something Went Wrong",
-        hintText: "Something went wrong in fetching data",
-        buttonText: "Retry",
-        onButtonClicked: () {
-          initalizeNeededData();
-        },
+      child: ErrorContent(
+        onButtonClicked: () => initalizeNeededData(),
       ),
     );
   }

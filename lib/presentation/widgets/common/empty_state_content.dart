@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class EmptyStateContent extends StatelessWidget {
+class FallBackContent extends StatelessWidget {
   final String captionText;
   final Function onButtonClicked;
   final String hintText;
   final String buttonText;
-  const EmptyStateContent({
+  const FallBackContent({
     Key? key,
     required this.captionText,
     required this.onButtonClicked,

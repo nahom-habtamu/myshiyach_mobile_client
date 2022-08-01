@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../domain/enitites/product.dart';
 import '../../pages/post_detail_page.dart';
@@ -35,8 +36,9 @@ class PostCardListItem extends StatelessWidget {
         return await showDialog(
           context: context,
           builder: (BuildContext context) {
-            return const PopupDialog(
-              content: "Are you sure you wish to delete this item?",
+            return PopupDialog(
+              content: AppLocalizations.of(context)
+                  .savedPostsDeleteConfirmDialogText,
             );
           },
         );
@@ -93,4 +95,3 @@ class PostCardListItem extends StatelessWidget {
     );
   }
 }
-

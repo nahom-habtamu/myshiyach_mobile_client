@@ -12,6 +12,8 @@ import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
+import '../widgets/common/error_content.dart';
+import '../widgets/common/no_network_content.dart';
 import '../widgets/common/post_card_list_item.dart';
 import 'master_page.dart';
 
@@ -124,7 +126,7 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
   }
 
   Widget buildEmptyStateContent() {
-    return EmptyStateContent(
+    return FallBackContent(
       captionText: AppLocalizations.of(context).savedPostsEmptyCaptionText,
       hintText: AppLocalizations.of(context).savedPostsEmptyHintText,
       buttonText: AppLocalizations.of(context).savedPostsEmptyButtonText,
@@ -135,24 +137,14 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
   }
 
   Widget buildNoNetworkContent() {
-    return EmptyStateContent(
-      captionText: "No Network",
-      hintText: "Please connect to the internet ",
-      buttonText: "Retry",
-      onButtonClicked: () {
-        fetchFavoriteProducts();
-      },
+    return NoNetworkContent(
+      onButtonClicked: () => fetchFavoriteProducts(),
     );
   }
 
   Widget buildErrorContent() {
-    return EmptyStateContent(
-      captionText: "Something went wrong",
-      hintText: "Something went wrong on displaying data .",
-      buttonText: "Retry",
-      onButtonClicked: () {
-        fetchFavoriteProducts();
-      },
+    return ErrorContent(
+      onButtonClicked: () => fetchFavoriteProducts(),
     );
   }
 }

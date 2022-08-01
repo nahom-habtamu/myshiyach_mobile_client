@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
-import '../widgets/common/empty_state_content.dart';
+import '../widgets/common/no_network_content.dart';
 import 'intro_page.dart';
 import 'master_page.dart';
 
@@ -75,13 +75,8 @@ class _SplashPageState extends State<SplashPage> {
   renderNoNetwork() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: EmptyStateContent(
-        captionText: "No Network",
-        onButtonClicked: () {
-          context.read<AuthCubit>().loginUser(null);
-        },
-        hintText: "Please Connect to network to keep using the application",
-        buttonText: "Retry",
+      child: NoNetworkContent(
+        onButtonClicked: () => context.read<AuthCubit>().loginUser(null),
       ),
     );
   }

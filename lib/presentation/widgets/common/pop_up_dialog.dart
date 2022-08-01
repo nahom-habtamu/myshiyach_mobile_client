@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PopupDialog extends StatelessWidget {
   final String content;
@@ -10,19 +11,23 @@ class PopupDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Confirm"),
+      title: Text(
+        AppLocalizations.of(context).popUpDialogTitle,
+      ),
       content: Text(content),
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: const Text(
-            "CONFIRM",
-            style: TextStyle(color: Colors.red),
+          child: Text(
+            AppLocalizations.of(context).popUpDialogConfirmButtonText,
+            style: const TextStyle(color: Colors.red),
           ),
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text("CANCEL"),
+          child: Text(
+            AppLocalizations.of(context).popUpDialogCancelButtonText,
+          ),
         ),
       ],
     );

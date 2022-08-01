@@ -43,6 +43,13 @@
     "commonCityInputHintText" : "ከተማ",
     "commonCityInputEmptyText" : "ከተማ ይምረጡ",
 
+    "commonFallBackErrorCaptionText" : "ችግር ተፈጥሯል",
+    "commonFallBackErrorButtonText" : "እንደገና ይሞክሩ",
+    "commonFallBackErrorHintText" : "ውሂብ በማሳየት ላይ የሆነ ችግር ተፈጥሯል።",
+    "commonFallBackNoNetworkCaptionText" : "ኔትዎርክ ተቋርጧል",
+    "commonFallBackNoNetworkButtonText" : "እንደገና ይሞክሩ ፡፡",
+    "commonFallBackNoNetworkHintText" : "እባክዎን መተግበሪያውን ለመጠቀም ከአውታር መረብ ጋር ይገናኙ ፡፡",
+
     "editPostAppBarText" : "እቃ ማስተካከያ",
     "editPostSaveButtonText" : "ለውጦቹን ተግብር",
     "editPostError" : "እቃው ላይ ማስተካከያዎቹን መተግበር አልተቻለም",
@@ -111,6 +118,10 @@
     "otpVerificationHeaderOne" : "የኦቲፒ ማረጋገጫ",
     "otpVerificationHeaderTwo" : "የማረጋገጫ ኮድ ተልኳል",
 
+    "popUpDialogTitle" : "አረጋግጥ",
+    "popUpDialogConfirmButtonText" : "አረጋግጥ",
+    "popUpDialogCancelButtonText" : "ዝጋ",
+
     "postConfirmationAppBarText" : "የእቃ ልትፍ ማረጋገጫ",
     "postConfirmationAdPlaced" : "እቃዎ ተለጥፏል",
     "postConfirmationAdPlacedSuccessfull" : "ልጥፍዎ በተሳካ ሁኔታ ተቀምጧል፣ የሎጂስቲክ ቡድናችን በቅርቡ ከእርስዎ ጋር ይገናኛል። ለማንኛውም እርዳታ (+251) 12345678 ይደውሉ",
@@ -167,6 +178,7 @@
     "savedPostsEmptyCaptionText" : "ምንም የተቀመጡ እቃዎች የለዎትም!",
     "savedPostsEmptyHintText" : "በእቃዎቹ ማሳያ ላይ ያለውን የልብ ምልክት ይንኩ",
     "savedPostsEmptyButtonText" : "ወደ እቃዎቹ ዝርዝር",
+    "savedPostsDeleteConfirmDialogText" : "እቃውን ለመደምሰስ ይፈልጋሉ ?",
 
     "signUpPageRegisterText" : "ይመዝገቡ",
     "signUpPageHeaderOne" : "መተግበሪያውን ለመጠቀም ይጀምሩ",

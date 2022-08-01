@@ -43,6 +43,13 @@
     "commonCityInputHintText" : "City",
     "commonCityInputEmptyText" : "Please Enter City",
 
+    "commonFallBackErrorCaptionText" : "Oops",
+    "commonFallBackErrorButtonText" : "Retry",
+    "commonFallBackErrorHintText" : "Something went wrong in displaying data",
+    "commonFallBackNoNetworkCaptionText" : "Please Connect to the internet to access our app features.",
+    "commonFallBackNoNetworkButtonText" : "No Network",
+    "commonFallBackNoNetworkHintText" : "Try Again",
+
     "editPostAppBarText" : "Edit Post",
     "editPostSaveButtonText" : "Save Changes",
     "editPostError" : "Error In Editing the Product",
@@ -111,6 +118,10 @@
     "otpVerificationHeaderOne" : "OTP Verification",
     "otpVerificationHeaderTwo" : "An Authentication code has been sent to",
 
+    "popUpDialogTitle" : "Confirm",
+    "popUpDialogConfirmButtonText" : "CONFIRM",
+    "popUpDialogCancelButtonText" : "CANCEL",
+
     "postConfirmationAppBarText" : "Post Confirmation",
     "postConfirmationAdPlaced" : "Ad Placed",
     "postConfirmationAdPlacedSuccessfull" : "Your ad has been Successfully placed, Our logistic team will contact with you soon. For any help, call (+251) 12345678",
@@ -167,6 +178,7 @@
     "savedPostsEmptyCaptionText" : "No saved Products yet!",
     "savedPostsEmptyHintText" : "Hit the heart icon to save a product",
     "savedPostsEmptyButtonText" : "Start Ordering",
+    "savedPostsDeleteConfirmDialogText" : "Are you sure you wish to delete this item?",
 
     "signUpPageRegisterText" : "Register",
     "signUpPageHeaderOne" : "Getting Started",

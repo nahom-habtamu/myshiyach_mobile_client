@@ -11,6 +11,8 @@ import '../bloc/filter/filter_products_cubit.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
+import '../widgets/common/error_content.dart';
+import '../widgets/common/no_network_content.dart';
 import '../widgets/home/category_item.dart';
 import '../widgets/home/product_list.dart';
 import '../widgets/home/search_bar.dart';
@@ -129,15 +131,9 @@ class _HomePageState extends State<HomePage> {
     return Expanded(
       child: Center(
         child: SingleChildScrollView(
-          child: EmptyStateContent(
-            captionText: "No Network",
-            hintText:
-                "Please Connect To Network to continue using this application",
-            buttonText:
-                AppLocalizations.of(context).homeRetryFetchProductButtonText,
-            onButtonClicked: () {
-              context.read<DisplayAllProductsCubit>().call();
-            },
+          child: NoNetworkContent(
+            onButtonClicked: () =>
+                context.read<DisplayAllProductsCubit>().call(),
           ),
         ),
       ),
@@ -148,14 +144,9 @@ class _HomePageState extends State<HomePage> {
     return Expanded(
       child: Center(
         child: SingleChildScrollView(
-          child: EmptyStateContent(
-            captionText: "Something went wrong",
-            hintText:
-                "Something went wrong in feching the products . Try again later",
-            buttonText: "Retry",
-            onButtonClicked: () {
-              context.read<DisplayAllProductsCubit>().call();
-            },
+          child: ErrorContent(
+            onButtonClicked: () =>
+                context.read<DisplayAllProductsCubit>().call(),
           ),
         ),
       ),
@@ -166,7 +157,7 @@ class _HomePageState extends State<HomePage> {
     return Expanded(
       child: Center(
         child: SingleChildScrollView(
-          child: EmptyStateContent(
+          child: FallBackContent(
             captionText: AppLocalizations.of(context).homeEmptyProductText,
             hintText:
                 AppLocalizations.of(context).homeRetryFetchProductButtonLabel,

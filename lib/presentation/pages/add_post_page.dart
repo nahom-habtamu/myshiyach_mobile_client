@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../data/models/product/add_product_model.dart';
@@ -12,11 +11,14 @@ import '../bloc/create_product/create_product_cubit.dart';
 import '../bloc/create_product/create_product_state.dart';
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_state.dart';
+import '../utils/show_toast.dart';
 import '../widgets/add_post/first_page_inputs.dart';
 import '../widgets/add_post/second_page_inputs.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
+import '../widgets/common/error_content.dart';
+import '../widgets/common/no_network_content.dart';
 import 'post_confirmation_page.dart';
 
 class AddPostPage extends StatefulWidget {
@@ -113,7 +115,7 @@ class _AddPostPageState extends State<AddPostPage> {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.8,
       child: Center(
-        child: EmptyStateContent(
+        child: FallBackContent(
           captionText: "Empty Categories",
           onButtonClicked: () {
             initCategories();
@@ -129,13 +131,8 @@ class _AddPostPageState extends State<AddPostPage> {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.8,
       child: Center(
-        child: EmptyStateContent(
-          captionText: "Something went wrong",
-          onButtonClicked: () {
-            initCategories();
-          },
-          hintText: "Something went wrong in fetching categories",
-          buttonText: "Retry",
+        child: ErrorContent(
+          onButtonClicked: () => initCategories(),
         ),
       ),
     );
@@ -145,13 +142,8 @@ class _AddPostPageState extends State<AddPostPage> {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.8,
       child: Center(
-        child: EmptyStateContent(
-          captionText: "No Network Connection",
-          onButtonClicked: () {
-            initCategories();
-          },
-          hintText: "Please Connect to network to fetch conversations",
-          buttonText: "Retry",
+        child: NoNetworkContent(
+          onButtonClicked: () => initCategories(),
         ),
       ),
     );
@@ -171,14 +163,9 @@ class _AddPostPageState extends State<AddPostPage> {
     return BlocBuilder<CreateProductCubit, CreateProductState>(
         builder: (context, state) {
       if (state is AddPostError) {
-        Fluttertoast.showToast(
-          msg: state.message,
-          toastLength: Toast.LENGTH_LONG,
-          timeInSecForIosWeb: 1,
-          backgroundColor: const Color(0xFFA70606),
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+          showToast(context, state.message);
+        });
       }
 
       if (state is AddPostEmpty) {

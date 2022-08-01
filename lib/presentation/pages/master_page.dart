@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mnale_client/presentation/bloc/get_all_conversations/get_all_conversations_state.dart';
 
 import '../../domain/enitites/conversation.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/get_all_conversations/get_all_conversations_cubit.dart';
+import '../bloc/get_all_conversations/get_all_conversations_state.dart';
 import 'add_post_page.dart';
 import 'chat_list_page.dart';
 import 'home_page.dart';
@@ -132,33 +132,8 @@ class _MasterPageState extends State<MasterPage> {
                 }
 
                 int unreadMessagesCount = buildUnreadMessages(snapshot.data);
-                return Stack(
-                  children: [
-                    const Icon(
-                      Icons.chat,
-                      size: 25,
-                    ),
-                    Visibility(
-                      visible: unreadMessagesCount > 0,
-                      child: Positioned(
-                        top: 2,
-                        left: 5,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.red,
-                          radius: 6.5,
-                          child: Center(
-                            child: Text(
-                              unreadMessagesCount.toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                return renderChatBarWithMessageIndicator(
+                  unreadMessagesCount,
                 );
               },
             );
@@ -171,6 +146,37 @@ class _MasterPageState extends State<MasterPage> {
         },
       ),
       label: AppLocalizations.of(context).masterNavigationBarTextTwo,
+    );
+  }
+
+  Stack renderChatBarWithMessageIndicator(int unreadMessagesCount) {
+    return Stack(
+      children: [
+        const Icon(
+          Icons.chat,
+          size: 25,
+        ),
+        Visibility(
+          visible: unreadMessagesCount > 0,
+          child: Positioned(
+            top: 2,
+            left: 5,
+            child: CircleAvatar(
+              backgroundColor: Colors.red,
+              radius: 6.5,
+              child: Center(
+                child: Text(
+                  unreadMessagesCount.toString(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

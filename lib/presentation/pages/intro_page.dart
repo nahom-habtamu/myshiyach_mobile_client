@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../widgets/intro/intro_page_progress_indicator_bubble.dart';
 import 'login_page.dart';
 
 class IntroPage extends StatefulWidget {
@@ -195,24 +196,4 @@ class _IntroPageState extends State<IntroPage> {
   }
 }
 
-class IntroPageProgressIndicatorBubble extends StatelessWidget {
-  final bool isActive;
-  const IntroPageProgressIndicatorBubble({
-    Key? key,
-    this.isActive = false,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: !isActive ? 9 : 28,
-      height: 9,
-      decoration: BoxDecoration(
-        color: !isActive ? Colors.grey : const Color(0xFF11435E),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(5),
-        ),
-      ),
-    );
-  }
-}
