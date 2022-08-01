@@ -25,6 +25,16 @@ class MessageModel extends Message {
     );
   }
 
+  factory MessageModel.fromMessage(Message message) {
+    return MessageModel(
+      text: message.text,
+      senderId: message.senderId,
+      recieverId: message.recieverId,
+      createdDateTime: message.createdDateTime,
+      isSeen: message.isSeen,
+    );
+  }
+
   Map<String, dynamic> toJson() => {
         "text": text,
         "senderId": senderId,

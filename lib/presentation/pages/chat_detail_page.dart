@@ -89,6 +89,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           );
         }
 
+        SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+          markAllMessagesAsRead(args!.conversationId);
+        });
+
         return renderMainContent(snapshot.data!);
       },
     );
@@ -125,36 +129,39 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   renderMessageBubblesAlongWithCreatedDate(Conversation conversation) {
     var uniqueDates = buildUniqueDateFromMessages(conversation);
-    var generatedWidgets = List<ListTile>.generate(uniqueDates.length, (index) {
-      var messagesWithCurrentDate = conversation.messages
-          .where(
-            (m) => compareMessageSentDate(uniqueDates[index],
-                DateFormatterUtil.extractDateFromDateTime(m.createdDateTime)),
-          )
-          .toList();
-      return ListTile(
-        title: Container(
-          height: 20,
-          padding: const EdgeInsets.all(4),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
+    var generatedWidgets = List<ListTile>.generate(
+      uniqueDates.length,
+      (index) {
+        var messagesWithCurrentDate = conversation.messages
+            .where(
+              (m) => compareMessageSentDate(uniqueDates[index],
+                  DateFormatterUtil.extractDateFromDateTime(m.createdDateTime)),
+            )
+            .toList();
+        return ListTile(
+          title: Container(
+            height: 23,
+            padding: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            child: Text(
+              DateFormatterUtil.formatUniqueMessageCreatedDate(
+                  uniqueDates[index]),
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
-          child: Text(
-            DateFormatterUtil.formatUniqueMessageCreatedDate(
-                uniqueDates[index]),
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        subtitle: renderMessageBubbles(messagesWithCurrentDate),
-      );
-    });
+          subtitle: renderMessageBubbles(messagesWithCurrentDate),
+        );
+      },
+    );
 
     return Expanded(
       child: ListView.builder(
