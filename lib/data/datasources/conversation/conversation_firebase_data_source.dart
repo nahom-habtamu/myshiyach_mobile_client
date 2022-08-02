@@ -104,9 +104,7 @@ class ConversationFirebaseDataSource extends ConversationDataSource {
     if (_hasUnreadMessages(conversation, currentUserId)) {
       var readMessages = conversation.messages.map(
         (e) {
-          if (e.senderId != currentUserId && e.isSeen) {
-            return MessageModel.fromMessage(e).toJson();
-          } else {
+          if (e.recieverId == currentUserId && !e.isSeen) {
             return MessageModel(
               text: e.text,
               senderId: e.senderId,
@@ -114,6 +112,8 @@ class ConversationFirebaseDataSource extends ConversationDataSource {
               createdDateTime: e.createdDateTime,
               isSeen: true,
             ).toJson();
+          } else {
+            return MessageModel.fromMessage(e).toJson();
           }
         },
       ).toList();
