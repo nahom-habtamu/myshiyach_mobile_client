@@ -1,4 +1,4 @@
-import '../../../domain/enitites/product.dart';
+import '../../../domain/enitites/get_paginate_products_result.dart';
 
 abstract class GetAllProductsState {}
 
@@ -7,8 +7,8 @@ class Empty extends GetAllProductsState {}
 class Loading extends GetAllProductsState {}
 
 class Loaded extends GetAllProductsState {
-  final List<Product> products;
-  Loaded(this.products);
+  final GetPaginatedProductsResult result;
+  Loaded(this.result);
 }
 
 class Error extends GetAllProductsState {

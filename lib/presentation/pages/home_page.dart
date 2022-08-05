@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../data/models/filter/filter_criteria_model.dart';
+import '../../data/models/product/page_and_limit_model.dart';
 import '../../domain/enitites/main_category.dart';
-import '../../domain/enitites/product.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
 import '../bloc/filter/filter_products_cubit.dart';
@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
   FilterCriteriaModel? filterValues;
   String searchKeyword = "";
   MainCategory? selectedMainCategory;
+  var initialPageAndLimit = PageAndLimitModel.initialDefault();
 
   @override
   void initState() {
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   fetchAllNeededToDisplayProductList() {
-    context.read<DisplayAllProductsCubit>().call();
+    context.read<DisplayAllProductsCubit>().call(initialPageAndLimit);
   }
 
   @override
@@ -80,7 +81,7 @@ class _HomePageState extends State<HomePage> {
               });
             },
             categories: state.categories,
-            products: state.products,
+            products: state.paginatedResult.products,
             initialFilterCriteria: filterValues,
           );
         } else {
@@ -113,18 +114,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   showProducts(Loaded state) {
+    var products = state.paginatedResult.products;
     var productsToDisplay = filterValues == null
-        ? state.products
-        : context
-            .read<FilterProductsCubit>()
-            .call(state.products, filterValues!);
+        ? products
+        : context.read<FilterProductsCubit>().call(products, filterValues!);
+
     if (productsToDisplay.isEmpty) {
       return buildEmptyStateContent();
     }
-    return buildProductList(
-      productsToDisplay,
-      state.favorites,
-    );
+    return buildProductList(state);
   }
 
   Widget buildNoNetworkContent() {
@@ -132,8 +130,9 @@ class _HomePageState extends State<HomePage> {
       child: Center(
         child: SingleChildScrollView(
           child: NoNetworkContent(
-            onButtonClicked: () =>
-                context.read<DisplayAllProductsCubit>().call(),
+            onButtonClicked: () => context
+                .read<DisplayAllProductsCubit>()
+                .call(initialPageAndLimit),
           ),
         ),
       ),
@@ -145,8 +144,9 @@ class _HomePageState extends State<HomePage> {
       child: Center(
         child: SingleChildScrollView(
           child: ErrorContent(
-            onButtonClicked: () =>
-                context.read<DisplayAllProductsCubit>().call(),
+            onButtonClicked: () => context
+                .read<DisplayAllProductsCubit>()
+                .call(initialPageAndLimit),
           ),
         ),
       ),
@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> {
             buttonText:
                 AppLocalizations.of(context).homeRetryFetchProductButtonText,
             onButtonClicked: () {
-              context.read<DisplayAllProductsCubit>().call();
+              context.read<DisplayAllProductsCubit>().call(initialPageAndLimit);
             },
           ),
         ),
@@ -172,9 +172,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  buildProductList(List<Product> products, List<Product> favorites) {
+  buildProductList(Loaded state) {
     return Expanded(
-      child: ProductList(products: products, favorites: favorites),
+      child: ProductList(
+        initialProducts: state.paginatedResult.products,
+        favorites: state.favorites,
+        initialPageAndLimit:
+            PageAndLimitModel.fromPaginationLimit(state.paginatedResult.next!),
+      ),
     );
   }
 

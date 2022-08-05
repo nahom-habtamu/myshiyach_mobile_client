@@ -1,3 +1,5 @@
+import 'package:mnale_client/data/models/product/page_and_limit_model.dart';
+
 import '../../core/services/network_info.dart';
 import '../../domain/contracts/product_service.dart';
 import '../datasources/firebase/firebase_storage_data_source.dart';
@@ -5,6 +7,7 @@ import '../datasources/product/product_local_data_source.dart';
 import '../datasources/product/product_remote_data_source.dart';
 import '../models/product/add_product_model.dart';
 import '../models/product/edit_product_model.dart';
+import '../models/product/get_paginated_products_result_model.dart';
 import '../models/product/product_model.dart';
 
 class ProductRepository extends ProductService {
@@ -21,8 +24,8 @@ class ProductRepository extends ProductService {
   });
 
   @override
-  Future<List<ProductModel>> getAllProducts() {
-    return remoteDataSource.getAllProducts();
+  Future<GetPaginatedProductsResultModel> getAllProducts(PageAndLimitModel pageAndLimit) {
+    return remoteDataSource.getAllProducts(pageAndLimit);
   }
 
   @override

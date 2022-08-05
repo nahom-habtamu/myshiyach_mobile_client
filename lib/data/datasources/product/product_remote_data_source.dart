@@ -5,25 +5,29 @@ import 'package:http/http.dart' as http;
 import '../../../core/constants/api_information.dart';
 import '../../models/product/add_product_model.dart';
 import '../../models/product/edit_product_model.dart';
+import '../../models/product/get_paginated_products_result_model.dart';
+import '../../models/product/page_and_limit_model.dart';
 import '../../models/product/product_model.dart';
 import 'product_data_source.dart';
 
 class ProductRemoteDataSource extends ProductDataSource {
   @override
-  Future<List<ProductModel>> getAllProducts() async {
-    const String endPoint = '$baseUrl/products';
+  Future<GetPaginatedProductsResultModel> getAllProducts(
+      PageAndLimitModel pageAndLimit) async {
+    String endPoint =
+        '$baseUrl/products?page=${pageAndLimit.page}&limit=${pageAndLimit.limit}';
     final response = await http.get(
       Uri.parse(endPoint),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-    );
+    ).timeout(const Duration(seconds: 60));
 
     if (response.statusCode == 200) {
-      var products = ProductModel.parseProductsFromJson(
+      var result = GetPaginatedProductsResultModel.fromJson(
         json.decode(response.body),
       );
-      return products;
+      return result;
     }
     throw Exception("Couldn't Fetch Products");
   }

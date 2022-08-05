@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/data/models/product/page_and_limit_model.dart';
 
 import '../../../core/services/network_info.dart';
 import '../../../core/utils/date_time_formatter.dart';
@@ -26,26 +27,23 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
     return secondDate.compareTo(firstDate);
   }
 
-  void call() async {
+  void call(PageAndLimitModel pageAndLimit) async {
     try {
-
-      if(await networkInfo.isConnected()){
+      if (await networkInfo.isConnected()) {
         emit(Empty());
         emit(Loading());
-        var products = await getAllProducts.call();
+        var result = await getAllProducts.call(pageAndLimit);
         var favoriteProducts = await getFavoriteProducts.call();
         var categories = await getAllCategories.call();
-        if (products.isNotEmpty && categories.isNotEmpty) {
-          sortProductByCreatedTime(products);
-          emit(Loaded(products, categories, favoriteProducts));
+        if (result.products.isNotEmpty && categories.isNotEmpty) {
+          sortProductByCreatedTime(result.products);
+          emit(Loaded(result, categories, favoriteProducts));
         } else {
           emit(Empty());
         }
-      }
-      else {
+      } else {
         emit(NoNetwork());
       }
-
     } catch (e) {
       emit(Error(message: e.toString()));
     }

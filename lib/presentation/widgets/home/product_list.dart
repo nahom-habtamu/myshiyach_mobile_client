@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../../domain/enitites/product.dart';
+import '../../../data/models/product/page_and_limit_model.dart';
 import '../../../data/models/product/product_model.dart';
-import '../../bloc/display_all_products/display_all_products_cubit.dart';
+import '../../../domain/enitites/product.dart';
+import '../../bloc/get_all_products/get_all_products_cubit.dart';
+import '../../bloc/get_all_products/get_all_products_state.dart';
 import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import 'product_list_item.dart';
 
 class ProductList extends StatefulWidget {
   final List<Product> favorites;
-  final List<Product> products;
+  final List<Product> initialProducts;
+  final PageAndLimitModel? initialPageAndLimit;
   const ProductList({
     Key? key,
-    required this.products,
+    required this.initialProducts,
     required this.favorites,
+    required this.initialPageAndLimit,
   }) : super(key: key);
 
   @override
@@ -23,39 +29,79 @@ class ProductList extends StatefulWidget {
 class _ProductListState extends State<ProductList> {
   SetFavoriteProductsCubit? setFavoriteProductsCubit;
   List<Product> favorites = [];
+  List<Product> productsToDisplay = [];
+  PageAndLimitModel? currentPageAndLimit;
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
   @override
   void initState() {
     super.initState();
+    initializeState();
+  }
+
+  void initializeState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
       setState(() {
         favorites = [...widget.favorites];
+        productsToDisplay = [...widget.initialProducts];
+        currentPageAndLimit = widget.initialPageAndLimit;
       });
+      setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        context.read<DisplayAllProductsCubit>().call();
+    return BlocBuilder<GetAllProductsCubit, GetAllProductsState>(
+      builder: (context, state) {
+        if (state is Loaded) {
+          handleAddingNewItemsAndUpdatingState(state, context);
+        }
+        return SmartRefresher(
+          controller: _refreshController,
+          onRefresh: () async {
+            await Future.delayed(const Duration(milliseconds: 300));
+            _refreshController.refreshCompleted();
+          },
+          onLoading: () async {
+            await Future.delayed(const Duration(milliseconds: 300));
+            context.read<GetAllProductsCubit>().call(currentPageAndLimit!);
+            _refreshController.loadComplete();
+          },
+          header: const WaterDropHeader(),
+          enablePullUp: true,
+          enablePullDown: false,
+          child: GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 5.0,
+              mainAxisSpacing: 5.0,
+              childAspectRatio: MediaQuery.of(context).size.width /
+                  (MediaQuery.of(context).size.height) *
+                  1.47,
+            ),
+            itemCount: productsToDisplay.length,
+            itemBuilder: (context, index) {
+              return buildProduct(productsToDisplay[index]);
+            },
+          ),
+        );
       },
-      child: GridView.builder(
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 5.0,
-          mainAxisSpacing: 5.0,
-          childAspectRatio: MediaQuery.of(context).size.width /
-              (MediaQuery.of(context).size.height) *
-              1.47,
-        ),
-        itemCount: widget.products.length,
-        itemBuilder: (context, index) {
-          return buildProduct(widget.products[index]);
-        },
-      ),
     );
+  }
+
+  void handleAddingNewItemsAndUpdatingState(
+      Loaded state, BuildContext context) {
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      setState(() {
+        productsToDisplay = [...productsToDisplay, ...state.result.products];
+        currentPageAndLimit =
+            PageAndLimitModel.fromPaginationLimit(state.result.next);
+      });
+      context.read<GetAllProductsCubit>().clear();
+    });
   }
 
   ProductListItem buildProduct(Product product) {
