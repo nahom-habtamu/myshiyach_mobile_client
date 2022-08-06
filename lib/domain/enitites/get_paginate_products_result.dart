@@ -1,10 +1,10 @@
-import '../../data/models/product/product_model.dart';
 import 'page_and_limit.dart';
+import 'product.dart';
 
 class GetPaginatedProductsResult {
   final PageAndLimit? prev;
   final PageAndLimit? next;
-  final List<ProductModel> products;
+  final List<Product> products;
 
   GetPaginatedProductsResult({
     this.prev,

@@ -27,6 +27,10 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
     return secondDate.compareTo(firstDate);
   }
 
+  void clear() {
+    emit(Empty());
+  }
+
   void call(PageAndLimitModel pageAndLimit) async {
     try {
       if (await networkInfo.isConnected()) {

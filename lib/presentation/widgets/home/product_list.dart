@@ -9,17 +9,20 @@ import '../../../domain/enitites/product.dart';
 import '../../bloc/get_all_products/get_all_products_cubit.dart';
 import '../../bloc/get_all_products/get_all_products_state.dart';
 import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import 'custom_footer_for_lazy_loading.dart';
 import 'product_list_item.dart';
 
 class ProductList extends StatefulWidget {
   final List<Product> favorites;
-  final List<Product> initialProducts;
-  final PageAndLimitModel? initialPageAndLimit;
+  final List<Product> products;
+  final PageAndLimitModel? pageAndLimit;
+  final Function(Loaded) onRefreshed;
   const ProductList({
     Key? key,
-    required this.initialProducts,
+    required this.products,
     required this.favorites,
-    required this.initialPageAndLimit,
+    required this.pageAndLimit,
+    required this.onRefreshed,
   }) : super(key: key);
 
   @override
@@ -28,9 +31,6 @@ class ProductList extends StatefulWidget {
 
 class _ProductListState extends State<ProductList> {
   SetFavoriteProductsCubit? setFavoriteProductsCubit;
-  List<Product> favorites = [];
-  List<Product> productsToDisplay = [];
-  PageAndLimitModel? currentPageAndLimit;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -42,11 +42,6 @@ class _ProductListState extends State<ProductList> {
 
   void initializeState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      setState(() {
-        favorites = [...widget.favorites];
-        productsToDisplay = [...widget.initialProducts];
-        currentPageAndLimit = widget.initialPageAndLimit;
-      });
       setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
     });
   }
@@ -54,59 +49,60 @@ class _ProductListState extends State<ProductList> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GetAllProductsCubit, GetAllProductsState>(
-      builder: (context, state) {
-        if (state is Loaded) {
-          handleAddingNewItemsAndUpdatingState(state, context);
-        }
-        return SmartRefresher(
-          controller: _refreshController,
-          onRefresh: () async {
+        builder: (context, state) {
+      if (state is Loaded) {
+        handleAddingNewItemsAndUpdatingState(state);
+      } else if (state is Error) {
+        _refreshController.loadFailed();
+      }
+      return SmartRefresher(
+        controller: _refreshController,
+        onRefresh: () async {
+          await Future.delayed(const Duration(milliseconds: 300));
+          _refreshController.refreshCompleted();
+        },
+        onLoading: () async {
+          if (widget.pageAndLimit != null) {
             await Future.delayed(const Duration(milliseconds: 300));
-            _refreshController.refreshCompleted();
-          },
-          onLoading: () async {
-            await Future.delayed(const Duration(milliseconds: 300));
-            context.read<GetAllProductsCubit>().call(currentPageAndLimit!);
+            context.read<GetAllProductsCubit>().call(widget.pageAndLimit!);
             _refreshController.loadComplete();
-          },
-          header: const WaterDropHeader(),
-          enablePullUp: true,
-          enablePullDown: false,
-          child: GridView.builder(
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 5.0,
-              mainAxisSpacing: 5.0,
-              childAspectRatio: MediaQuery.of(context).size.width /
-                  (MediaQuery.of(context).size.height) *
-                  1.47,
-            ),
-            itemCount: productsToDisplay.length,
-            itemBuilder: (context, index) {
-              return buildProduct(productsToDisplay[index]);
-            },
+          } else {
+            _refreshController.loadNoData();
+          }
+        },
+        header: const WaterDropHeader(),
+        enablePullUp: true,
+        enablePullDown: false,
+        footer: const CustomFooterForLazyLoading(),
+        child: GridView.builder(
+          shrinkWrap: true,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 5.0,
+            mainAxisSpacing: 5.0,
+            childAspectRatio: MediaQuery.of(context).size.width /
+                (MediaQuery.of(context).size.height) *
+                1.47,
           ),
-        );
-      },
-    );
+          itemCount: widget.products.length,
+          itemBuilder: (context, index) {
+            return buildProduct(widget.products[index]);
+          },
+        ),
+      );
+    });
   }
 
-  void handleAddingNewItemsAndUpdatingState(
-      Loaded state, BuildContext context) {
+  void handleAddingNewItemsAndUpdatingState(Loaded state) {
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-      setState(() {
-        productsToDisplay = [...productsToDisplay, ...state.result.products];
-        currentPageAndLimit =
-            PageAndLimitModel.fromPaginationLimit(state.result.next);
-      });
+      widget.onRefreshed(state);
       context.read<GetAllProductsCubit>().clear();
     });
   }
 
   ProductListItem buildProduct(Product product) {
     var duplicate =
-        favorites.where((element) => element.id == product.id).toList();
+        widget.favorites.where((element) => element.id == product.id).toList();
     return ProductListItem(
       product: product,
       isFavorite: duplicate.isEmpty,
@@ -118,12 +114,12 @@ class _ProductListState extends State<ProductList> {
 
   void updateFavorites(List<Product> duplicate, Product product) {
     if (duplicate.isNotEmpty) {
-      favorites.removeWhere((element) => element.id == product.id);
+      widget.favorites.removeWhere((element) => element.id == product.id);
       setState(() {});
     } else {
-      setState(() {
-        favorites = [...favorites, product];
-      });
+      // setState(() {
+      //   favorites = [...favorites, product];
+      // });
     }
     List<ProductModel> favoritesToSave = parseListToProductModelList();
     setFavoriteProductsCubit!.setFavoriteProducts.call(favoritesToSave);
@@ -131,7 +127,7 @@ class _ProductListState extends State<ProductList> {
 
   List<ProductModel> parseListToProductModelList() {
     var favoritesToSave =
-        favorites.map((e) => ProductModel.fromProduct(e)).toList();
+        widget.favorites.map((e) => ProductModel.fromProduct(e)).toList();
     return favoritesToSave;
   }
 }

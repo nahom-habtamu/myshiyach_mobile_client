@@ -15,7 +15,7 @@ class PageAndLimitModel extends PageAndLimit {
 
   factory PageAndLimitModel.initialDefault() {
     return PageAndLimitModel(
-      limit: 15,
+      limit: 8,
       page: 1,
     );
   }
