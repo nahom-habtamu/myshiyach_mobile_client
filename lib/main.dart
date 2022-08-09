@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 import 'core/services/injection_container.dart' as di;
 import 'core/services/injection_container.dart';
@@ -24,7 +25,10 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  // final PendingDynamicLinkData? dynamicLinkData;
+  const MyApp({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -32,6 +36,17 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale? _locale = const Locale("en");
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+      print('dynamic link');
+      print(dynamicLinkData.link.toString().split('?').last.split("=").last);
+    }).onError((error) {
+      
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
