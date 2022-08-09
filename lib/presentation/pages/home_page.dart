@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../core/constants/lazy_loading_constants.dart';
 import '../../data/models/filter/filter_criteria_model.dart';
 import '../../data/models/product/page_and_limit_model.dart';
 import '../../domain/enitites/main_category.dart';
@@ -10,6 +11,7 @@ import '../../domain/enitites/product.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
 import '../bloc/filter/filter_products_cubit.dart';
+import '../bloc/get_all_products/get_all_products_cubit.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
@@ -137,6 +139,10 @@ class _HomePageState extends State<HomePage> {
     var productsToDisplay = filterValues == null
         ? products
         : context.read<FilterProductsCubit>().call(products, filterValues!);
+
+    if (productsToDisplay.length < lazyLoadingLimit && pageAndLimit != null) {
+      context.read<GetAllProductsCubit>().call(pageAndLimit!);
+    }
 
     if (productsToDisplay.isEmpty) {
       return buildEmptyStateContent();

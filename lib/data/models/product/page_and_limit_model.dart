@@ -1,3 +1,4 @@
+import '../../../core/constants/lazy_loading_constants.dart';
 import '../../../domain/enitites/page_and_limit.dart';
 
 class PageAndLimitModel extends PageAndLimit {
@@ -15,7 +16,7 @@ class PageAndLimitModel extends PageAndLimit {
 
   factory PageAndLimitModel.initialDefault() {
     return PageAndLimitModel(
-      limit: 8,
+      limit: lazyLoadingLimit,
       page: 1,
     );
   }
