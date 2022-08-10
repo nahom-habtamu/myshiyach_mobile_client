@@ -1,15 +1,21 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../domain/enitites/conversation.dart';
+import '../../domain/enitites/login_result.dart';
+import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import '../bloc/get_all_conversations/get_all_conversations_state.dart';
+import '../bloc/get_product_by_id/get_product_by_id_cubit.dart';
+import '../screen_arguments/post_detail_page_arguments.dart';
 import 'add_post_page.dart';
 import 'chat_list_page.dart';
 import 'home_page.dart';
+import 'post_detail_page.dart';
 import 'profile_page.dart';
 import 'saved_posts.dart';
 
@@ -23,12 +29,54 @@ class MasterPage extends StatefulWidget {
 
 class _MasterPageState extends State<MasterPage> {
   int _selectedIndex = 0;
-  String? currentUserId;
+  User? currentUser;
+  LoginResult? loginResult;
   @override
   void initState() {
     super.initState();
     getCurrentUser();
     getAllConversation();
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      handleDynamicLink(context);
+    });
+  }
+
+  void handleDynamicLink(context) {
+    FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+    dynamicLinks.onLink.listen((dynamicLinkData) {
+      final Uri uri = dynamicLinkData.link;
+      final queryParams = uri.queryParameters;
+      if (queryParams.isNotEmpty && mounted) {
+        handleFetchingProductAndNavigateToProductDetail(
+          context,
+          dynamicLinkData,
+        );
+      }
+    });
+  }
+
+  void handleFetchingProductAndNavigateToProductDetail(
+    BuildContext context,
+    PendingDynamicLinkData linkData,
+  ) async {
+    var productId = linkData.link.queryParameters["productId"];
+    var product = await context
+        .read<GetProductByIdCubit>()
+        .call(productId!, loginResult!.token);
+
+    if (product != null) {
+      Navigator.pushReplacementNamed(
+        context,
+        PostDetailPage.routeName,
+        arguments: PostDetalPageArguments(
+          product: product,
+          isFromDynamicLink: true,
+          currentUser: currentUser,
+          token: loginResult!.token,
+        ),
+      );
+    }
   }
 
   List<Widget> pagesToShow = [
@@ -49,7 +97,8 @@ class _MasterPageState extends State<MasterPage> {
     var authState = context.read<AuthCubit>().state;
     if (authState is AuthSuccessfull) {
       setState(() {
-        currentUserId = authState.currentUser.id;
+        currentUser = authState.currentUser;
+        loginResult = authState.loginResult;
       });
     }
   }
@@ -184,7 +233,7 @@ class _MasterPageState extends State<MasterPage> {
     var totalUnreadMessagesCount = 0;
     for (var conversation in data!) {
       var unreadMessagesInConversation = conversation.messages
-          .where((m) => !m.isSeen && m.recieverId == currentUserId)
+          .where((m) => !m.isSeen && m.recieverId == currentUser!.id)
           .toList();
       if (unreadMessagesInConversation.isNotEmpty) totalUnreadMessagesCount++;
     }

@@ -62,8 +62,8 @@ class _ProductListState extends State<ProductList> {
           _refreshController.refreshCompleted();
         },
         onLoading: () async {
+          await Future.delayed(const Duration(milliseconds: 300));
           if (widget.pageAndLimit != null) {
-            await Future.delayed(const Duration(milliseconds: 300));
             context.read<GetAllProductsCubit>().call(widget.pageAndLimit!);
             _refreshController.loadComplete();
           } else {

@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/constants/lazy_loading_constants.dart';
 import '../../data/models/filter/filter_criteria_model.dart';
 import '../../data/models/product/page_and_limit_model.dart';
+import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
@@ -46,6 +47,8 @@ class _HomePageState extends State<HomePage> {
       fetchAllNeededToDisplayProductList();
     });
   }
+
+  
 
   fetchAllNeededToDisplayProductList() {
     context
@@ -189,7 +192,9 @@ class _HomePageState extends State<HomePage> {
             buttonText:
                 AppLocalizations.of(context).homeRetryFetchProductButtonText,
             onButtonClicked: () {
-              context.read<DisplayAllProductsCubit>().call(pageAndLimit!);
+              if (pageAndLimit != null) {
+                context.read<DisplayAllProductsCubit>().call(pageAndLimit!);
+              }
             },
           ),
         ),
@@ -203,15 +208,21 @@ class _HomePageState extends State<HomePage> {
         products: filteredProducts,
         favorites: favorites,
         pageAndLimit: pageAndLimit,
-        onRefreshed: (newState) {
-          setState(() {
-            products = [...products, ...newState.result.products];
-            pageAndLimit =
-                PageAndLimitModel.fromPaginationLimit(newState.result.next);
-          });
-        },
+        onRefreshed: updateStateOnRefresh,
       ),
     );
+  }
+
+  updateStateOnRefresh(newState) {
+    var productsToAddInState = List<ProductModel>.from(newState.result.products)
+        .where((p) => products.where((pis) => pis.id == p.id).isEmpty)
+        .toList();
+
+    setState(() {
+      products = [...products, ...productsToAddInState];
+      pageAndLimit =
+          PageAndLimitModel.fromPaginationLimit(newState.result.next);
+    });
   }
 
   renderCategories() {

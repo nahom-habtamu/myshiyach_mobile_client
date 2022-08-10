@@ -1,17 +1,24 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../domain/enitites/login_result.dart';
+import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
+import '../bloc/get_product_by_id/get_product_by_id_cubit.dart';
+import '../screen_arguments/post_detail_page_arguments.dart';
 import '../widgets/common/no_network_content.dart';
 import 'intro_page.dart';
 import 'master_page.dart';
+import 'post_detail_page.dart';
 
 class SplashPage extends StatefulWidget {
   static String routeName = "/splashPage";
-  const SplashPage({Key? key}) : super(key: key);
+  final PendingDynamicLinkData? linkData;
+  const SplashPage({Key? key, this.linkData}) : super(key: key);
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -36,10 +43,7 @@ class _SplashPageState extends State<SplashPage> {
       builder: (context, state) {
         if (state is AuthSuccessfull) {
           SchedulerBinding.instance!.addPostFrameCallback((_) {
-            Navigator.pushReplacementNamed(
-              context,
-              MasterPage.routeName,
-            );
+            handleSuccessCase(context, state.currentUser, state.loginResult);
           });
         }
         if (state is AuthError) {
@@ -50,12 +54,30 @@ class _SplashPageState extends State<SplashPage> {
             );
           });
         }
-
         if (state is AuthNoNetwork) {
           return renderNoNetwork();
         }
         return renderAppTitle();
       },
+    );
+  }
+
+  handleSuccessCase(
+    BuildContext context,
+    User currentUser,
+    LoginResult loginResult,
+  ) {
+    if (widget.linkData == null) {
+      navigateToMasterPage(context);
+    } else {
+      handleFetchingProductAndNavigateToProductDetail(currentUser, loginResult);
+    }
+  }
+
+  void navigateToMasterPage(BuildContext context) {
+    Navigator.pushReplacementNamed(
+      context,
+      MasterPage.routeName,
     );
   }
 
@@ -79,5 +101,28 @@ class _SplashPageState extends State<SplashPage> {
         onButtonClicked: () => context.read<AuthCubit>().loginUser(null),
       ),
     );
+  }
+
+  void handleFetchingProductAndNavigateToProductDetail(
+    User currentUser,
+    LoginResult loginResult,
+  ) async {
+    var productId = widget.linkData!.link.queryParameters["productId"];
+    var product = await context
+        .read<GetProductByIdCubit>()
+        .call(productId!, loginResult.token);
+
+    if (product != null) {
+      Navigator.pushReplacementNamed(
+        context,
+        PostDetailPage.routeName,
+        arguments: PostDetalPageArguments(
+          product: product,
+          isFromDynamicLink: true,
+          currentUser: currentUser,
+          token: loginResult.token,
+        ),
+      );
+    }
   }
 }

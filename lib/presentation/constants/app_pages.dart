@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../pages/posts_created_by_user_page.dart';
 
 import '../pages/add_post_page.dart';
 import '../pages/change_password_page.dart';
@@ -16,7 +17,6 @@ import '../pages/otp_verification_page.dart';
 import '../pages/post_confirmation_page.dart';
 import '../pages/post_detail_page.dart';
 import '../pages/post_image_screen.dart';
-import '../pages/posts_created_by_user_page.dart';
 import '../pages/profile_page.dart';
 import '../pages/sign_up_page.dart';
 import '../pages/splash_page.dart';

@@ -11,3 +11,5 @@ class SignUpButtonArguments {
     required this.verificationId,
   });
 }
+
+

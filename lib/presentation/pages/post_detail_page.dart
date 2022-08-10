@@ -15,11 +15,13 @@ import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/refresh_product/refresh_product_cubit.dart';
 import '../bloc/refresh_product/refresh_product_state.dart';
 import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../screen_arguments/post_detail_page_arguments.dart';
 import '../widgets/common/error_content.dart';
 import '../widgets/common/no_network_content.dart';
 import '../widgets/post_detail/post_content_to_show.dart';
 import '../widgets/post_detail/post_detail_app_bar.dart';
 import 'edit_post_page.dart';
+import 'master_page.dart';
 
 class PostDetailPage extends StatefulWidget {
   static String routeName = "/postDetail";
@@ -33,20 +35,24 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Product? product;
   User? currentUser;
   String? authToken;
+  bool isFromDynamicLink = false;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       initalizeNeededData();
     });
   }
 
   void initalizeNeededData() {
+    var args =
+        ModalRoute.of(context)!.settings.arguments as PostDetalPageArguments;
     setState(() {
-      currentUser = getCurrentUser();
-      authToken = getToken();
-      product = ModalRoute.of(context)!.settings.arguments as Product;
+      currentUser = getCurrentUser() ?? args.currentUser;
+      authToken = getToken() ?? args.token;
+      product = args.product;
+      isFromDynamicLink = args.isFromDynamicLink;
     });
     context.read<HandleGoingToMessageCubit>().clear();
     context.read<RefreshProductCubit>().clear();
@@ -57,24 +63,33 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: renderAppBar(),
-        body: BlocBuilder<GetPostDetailContentCubit, GetPostDetailContentState>(
-          builder: (context, state) {
-            if (state is Loading || product == null) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is Error) {
-              return buildErrorContent();
-            } else if (state is NoNetwork) {
-              return buildNoNetworkContent();
-            } else if (state is Loaded) {
-              return renderBody(state.favoriteProducts, state.postCreator);
-            }
-            return Container();
-          },
+    return WillPopScope(
+      onWillPop: () async {
+        if (isFromDynamicLink) {
+          Navigator.pushReplacementNamed(context, MasterPage.routeName);
+        }
+        return true;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          appBar: renderAppBar(),
+          body:
+              BlocBuilder<GetPostDetailContentCubit, GetPostDetailContentState>(
+            builder: (context, state) {
+              if (state is Loading || product == null) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is Error) {
+                return buildErrorContent();
+              } else if (state is NoNetwork) {
+                return buildNoNetworkContent();
+              } else if (state is Loaded) {
+                return renderBody(state.favoriteProducts, state.postCreator);
+              }
+              return Container();
+            },
+          ),
         ),
       ),
     );
@@ -147,7 +162,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
   renderAppBar() {
     return PostDetailAppBar(
       onAppBarMenuClicked: (value) => handleAppBarMenuClicked(value),
-      showActions: product != null && currentUser!.id == product!.createdBy,
+      showActions: currentUser != null &&
+          product != null &&
+          currentUser!.id == product!.createdBy,
     );
   }
 

@@ -4,6 +4,7 @@ import '../../../core/utils/date_time_formatter.dart';
 import '../../../core/utils/price_formatter.dart';
 import '../../../domain/enitites/product.dart';
 import '../../pages/post_detail_page.dart';
+import '../../screen_arguments/post_detail_page_arguments.dart';
 
 class ProductListItem extends StatefulWidget {
   final Product product;
@@ -28,8 +29,14 @@ class _ProductListItemState extends State<ProductListItem> {
     heightOfMobile = MediaQuery.of(context).size.height * 0.01;
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, PostDetailPage.routeName,
-            arguments: widget.product);
+        Navigator.pushNamed(
+          context,
+          PostDetailPage.routeName,
+          arguments: PostDetalPageArguments(
+            product: widget.product,
+            isFromDynamicLink: false,
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.all(5),

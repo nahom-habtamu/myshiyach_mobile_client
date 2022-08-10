@@ -46,8 +46,8 @@ import '../../domain/usecases/get_categories.dart';
 import '../../domain/usecases/get_conversation_by_id.dart';
 import '../../domain/usecases/get_conversation_by_members.dart';
 import '../../domain/usecases/get_favorite_products.dart';
-import '../../domain/usecases/get_products_by_user_id.dart';
 import '../../domain/usecases/get_product_by_id.dart';
+import '../../domain/usecases/get_products_by_user_id.dart';
 import '../../domain/usecases/get_stored_user_credentials.dart';
 import '../../domain/usecases/get_user_by_id.dart';
 import '../../domain/usecases/login.dart';
@@ -75,6 +75,7 @@ import '../../presentation/bloc/get_conversation_by_id.dart/get_conversation_by_
 import '../../presentation/bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import '../../presentation/bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
+import '../../presentation/bloc/get_product_by_id/get_product_by_id_cubit.dart';
 import '../../presentation/bloc/get_products_by_user_id/get_products_by_user_id_cubit.dart';
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../presentation/bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
@@ -152,6 +153,7 @@ Future<void> init() async {
       uploadProductPictures: sl(),
     ),
   );
+  sl.registerFactory(() => GetProductByIdCubit(sl()));
 
   // usecases
   sl.registerLazySingleton(() => Login(sl()));
