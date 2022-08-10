@@ -5,7 +5,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../domain/enitites/product.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
-import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../bloc/get_products_by_user_id/get_products_by_user_id_cubit.dart';
 import '../bloc/get_products_by_user_id/get_products_by_user_id_state.dart';
 import '../widgets/common/curved_container.dart';
@@ -16,22 +15,28 @@ import '../widgets/common/no_network_content.dart';
 import '../widgets/common/post_card_list_item.dart';
 import 'add_post_page.dart';
 
-class MyPostsPage extends StatefulWidget {
-  static String routeName = '/myPostsPage';
-  const MyPostsPage({Key? key}) : super(key: key);
+class PostsCreatedByUserPage extends StatefulWidget {
+  static String routeName = '/postsCreatedByUserPage';
+  const PostsCreatedByUserPage({Key? key}) : super(key: key);
 
   @override
-  State<MyPostsPage> createState() => _MyPostsPageState();
+  State<PostsCreatedByUserPage> createState() => _PostsCreatedByUserPageState();
 }
 
-class _MyPostsPageState extends State<MyPostsPage> {
+class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
   String accessToken = "";
+  String userId = "";
 
   @override
   void initState() {
     super.initState();
     initAccessToken();
-    fetchMyPosts();
+
+    Future.delayed(Duration.zero, () {
+      // userId = ModalRoute.of(context)!.settings.arguments as String;
+      userId = "62c0275cdefbcb53a9fd53a1";
+      fetchPostsCreatedByUser(userId);
+    });
   }
 
   void initAccessToken() {
@@ -41,11 +46,8 @@ class _MyPostsPageState extends State<MyPostsPage> {
     }
   }
 
-  void fetchMyPosts() {
-    var authState = context.read<AuthCubit>().state;
-    if (authState is AuthSuccessfull) {
-      context.read<GetProductsByUserIdCubit>().call(authState.currentUser.id);
-    }
+  void fetchPostsCreatedByUser(String userId) {
+    context.read<GetProductsByUserIdCubit>().call(userId);
   }
 
   @override
@@ -53,7 +55,7 @@ class _MyPostsPageState extends State<MyPostsPage> {
     return Scaffold(
       backgroundColor: const Color(0xff11435E),
       appBar: CustomAppBar(
-        title: AppLocalizations.of(context).myPostsPageAppBarText,
+        title: AppLocalizations.of(context).postsCreatedByUserPageAppBarText,
       ),
       body: CurvedContainer(
         child: buildMyPosts(),
@@ -83,9 +85,12 @@ class _MyPostsPageState extends State<MyPostsPage> {
 
   buildEmptyStateContent() {
     return FallBackContent(
-      captionText: AppLocalizations.of(context).myPostsPageEmptyCaptionText,
-      hintText: AppLocalizations.of(context).myPostsPageEmptyHintText,
-      buttonText: AppLocalizations.of(context).myPostsPageEmptyButtonText,
+      captionText:
+          AppLocalizations.of(context).postsCreatedByUserPageEmptyCaptionText,
+      hintText:
+          AppLocalizations.of(context).postsCreatedByUserPageEmptyHintText,
+      buttonText:
+          AppLocalizations.of(context).postsCreatedByUserPageEmptyButtonText,
       onButtonClicked: () {
         Navigator.pushReplacementNamed(context, AddPostPage.routeName);
       },
@@ -94,48 +99,25 @@ class _MyPostsPageState extends State<MyPostsPage> {
 
   buildNoNetworkContent() {
     return NoNetworkContent(
-      onButtonClicked: () => fetchMyPosts(),
+      onButtonClicked: () => fetchPostsCreatedByUser(userId),
     );
   }
 
   buildErrorContent() {
     return ErrorContent(
-      onButtonClicked: () => fetchMyPosts(),
+      onButtonClicked: () => fetchPostsCreatedByUser(userId),
     );
   }
 
   buildProductList(List<Product> products) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15.0),
-          child: Text(
-            AppLocalizations.of(context).myPostsPageSwipeToDelete,
-            style: const TextStyle(
-              fontSize: 22,
-              fontStyle: FontStyle.italic,
-              color: Colors.black45,
-            ),
-            textAlign: TextAlign.center,
-          ),
+    return Expanded(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemBuilder: (context, index) => PostCardListItem(
+          product: products[index],
         ),
-        Expanded(
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemBuilder: (context, index) => PostCardListItem(
-              product: products[index],
-              onDissmissed: () {
-                context.read<DeleteProductByIdCubit>().call(
-                      products[index].id,
-                      accessToken,
-                    );
-                fetchMyPosts();
-              },
-            ),
-            itemCount: products.length,
-          ),
-        ),
-      ],
+        itemCount: products.length,
+      ),
     );
   }
 }

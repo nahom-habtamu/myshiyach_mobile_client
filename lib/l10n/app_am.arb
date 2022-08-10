@@ -127,6 +127,11 @@
     "postConfirmationAdPlacedSuccessfull" : "ልጥፍዎ በተሳካ ሁኔታ ተቀምጧል፣ የሎጂስቲክ ቡድናችን በቅርቡ ከእርስዎ ጋር ይገናኛል። ለማንኛውም እርዳታ (+251) 12345678 ይደውሉ",
     "postConfirmationGoToHomePageButtonText" : "ወደ መነሻ ገጽ ሂድ",
 
+    "postsCreatedByUserPageAppBarText" : "የተመረጡ እቃዎች",
+    "postsCreatedByUserPageEmptyCaptionText" : "ተጠቃሚው ምንም ልጥፎች የሉትም!",
+    "postsCreatedByUserPageEmptyHintText" : "ከዚህ በታች ያለውን አዝራር በመጫን ሌሎች እቃዎችን ይመልከቱ",
+    "postsCreatedByUserPageEmptyButtonText" : "ወደ መነሻ ገጽ ሂድ",
+
     "postDetailAppBarText" : "የእቃ ዝርዝር",
     "postDetailEditText" : "ማስተካከያ",
     "postDetailDeleteText" : "ደምስስ",

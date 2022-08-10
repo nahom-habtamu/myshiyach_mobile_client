@@ -127,6 +127,11 @@
     "postConfirmationAdPlacedSuccessfull" : "Your ad has been Successfully placed, Our logistic team will contact with you soon. For any help, call (+251) 12345678",
     "postConfirmationGoToHomePageButtonText" : "Go to Homepage",
 
+    "postsCreatedByUserPageAppBarText" : "Posts By User",
+    "postsCreatedByUserPageEmptyCaptionText" : "User has no products!",
+    "postsCreatedByUserPageEmptyHintText" : "Go to products to see more products",
+    "postsCreatedByUserPageEmptyButtonText" : "Go To Home",
+
     "postDetailAppBarText" : "Post Detail",
     "postDetailEditText" : "Edit",
     "postDetailDeleteText" : "Delete",

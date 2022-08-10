@@ -46,7 +46,7 @@ import '../../domain/usecases/get_categories.dart';
 import '../../domain/usecases/get_conversation_by_id.dart';
 import '../../domain/usecases/get_conversation_by_members.dart';
 import '../../domain/usecases/get_favorite_products.dart';
-import '../../domain/usecases/get_my_products.dart';
+import '../../domain/usecases/get_products_by_user_id.dart';
 import '../../domain/usecases/get_product_by_id.dart';
 import '../../domain/usecases/get_stored_user_credentials.dart';
 import '../../domain/usecases/get_user_by_id.dart';
@@ -74,8 +74,8 @@ import '../../presentation/bloc/get_all_products/get_all_products_cubit.dart';
 import '../../presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../../presentation/bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
-import '../../presentation/bloc/get_my_products/get_my_products_cubit.dart';
 import '../../presentation/bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
+import '../../presentation/bloc/get_products_by_user_id/get_products_by_user_id_cubit.dart';
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../presentation/bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../../presentation/bloc/logout/logout_cubit.dart';
@@ -113,7 +113,7 @@ Future<void> init() async {
         networkInfo: sl()),
   );
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
-  sl.registerFactory(() => GetMyProductsCubit(sl(), sl()));
+  sl.registerFactory(() => GetProductsByUserIdCubit(sl(), sl()));
   sl.registerFactory(() => AuthPhoneNumberCubit(sl()));
   sl.registerFactory(() => LogOutCubit(storeUserCredentials: sl()));
   sl.registerFactory(
@@ -176,7 +176,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetConversationByMembers(sl()));
   sl.registerLazySingleton(() => GetStoredUserCredentials(sl()));
   sl.registerLazySingleton(() => StoreUserCredentials(sl()));
-  sl.registerLazySingleton(() => GetMyProducts(sl()));
+  sl.registerLazySingleton(() => GetProductsByUserId(sl()));
   sl.registerLazySingleton(() => ChangePassword(sl()));
   sl.registerLazySingleton(() => FilterProducts());
   sl.registerLazySingleton(() => GetProductById(sl()));

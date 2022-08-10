@@ -16,6 +16,7 @@ import '../pages/otp_verification_page.dart';
 import '../pages/post_confirmation_page.dart';
 import '../pages/post_detail_page.dart';
 import '../pages/post_image_screen.dart';
+import '../pages/posts_created_by_user_page.dart';
 import '../pages/profile_page.dart';
 import '../pages/sign_up_page.dart';
 import '../pages/splash_page.dart';
@@ -42,6 +43,8 @@ class AppPages {
       FilterDataPage.routeName: (context) => const FilterDataPage(),
       PostImagesScreen.routeName: (context) => const PostImagesScreen(),
       ProfilePage.routeName: (context) => const ProfilePage(),
+      PostsCreatedByUserPage.routeName: (context) =>
+          const PostsCreatedByUserPage(),
     };
   }
 }

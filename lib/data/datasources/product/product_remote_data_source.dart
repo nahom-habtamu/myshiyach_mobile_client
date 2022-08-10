@@ -99,7 +99,7 @@ class ProductRemoteDataSource extends ProductDataSource {
 
   @override
   Future<List<ProductModel>> getProductsByCreatorId(String userId) async {
-    final String endPoint = '$baseUrl/products?createdBy=$userId';
+    final String endPoint = '$baseUrl/products/createdBy/$userId';
     final response = await http.get(
       Uri.parse(endPoint),
       headers: <String, String>{

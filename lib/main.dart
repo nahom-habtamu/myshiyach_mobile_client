@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 import 'core/services/injection_container.dart' as di;
 import 'core/services/injection_container.dart';
@@ -43,9 +43,7 @@ class _MyAppState extends State<MyApp> {
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
       print('dynamic link');
       print(dynamicLinkData.link.toString().split('?').last.split("=").last);
-    }).onError((error) {
-      
-    });
+    }).onError((error) {});
   }
 
   @override

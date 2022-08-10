@@ -16,8 +16,8 @@ import '../bloc/get_all_products/get_all_products_cubit.dart';
 import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
-import '../bloc/get_my_products/get_my_products_cubit.dart';
 import '../bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
+import '../bloc/get_products_by_user_id/get_products_by_user_id_cubit.dart';
 import '../bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/logout/logout_cubit.dart';
@@ -86,7 +86,7 @@ class AppLevelState {
         create: (_) => sl<LogOutCubit>(),
       ),
       BlocProvider(
-        create: (_) => sl<GetMyProductsCubit>(),
+        create: (_) => sl<GetProductsByUserIdCubit>(),
       ),
       BlocProvider(
         create: (_) => sl<AuthPhoneNumberCubit>(),
