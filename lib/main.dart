@@ -41,8 +41,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
-      print('dynamic link');
-      print(dynamicLinkData.link.toString().split('?').last.split("=").last);
+      // print('dynamic link');
+      // print(dynamicLinkData.link.toString().split('?').last.split("=").last);
     }).onError((error) {});
   }
 

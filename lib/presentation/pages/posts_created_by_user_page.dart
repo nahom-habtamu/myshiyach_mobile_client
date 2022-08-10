@@ -33,8 +33,7 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
     initAccessToken();
 
     Future.delayed(Duration.zero, () {
-      // userId = ModalRoute.of(context)!.settings.arguments as String;
-      userId = "62c0275cdefbcb53a9fd53a1";
+      userId = ModalRoute.of(context)!.settings.arguments as String;
       fetchPostsCreatedByUser(userId);
     });
   }
