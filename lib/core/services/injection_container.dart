@@ -11,6 +11,7 @@ import '../../data/datasources/city/city_data_source.dart';
 import '../../data/datasources/city/city_remote_data_source.dart';
 import '../../data/datasources/conversation/conversation_data_source.dart';
 import '../../data/datasources/conversation/conversation_firebase_data_source.dart';
+import '../../data/datasources/firebase/firebase_dynamic_link_data_souce.dart';
 import '../../data/datasources/firebase/firebase_storage_data_source.dart';
 import '../../data/datasources/product/product_data_source.dart';
 import '../../data/datasources/product/product_local_data_source.dart';
@@ -39,6 +40,7 @@ import '../../domain/usecases/create_product.dart';
 import '../../domain/usecases/delete_product_by_id.dart';
 import '../../domain/usecases/extract_token.dart';
 import '../../domain/usecases/filter_products.dart';
+import '../../domain/usecases/generate_share_link_for_product.dart';
 import '../../domain/usecases/get_all_cities.dart';
 import '../../domain/usecases/get_all_conversations.dart';
 import '../../domain/usecases/get_all_products.dart';
@@ -68,6 +70,7 @@ import '../../presentation/bloc/create_product/create_product_cubit.dart';
 import '../../presentation/bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../../presentation/bloc/display_all_products/display_all_products_cubit.dart';
 import '../../presentation/bloc/filter/filter_products_cubit.dart';
+import '../../presentation/bloc/generate_share_link_for_product/generate_share_link_for_product_cubit.dart';
 import '../../presentation/bloc/get_all_categories/get_all_categories_cubit.dart';
 import '../../presentation/bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import '../../presentation/bloc/get_all_products/get_all_products_cubit.dart';
@@ -154,6 +157,7 @@ Future<void> init() async {
     ),
   );
   sl.registerFactory(() => GetProductByIdCubit(sl()));
+  sl.registerFactory(() => GenerateShareLinkForProductCubit(sl()));
 
   // usecases
   sl.registerLazySingleton(() => Login(sl()));
@@ -184,6 +188,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetProductById(sl()));
   sl.registerLazySingleton(() => RefreshProduct(sl()));
   sl.registerLazySingleton(() => MarkMessagesAsRead(sl()));
+  sl.registerLazySingleton(() => GenerateShareLinkForProduct(sl()));
 
   // repositories
 
@@ -222,11 +227,11 @@ Future<void> init() async {
   // Product Service
   sl.registerLazySingleton<ProductService>(
     () => ProductRepository(
-      remoteDataSource: sl(),
-      networkInfo: sl(),
-      localDataSource: sl(),
-      storageService: sl(),
-    ),
+        remoteDataSource: sl(),
+        networkInfo: sl(),
+        localDataSource: sl(),
+        storageService: sl(),
+        dynamicLinkDataSource: sl()),
   );
 
   // Category
@@ -256,6 +261,11 @@ Future<void> init() async {
   // UPLOAD SERVICE
   sl.registerLazySingleton<StorageDataSource>(
     () => FirebaseStorageDataSource(),
+  );
+
+  // DYNAMIC LINK SERVICE
+  sl.registerLazySingleton<DynamicLinkDataSource>(
+    () => FirebaseDynamicLinkDataSource(),
   );
 
   //  User

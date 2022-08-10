@@ -10,6 +10,7 @@ import '../bloc/create_product/create_product_cubit.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/filter/filter_products_cubit.dart';
+import '../bloc/generate_share_link_for_product/generate_share_link_for_product_cubit.dart';
 import '../bloc/get_all_categories/get_all_categories_cubit.dart';
 import '../bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import '../bloc/get_all_products/get_all_products_cubit.dart';
@@ -108,6 +109,9 @@ class AppLevelState {
       ),
       BlocProvider(
         create: (_) => sl<GetPostDetailContentCubit>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<GenerateShareLinkForProductCubit>(),
       )
     ];
   }

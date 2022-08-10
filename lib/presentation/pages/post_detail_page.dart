@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/product.dart';
@@ -9,6 +10,7 @@ import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/delete_product_by_id/delete_product_by_id_cubit.dart';
+import '../bloc/generate_share_link_for_product/generate_share_link_for_product_cubit.dart';
 import '../bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
 import '../bloc/get_post_detail_content/get_post_detail_content_state.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
@@ -189,6 +191,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       AppLocalizations.of(context).postDetailEditText,
       AppLocalizations.of(context).postDetailRefreshText,
       AppLocalizations.of(context).postDetailDeleteText,
+      "Share"
     ];
 
     if (value == values[0]) {
@@ -201,6 +204,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
       refreshProduct(product!);
     } else if (value == values[2]) {
       deleteProduct(product!);
+    } else if (value == values[3]) {
+      handleProductShare(product!.id);
     }
   }
 
@@ -243,5 +248,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void deleteProduct(Product product) {
     context.read<DeleteProductByIdCubit>().call(product.id, authToken!);
     Navigator.pop(context);
+  }
+
+  void handleProductShare(String id) async {
+    var content =
+        await context.read<GenerateShareLinkForProductCubit>().call(id);
+    if (content != null) {
+      Share.share(content);
+    }
   }
 }

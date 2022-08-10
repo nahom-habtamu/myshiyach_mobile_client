@@ -24,28 +24,27 @@ class PostDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: true,
       actions: [
-        Visibility(
-          visible: showActions,
-          child: PopupMenuButton<String>(
-            onSelected: (value) => onAppBarMenuClicked(value),
-            itemBuilder: (BuildContext context) {
-              var contentToShowOnPopup = {
-                AppLocalizations.of(context).postDetailEditText,
-                AppLocalizations.of(context).postDetailDeleteText,
-                AppLocalizations.of(context).postDetailRefreshText,
-              };
-              return contentToShowOnPopup.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(
-                    choice,
-                    style: const TextStyle(fontSize: 13),
-                  ),
-                );
-              }).toList();
-            },
-          ),
-        ),
+        PopupMenuButton<String>(
+          onSelected: (value) => onAppBarMenuClicked(value),
+          itemBuilder: (BuildContext context) {
+            var contentToShowOnPopup = showActions
+                ? {
+                    AppLocalizations.of(context).postDetailEditText,
+                    AppLocalizations.of(context).postDetailDeleteText,
+                    AppLocalizations.of(context).postDetailRefreshText,
+                  }
+                : {"Share"};
+            return contentToShowOnPopup.map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(
+                  choice,
+                  style: const TextStyle(fontSize: 13),
+                ),
+              );
+            }).toList();
+          },
+        )
       ],
     );
   }

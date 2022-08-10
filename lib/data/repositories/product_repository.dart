@@ -1,13 +1,13 @@
-import 'package:mnale_client/data/models/product/page_and_limit_model.dart';
-
 import '../../core/services/network_info.dart';
 import '../../domain/contracts/product_service.dart';
+import '../datasources/firebase/firebase_dynamic_link_data_souce.dart';
 import '../datasources/firebase/firebase_storage_data_source.dart';
 import '../datasources/product/product_local_data_source.dart';
 import '../datasources/product/product_remote_data_source.dart';
 import '../models/product/add_product_model.dart';
 import '../models/product/edit_product_model.dart';
 import '../models/product/get_paginated_products_result_model.dart';
+import '../models/product/page_and_limit_model.dart';
 import '../models/product/product_model.dart';
 
 class ProductRepository extends ProductService {
@@ -15,16 +15,19 @@ class ProductRepository extends ProductService {
   final ProductLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
   final StorageDataSource storageService;
+  final DynamicLinkDataSource dynamicLinkDataSource;
 
   ProductRepository({
     required this.remoteDataSource,
     required this.networkInfo,
     required this.localDataSource,
     required this.storageService,
+    required this.dynamicLinkDataSource,
   });
 
   @override
-  Future<GetPaginatedProductsResultModel> getAllProducts(PageAndLimitModel pageAndLimit) {
+  Future<GetPaginatedProductsResultModel> getAllProducts(
+      PageAndLimitModel pageAndLimit) {
     return remoteDataSource.getAllProducts(pageAndLimit);
   }
 
@@ -76,5 +79,10 @@ class ProductRepository extends ProductService {
   @override
   Future<ProductModel> refreshProduct(String id, String token) {
     return remoteDataSource.refreshProduct(id, token);
+  }
+
+  @override
+  Future<String> generateShareLink(String id) {
+    return dynamicLinkDataSource.generateDynamicLink(id);
   }
 }
