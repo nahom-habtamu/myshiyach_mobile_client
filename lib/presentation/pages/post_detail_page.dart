@@ -191,7 +191,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       AppLocalizations.of(context).postDetailEditText,
       AppLocalizations.of(context).postDetailRefreshText,
       AppLocalizations.of(context).postDetailDeleteText,
-      "Share"
+      AppLocalizations.of(context).postDetailShareText,
     ];
 
     if (value == values[0]) {

@@ -34,6 +34,8 @@ class _ProductListState extends State<ProductList> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
+  List<Product> favorites = [];
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +44,7 @@ class _ProductListState extends State<ProductList> {
 
   void initializeState() {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      favorites = [...widget.favorites];
       setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
     });
   }
@@ -102,7 +105,7 @@ class _ProductListState extends State<ProductList> {
 
   ProductListItem buildProduct(Product product) {
     var duplicate =
-        widget.favorites.where((element) => element.id == product.id).toList();
+        favorites.where((element) => element.id == product.id).toList();
     return ProductListItem(
       product: product,
       isFavorite: duplicate.isEmpty,
@@ -114,12 +117,12 @@ class _ProductListState extends State<ProductList> {
 
   void updateFavorites(List<Product> duplicate, Product product) {
     if (duplicate.isNotEmpty) {
-      widget.favorites.removeWhere((element) => element.id == product.id);
+      favorites.removeWhere((element) => element.id == product.id);
       setState(() {});
     } else {
-      // setState(() {
-      //   favorites = [...favorites, product];
-      // });
+      setState(() {
+        favorites = [...favorites, product];
+      });
     }
     List<ProductModel> favoritesToSave = parseListToProductModelList();
     setFavoriteProductsCubit!.setFavoriteProducts.call(favoritesToSave);
@@ -127,7 +130,7 @@ class _ProductListState extends State<ProductList> {
 
   List<ProductModel> parseListToProductModelList() {
     var favoritesToSave =
-        widget.favorites.map((e) => ProductModel.fromProduct(e)).toList();
+        favorites.map((e) => ProductModel.fromProduct(e)).toList();
     return favoritesToSave;
   }
 }

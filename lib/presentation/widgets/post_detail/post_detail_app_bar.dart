@@ -32,8 +32,11 @@ class PostDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
                     AppLocalizations.of(context).postDetailEditText,
                     AppLocalizations.of(context).postDetailDeleteText,
                     AppLocalizations.of(context).postDetailRefreshText,
+                    AppLocalizations.of(context).postDetailShareText,
                   }
-                : {"Share"};
+                : {
+                    AppLocalizations.of(context).postDetailShareText,
+                  };
             return contentToShowOnPopup.map((String choice) {
               return PopupMenuItem<String>(
                 value: choice,

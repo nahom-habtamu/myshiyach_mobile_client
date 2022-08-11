@@ -48,8 +48,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  
-
   fetchAllNeededToDisplayProductList() {
     context
         .read<DisplayAllProductsCubit>()
