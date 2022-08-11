@@ -57,12 +57,12 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
         title: AppLocalizations.of(context).postsCreatedByUserPageAppBarText,
       ),
       body: CurvedContainer(
-        child: buildMyPosts(),
+        child: renderBody(),
       ),
     );
   }
 
-  buildMyPosts() {
+  renderBody() {
     return BlocBuilder<GetProductsByUserIdCubit, GetProductsByUserIdState>(
       builder: (context, state) {
         if (state is GetProductsByUserIdLoaded) {
@@ -109,14 +109,18 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
   }
 
   buildProductList(List<Product> products) {
-    return Expanded(
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemBuilder: (context, index) => PostCardListItem(
-          product: products[index],
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemBuilder: (context, index) => PostCardListItem(
+              product: products[index],
+            ),
+            itemCount: products.length,
+          ),
         ),
-        itemCount: products.length,
-      ),
+      ],
     );
   }
 }
