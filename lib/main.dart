@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: AppLevelState.get(),
+      providers: [...AppLevelState.get()],
       child: BlocBuilder<ChangeLanguageCubit, String>(
         builder: (context, state) {
           SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {

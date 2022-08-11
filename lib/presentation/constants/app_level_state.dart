@@ -1,4 +1,4 @@
-import 'package:flutter_bloc/src/bloc_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/services/injection_container.dart';
 import '../bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
@@ -30,7 +30,7 @@ import '../bloc/update_product/update_product_cubit.dart';
 import '../bloc/verify_phone_number/verify_phone_number_cubit.dart';
 
 class AppLevelState {
-  static List<BlocProviderSingleChildWidget> get() {
+  static List<dynamic> get() {
     return [
       BlocProvider(
         create: (_) => sl<AuthCubit>(),
