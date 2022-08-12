@@ -92,12 +92,15 @@ class _ChatListPageState extends State<ChatListPage> {
         sortedConvos.sort(
             ((a, b) => _compareMessages(a.messages.last, b.messages.last)));
 
-        return ListView.builder(
-          itemBuilder: (context, index) {
-            var conversation = sortedConvos[index];
-            return buildConversationItem(conversation);
-          },
-          itemCount: sortedConvos.length,
+        return Padding(
+          padding: const EdgeInsets.only(top: 20.0),
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              var conversation = sortedConvos[index];
+              return buildConversationItem(conversation);
+            },
+            itemCount: sortedConvos.length,
+          ),
         );
       },
     );
