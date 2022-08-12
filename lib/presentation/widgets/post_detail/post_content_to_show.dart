@@ -115,7 +115,17 @@ class PostContentToShow extends StatelessWidget {
                 textAlign: TextAlign.justify,
               ),
             ),
-            title: Text(AppLocalizations.of(context).postDetailDescriptionText),
+            title: Row(
+              children: [
+                const Icon(
+                  Icons.description,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(AppLocalizations.of(context).postDetailDescriptionText),
+              ],
+            ),
           ),
         ),
       ),
@@ -137,14 +147,32 @@ class PostContentToShow extends StatelessWidget {
           Expanded(
             child: DetailItem(
               subtitle: Text(postCreator?.fullName ?? ""),
-              title: Text(AppLocalizations.of(context).postDetailOwnerNameText),
+              title: Row(
+                children: [
+                  const Icon(Icons.open_with_rounded),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(AppLocalizations.of(context).postDetailOwnerNameText),
+                ],
+              ),
             ),
           ),
           Expanded(
             child: DetailItem(
               subtitle: Text(postCreator?.phoneNumber ?? ""),
-              title: Text(
-                  AppLocalizations.of(context).postDetailOwnerPhoneNumberText),
+              title: Row(
+                children: [
+                  const Icon(
+                    Icons.phone,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(AppLocalizations.of(context)
+                      .postDetailOwnerPhoneNumberText),
+                ],
+              ),
             ),
           ),
         ],
@@ -159,14 +187,33 @@ class PostContentToShow extends StatelessWidget {
           Expanded(
             child: DetailItem(
               subtitle: renderTimeContent(product.createdAt),
-              title: Text(AppLocalizations.of(context).postDetailCreatedAtText),
+              title: Row(
+                children: [
+                  const Icon(
+                    Icons.alarm_on_outlined,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(AppLocalizations.of(context).postDetailCreatedAtText),
+                ],
+              ),
             ),
           ),
           Expanded(
             child: DetailItem(
               subtitle: renderTimeContent(product.refreshedAt),
-              title:
+              title: Row(
+                children: [
+                  const Icon(
+                    Icons.alarm_on_outlined,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
                   Text(AppLocalizations.of(context).postDetailRefreshedAtText),
+                ],
+              ),
             ),
           ),
         ],
@@ -181,13 +228,33 @@ class PostContentToShow extends StatelessWidget {
           Expanded(
             child: DetailItem(
               subtitle: Text(product.title),
-              title: Text(AppLocalizations.of(context).postDetailTitleText),
+              title: Row(
+                children: [
+                  const Icon(
+                    Icons.title,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(AppLocalizations.of(context).postDetailTitleText),
+                ],
+              ),
             ),
           ),
           Expanded(
             child: DetailItem(
               subtitle: Text(product.city),
-              title: Text(AppLocalizations.of(context).postDetailCityText),
+              title: Row(
+                children: [
+                  const Icon(
+                    Icons.location_city,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(AppLocalizations.of(context).postDetailCityText),
+                ],
+              ),
             ),
           ),
         ],
@@ -207,7 +274,17 @@ class PostContentToShow extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        title: Text(AppLocalizations.of(context).postDetailPriceText),
+        title: Row(
+          children: [
+            const Icon(
+              Icons.monetization_on,
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Text(AppLocalizations.of(context).postDetailPriceText),
+          ],
+        ),
       ),
     );
   }
