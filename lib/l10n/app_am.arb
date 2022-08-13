@@ -145,10 +145,10 @@
     "postDetailCityText" : "ከተማ",
     "postDetailStateText" : "ሁኔታ",
     "postDetailBrandText" : "ብራንድ",
-    "postDetailCreatedAtText" : "የተለጠፈበት ሰአት",
-    "postDetailRefreshedAtText" : "የታደሰበት ሰአት",
+    "postDetailCreatedAtText" : "የተለጠፈበት ጊዜ",
+    "postDetailRefreshedAtText" : "የታደሰበት ጊዜ",
     "postDetailOwnerPhoneNumberText" : "ስልክ ቁጥር",
-    "postDetailOwnerNameText" : "የእቃው ባለቤት ስም",
+    "postDetailOwnerNameText" : "የባለቤቱ ስም",
     "postDetailSendMessageButton" : "መልእክት ይላኩ",
 
     "profilePageAppBarText" : "መገለጫ",

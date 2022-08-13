@@ -148,7 +148,7 @@
     "postDetailCreatedAtText" : "Created",
     "postDetailRefreshedAtText" : "Last Updated",
     "postDetailOwnerPhoneNumberText" : "Phone No",
-    "postDetailOwnerNameText" : "Creator Name",
+    "postDetailOwnerNameText" : "Owner Name",
     "postDetailSendMessageButton" : "Send Message",
 
     "profilePageAppBarText" : "Profile",

@@ -13,7 +13,7 @@ class DetailItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: 15,
+        horizontal: 12,
         vertical: 8,
       ),
       child: Container(
