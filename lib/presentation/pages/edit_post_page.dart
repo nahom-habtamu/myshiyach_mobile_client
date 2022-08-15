@@ -13,6 +13,7 @@ import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cu
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_state.dart';
 import '../bloc/update_product/update_product_cubit.dart';
 import '../bloc/update_product/update_product_state.dart';
+import '../screen_arguments/post_detail_page_arguments.dart';
 import '../utils/show_toast.dart';
 import '../widgets/add_post/add_post_dropdown_dart.dart';
 import '../widgets/add_post/add_post_input.dart';
@@ -370,7 +371,10 @@ class _EditPostPageState extends State<EditPostPage> {
           Navigator.pushReplacementNamed(
             context,
             PostDetailPage.routeName,
-            arguments: state.product,
+            arguments: PostDetalPageArguments(
+              isFromDynamicLink: false,
+              product: state.product,
+            ),
           );
         });
       }
