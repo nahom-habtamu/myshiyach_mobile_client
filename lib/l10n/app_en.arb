@@ -42,6 +42,8 @@
     "commonPickImagesInputHintText" : "Pick Images",
     "commonCityInputHintText" : "City",
     "commonCityInputEmptyText" : "Please Enter City",
+    "commonContactPersonInputHintText" : "Contact Person",
+    "commonContactPersonInputEmptyText" : "Please Enter Contact Person",
 
     "commonFallBackErrorCaptionText" : "Oops",
     "commonFallBackErrorButtonText" : "Retry",

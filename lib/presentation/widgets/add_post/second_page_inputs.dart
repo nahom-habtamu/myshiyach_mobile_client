@@ -94,11 +94,13 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
           ),
           AddPostInput(
             initialValue: contactPhone,
-            hintText: "Contact Phone",
+            hintText:
+                AppLocalizations.of(context).commonContactPersonInputHintText,
             onChanged: (value) => contactPhone = value,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return "Please Enter Contact Phone";
+                return AppLocalizations.of(context)
+                    .commonContactPersonInputHintText;
               }
               return null;
             },

@@ -167,12 +167,14 @@ class _EditPostPageState extends State<EditPostPage> {
                   ),
                   const SizedBox(height: 20),
                   AddPostInput(
-                    hintText: "Contact Phone",
+                    hintText: AppLocalizations.of(context)
+                        .commonContactPersonInputHintText,
                     onChanged: (value) => setState(() => contactPhone = value),
                     initialValue: product!.contactPhone,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Please Enter Contact Phone";
+                        return AppLocalizations.of(context)
+                            .commonContactPersonInputHintText;
                       }
                       return null;
                     },

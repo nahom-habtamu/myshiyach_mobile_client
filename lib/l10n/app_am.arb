@@ -42,6 +42,8 @@
     "commonPickImagesInputHintText" : "ፎቶ ይምረጡ",
     "commonCityInputHintText" : "ከተማ",
     "commonCityInputEmptyText" : "ከተማ ይምረጡ",
+    "commonContactPersonInputHintText" : "ስልክ ቁጥር",
+    "commonContactPersonInputEmptyText" : "እባክዎን ስልክ ቁጥር ያስገቡ",
 
     "commonFallBackErrorCaptionText" : "ችግር ተፈጥሯል",
     "commonFallBackErrorButtonText" : "እንደገና ይሞክሩ",
