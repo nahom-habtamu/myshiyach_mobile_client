@@ -171,9 +171,10 @@ class PostContentToShow extends StatelessWidget {
           Expanded(
             child: DetailItem(
               onClick: () async {
-                await launchUrl(
-                  Uri.parse('tel:${product.contactPhone}'),
-                );
+                final _call = 'tel:${product.contactPhone}';
+                if (await canLaunchUrl(Uri.parse(_call))) {
+                  await launchUrl(Uri.parse(_call));
+                }
               },
               subtitle: Text(product.contactPhone),
               title: Row(
