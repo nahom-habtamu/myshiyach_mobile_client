@@ -76,15 +76,13 @@ class _AddPostPageState extends State<AddPostPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xff11435E),
-        appBar: CustomAppBar(
-          title: AppLocalizations.of(context).addPostAppBarText,
-        ),
-        body: CurvedContainer(
-          child: SingleChildScrollView(child: renderMainContent()),
-        ),
+    return Scaffold(
+      backgroundColor: const Color(0xff11435E),
+      appBar: CustomAppBar(
+        title: AppLocalizations.of(context).addPostAppBarText,
+      ),
+      body: CurvedContainer(
+        child: SingleChildScrollView(child: renderMainContent()),
       ),
     );
   }

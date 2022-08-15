@@ -43,7 +43,9 @@ class AddPostInput extends StatelessWidget {
           : [LengthLimitingTextInputFormatter(sizeLimit != 0 ? sizeLimit : -1)],
       keyboardType: isPrice
           ? const TextInputType.numberWithOptions(decimal: true)
-          : TextInputType.text,
+          : isTextArea
+              ? TextInputType.multiline
+              : TextInputType.text,
       decoration: InputDecoration(
         labelText: hintText,
         border: const OutlineInputBorder(
