@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/utils/date_time_formatter.dart';
 import '../../../core/utils/price_formatter.dart';
 import '../../../domain/enitites/product.dart';
 import '../../../domain/enitites/user.dart';
+import '../../pages/posts_created_by_user_page.dart';
 import 'detail_item.dart';
 import 'post_detail_carousel.dart';
 import 'save_to_favorite_button.dart';
@@ -53,6 +55,13 @@ class PostContentToShow extends StatelessWidget {
     );
   }
 
+  onDetailItemClicked(context) {
+    Navigator.of(context).pushNamed(
+      PostsCreatedByUserPage.routeName,
+      arguments: currentUser.id,
+    );
+  }
+
   IntrinsicHeight renderContentOtherThanDescription(BuildContext context) {
     return IntrinsicHeight(
       child: Align(
@@ -74,7 +83,7 @@ class PostContentToShow extends StatelessWidget {
           child: Column(
             children: [
               renderCityAndTitle(context),
-              renderOtherDetail(),
+              renderOtherDetail(context),
               renderPrice(context),
               renderCreatorInformation(context),
               renderProductTimes(context),
@@ -132,10 +141,10 @@ class PostContentToShow extends StatelessWidget {
     );
   }
 
-  IntrinsicHeight renderOtherDetail() {
+  IntrinsicHeight renderOtherDetail(context) {
     return IntrinsicHeight(
       child: Column(
-        children: buildOtherDetail(),
+        children: buildOtherDetail(context),
       ),
     );
   }
@@ -146,6 +155,7 @@ class PostContentToShow extends StatelessWidget {
         children: [
           Expanded(
             child: DetailItem(
+              onClick: () => onDetailItemClicked(context),
               subtitle: Text(postCreator?.fullName ?? ""),
               title: Row(
                 children: [
@@ -160,7 +170,12 @@ class PostContentToShow extends StatelessWidget {
           ),
           Expanded(
             child: DetailItem(
-              subtitle: Text(postCreator?.phoneNumber ?? ""),
+              onClick: () async {
+                await launchUrl(
+                  Uri.parse('tel:${product.contactPhone}'),
+                );
+              },
+              subtitle: Text(product.contactPhone),
               title: Row(
                 children: [
                   const Icon(
@@ -186,6 +201,7 @@ class PostContentToShow extends StatelessWidget {
         children: [
           Expanded(
             child: DetailItem(
+              onClick: () => onDetailItemClicked(context),
               subtitle: renderTimeContent(product.createdAt),
               title: Row(
                 children: [
@@ -202,6 +218,7 @@ class PostContentToShow extends StatelessWidget {
           ),
           Expanded(
             child: DetailItem(
+              onClick: () => onDetailItemClicked(context),
               subtitle: renderTimeContent(product.refreshedAt),
               title: Row(
                 children: [
@@ -227,6 +244,7 @@ class PostContentToShow extends StatelessWidget {
         children: [
           Expanded(
             child: DetailItem(
+              onClick: () => onDetailItemClicked(context),
               subtitle: Text(product.title),
               title: Row(
                 children: [
@@ -243,6 +261,7 @@ class PostContentToShow extends StatelessWidget {
           ),
           Expanded(
             child: DetailItem(
+              onClick: () => onDetailItemClicked(context),
               subtitle: Text(product.city),
               title: Row(
                 children: [
@@ -265,6 +284,7 @@ class PostContentToShow extends StatelessWidget {
   renderPrice(context) {
     return IntrinsicHeight(
       child: DetailItem(
+        onClick: () => onDetailItemClicked(context),
         subtitle: Text(
           PriceFormatterUtil.formatToPrice(product.price) + ' Birr',
           style: const TextStyle(
@@ -301,7 +321,7 @@ class PostContentToShow extends StatelessWidget {
     );
   }
 
-  List<Widget> buildOtherDetail() {
+  List<Widget> buildOtherDetail(context) {
     if (product.productDetail == null || product.productDetail!.isEmpty) {
       return [];
     }
@@ -309,7 +329,7 @@ class PostContentToShow extends StatelessWidget {
     return List<Widget>.generate(
       chunks.length,
       (index) {
-        List<Widget> items = buildWidgetListFromMap(chunks[index]);
+        List<Widget> items = buildWidgetListFromMap(chunks[index], context);
         return IntrinsicHeight(
           child: Row(
             children: items,
@@ -319,12 +339,13 @@ class PostContentToShow extends StatelessWidget {
     );
   }
 
-  List<Widget> buildWidgetListFromMap(dynamic chunk) {
+  List<Widget> buildWidgetListFromMap(dynamic chunk, BuildContext context) {
     return List<Widget>.from(
       chunk
           .map(
             (e) => Expanded(
               child: DetailItem(
+                onClick: () => onDetailItemClicked(context),
                 title: Text(e.key),
                 subtitle: Text(e.value),
               ),
