@@ -4,6 +4,7 @@ class AddProductModel {
   final double price;
   final String mainCategory;
   final String subCategory;
+  final String contactPhone;
   final String city;
   List<String> productImages;
   Map<String, dynamic>? productDetail;
@@ -15,6 +16,7 @@ class AddProductModel {
     required this.mainCategory,
     required this.subCategory,
     required this.city,
+    required this.contactPhone,
     required this.productImages,
     this.productDetail,
   });
@@ -27,6 +29,7 @@ class AddProductModel {
       mainCategory: json["mainCategory"],
       subCategory: json["subCategory"],
       city: json["city"],
+      contactPhone: json["contactPhone"],
       productImages: [],
       productDetail: Map<String, dynamic>.from(json["productDetail"]),
     );
@@ -38,6 +41,7 @@ class AddProductModel {
         "price": price,
         "mainCategory": mainCategory,
         "subCategory": subCategory,
+        "contactPhone": contactPhone,
         "city": city.trim(),
         "productImages": productImages,
         "productDetail": productDetail

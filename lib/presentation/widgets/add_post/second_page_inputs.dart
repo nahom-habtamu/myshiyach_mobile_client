@@ -35,6 +35,7 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
   String postState = "";
   String brand = "";
   String city = "";
+  String contactPhone = "";
 
   final formKey = GlobalKey<FormState>();
 
@@ -47,6 +48,7 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
     pickedImages = [
       ...widget.initialValue["productImages"] ?? [],
     ];
+    contactPhone = widget.initialValue["contactPhone"] ?? "";
   }
 
   @override
@@ -83,6 +85,20 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return AppLocalizations.of(context).commonCityInputHintText;
+              }
+              return null;
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          AddPostInput(
+            initialValue: contactPhone,
+            hintText: "Contact Phone",
+            onChanged: (value) => contactPhone = value,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please Enter Contact Phone";
               }
               return null;
             },
@@ -127,6 +143,7 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
       "state": postState,
       "city": city,
       "brand": brand,
+      "contactPhone": contactPhone,
       "productImages": pickedImages,
       "productDetail": {...otherRequiredFeilds},
     };

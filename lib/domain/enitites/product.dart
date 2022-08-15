@@ -6,6 +6,7 @@ class Product {
   final String mainCategory;
   final String subCategory;
   final String city;
+  final String contactPhone;
   final String createdAt;
   final String refreshedAt;
   final String createdBy;
@@ -20,6 +21,7 @@ class Product {
     required this.mainCategory,
     required this.subCategory,
     required this.city,
+    required this.contactPhone,
     required this.createdAt,
     required this.refreshedAt,
     required this.createdBy,

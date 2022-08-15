@@ -9,6 +9,7 @@ class ProductModel extends Product {
     required String mainCategory,
     required String subCategory,
     required String city,
+    required String contactPhone,
     required String createdAt,
     required String refreshedAt,
     required String createdBy,
@@ -22,6 +23,7 @@ class ProductModel extends Product {
           mainCategory: mainCategory,
           subCategory: subCategory,
           city: city,
+          contactPhone: contactPhone,
           createdAt: createdAt,
           refreshedAt: refreshedAt,
           createdBy: createdBy,
@@ -41,6 +43,7 @@ class ProductModel extends Product {
       refreshedAt: jsonProduct["refreshedAt"],
       createdBy: jsonProduct["createdBy"],
       city: jsonProduct["city"],
+      contactPhone: jsonProduct["contactPhone"],
       productDetail: jsonProduct["productDetail"] == null
           ? null
           : Map<String, dynamic>.from(jsonProduct["productDetail"]),
@@ -60,6 +63,7 @@ class ProductModel extends Product {
       refreshedAt: p.refreshedAt,
       createdBy: p.createdBy,
       city: p.city,
+      contactPhone: p.contactPhone,
       productImages: p.productImages,
       productDetail: p.productDetail,
     );
@@ -76,6 +80,7 @@ class ProductModel extends Product {
         "refreshedAt": refreshedAt,
         "createdBy": createdBy,
         "city": city,
+        "contactPhone": contactPhone,
         "productImages": productImages,
         "productDetail": productDetail,
       };

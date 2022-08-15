@@ -44,6 +44,7 @@ class _EditPostPageState extends State<EditPostPage> {
   String mainCategory = "";
   String subCategory = "";
   String city = "";
+  String contactPhone = "";
   Map<String, dynamic> productDetail = {};
 
   final formKey = GlobalKey<FormState>();
@@ -64,6 +65,7 @@ class _EditPostPageState extends State<EditPostPage> {
         mainCategory = product!.mainCategory;
         subCategory = product!.subCategory;
         city = product!.city;
+        contactPhone = product!.contactPhone;
       });
     });
   }
@@ -121,9 +123,7 @@ class _EditPostPageState extends State<EditPostPage> {
               child: Column(
                 children: [
                   renderPickedImages(),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   ImagePickerInput(
                     hintText: AppLocalizations.of(context)
                         .commonPickImagesInputHintText,
@@ -135,9 +135,7 @@ class _EditPostPageState extends State<EditPostPage> {
                       });
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   AddPostInput(
                     hintText:
                         AppLocalizations.of(context).commonTitleInputHintText,
@@ -152,9 +150,7 @@ class _EditPostPageState extends State<EditPostPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   AddPostInput(
                     hintText: AppLocalizations.of(context)
                         .commonDescriptionInputHintText,
@@ -169,9 +165,19 @@ class _EditPostPageState extends State<EditPostPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
+                  const SizedBox(height: 20),
+                  AddPostInput(
+                    hintText: "Contact Phone",
+                    onChanged: (value) => setState(() => contactPhone = value),
+                    initialValue: product!.contactPhone,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Enter Contact Phone";
+                      }
+                      return null;
+                    },
                   ),
+                  const SizedBox(height: 20),
                   AddPostInput(
                     hintText:
                         AppLocalizations.of(context).commonPriceInputHintText,
@@ -200,9 +206,7 @@ class _EditPostPageState extends State<EditPostPage> {
                       }
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   AddPostDropDownInput(
                     initialValue: mainCategory,
                     items: mainCategoryToShowOnDropDown,
@@ -222,9 +226,7 @@ class _EditPostPageState extends State<EditPostPage> {
                       },
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   AddPostDropDownInput(
                     key: Key(subCategory),
                     initialValue: subCategory,
@@ -242,9 +244,7 @@ class _EditPostPageState extends State<EditPostPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   AddPostDropDownInput(
                     initialValue: city,
                     items: citiesToShowOnDropDown,
@@ -259,14 +259,10 @@ class _EditPostPageState extends State<EditPostPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   ...buildRequiredFeildsInput(state.categories),
                   renderSaveButton(),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   renderEditError()
                 ],
               ),
@@ -400,6 +396,7 @@ class _EditPostPageState extends State<EditPostPage> {
       mainCategory: mainCategory,
       subCategory: subCategory,
       price: price,
+      contactPhone: contactPhone,
       productImages: [],
       title: title,
       productDetail: productDetail,
