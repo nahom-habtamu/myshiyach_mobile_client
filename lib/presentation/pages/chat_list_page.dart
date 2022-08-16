@@ -42,25 +42,22 @@ class _ChatListPageState extends State<ChatListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xff11435E),
-        appBar: CustomAppBar(
-          title: AppLocalizations.of(context).chatListAppBarText,
-        ),
-        body: CurvedContainer(
-          child:
-              BlocBuilder<GetAllConversationsCubit, GetAllConversationsState>(
-                  builder: (context, state) {
-            if (state is GetAllConversationStateLoaded) {
-              return buildConversationList(state.conversation);
-            } else {
-              return NoNetworkContent(
-                onButtonClicked: () => fetchConversations(),
-              );
-            }
-          }),
-        ),
+    return Scaffold(
+      backgroundColor: const Color(0xff11435E),
+      appBar: CustomAppBar(
+        title: AppLocalizations.of(context).chatListAppBarText,
+      ),
+      body: CurvedContainer(
+        child: BlocBuilder<GetAllConversationsCubit, GetAllConversationsState>(
+            builder: (context, state) {
+          if (state is GetAllConversationStateLoaded) {
+            return buildConversationList(state.conversation);
+          } else {
+            return NoNetworkContent(
+              onButtonClicked: () => fetchConversations(),
+            );
+          }
+        }),
       ),
     );
   }
