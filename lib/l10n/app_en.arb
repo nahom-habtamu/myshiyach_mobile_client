@@ -133,6 +133,8 @@
     "postsCreatedByUserPageEmptyCaptionText" : "User has no products!",
     "postsCreatedByUserPageEmptyHintText" : "Go to products to see more products",
     "postsCreatedByUserPageEmptyButtonText" : "Go To Home",
+    "postsCreatedByUserPageUserInformationText" : "User Information",
+    "postsCreatedByUserPageProductText" : "Products",
 
     "postDetailAppBarText" : "Post Detail",
     "postDetailEditText" : "Edit",

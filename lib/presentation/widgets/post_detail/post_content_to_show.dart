@@ -58,7 +58,7 @@ class PostContentToShow extends StatelessWidget {
   onDetailItemClicked(context) {
     Navigator.of(context).pushNamed(
       PostsCreatedByUserPage.routeName,
-      arguments: currentUser.id,
+      arguments: product.createdBy,
     );
   }
 

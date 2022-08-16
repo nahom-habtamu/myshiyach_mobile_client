@@ -14,6 +14,7 @@ import '../widgets/common/empty_state_content.dart';
 import '../widgets/common/error_content.dart';
 import '../widgets/common/no_network_content.dart';
 import '../widgets/common/post_card_list_item.dart';
+import '../widgets/post_detail/detail_item.dart';
 import 'add_post_page.dart';
 
 class PostsCreatedByUserPage extends StatefulWidget {
@@ -112,10 +113,55 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
 
   buildProductListAndHeader(List<Product> products, User user) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          height: MediaQuery.of(context).size.height * 0.2,
-          color: Colors.red,
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: Text(
+            AppLocalizations.of(context)
+                .postsCreatedByUserPageUserInformationText,
+            style: const TextStyle(
+              fontSize: 22,
+              fontStyle: FontStyle.italic,
+              color: Colors.black45,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        SizedBox(
+          height: 100,
+          child: Row(
+            children: [
+              Expanded(
+                child: DetailItem(
+                  title: Text(
+                      AppLocalizations.of(context).postDetailOwnerNameText),
+                  subtitle: Text(user.fullName),
+                  onClick: () {},
+                ),
+              ),
+              Expanded(
+                child: DetailItem(
+                  title: Text(AppLocalizations.of(context)
+                      .postDetailOwnerPhoneNumberText),
+                  subtitle: Text(user.phoneNumber),
+                  onClick: () {},
+                ),
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: Text(
+            AppLocalizations.of(context).postsCreatedByUserPageProductText,
+            style: const TextStyle(
+              fontSize: 22,
+              fontStyle: FontStyle.italic,
+              color: Colors.black45,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ),
         Expanded(
           child: ListView.builder(

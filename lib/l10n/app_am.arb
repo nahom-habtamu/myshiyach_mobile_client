@@ -133,6 +133,8 @@
     "postsCreatedByUserPageEmptyCaptionText" : "ተጠቃሚው ምንም ልጥፎች የሉትም!",
     "postsCreatedByUserPageEmptyHintText" : "ከዚህ በታች ያለውን አዝራር በመጫን ሌሎች እቃዎችን ይመልከቱ",
     "postsCreatedByUserPageEmptyButtonText" : "ወደ መነሻ ገጽ ሂድ",
+    "postsCreatedByUserPageUserInformationText" : "የተጠቃሚው መረጃዎች",
+    "postsCreatedByUserPageProductText" : "ልጥፎች",
 
     "postDetailAppBarText" : "የእቃ ዝርዝር",
     "postDetailEditText" : "ማስተካከያ",
