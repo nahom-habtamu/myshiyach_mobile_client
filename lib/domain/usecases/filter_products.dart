@@ -5,37 +5,42 @@ import '../enitites/product.dart';
 class FilterProducts {
   List<Product> call(
     List<Product> products,
-    FilterCriteriaModel filterCriteria,
+    FilterCriteriaModel? filterCriteria,
   ) {
-    var filteredByMainCategory = _filterByMainCategory(
-      filterCriteria,
-      products,
-    );
-    var filteredBySubCategory = filteredByMainCategory.isEmpty
-        ? <Product>[]
-        : _filterBySubCategory(filterCriteria, filteredByMainCategory);
+    if (filterCriteria == null) {
+      products.sort(((a, b) => _compareRefreshedAt(a, b)));
+      return products;
+    } else {
+      var filteredByMainCategory = _filterByMainCategory(
+        filterCriteria,
+        products,
+      );
+      var filteredBySubCategory = filteredByMainCategory.isEmpty
+          ? <Product>[]
+          : _filterBySubCategory(filterCriteria, filteredByMainCategory);
 
-    var filteredByBrand = filteredBySubCategory.isEmpty
-        ? <Product>[]
-        : _filterByBrand(filterCriteria, filteredBySubCategory);
+      var filteredByBrand = filteredBySubCategory.isEmpty
+          ? <Product>[]
+          : _filterByBrand(filterCriteria, filteredBySubCategory);
 
-    var filteredByCity = filteredByBrand.isEmpty
-        ? <Product>[]
-        : _filterByCity(filterCriteria, filteredByBrand);
+      var filteredByCity = filteredByBrand.isEmpty
+          ? <Product>[]
+          : _filterByCity(filterCriteria, filteredByBrand);
 
-    var filteredByPrice = filteredByCity.isEmpty
-        ? <Product>[]
-        : _filterByPrice(filterCriteria, filteredByCity);
+      var filteredByPrice = filteredByCity.isEmpty
+          ? <Product>[]
+          : _filterByPrice(filterCriteria, filteredByCity);
 
-    var filteredByKeyword = filteredByPrice.isEmpty
-        ? <Product>[]
-        : _filterByKeyword(filterCriteria, filteredByPrice);
+      var filteredByKeyword = filteredByPrice.isEmpty
+          ? <Product>[]
+          : _filterByKeyword(filterCriteria, filteredByPrice);
 
-    var sortedProduct = filteredByKeyword.isEmpty
-        ? <Product>[]
-        : _sortProduct(filterCriteria, filteredByKeyword);
+      var sortedProduct = filteredByKeyword.isEmpty
+          ? <Product>[]
+          : _sortProduct(filterCriteria, filteredByKeyword);
 
-    return sortedProduct;
+      return sortedProduct;
+    }
   }
 
   List<Product> _filterByMainCategory(

@@ -12,7 +12,7 @@ class FilterProductsCubit extends Cubit<List<Product>> {
 
   List<Product> call(
     List<Product> products,
-    FilterCriteriaModel filterCriteria,
+    FilterCriteriaModel? filterCriteria,
   ) {
     return filterProducts.call(products, filterCriteria);
   }

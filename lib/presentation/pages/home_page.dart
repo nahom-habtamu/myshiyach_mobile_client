@@ -127,8 +127,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void updateState(Loaded state) {
+    var updatedProductList = [...products, ...state.paginatedResult.products];
     setState(() {
-      products = [...products, ...state.paginatedResult.products];
+      products = updatedProductList;
       favorites = [...state.favorites];
       pageAndLimit =
           PageAndLimitModel.fromPaginationLimit(state.paginatedResult.next);
@@ -137,14 +138,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   showProducts() {
-    var productsToDisplay = filterValues == null
-        ? products
-        : context.read<FilterProductsCubit>().call(products, filterValues!);
-
+    var productsToDisplay =
+        context.read<FilterProductsCubit>().call(products, filterValues);
     if (productsToDisplay.length < lazyLoadingLimit && pageAndLimit != null) {
       context.read<GetAllProductsCubit>().call(pageAndLimit!);
     }
-
     if (productsToDisplay.isEmpty) {
       return buildEmptyStateContent();
     }
