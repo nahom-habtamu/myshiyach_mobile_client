@@ -80,6 +80,7 @@ import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubi
 import '../../presentation/bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
 import '../../presentation/bloc/get_product_by_id/get_product_by_id_cubit.dart';
 import '../../presentation/bloc/get_products_by_user_id/get_products_by_user_id_cubit.dart';
+import '../../presentation/bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_cubit.dart';
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../presentation/bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../../presentation/bloc/logout/logout_cubit.dart';
@@ -117,7 +118,10 @@ Future<void> init() async {
         networkInfo: sl()),
   );
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
-  sl.registerFactory(() => GetProductsByUserIdCubit(sl(), sl()));
+  sl.registerFactory(() => GetUserAndProductsByUserIdCubit(
+      getMyProducts: sl(), getUserById: sl(), networkInfo: sl()));
+  sl.registerFactory(() =>
+      GetProductsByUserIdCubit(getProductsByUserId: sl(), networkInfo: sl()));
   sl.registerFactory(() => AuthPhoneNumberCubit(sl()));
   sl.registerFactory(() => LogOutCubit(storeUserCredentials: sl()));
   sl.registerFactory(

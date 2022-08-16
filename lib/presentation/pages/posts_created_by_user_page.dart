@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../domain/enitites/product.dart';
+import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
-import '../bloc/get_products_by_user_id/get_products_by_user_id_cubit.dart';
-import '../bloc/get_products_by_user_id/get_products_by_user_id_state.dart';
+import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_cubit.dart';
+import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_state.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
@@ -46,7 +47,7 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
   }
 
   void fetchPostsCreatedByUser(String userId) {
-    context.read<GetProductsByUserIdCubit>().call(userId);
+    context.read<GetUserAndProductsByUserIdCubit>().call(userId, accessToken);
   }
 
   @override
@@ -63,17 +64,18 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
   }
 
   renderBody() {
-    return BlocBuilder<GetProductsByUserIdCubit, GetProductsByUserIdState>(
+    return BlocBuilder<GetUserAndProductsByUserIdCubit,
+        GetUserAndProductsByUserIdState>(
       builder: (context, state) {
-        if (state is GetProductsByUserIdLoaded) {
-          return buildProductList(state.products);
-        } else if (state is GetProductsByUserIdLoading) {
+        if (state is GetUserAndProductsByUserIdLoaded) {
+          return buildProductListAndHeader(state.products, state.user);
+        } else if (state is GetUserAndProductsByUserIdLoading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is GetProductsByUserIdError) {
+        } else if (state is GetUserAndProductsByUserIdError) {
           return buildErrorContent();
-        } else if (state is GetProductsByUserIdNoNetwork) {
+        } else if (state is GetUserAndProductsByUserIdNoNetwork) {
           return buildNoNetworkContent();
         } else {
           return buildEmptyStateContent();
@@ -108,9 +110,13 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
     );
   }
 
-  buildProductList(List<Product> products) {
+  buildProductListAndHeader(List<Product> products, User user) {
     return Column(
       children: [
+        Container(
+          height: MediaQuery.of(context).size.height * 0.2,
+          color: Colors.red,
+        ),
         Expanded(
           child: ListView.builder(
             shrinkWrap: true,

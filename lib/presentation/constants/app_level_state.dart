@@ -19,6 +19,7 @@ import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cu
 import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import '../bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
 import '../bloc/get_products_by_user_id/get_products_by_user_id_cubit.dart';
+import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_cubit.dart';
 import '../bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/logout/logout_cubit.dart';
@@ -85,6 +86,9 @@ class AppLevelState {
       ),
       BlocProvider(
         create: (_) => sl<LogOutCubit>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<GetUserAndProductsByUserIdCubit>(),
       ),
       BlocProvider(
         create: (_) => sl<GetProductsByUserIdCubit>(),
