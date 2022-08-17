@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../domain/enitites/product.dart';
 import '../../domain/enitites/user.dart';
@@ -145,7 +146,12 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
                   title: Text(AppLocalizations.of(context)
                       .postDetailOwnerPhoneNumberText),
                   subtitle: Text(user.phoneNumber),
-                  onClick: () {},
+                  onClick: () async {
+                    final _call = 'tel:${user.phoneNumber}';
+                    if (await canLaunchUrl(Uri.parse(_call))) {
+                      await launchUrl(Uri.parse(_call));
+                    }
+                  },
                 ),
               )
             ],
