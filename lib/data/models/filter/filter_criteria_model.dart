@@ -90,4 +90,18 @@ class FilterCriteriaModel {
       sortByCreatedByAscending : $sortByCreatedByAscending,  
     }''';
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "maxPrice": maxPrice,
+      "minPrice": minPrice,
+      "mainCategory": mainCategory?.id,
+      "subCategory": subCategory?.id,
+      "brand": brand,
+      "city": city,
+      "sortByPriceAscending": sortByPriceAscending,
+      "sortByCreatedByAscending": sortByCreatedByAscending,
+      "keyword": keyword
+    };
+  }
 }

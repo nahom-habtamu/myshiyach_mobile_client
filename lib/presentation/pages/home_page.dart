@@ -3,7 +3,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../core/constants/lazy_loading_constants.dart';
 import '../../data/models/filter/filter_criteria_model.dart';
 import '../../data/models/product/page_and_limit_model.dart';
 import '../../data/models/product/product_model.dart';
@@ -11,8 +10,6 @@ import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
-import '../bloc/filter/filter_products_cubit.dart';
-import '../bloc/get_all_products/get_all_products_cubit.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
@@ -51,7 +48,7 @@ class _HomePageState extends State<HomePage> {
   fetchAllNeededToDisplayProductList() {
     context
         .read<DisplayAllProductsCubit>()
-        .call(PageAndLimitModel.initialDefault());
+        .call(PageAndLimitModel.initialDefault(), filterValues);
   }
 
   @override
@@ -82,7 +79,9 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               filterValues = value;
               selectedMainCategory = filterValues?.mainCategory;
+              products = [];
             });
+            fetchAllNeededToDisplayProductList();
           },
           onSearchQueryChanged: (value) {
             setState(() {
@@ -90,7 +89,9 @@ class _HomePageState extends State<HomePage> {
               var addedKeyword =
                   FilterCriteriaModel.addKeyWord(filterValues, searchKeyword);
               filterValues = addedKeyword;
+              products = [];
             });
+            fetchAllNeededToDisplayProductList();
           },
           categories: categories,
           products: products,
@@ -138,15 +139,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   showProducts() {
-    var productsToDisplay =
-        context.read<FilterProductsCubit>().call(products, filterValues);
-    if (productsToDisplay.length < lazyLoadingLimit && pageAndLimit != null) {
-      context.read<GetAllProductsCubit>().call(pageAndLimit!);
-    }
-    if (productsToDisplay.isEmpty) {
+    if (products.isEmpty) {
       return buildEmptyStateContent();
     }
-    return buildProductList(productsToDisplay);
+    return buildProductList(products);
   }
 
   Widget buildNoNetworkContent() {
@@ -156,7 +152,7 @@ class _HomePageState extends State<HomePage> {
           child: NoNetworkContent(
             onButtonClicked: () => context
                 .read<DisplayAllProductsCubit>()
-                .call(PageAndLimitModel.initialDefault()),
+                .call(PageAndLimitModel.initialDefault(), filterValues),
           ),
         ),
       ),
@@ -170,7 +166,7 @@ class _HomePageState extends State<HomePage> {
           child: ErrorContent(
             onButtonClicked: () => context
                 .read<DisplayAllProductsCubit>()
-                .call(PageAndLimitModel.initialDefault()),
+                .call(PageAndLimitModel.initialDefault(), filterValues),
           ),
         ),
       ),
@@ -189,7 +185,9 @@ class _HomePageState extends State<HomePage> {
                 AppLocalizations.of(context).homeRetryFetchProductButtonText,
             onButtonClicked: () {
               if (pageAndLimit != null) {
-                context.read<DisplayAllProductsCubit>().call(pageAndLimit!);
+                context
+                    .read<DisplayAllProductsCubit>()
+                    .call(pageAndLimit!, filterValues);
               }
             },
           ),
@@ -255,8 +253,11 @@ class _HomePageState extends State<HomePage> {
                           selectedMainCategory,
                         );
                         filterValues = alteredFilter;
+                        products = [];
+                        categories = [];
                       },
                     );
+                    fetchAllNeededToDisplayProductList();
                   },
                 ),
               )

@@ -1,3 +1,4 @@
+import '../../data/models/filter/filter_criteria_model.dart';
 import '../../data/models/product/add_product_model.dart';
 import '../../data/models/product/edit_product_model.dart';
 import '../../data/models/product/get_paginated_products_result_model.dart';
@@ -6,7 +7,9 @@ import '../../data/models/product/product_model.dart';
 
 abstract class ProductService {
   Future<GetPaginatedProductsResultModel> getAllProducts(
-      PageAndLimitModel pageAndLimit);
+    PageAndLimitModel pageAndLimit,
+    FilterCriteriaModel? filterCriteriaModel,
+  );
   Future<ProductModel> getProductById(String id, String token);
   Future<List<ProductModel>> getAllFavoriteProducts();
   Future<void> setFavoriteProducts(List<ProductModel> products);

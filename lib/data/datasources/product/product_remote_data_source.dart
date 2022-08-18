@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../../core/constants/api_information.dart';
+import '../../models/filter/filter_criteria_model.dart';
 import '../../models/product/add_product_model.dart';
 import '../../models/product/edit_product_model.dart';
 import '../../models/product/get_paginated_products_result_model.dart';
@@ -13,11 +14,20 @@ import 'product_data_source.dart';
 class ProductRemoteDataSource extends ProductDataSource {
   @override
   Future<GetPaginatedProductsResultModel> getAllProducts(
-      PageAndLimitModel pageAndLimit) async {
-    String endPoint =
-        '$baseUrl/products?page=${pageAndLimit.page}&limit=${pageAndLimit.limit}';
-    final response = await http.get(
+    PageAndLimitModel pageAndLimit,
+    FilterCriteriaModel? filterCriteriaModel,
+  ) async {
+    String endPoint = '$baseUrl/products';
+
+    var requestBody = {
+      "page": pageAndLimit.page,
+      "limit": pageAndLimit.limit,
+      "filterCriteria": filterCriteriaModel?.toJson()
+    };
+
+    final response = await http.post(
       Uri.parse(endPoint),
+      body: jsonEncode(requestBody),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

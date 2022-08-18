@@ -16,7 +16,7 @@ class GetAllProductsCubit extends Cubit<GetAllProductsState> {
     try {
       emit(Empty());
       emit(Loading());
-      var result = await getAllProducts.call(pageAndLimit);
+      var result = await getAllProducts.call(pageAndLimit, null);
       if (result.products.isNotEmpty) {
         emit(Loaded(result));
       } else {

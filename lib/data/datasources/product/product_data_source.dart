@@ -1,13 +1,14 @@
-import 'package:mnale_client/data/models/product/page_and_limit_model.dart';
-
+import '../../models/filter/filter_criteria_model.dart';
 import '../../models/product/add_product_model.dart';
 import '../../models/product/edit_product_model.dart';
 import '../../models/product/get_paginated_products_result_model.dart';
+import '../../models/product/page_and_limit_model.dart';
 import '../../models/product/product_model.dart';
 
 abstract class ProductDataSource {
   Future<GetPaginatedProductsResultModel> getAllProducts(
     PageAndLimitModel pageAndLimit,
+    FilterCriteriaModel? filterCriteriaModel,
   );
   Future<ProductModel> createProduct(
       AddProductModel addProductModel, String token);

@@ -4,6 +4,7 @@ import '../datasources/firebase/firebase_dynamic_link_data_souce.dart';
 import '../datasources/firebase/firebase_storage_data_source.dart';
 import '../datasources/product/product_local_data_source.dart';
 import '../datasources/product/product_remote_data_source.dart';
+import '../models/filter/filter_criteria_model.dart';
 import '../models/product/add_product_model.dart';
 import '../models/product/edit_product_model.dart';
 import '../models/product/get_paginated_products_result_model.dart';
@@ -27,8 +28,10 @@ class ProductRepository extends ProductService {
 
   @override
   Future<GetPaginatedProductsResultModel> getAllProducts(
-      PageAndLimitModel pageAndLimit) {
-    return remoteDataSource.getAllProducts(pageAndLimit);
+    PageAndLimitModel pageAndLimit,
+    FilterCriteriaModel? filterCriteriaModel,
+  ) {
+    return remoteDataSource.getAllProducts(pageAndLimit, filterCriteriaModel);
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/data/models/filter/filter_criteria_model.dart';
 import 'package:mnale_client/data/models/product/page_and_limit_model.dart';
 
 import '../../../core/services/network_info.dart';
@@ -31,12 +32,16 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
     emit(Empty());
   }
 
-  void call(PageAndLimitModel pageAndLimit) async {
+  void call(
+    PageAndLimitModel pageAndLimit,
+    FilterCriteriaModel? filterCriteriaModel,
+  ) async {
     try {
       if (await networkInfo.isConnected()) {
         emit(Empty());
         emit(Loading());
-        var result = await getAllProducts.call(pageAndLimit);
+        var result =
+            await getAllProducts.call(pageAndLimit, filterCriteriaModel);
         var favoriteProducts = await getFavoriteProducts.call();
         var categories = await getAllCategories.call();
         if (result.products.isNotEmpty && categories.isNotEmpty) {
