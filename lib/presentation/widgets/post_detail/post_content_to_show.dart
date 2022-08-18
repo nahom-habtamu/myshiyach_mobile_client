@@ -346,7 +346,7 @@ class PostContentToShow extends StatelessWidget {
           .map(
             (e) => Expanded(
               child: DetailItem(
-                onClick: () => onDetailItemClicked(context),
+                onClick: () => {},
                 title: Text(e.key),
                 subtitle: Text(e.value),
               ),
