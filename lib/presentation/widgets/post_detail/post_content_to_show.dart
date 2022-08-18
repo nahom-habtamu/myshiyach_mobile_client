@@ -159,7 +159,7 @@ class PostContentToShow extends StatelessWidget {
               subtitle: Text(postCreator?.fullName ?? ""),
               title: Row(
                 children: [
-                  const Icon(Icons.open_with_rounded),
+                  const Icon(Icons.person),
                   const SizedBox(
                     width: 5,
                   ),
@@ -202,7 +202,7 @@ class PostContentToShow extends StatelessWidget {
         children: [
           Expanded(
             child: DetailItem(
-              onClick: () => onDetailItemClicked(context),
+              onClick: () => {},
               subtitle: renderTimeContent(product.createdAt),
               title: Row(
                 children: [
@@ -219,7 +219,7 @@ class PostContentToShow extends StatelessWidget {
           ),
           Expanded(
             child: DetailItem(
-              onClick: () => onDetailItemClicked(context),
+              onClick: () => {},
               subtitle: renderTimeContent(product.refreshedAt),
               title: Row(
                 children: [
@@ -245,7 +245,7 @@ class PostContentToShow extends StatelessWidget {
         children: [
           Expanded(
             child: DetailItem(
-              onClick: () => onDetailItemClicked(context),
+              onClick: () => {},
               subtitle: Text(product.title),
               title: Row(
                 children: [
@@ -262,7 +262,7 @@ class PostContentToShow extends StatelessWidget {
           ),
           Expanded(
             child: DetailItem(
-              onClick: () => onDetailItemClicked(context),
+              onClick: () => {},
               subtitle: Text(product.city),
               title: Row(
                 children: [
@@ -285,7 +285,7 @@ class PostContentToShow extends StatelessWidget {
   renderPrice(context) {
     return IntrinsicHeight(
       child: DetailItem(
-        onClick: () => onDetailItemClicked(context),
+        onClick: () => {},
         subtitle: Text(
           PriceFormatterUtil.formatToPrice(product.price) + ' Birr',
           style: const TextStyle(
@@ -376,7 +376,7 @@ class PostContentToShow extends StatelessWidget {
   renderPostDetailButtonSection() {
     return SendMessageButton(
       currentUser: currentUser,
-      product: product,
+      receiverId: product.createdBy,
       authToken: authToken,
     );
   }

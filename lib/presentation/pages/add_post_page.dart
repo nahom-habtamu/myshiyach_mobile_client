@@ -39,7 +39,7 @@ class _AddPostPageState extends State<AddPostPage> {
   void initState() {
     super.initState();
     emptyAddPostState();
-    initializeCurrentUser();
+    initializeCurrentUserAndSetContactPhone();
     initCategories();
   }
 
@@ -47,10 +47,13 @@ class _AddPostPageState extends State<AddPostPage> {
     context.read<CreateProductCubit>().clear();
   }
 
-  void initializeCurrentUser() {
+  void initializeCurrentUserAndSetContactPhone() {
     var authState = context.read<AuthCubit>().state;
     if (authState is AuthSuccessfull) {
       accessToken = authState.loginResult.token;
+      mergedInputValues = {
+        "contactPhone": authState.currentUser.phoneNumber,
+      };
     }
   }
 

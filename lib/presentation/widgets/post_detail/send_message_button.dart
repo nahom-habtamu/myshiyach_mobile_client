@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../data/models/conversation/add_conversation_model.dart';
-import '../../../domain/enitites/product.dart';
 import '../../../domain/enitites/user.dart';
 import '../../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
@@ -14,20 +13,20 @@ import '../common/action_button.dart';
 
 class SendMessageButton extends StatelessWidget {
   final User currentUser;
-  final Product product;
+  final String receiverId;
   final String authToken;
 
   const SendMessageButton({
     Key? key,
     required this.currentUser,
-    required this.product,
+    required this.receiverId,
     required this.authToken,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Visibility(
-      visible: currentUser.id != product.createdBy,
+      visible: currentUser.id != receiverId,
       child: SizedBox(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -53,7 +52,7 @@ class SendMessageButton extends StatelessWidget {
                   onPressed: () {
                     var addConversation = AddConversationModel(
                       memberOne: currentUser.id,
-                      memberTwo: product.createdBy,
+                      memberTwo: receiverId,
                     );
                     context.read<HandleGoingToMessageCubit>().call(
                           addConversation,

@@ -16,6 +16,7 @@ import '../widgets/common/error_content.dart';
 import '../widgets/common/no_network_content.dart';
 import '../widgets/common/post_card_list_item.dart';
 import '../widgets/post_detail/detail_item.dart';
+import '../widgets/post_detail/send_message_button.dart';
 import 'add_post_page.dart';
 
 class PostsCreatedByUserPage extends StatefulWidget {
@@ -28,6 +29,7 @@ class PostsCreatedByUserPage extends StatefulWidget {
 
 class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
   String accessToken = "";
+  User? currentUser;
   String userId = "";
 
   @override
@@ -45,6 +47,7 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
     var authState = context.read<AuthCubit>().state;
     if (authState is AuthSuccessfull) {
       accessToken = authState.loginResult.token;
+      currentUser = authState.currentUser;
     }
   }
 
@@ -135,6 +138,8 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
             children: [
               Expanded(
                 child: DetailItem(
+                  isCurved: true,
+                  color: const Color(0xFFDAD9D9),
                   title: Text(
                       AppLocalizations.of(context).postDetailOwnerNameText),
                   subtitle: Text(user.fullName),
@@ -143,6 +148,8 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
               ),
               Expanded(
                 child: DetailItem(
+                  isCurved: true,
+                  color: const Color(0xFFDAD9D9),
                   title: Text(AppLocalizations.of(context)
                       .postDetailOwnerPhoneNumberText),
                   subtitle: Text(user.phoneNumber),
@@ -155,6 +162,14 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
                 ),
               )
             ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SendMessageButton(
+            currentUser: currentUser!,
+            receiverId: userId,
+            authToken: accessToken,
           ),
         ),
         Padding(

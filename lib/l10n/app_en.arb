@@ -134,7 +134,7 @@
     "postsCreatedByUserPageEmptyHintText" : "Go to products to see more products",
     "postsCreatedByUserPageEmptyButtonText" : "Go To Home",
     "postsCreatedByUserPageUserInformationText" : "User Information",
-    "postsCreatedByUserPageProductText" : "Products",
+    "postsCreatedByUserPageProductText" : "Products by User",
 
     "postDetailAppBarText" : "Post Detail",
     "postDetailEditText" : "Edit",
@@ -152,7 +152,7 @@
     "postDetailCreatedAtText" : "Created",
     "postDetailRefreshedAtText" : "Last Updated",
     "postDetailOwnerPhoneNumberText" : "Phone No",
-    "postDetailOwnerNameText" : "Owner Name",
+    "postDetailOwnerNameText" : "Name",
     "postDetailSendMessageButton" : "Send Message",
 
     "profilePageAppBarText" : "Profile",

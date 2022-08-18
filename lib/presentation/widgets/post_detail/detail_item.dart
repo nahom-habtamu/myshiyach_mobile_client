@@ -4,11 +4,15 @@ class DetailItem extends StatelessWidget {
   final Widget title;
   final Widget subtitle;
   final Function onClick;
+  final bool isCurved;
+  final Color? color;
   const DetailItem({
     Key? key,
     required this.title,
     required this.subtitle,
     required this.onClick,
+    this.isCurved = false,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -21,15 +25,16 @@ class DetailItem extends StatelessWidget {
           vertical: 8,
         ),
         child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
+          decoration: BoxDecoration(
+            color: color ?? Colors.white,
+            boxShadow: const [
               BoxShadow(
                 color: Color(0xFFECE9E9),
                 blurRadius: 1,
                 spreadRadius: 1,
               )
             ],
+            borderRadius: BorderRadius.circular(isCurved ? 15 : 0),
           ),
           child: ListTile(
             subtitle: subtitle,
