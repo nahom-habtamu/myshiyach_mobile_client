@@ -32,7 +32,13 @@ class _SearchBarState extends State<SearchBar> {
   final TextEditingController _controller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    filterResult = widget.initialFilterCriteria;
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 100,
@@ -173,6 +179,6 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   bool filterIsNotEmpty() {
-    return filterResult != null;
+    return (!(filterResult == null || filterResult!.areAllValuesNull()));
   }
 }

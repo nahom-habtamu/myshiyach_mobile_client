@@ -57,7 +57,7 @@ class FilterCriteriaModel {
       maxPrice: original?.maxPrice ?? 0.0,
       minPrice: original?.minPrice ?? 0.0,
       mainCategory: mainCategory,
-      subCategory: original?.subCategory,
+      subCategory: null,
       brand: original?.brand,
       city: original?.city,
       sortByPriceAscending: original?.sortByPriceAscending,

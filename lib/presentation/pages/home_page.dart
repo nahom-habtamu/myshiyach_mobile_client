@@ -10,6 +10,7 @@ import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
+import '../bloc/filter/filter_products_cubit.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
@@ -69,35 +70,29 @@ class _HomePageState extends State<HomePage> {
   }
 
   renderSearchAndFilterBar() {
-    return BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
-      builder: (context, state) {
-        if (state is Loading) {
-          return Container();
-        }
-        return SearchBar(
-          onSearchFilterApplied: (value) {
-            setState(() {
-              filterValues = value;
-              selectedMainCategory = filterValues?.mainCategory;
-              products = [];
-            });
-            fetchAllNeededToDisplayProductList();
-          },
-          onSearchQueryChanged: (value) {
-            setState(() {
-              searchKeyword = value.trim();
-              var addedKeyword =
-                  FilterCriteriaModel.addKeyWord(filterValues, searchKeyword);
-              filterValues = addedKeyword;
-              products = [];
-            });
-            fetchAllNeededToDisplayProductList();
-          },
-          categories: categories,
-          products: products,
-          initialFilterCriteria: filterValues,
-        );
+    if (categories.isEmpty) {
+      return Container();
+    }
+    return SearchBar(
+      onSearchFilterApplied: (value) {
+        setState(() {
+          filterValues = value;
+          selectedMainCategory = filterValues?.mainCategory;
+          products = [];
+        });
+        fetchAllNeededToDisplayProductList();
       },
+      onSearchQueryChanged: (value) {
+        setState(() {
+          searchKeyword = value.trim();
+          var addedKeyword =
+              FilterCriteriaModel.addKeyWord(filterValues, searchKeyword);
+          filterValues = addedKeyword;
+        });
+      },
+      categories: categories,
+      products: products,
+      initialFilterCriteria: filterValues,
     );
   }
 
@@ -134,15 +129,20 @@ class _HomePageState extends State<HomePage> {
       favorites = [...state.favorites];
       pageAndLimit =
           PageAndLimitModel.fromPaginationLimit(state.paginatedResult.next);
-      categories = [...state.categories];
+      if (categories.isEmpty) {
+        categories = [...state.categories];
+      }
     });
   }
 
   showProducts() {
-    if (products.isEmpty) {
+    var productsToDisplay = filterValues == null
+        ? products
+        : context.read<FilterProductsCubit>().call(products, filterValues!);
+    if (productsToDisplay.isEmpty) {
       return buildEmptyStateContent();
     }
-    return buildProductList(products);
+    return buildProductList(productsToDisplay);
   }
 
   Widget buildNoNetworkContent() {
@@ -220,14 +220,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   renderCategories() {
-    return BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
-      builder: (context, state) {
-        if (state is Loading) {
-          return Container();
-        }
-        return buildCategorySlider(categories);
-      },
-    );
+    if (categories.isEmpty) {
+      return Container();
+    }
+    return buildCategorySlider(categories);
   }
 
   buildCategorySlider(List<MainCategory> categories) {
@@ -254,7 +250,6 @@ class _HomePageState extends State<HomePage> {
                         );
                         filterValues = alteredFilter;
                         products = [];
-                        categories = [];
                       },
                     );
                     fetchAllNeededToDisplayProductList();

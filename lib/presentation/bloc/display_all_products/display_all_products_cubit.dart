@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/data/models/filter/filter_criteria_model.dart';
-import 'package:mnale_client/data/models/product/page_and_limit_model.dart';
 
 import '../../../core/services/network_info.dart';
 import '../../../core/utils/date_time_formatter.dart';
+import '../../../data/models/filter/filter_criteria_model.dart';
+import '../../../data/models/product/page_and_limit_model.dart';
 import '../../../domain/enitites/product.dart';
 import '../../../domain/usecases/get_all_products.dart';
 import '../../../domain/usecases/get_categories.dart';
@@ -45,7 +45,7 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
         var favoriteProducts = await getFavoriteProducts.call();
         var categories = await getAllCategories.call();
         if (result.products.isNotEmpty && categories.isNotEmpty) {
-          sortProductByCreatedTime(result.products);
+          // sortProductByCreatedTime(result.products);
           emit(Loaded(result, categories, favoriteProducts));
         } else {
           emit(Empty());
