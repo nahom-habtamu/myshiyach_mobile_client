@@ -1,1 +1,1 @@
-const lazyLoadingLimit = 8;
+const lazyLoadingLimit = 5;

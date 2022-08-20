@@ -17,7 +17,7 @@ class ProductRemoteDataSource extends ProductDataSource {
     PageAndLimitModel pageAndLimit,
     FilterCriteriaModel? filterCriteriaModel,
   ) async {
-    String endPoint = '$baseUrl/products';
+    String endPoint = '$baseUrl/products/getPaginated';
 
     var requestBody = {
       "page": pageAndLimit.page,

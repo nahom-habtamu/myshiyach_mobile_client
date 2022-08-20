@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../data/models/filter/filter_criteria_model.dart';
 import '../../../data/models/product/page_and_limit_model.dart';
 import '../../../data/models/product/product_model.dart';
 import '../../../domain/enitites/product.dart';
 import '../../bloc/get_all_products/get_all_products_cubit.dart';
 import '../../bloc/get_all_products/get_all_products_state.dart';
 import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../common/empty_state_content.dart';
+import '../common/error_content.dart';
 import 'custom_footer_for_lazy_loading.dart';
 import 'product_list_item.dart';
 
@@ -16,13 +20,17 @@ class ProductList extends StatefulWidget {
   final List<Product> favorites;
   final List<Product> products;
   final PageAndLimitModel? pageAndLimit;
+  final FilterCriteriaModel? filterValues;
   final Function(Loaded) onRefreshed;
+  final RefreshController refreshController;
   const ProductList({
     Key? key,
     required this.products,
     required this.favorites,
     required this.pageAndLimit,
+    required this.filterValues,
     required this.onRefreshed,
+    required this.refreshController,
   }) : super(key: key);
 
   @override
@@ -31,9 +39,6 @@ class ProductList extends StatefulWidget {
 
 class _ProductListState extends State<ProductList> {
   SetFavoriteProductsCubit? setFavoriteProductsCubit;
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-
   List<Product> favorites = [];
 
   @override
@@ -49,6 +54,41 @@ class _ProductListState extends State<ProductList> {
     });
   }
 
+  Widget buildErrorContent() {
+    return SingleChildScrollView(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.5,
+        child: ErrorContent(
+          onButtonClicked: () => context
+              .read<GetAllProductsCubit>()
+              .call(widget.pageAndLimit!, widget.filterValues),
+        ),
+      ),
+    );
+  }
+
+  Widget buildEmptyStateContent() {
+    return SingleChildScrollView(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.5,
+        child: FallBackContent(
+          captionText: AppLocalizations.of(context).homeEmptyProductText,
+          hintText:
+              AppLocalizations.of(context).homeRetryFetchProductButtonLabel,
+          buttonText:
+              AppLocalizations.of(context).homeRetryFetchProductButtonText,
+          onButtonClicked: () {
+            if (widget.pageAndLimit != null) {
+              context
+                  .read<GetAllProductsCubit>()
+                  .call(widget.pageAndLimit!, widget.filterValues);
+            }
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GetAllProductsCubit, GetAllProductsState>(
@@ -56,21 +96,24 @@ class _ProductListState extends State<ProductList> {
       if (state is Loaded) {
         handleAddingNewItemsAndUpdatingState(state);
       } else if (state is Error) {
-        _refreshController.loadFailed();
+        widget.refreshController.loadFailed();
       }
       return SmartRefresher(
-        controller: _refreshController,
+        controller: widget.refreshController,
         onRefresh: () async {
           await Future.delayed(const Duration(milliseconds: 300));
-          _refreshController.refreshCompleted();
+          widget.refreshController.refreshCompleted();
         },
         onLoading: () async {
           await Future.delayed(const Duration(milliseconds: 300));
           if (widget.pageAndLimit != null) {
-            context.read<GetAllProductsCubit>().call(widget.pageAndLimit!);
-            _refreshController.loadComplete();
+            context.read<GetAllProductsCubit>().call(
+                  widget.pageAndLimit!,
+                  widget.filterValues,
+                );
+            widget.refreshController.loadComplete();
           } else {
-            _refreshController.loadNoData();
+            widget.refreshController.loadNoData();
           }
         },
         header: const WaterDropHeader(),
