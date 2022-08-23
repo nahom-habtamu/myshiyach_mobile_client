@@ -11,6 +11,7 @@ import '../../bloc/get_products_by_category/get_products_by_category_cubit.dart'
 import '../../bloc/get_products_by_category/get_products_by_category_state.dart';
 import '../../pages/posts_created_by_user_page.dart';
 import '../common/post_card_list_item.dart';
+import '../home/product_list_item.dart';
 import 'detail_item.dart';
 import 'post_detail_carousel.dart';
 import 'save_to_favorite_button.dart';
@@ -424,15 +425,24 @@ class _PostContentToShowState extends State<PostContentToShow> {
               ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
-                child: ListView.builder(
+                child: GridView.builder(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5.0,
+                    mainAxisSpacing: 5.0,
+                    childAspectRatio: MediaQuery.of(context).size.width /
+                        (MediaQuery.of(context).size.height) *
+                        1.47,
+                  ),
+                  itemCount: state.products.length,
                   itemBuilder: (context, index) {
-                    return PostCardListItem(
+                    return ProductListItem(
+                      isFavorite: false,
+                      onTap: () {},
                       product: state.products[index],
                     );
                   },
-                  itemCount: state.products.length,
                 ),
               ),
             ],
