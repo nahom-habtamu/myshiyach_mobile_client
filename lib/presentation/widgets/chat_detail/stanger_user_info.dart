@@ -17,7 +17,7 @@ class StrangerUserInfo extends StatelessWidget {
         splittedStrangerName.last[0].toUpperCase();
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(
+        Navigator.of(context).pushReplacementNamed(
           PostsCreatedByUserPage.routeName,
           arguments: strangerUser.id,
         );

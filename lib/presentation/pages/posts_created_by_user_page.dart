@@ -9,6 +9,7 @@ import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_cubit.dart';
 import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_state.dart';
+import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
@@ -36,7 +37,7 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
   void initState() {
     super.initState();
     initAccessToken();
-
+    context.read<HandleGoingToMessageCubit>().clear();
     Future.delayed(Duration.zero, () {
       userId = ModalRoute.of(context)!.settings.arguments as String;
       fetchPostsCreatedByUser(userId);
