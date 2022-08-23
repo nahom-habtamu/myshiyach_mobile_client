@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../data/models/filter/filter_criteria_model.dart';
 import '../../../data/models/product/page_and_limit_model.dart';
 import '../../../data/models/product/product_model.dart';
 import '../../../domain/enitites/product.dart';
-import '../../bloc/get_all_products/get_all_products_cubit.dart';
-import '../../bloc/get_all_products/get_all_products_state.dart';
+import '../../bloc/get_paginated_products/get_paginated_products_cubit.dart';
+import '../../bloc/get_paginated_products/get_paginated_products_state.dart';
 import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../common/empty_state_content.dart';
 import '../common/error_content.dart';
@@ -60,7 +60,7 @@ class _ProductListState extends State<ProductList> {
         height: MediaQuery.of(context).size.height * 0.5,
         child: ErrorContent(
           onButtonClicked: () => context
-              .read<GetAllProductsCubit>()
+              .read<GetPaginatedProductsCubit>()
               .call(widget.pageAndLimit!, widget.filterValues),
         ),
       ),
@@ -80,7 +80,7 @@ class _ProductListState extends State<ProductList> {
           onButtonClicked: () {
             if (widget.pageAndLimit != null) {
               context
-                  .read<GetAllProductsCubit>()
+                  .read<GetPaginatedProductsCubit>()
                   .call(widget.pageAndLimit!, widget.filterValues);
             }
           },
@@ -91,7 +91,7 @@ class _ProductListState extends State<ProductList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetAllProductsCubit, GetAllProductsState>(
+    return BlocBuilder<GetPaginatedProductsCubit, GetPaginatedProductsState>(
         builder: (context, state) {
       if (state is Loaded) {
         handleAddingNewItemsAndUpdatingState(state);
@@ -107,7 +107,7 @@ class _ProductListState extends State<ProductList> {
         onLoading: () async {
           await Future.delayed(const Duration(milliseconds: 300));
           if (widget.pageAndLimit != null) {
-            context.read<GetAllProductsCubit>().call(
+            context.read<GetPaginatedProductsCubit>().call(
                   widget.pageAndLimit!,
                   widget.filterValues,
                 );
@@ -142,7 +142,7 @@ class _ProductListState extends State<ProductList> {
   void handleAddingNewItemsAndUpdatingState(Loaded state) {
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
       widget.onRefreshed(state);
-      context.read<GetAllProductsCubit>().clear();
+      context.read<GetPaginatedProductsCubit>().clear();
     });
   }
 

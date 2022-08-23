@@ -27,11 +27,12 @@ class ProductRepository extends ProductService {
   });
 
   @override
-  Future<GetPaginatedProductsResultModel> getAllProducts(
+  Future<GetPaginatedProductsResultModel> getPaginatedProducts(
     PageAndLimitModel pageAndLimit,
     FilterCriteriaModel? filterCriteriaModel,
   ) {
-    return remoteDataSource.getAllProducts(pageAndLimit, filterCriteriaModel);
+    return remoteDataSource.getPaginatedProducts(
+        pageAndLimit, filterCriteriaModel);
   }
 
   @override
@@ -87,5 +88,10 @@ class ProductRepository extends ProductService {
   @override
   Future<String> generateShareLink(String id) {
     return dynamicLinkDataSource.generateDynamicLink(id);
+  }
+
+  @override
+  Future<List<ProductModel>> getAllProducts() {
+    return remoteDataSource.getAllProducts();
   }
 }

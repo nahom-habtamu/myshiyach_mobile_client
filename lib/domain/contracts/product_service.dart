@@ -6,11 +6,12 @@ import '../../data/models/product/page_and_limit_model.dart';
 import '../../data/models/product/product_model.dart';
 
 abstract class ProductService {
-  Future<GetPaginatedProductsResultModel> getAllProducts(
+  Future<GetPaginatedProductsResultModel> getPaginatedProducts(
     PageAndLimitModel pageAndLimit,
     FilterCriteriaModel? filterCriteriaModel,
   );
   Future<ProductModel> getProductById(String id, String token);
+  Future<List<ProductModel>> getAllProducts();
   Future<List<ProductModel>> getAllFavoriteProducts();
   Future<void> setFavoriteProducts(List<ProductModel> products);
   Future<ProductModel> createProduct(

@@ -3,17 +3,17 @@ import '../../data/models/product/get_paginated_products_result_model.dart';
 import '../../data/models/product/page_and_limit_model.dart';
 import '../contracts/product_service.dart';
 
-class GetAllProducts {
+class GetPaginatedProducts {
   final ProductService repository;
 
-  GetAllProducts(this.repository);
+  GetPaginatedProducts(this.repository);
 
   Future<GetPaginatedProductsResultModel> call(
     PageAndLimitModel pageAndLimit,
     FilterCriteriaModel? filterCriteria,
   ) async {
     var parsedResult =
-        await repository.getAllProducts(pageAndLimit, filterCriteria);
+        await repository.getPaginatedProducts(pageAndLimit, filterCriteria);
     return parsedResult;
   }
 }

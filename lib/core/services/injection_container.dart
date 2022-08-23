@@ -43,12 +43,13 @@ import '../../domain/usecases/filter_products.dart';
 import '../../domain/usecases/generate_share_link_for_product.dart';
 import '../../domain/usecases/get_all_cities.dart';
 import '../../domain/usecases/get_all_conversations.dart';
-import '../../domain/usecases/get_all_products.dart';
 import '../../domain/usecases/get_categories.dart';
 import '../../domain/usecases/get_conversation_by_id.dart';
 import '../../domain/usecases/get_conversation_by_members.dart';
 import '../../domain/usecases/get_favorite_products.dart';
+import '../../domain/usecases/get_paginated_products.dart';
 import '../../domain/usecases/get_product_by_id.dart';
+import '../../domain/usecases/get_products_by_category.dart';
 import '../../domain/usecases/get_products_by_user_id.dart';
 import '../../domain/usecases/get_stored_user_credentials.dart';
 import '../../domain/usecases/get_user_by_id.dart';
@@ -73,12 +74,13 @@ import '../../presentation/bloc/filter/filter_products_cubit.dart';
 import '../../presentation/bloc/generate_share_link_for_product/generate_share_link_for_product_cubit.dart';
 import '../../presentation/bloc/get_all_categories/get_all_categories_cubit.dart';
 import '../../presentation/bloc/get_all_conversations/get_all_conversations_cubit.dart';
-import '../../presentation/bloc/get_all_products/get_all_products_cubit.dart';
 import '../../presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../../presentation/bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
+import '../../presentation/bloc/get_paginated_products/get_paginated_products_cubit.dart';
 import '../../presentation/bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
 import '../../presentation/bloc/get_product_by_id/get_product_by_id_cubit.dart';
+import '../../presentation/bloc/get_products_by_category/get_products_by_category_cubit.dart';
 import '../../presentation/bloc/get_products_by_user_id/get_products_by_user_id_cubit.dart';
 import '../../presentation/bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_cubit.dart';
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
@@ -109,7 +111,7 @@ Future<void> init() async {
   sl.registerFactory(() => VerifyPhoneNumberCubit(sl(), sl()));
   sl.registerFactory(() => RegisterUserCubit(sl(), sl(), sl()));
   sl.registerFactory(() => DisplayAllProductsCubit(sl(), sl(), sl(), sl()));
-  sl.registerFactory(() => GetAllProductsCubit(sl()));
+  sl.registerFactory(() => GetPaginatedProductsCubit(sl()));
   sl.registerFactory(
     () => GetFavoriteProductsCubit(
         getFavoriteProducts: sl(),
@@ -162,6 +164,7 @@ Future<void> init() async {
   );
   sl.registerFactory(() => GetProductByIdCubit(sl()));
   sl.registerFactory(() => GenerateShareLinkForProductCubit(sl()));
+  sl.registerFactory(() => GetProductsByCategoryCubit(sl()));
 
   // usecases
   sl.registerLazySingleton(() => Login(sl()));
@@ -169,7 +172,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => VerifyPhoneNumber(sl()));
   sl.registerLazySingleton(() => AuthenticatePhoneNumber(sl()));
   sl.registerLazySingleton(() => RegisterUser(sl()));
-  sl.registerLazySingleton(() => GetAllProducts(sl()));
+  sl.registerLazySingleton(() => GetPaginatedProducts(sl()));
   sl.registerLazySingleton(() => GetFavoriteProducts(sl()));
   sl.registerLazySingleton(() => UpdateProduct(sl()));
   sl.registerLazySingleton(() => SetFavoriteProducts(sl()));
@@ -193,6 +196,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RefreshProduct(sl()));
   sl.registerLazySingleton(() => MarkMessagesAsRead(sl()));
   sl.registerLazySingleton(() => GenerateShareLinkForProduct(sl()));
+  sl.registerLazySingleton(() => GetProductsByCategory(sl()));
 
   // repositories
 

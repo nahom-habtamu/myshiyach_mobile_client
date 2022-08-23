@@ -13,11 +13,12 @@ import '../bloc/filter/filter_products_cubit.dart';
 import '../bloc/generate_share_link_for_product/generate_share_link_for_product_cubit.dart';
 import '../bloc/get_all_categories/get_all_categories_cubit.dart';
 import '../bloc/get_all_conversations/get_all_conversations_cubit.dart';
-import '../bloc/get_all_products/get_all_products_cubit.dart';
 import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
+import '../bloc/get_paginated_products/get_paginated_products_cubit.dart';
 import '../bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
+import '../bloc/get_products_by_category/get_products_by_category_cubit.dart';
 import '../bloc/get_products_by_user_id/get_products_by_user_id_cubit.dart';
 import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_cubit.dart';
 import '../bloc/get_user_by_id/get_user_by_id_cubit.dart';
@@ -46,7 +47,7 @@ class AppLevelState {
         create: (_) => sl<DisplayAllProductsCubit>(),
       ),
       BlocProvider(
-        create: (_) => sl<GetAllProductsCubit>(),
+        create: (_) => sl<GetPaginatedProductsCubit>(),
       ),
       BlocProvider(
         create: (_) => sl<GetFavoriteProductsCubit>(),
@@ -116,6 +117,9 @@ class AppLevelState {
       ),
       BlocProvider(
         create: (_) => sl<GenerateShareLinkForProductCubit>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<GetProductsByCategoryCubit>(),
       )
     ];
   }

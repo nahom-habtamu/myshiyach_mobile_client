@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mnale_client/domain/enitites/sub_category.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../data/models/filter/filter_criteria_model.dart';
@@ -10,6 +9,7 @@ import '../../data/models/product/page_and_limit_model.dart';
 import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
+import '../../domain/enitites/sub_category.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
 import '../bloc/filter/filter_products_cubit.dart';

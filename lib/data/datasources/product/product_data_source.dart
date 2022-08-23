@@ -6,7 +6,7 @@ import '../../models/product/page_and_limit_model.dart';
 import '../../models/product/product_model.dart';
 
 abstract class ProductDataSource {
-  Future<GetPaginatedProductsResultModel> getAllProducts(
+  Future<GetPaginatedProductsResultModel> getPaginatedProducts(
     PageAndLimitModel pageAndLimit,
     FilterCriteriaModel? filterCriteriaModel,
   );
@@ -19,6 +19,7 @@ abstract class ProductDataSource {
     String token,
   );
   Future<List<ProductModel>> getProductsByCreatorId(String userId);
+  Future<List<ProductModel>> getAllProducts();
   Future<ProductModel> getProductById(String id, String token);
   Future<ProductModel> refreshProduct(String id, String token);
 }

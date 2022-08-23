@@ -2,12 +2,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/filter/filter_criteria_model.dart';
 import '../../../data/models/product/page_and_limit_model.dart';
-import '../../../domain/usecases/get_all_products.dart';
-import 'get_all_products_state.dart';
+import '../../../domain/usecases/get_paginated_products.dart';
+import 'get_paginated_products_state.dart';
 
-class GetAllProductsCubit extends Cubit<GetAllProductsState> {
-  final GetAllProducts getAllProducts;
-  GetAllProductsCubit(this.getAllProducts) : super(Empty());
+class GetPaginatedProductsCubit extends Cubit<GetPaginatedProductsState> {
+  final GetPaginatedProducts getPaginatedProducts;
+  GetPaginatedProductsCubit(this.getPaginatedProducts) : super(Empty());
 
   void clear() {
     emit(NotTriggered());
@@ -20,7 +20,8 @@ class GetAllProductsCubit extends Cubit<GetAllProductsState> {
     try {
       emit(NotTriggered());
       emit(Loading());
-      var result = await getAllProducts.call(pageAndLimit, filterCriteriaModel);
+      var result =
+          await getPaginatedProducts.call(pageAndLimit, filterCriteriaModel);
       if (result.products.isNotEmpty) {
         emit(Loaded(result));
       } else {

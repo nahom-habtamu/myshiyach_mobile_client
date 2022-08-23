@@ -5,13 +5,13 @@ import '../../../core/utils/date_time_formatter.dart';
 import '../../../data/models/filter/filter_criteria_model.dart';
 import '../../../data/models/product/page_and_limit_model.dart';
 import '../../../domain/enitites/product.dart';
-import '../../../domain/usecases/get_all_products.dart';
+import '../../../domain/usecases/get_paginated_products.dart';
 import '../../../domain/usecases/get_categories.dart';
 import '../../../domain/usecases/get_favorite_products.dart';
 import 'display_all_products_state.dart';
 
 class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
-  final GetAllProducts getAllProducts;
+  final GetPaginatedProducts getAllProducts;
   final GetAllCategories getAllCategories;
   final GetFavoriteProducts getFavoriteProducts;
   final NetworkInfo networkInfo;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -6,13 +7,16 @@ import '../../../core/utils/date_time_formatter.dart';
 import '../../../core/utils/price_formatter.dart';
 import '../../../domain/enitites/product.dart';
 import '../../../domain/enitites/user.dart';
+import '../../bloc/get_products_by_category/get_products_by_category_cubit.dart';
+import '../../bloc/get_products_by_category/get_products_by_category_state.dart';
 import '../../pages/posts_created_by_user_page.dart';
+import '../common/post_card_list_item.dart';
 import 'detail_item.dart';
 import 'post_detail_carousel.dart';
 import 'save_to_favorite_button.dart';
 import 'send_message_button.dart';
 
-class PostContentToShow extends StatelessWidget {
+class PostContentToShow extends StatefulWidget {
   final Product product;
   final User currentUser;
   final User? postCreator;
@@ -30,11 +34,27 @@ class PostContentToShow extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<PostContentToShow> createState() => _PostContentToShowState();
+}
+
+class _PostContentToShowState extends State<PostContentToShow> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      context.read<GetProductsByCategoryCubit>().call(
+            widget.product.mainCategory,
+            widget.product.subCategory,
+          );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         PostDetailCarousel(
-          items: [...product.productImages],
+          items: [...widget.product.productImages],
         ),
         Expanded(
           child: SingleChildScrollView(
@@ -46,7 +66,8 @@ class PostContentToShow extends StatelessWidget {
                 renderDescription(context),
                 const SizedBox(height: 15),
                 renderPostDetailButtonSection(),
-                const SizedBox(height: 15),
+                const SizedBox(height: 35),
+                renderRecommendedProducts(),
               ],
             ),
           ),
@@ -58,7 +79,7 @@ class PostContentToShow extends StatelessWidget {
   onDetailItemClicked(context) {
     Navigator.of(context).pushNamed(
       PostsCreatedByUserPage.routeName,
-      arguments: product.createdBy,
+      arguments: widget.product.createdBy,
     );
   }
 
@@ -88,8 +109,8 @@ class PostContentToShow extends StatelessWidget {
               renderCreatorInformation(context),
               renderProductTimes(context),
               SaveToFavoritesButton(
-                isFavorite: isFavorite,
-                onPressed: handleSaveToFavorite,
+                isFavorite: widget.isFavorite,
+                onPressed: widget.handleSaveToFavorite,
               )
             ],
           ),
@@ -120,7 +141,7 @@ class PostContentToShow extends StatelessWidget {
             subtitle: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
-                product.description,
+                widget.product.description,
                 textAlign: TextAlign.justify,
               ),
             ),
@@ -156,7 +177,7 @@ class PostContentToShow extends StatelessWidget {
           Expanded(
             child: DetailItem(
               onClick: () => onDetailItemClicked(context),
-              subtitle: Text(postCreator?.fullName ?? ""),
+              subtitle: Text(widget.postCreator?.fullName ?? ""),
               title: Row(
                 children: [
                   const Icon(Icons.person),
@@ -171,12 +192,12 @@ class PostContentToShow extends StatelessWidget {
           Expanded(
             child: DetailItem(
               onClick: () async {
-                final _call = 'tel:${product.contactPhone}';
+                final _call = 'tel:${widget.product.contactPhone}';
                 if (await canLaunchUrl(Uri.parse(_call))) {
                   await launchUrl(Uri.parse(_call));
                 }
               },
-              subtitle: Text(product.contactPhone),
+              subtitle: Text(widget.product.contactPhone),
               title: Row(
                 children: [
                   const Icon(
@@ -203,7 +224,7 @@ class PostContentToShow extends StatelessWidget {
           Expanded(
             child: DetailItem(
               onClick: () => {},
-              subtitle: renderTimeContent(product.createdAt),
+              subtitle: renderTimeContent(widget.product.createdAt),
               title: Row(
                 children: [
                   const Icon(
@@ -220,7 +241,7 @@ class PostContentToShow extends StatelessWidget {
           Expanded(
             child: DetailItem(
               onClick: () => {},
-              subtitle: renderTimeContent(product.refreshedAt),
+              subtitle: renderTimeContent(widget.product.refreshedAt),
               title: Row(
                 children: [
                   const Icon(
@@ -246,7 +267,7 @@ class PostContentToShow extends StatelessWidget {
           Expanded(
             child: DetailItem(
               onClick: () => {},
-              subtitle: Text(product.title),
+              subtitle: Text(widget.product.title),
               title: Row(
                 children: [
                   const Icon(
@@ -263,7 +284,7 @@ class PostContentToShow extends StatelessWidget {
           Expanded(
             child: DetailItem(
               onClick: () => {},
-              subtitle: Text(product.city),
+              subtitle: Text(widget.product.city),
               title: Row(
                 children: [
                   const Icon(
@@ -287,7 +308,7 @@ class PostContentToShow extends StatelessWidget {
       child: DetailItem(
         onClick: () => {},
         subtitle: Text(
-          PriceFormatterUtil.formatToPrice(product.price) + ' Birr',
+          PriceFormatterUtil.formatToPrice(widget.product.price) + ' Birr',
           style: const TextStyle(
             color: Color(0xff34A853),
             fontSize: 18,
@@ -323,7 +344,8 @@ class PostContentToShow extends StatelessWidget {
   }
 
   List<Widget> buildOtherDetail(context) {
-    if (product.productDetail == null || product.productDetail!.isEmpty) {
+    if (widget.product.productDetail == null ||
+        widget.product.productDetail!.isEmpty) {
       return [];
     }
     List<dynamic> chunks = sliceArrayToDifferentArrays();
@@ -357,7 +379,7 @@ class PostContentToShow extends StatelessWidget {
   }
 
   List<dynamic> sliceArrayToDifferentArrays() {
-    var originalList = product.productDetail!.entries.toList();
+    var originalList = widget.product.productDetail!.entries.toList();
     var chunks = [];
     int chunkSize = 2;
     for (var i = 0; i < originalList.length; i += chunkSize) {
@@ -375,9 +397,52 @@ class PostContentToShow extends StatelessWidget {
 
   renderPostDetailButtonSection() {
     return SendMessageButton(
-      currentUser: currentUser,
-      receiverId: product.createdBy,
-      authToken: authToken,
+      currentUser: widget.currentUser,
+      receiverId: widget.product.createdBy,
+      authToken: widget.authToken,
+    );
+  }
+
+  renderRecommendedProducts() {
+    return BlocBuilder<GetProductsByCategoryCubit, GetProductsByCategoryState>(
+      builder: (context, state) {
+        if (state is Loaded) {
+          return Column(
+            children: [
+              const Divider(),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 15.0),
+                child: Text(
+                  'Recommended Items',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.black45,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return PostCardListItem(
+                      product: state.products[index],
+                    );
+                  },
+                  itemCount: state.products.length,
+                ),
+              ),
+            ],
+          );
+        } else if (state is Loading) {
+          return const CircularProgressIndicator();
+        }
+
+        return Container();
+      },
     );
   }
 }

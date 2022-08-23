@@ -13,7 +13,7 @@ import 'product_data_source.dart';
 
 class ProductRemoteDataSource extends ProductDataSource {
   @override
-  Future<GetPaginatedProductsResultModel> getAllProducts(
+  Future<GetPaginatedProductsResultModel> getPaginatedProducts(
     PageAndLimitModel pageAndLimit,
     FilterCriteriaModel? filterCriteriaModel,
   ) async {
@@ -164,5 +164,24 @@ class ProductRemoteDataSource extends ProductDataSource {
       return product;
     }
     throw Exception("Couldn't Refresh Product");
+  }
+
+  @override
+  Future<List<ProductModel>> getAllProducts() async {
+    const String endPoint = '$baseUrl/products';
+    final response = await http.get(
+      Uri.parse(endPoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var products = ProductModel.parseProductsFromJson(
+        json.decode(response.body),
+      );
+      return products;
+    }
+    throw Exception("Couldn't Fetch Products");
   }
 }
