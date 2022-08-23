@@ -232,6 +232,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     setState(
                       () {
+                        selectedSubCategory = null;
                         selectedMainCategory?.id == e.id
                             ? selectedMainCategory = null
                             : selectedMainCategory = e;
