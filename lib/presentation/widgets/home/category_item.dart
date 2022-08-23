@@ -20,10 +20,10 @@ class CategoryItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Container(
-          height: 35,
+          height: 32,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: 15.0,
+              horizontal: 12.0,
               vertical: 3,
             ),
             child: Center(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mnale_client/domain/enitites/sub_category.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../data/models/filter/filter_criteria_model.dart';
@@ -32,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   FilterCriteriaModel? filterValues;
   String searchKeyword = "";
   MainCategory? selectedMainCategory;
+  SubCategory? selectedSubCategory;
   PageAndLimitModel? pageAndLimit = PageAndLimitModel.initialDefault();
   List<Product> products = [];
   List<Product> favorites = [];
@@ -62,7 +64,8 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             renderSearchAndFilterBar(),
-            renderCategories(),
+            renderMainCategories(),
+            renderSubCategories(),
             renderProductBuilder(),
           ],
         ),
@@ -196,14 +199,25 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  renderCategories() {
+  renderMainCategories() {
     if (categories.isEmpty) {
       return Container();
     }
-    return buildCategorySlider(categories);
+    return buildMainCategorySlider(categories);
   }
 
-  buildCategorySlider(List<MainCategory> categories) {
+  renderSubCategories() {
+    if (categories.isEmpty || selectedMainCategory == null) {
+      return Container();
+    }
+
+    var subCategories = categories
+        .firstWhere((c) => c.id == selectedMainCategory!.id)
+        .subCategories;
+    return buildSubCategorySlider(subCategories);
+  }
+
+  buildMainCategorySlider(List<MainCategory> categories) {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.only(bottom: 15),
@@ -224,6 +238,41 @@ class _HomePageState extends State<HomePage> {
                         var alteredFilter = FilterCriteriaModel.addMainCategory(
                           filterValues,
                           selectedMainCategory,
+                        );
+                        filterValues = alteredFilter;
+                      },
+                    );
+                    _refreshController.resetNoData();
+                  },
+                ),
+              )
+              .toList(),
+        ),
+      ),
+    );
+  }
+
+  buildSubCategorySlider(List<SubCategory> categories) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.only(bottom: 15),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: categories
+              .map(
+                (e) => CategoryItem(
+                  category: e.title,
+                  isActive: selectedSubCategory?.id == e.id,
+                  onTap: () {
+                    setState(
+                      () {
+                        selectedSubCategory?.id == e.id
+                            ? selectedSubCategory = null
+                            : selectedSubCategory = e;
+                        var alteredFilter = FilterCriteriaModel.addSubCategory(
+                          filterValues,
+                          selectedSubCategory,
                         );
                         filterValues = alteredFilter;
                       },
