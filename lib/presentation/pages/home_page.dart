@@ -18,7 +18,7 @@ import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/error_content.dart';
 import '../widgets/common/no_network_content.dart';
 import '../widgets/home/category_item.dart';
-import '../widgets/home/product_list.dart';
+import '../widgets/home/product_grid.dart';
 import '../widgets/home/search_bar.dart';
 
 class HomePage extends StatefulWidget {

@@ -14,7 +14,7 @@ import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../common/empty_state_content.dart';
 import '../common/error_content.dart';
 import 'custom_footer_for_lazy_loading.dart';
-import 'product_list_item.dart';
+import 'product_grid_item.dart';
 
 class ProductList extends StatefulWidget {
   final List<Product> favorites;

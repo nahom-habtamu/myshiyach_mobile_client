@@ -120,8 +120,14 @@ Future<void> init() async {
         networkInfo: sl()),
   );
   sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
-  sl.registerFactory(() => GetUserAndProductsByUserIdCubit(
-      getMyProducts: sl(), getUserById: sl(), networkInfo: sl()));
+  sl.registerFactory(
+    () => GetUserAndProductsByUserIdCubit(
+      getMyProducts: sl(),
+      getUserById: sl(),
+      networkInfo: sl(),
+      getFavoriteProducts: sl(),
+    ),
+  );
   sl.registerFactory(() =>
       GetProductsByUserIdCubit(getProductsByUserId: sl(), networkInfo: sl()));
   sl.registerFactory(() => AuthPhoneNumberCubit(sl()));

@@ -13,7 +13,7 @@ import '../../bloc/get_products_by_category/get_products_by_category_cubit.dart'
 import '../../bloc/get_products_by_category/get_products_by_category_state.dart';
 import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../../pages/posts_created_by_user_page.dart';
-import '../home/product_list_item.dart';
+import '../home/product_grid_item.dart';
 import 'detail_item.dart';
 import 'post_detail_carousel.dart';
 import 'save_to_favorite_button.dart';

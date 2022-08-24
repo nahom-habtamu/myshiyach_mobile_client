@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/services/network_info.dart';
+import '../../../domain/usecases/get_favorite_products.dart';
 import '../../../domain/usecases/get_products_by_user_id.dart';
 import '../../../domain/usecases/get_user_by_id.dart';
 import 'get_user_and_products_by_user_id_state.dart';
@@ -9,10 +10,12 @@ class GetUserAndProductsByUserIdCubit
     extends Cubit<GetUserAndProductsByUserIdState> {
   final GetProductsByUserId getMyProducts;
   final GetUserById getUserById;
+  final GetFavoriteProducts getFavoriteProducts;
   final NetworkInfo networkInfo;
   GetUserAndProductsByUserIdCubit({
     required this.getMyProducts,
     required this.networkInfo,
+    required this.getFavoriteProducts,
     required this.getUserById,
   }) : super(GetUserAndProductsByUserIdEmpty());
 
@@ -24,7 +27,12 @@ class GetUserAndProductsByUserIdCubit
         var user = await getUserById.call(userId, token);
         var products = await getMyProducts.call(userId);
         if (products.isNotEmpty) {
-          emit(GetUserAndProductsByUserIdLoaded(products, user));
+          var favorites = await getFavoriteProducts.call();
+          emit(GetUserAndProductsByUserIdLoaded(
+            favorites: favorites,
+            products: products,
+            user: user,
+          ));
         } else {
           emit(GetUserAndProductsByUserIdEmpty());
         }

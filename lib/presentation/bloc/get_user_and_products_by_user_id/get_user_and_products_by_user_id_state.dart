@@ -13,8 +13,13 @@ class GetUserAndProductsByUserIdNoNetwork
 
 class GetUserAndProductsByUserIdLoaded extends GetUserAndProductsByUserIdState {
   final List<Product> products;
+  final List<Product> favorites;
   final User user;
-  GetUserAndProductsByUserIdLoaded(this.products, this.user);
+  GetUserAndProductsByUserIdLoaded({
+    required this.products,
+    required this.user,
+    required this.favorites,
+  });
 }
 
 class GetUserAndProductsByUserIdError extends GetUserAndProductsByUserIdState {
