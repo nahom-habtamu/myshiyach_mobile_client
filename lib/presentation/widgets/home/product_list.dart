@@ -146,13 +146,13 @@ class _ProductListState extends State<ProductList> {
     });
   }
 
-  ProductListItem buildProduct(Product product) {
+  ProductGridItem buildProduct(Product product) {
     var duplicate =
         favorites.where((element) => element.id == product.id).toList();
-    return ProductListItem(
+    return ProductGridItem(
       product: product,
       isFavorite: duplicate.isEmpty,
-      onTap: () {
+      onFavoritesTap: () {
         updateFavorites(duplicate, product);
       },
     );

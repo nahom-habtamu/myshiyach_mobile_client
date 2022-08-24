@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/utils/date_time_formatter.dart';
 import '../../../core/utils/price_formatter.dart';
+import '../../../data/models/product/product_model.dart';
 import '../../../domain/enitites/product.dart';
 import '../../../domain/enitites/user.dart';
 import '../../bloc/get_products_by_category/get_products_by_category_cubit.dart';
 import '../../bloc/get_products_by_category/get_products_by_category_state.dart';
+import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../../pages/posts_created_by_user_page.dart';
-import '../common/post_card_list_item.dart';
 import '../home/product_list_item.dart';
 import 'detail_item.dart';
 import 'post_detail_carousel.dart';
@@ -39,6 +41,8 @@ class PostContentToShow extends StatefulWidget {
 }
 
 class _PostContentToShowState extends State<PostContentToShow> {
+  List<Product> favorites = [];
+
   @override
   void initState() {
     super.initState();
@@ -408,6 +412,12 @@ class _PostContentToShowState extends State<PostContentToShow> {
     return BlocBuilder<GetProductsByCategoryCubit, GetProductsByCategoryState>(
       builder: (context, state) {
         if (state is Loaded) {
+          SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+            setState(() {
+              if (favorites.isEmpty) favorites = state.favorites;
+            });
+          });
+
           return Column(
             children: [
               const Divider(),
@@ -427,6 +437,7 @@ class _PostContentToShowState extends State<PostContentToShow> {
                 padding: const EdgeInsets.all(15.0),
                 child: GridView.builder(
                   shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 5.0,
@@ -437,9 +448,14 @@ class _PostContentToShowState extends State<PostContentToShow> {
                   ),
                   itemCount: state.products.length,
                   itemBuilder: (context, index) {
-                    return ProductListItem(
-                      isFavorite: false,
-                      onTap: () {},
+                    var duplicate = favorites
+                        .where(
+                            (element) => element.id == state.products[index].id)
+                        .toList();
+                    return ProductGridItem(
+                      isFavorite: duplicate.isEmpty,
+                      onFavoritesTap: () =>
+                          updateFavorites(duplicate, state.products[index]),
                       product: state.products[index],
                     );
                   },
@@ -454,5 +470,30 @@ class _PostContentToShowState extends State<PostContentToShow> {
         return Container();
       },
     );
+  }
+
+  void updateFavorites(
+    List<Product> duplicate,
+    Product product,
+  ) {
+    if (duplicate.isNotEmpty) {
+      favorites.removeWhere((element) => element.id == product.id);
+      setState(() {});
+    } else {
+      setState(() {
+        favorites = [...favorites, product];
+      });
+    }
+    List<ProductModel> favoritesToSave = parseListToProductModelList();
+    context
+        .read<SetFavoriteProductsCubit>()
+        .setFavoriteProducts
+        .call(favoritesToSave);
+  }
+
+  List<ProductModel> parseListToProductModelList() {
+    var favoritesToSave =
+        favorites.map((e) => ProductModel.fromProduct(e)).toList();
+    return favoritesToSave;
   }
 }

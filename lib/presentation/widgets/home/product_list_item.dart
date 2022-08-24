@@ -6,22 +6,22 @@ import '../../../domain/enitites/product.dart';
 import '../../pages/post_detail_page.dart';
 import '../../screen_arguments/post_detail_page_arguments.dart';
 
-class ProductListItem extends StatefulWidget {
+class ProductGridItem extends StatefulWidget {
   final Product product;
   final bool isFavorite;
-  final Function onTap;
-  const ProductListItem({
+  final Function onFavoritesTap;
+  const ProductGridItem({
     Key? key,
     required this.product,
     required this.isFavorite,
-    required this.onTap,
+    required this.onFavoritesTap,
   }) : super(key: key);
 
   @override
-  State<ProductListItem> createState() => _ProductListItemState();
+  State<ProductGridItem> createState() => _ProductGridItemState();
 }
 
-class _ProductListItemState extends State<ProductListItem> {
+class _ProductGridItemState extends State<ProductGridItem> {
   double heightOfMobile = 0.0;
 
   @override
@@ -151,7 +151,7 @@ class _ProductListItemState extends State<ProductListItem> {
         ),
         GestureDetector(
           onTap: () {
-            widget.onTap();
+            widget.onFavoritesTap();
           },
           child: CircleAvatar(
             radius: heightOfMobile * 2,

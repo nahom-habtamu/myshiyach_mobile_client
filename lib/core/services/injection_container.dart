@@ -164,7 +164,7 @@ Future<void> init() async {
   );
   sl.registerFactory(() => GetProductByIdCubit(sl()));
   sl.registerFactory(() => GenerateShareLinkForProductCubit(sl()));
-  sl.registerFactory(() => GetProductsByCategoryCubit(sl()));
+  sl.registerFactory(() => GetProductsByCategoryCubit(sl(), sl()));
 
   // usecases
   sl.registerLazySingleton(() => Login(sl()));

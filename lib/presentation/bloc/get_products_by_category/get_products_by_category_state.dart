@@ -10,8 +10,9 @@ class Loading extends GetProductsByCategoryState {}
 
 class Loaded extends GetProductsByCategoryState {
   final List<Product> products;
+  final List<Product> favorites;
 
-  Loaded(this.products);
+  Loaded(this.products,this.favorites);
 }
 
 class Error extends GetProductsByCategoryState {
