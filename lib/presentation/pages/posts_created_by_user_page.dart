@@ -69,9 +69,7 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
       ),
       body: CurvedContainer(
         child: SingleChildScrollView(
-          child: Expanded(
-            child: renderBody(),
-          ),
+          child: renderBody(),
         ),
       ),
     );
