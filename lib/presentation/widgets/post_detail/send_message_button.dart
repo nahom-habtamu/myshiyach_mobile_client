@@ -46,6 +46,7 @@ class SendMessageButton extends StatelessWidget {
                       ChatDetailPage.routeName,
                       arguments: state.chatDetailPageArguments,
                     );
+                    context.read<HandleGoingToMessageCubit>().clear();
                   });
                 }
                 return ActionButton(

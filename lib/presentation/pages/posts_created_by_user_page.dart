@@ -68,7 +68,11 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
         title: AppLocalizations.of(context).postsCreatedByUserPageAppBarText,
       ),
       body: CurvedContainer(
-        child: renderBody(),
+        child: SingleChildScrollView(
+          child: Expanded(
+            child: renderBody(),
+          ),
+        ),
       ),
     );
   }
@@ -88,8 +92,11 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
 
           return buildProductListAndHeader(state.products, state.user);
         } else if (state is GetUserAndProductsByUserIdLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.9,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         } else if (state is GetUserAndProductsByUserIdError) {
           return buildErrorContent();
@@ -103,28 +110,34 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
   }
 
   buildEmptyStateContent() {
-    return FallBackContent(
-      captionText:
-          AppLocalizations.of(context).postsCreatedByUserPageEmptyCaptionText,
-      hintText:
-          AppLocalizations.of(context).postsCreatedByUserPageEmptyHintText,
-      buttonText:
-          AppLocalizations.of(context).postsCreatedByUserPageEmptyButtonText,
-      onButtonClicked: () {
-        Navigator.pushReplacementNamed(context, AddPostPage.routeName);
-      },
+    return Center(
+      child: FallBackContent(
+        captionText:
+            AppLocalizations.of(context).postsCreatedByUserPageEmptyCaptionText,
+        hintText:
+            AppLocalizations.of(context).postsCreatedByUserPageEmptyHintText,
+        buttonText:
+            AppLocalizations.of(context).postsCreatedByUserPageEmptyButtonText,
+        onButtonClicked: () {
+          Navigator.pushReplacementNamed(context, AddPostPage.routeName);
+        },
+      ),
     );
   }
 
   buildNoNetworkContent() {
-    return NoNetworkContent(
-      onButtonClicked: () => fetchPostsCreatedByUser(userId),
+    return Center(
+      child: NoNetworkContent(
+        onButtonClicked: () => fetchPostsCreatedByUser(userId),
+      ),
     );
   }
 
   buildErrorContent() {
-    return ErrorContent(
-      onButtonClicked: () => fetchPostsCreatedByUser(userId),
+    return Center(
+      child: ErrorContent(
+        onButtonClicked: () => fetchPostsCreatedByUser(userId),
+      ),
     );
   }
 
@@ -197,33 +210,31 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
             textAlign: TextAlign.center,
           ),
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
-                childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height) *
-                    1.47,
-              ),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                var duplicate = favorites
-                    .where((element) => element.id == products[index].id)
-                    .toList();
-                return ProductGridItem(
-                  isFavorite: duplicate.isEmpty,
-                  onFavoritesTap: () =>
-                      updateFavorites(duplicate, products[index]),
-                  product: products[index],
-                );
-              },
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 5.0,
+              mainAxisSpacing: 5.0,
+              childAspectRatio: MediaQuery.of(context).size.width /
+                  (MediaQuery.of(context).size.height) *
+                  1.47,
             ),
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              var duplicate = favorites
+                  .where((element) => element.id == products[index].id)
+                  .toList();
+              return ProductGridItem(
+                isFavorite: duplicate.isEmpty,
+                onFavoritesTap: () =>
+                    updateFavorites(duplicate, products[index]),
+                product: products[index],
+              );
+            },
           ),
         ),
       ],
