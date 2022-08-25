@@ -417,7 +417,8 @@ class _PostContentToShowState extends State<PostContentToShow> {
               if (favorites.isEmpty) favorites = state.favorites;
             });
           });
-
+          var contentOtherThanCurrentProduct =
+              state.products.where((p) => p.id != widget.product.id).toList();
           return Column(
             children: [
               const Divider(),
@@ -449,13 +450,14 @@ class _PostContentToShowState extends State<PostContentToShow> {
                   itemCount: state.products.length,
                   itemBuilder: (context, index) {
                     var duplicate = favorites
-                        .where(
-                            (element) => element.id == state.products[index].id)
+                        .where((element) =>
+                            element.id ==
+                            contentOtherThanCurrentProduct[index].id)
                         .toList();
                     return ProductGridItem(
                       isFavorite: duplicate.isEmpty,
-                      onFavoritesTap: () =>
-                          updateFavorites(duplicate, state.products[index]),
+                      onFavoritesTap: () => updateFavorites(
+                          duplicate, contentOtherThanCurrentProduct[index]),
                       product: state.products[index],
                     );
                   },
@@ -466,7 +468,6 @@ class _PostContentToShowState extends State<PostContentToShow> {
         } else if (state is Loading) {
           return const CircularProgressIndicator();
         }
-
         return Container();
       },
     );
