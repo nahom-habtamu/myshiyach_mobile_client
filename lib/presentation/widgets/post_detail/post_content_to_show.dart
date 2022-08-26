@@ -58,25 +58,24 @@ class _PostContentToShowState extends State<PostContentToShow> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        PostDetailCarousel(
-          items: [...widget.product.productImages],
-        ),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                renderContentOtherThanDescription(context),
-                const SizedBox(height: 15),
-                renderDescription(context),
-                const SizedBox(height: 15),
-                renderPostDetailButtonSection(),
-                const SizedBox(height: 35),
-                renderRecommendedProducts(),
-              ],
-            ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.3,
+          child: PostDetailCarousel(
+            items: [...widget.product.productImages],
           ),
-        )
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            renderContentOtherThanDescription(context),
+            const SizedBox(height: 15),
+            renderDescription(context),
+            const SizedBox(height: 15),
+            renderPostDetailButtonSection(),
+            const SizedBox(height: 35),
+            renderRecommendedProducts(),
+          ],
+        ),
       ],
     );
   }
@@ -88,44 +87,43 @@ class _PostContentToShowState extends State<PostContentToShow> {
     );
   }
 
-  IntrinsicHeight renderContentOtherThanDescription(BuildContext context) {
-    return IntrinsicHeight(
-      child: Align(
-        alignment: Alignment.center,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 5.0),
-          width: MediaQuery.of(context).size.width * 0.95,
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Color(0xFFC7C4C4),
-                blurRadius: 15,
-                spreadRadius: 1,
-              )
-            ],
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Column(
-            children: [
-              renderCityAndTitle(context),
-              renderOtherDetail(context),
-              renderPrice(context),
-              renderCreatorInformation(context),
-              renderProductTimes(context),
-              SaveToFavoritesButton(
-                isFavorite: widget.isFavorite,
-                onPressed: widget.handleSaveToFavorite,
-              )
-            ],
-          ),
+  renderContentOtherThanDescription(BuildContext context) {
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        width: MediaQuery.of(context).size.width * 0.95,
+        decoration: const BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFFC7C4C4),
+              blurRadius: 15,
+              spreadRadius: 1,
+            )
+          ],
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            renderCityAndTitle(context),
+            renderOtherDetail(context),
+            renderPrice(context),
+            renderCreatorInformation(context),
+            renderProductTimes(context),
+            SaveToFavoritesButton(
+              isFavorite: widget.isFavorite,
+              onPressed: widget.handleSaveToFavorite,
+            )
+          ],
         ),
       ),
     );
   }
 
-  IntrinsicHeight renderDescription(BuildContext context) {
-    return IntrinsicHeight(
+  renderDescription(BuildContext context) {
+    return SizedBox(
+      height: 100,
       child: Align(
         alignment: Alignment.center,
         child: Container(
@@ -167,16 +165,15 @@ class _PostContentToShowState extends State<PostContentToShow> {
     );
   }
 
-  IntrinsicHeight renderOtherDetail(context) {
-    return IntrinsicHeight(
-      child: Column(
-        children: buildOtherDetail(context),
-      ),
+  renderOtherDetail(context) {
+    return Column(
+      children: buildOtherDetail(context),
     );
   }
 
-  IntrinsicHeight renderCreatorInformation(context) {
-    return IntrinsicHeight(
+  renderCreatorInformation(context) {
+    return SizedBox(
+      height: 100,
       child: Row(
         children: [
           Expanded(
@@ -222,8 +219,9 @@ class _PostContentToShowState extends State<PostContentToShow> {
     );
   }
 
-  IntrinsicHeight renderProductTimes(context) {
-    return IntrinsicHeight(
+  renderProductTimes(context) {
+    return SizedBox(
+      height: 100,
       child: Row(
         children: [
           Expanded(
@@ -265,8 +263,9 @@ class _PostContentToShowState extends State<PostContentToShow> {
     );
   }
 
-  IntrinsicHeight renderCityAndTitle(context) {
-    return IntrinsicHeight(
+  renderCityAndTitle(context) {
+    return SizedBox(
+      height: 100,
       child: Row(
         children: [
           Expanded(
@@ -309,7 +308,8 @@ class _PostContentToShowState extends State<PostContentToShow> {
   }
 
   renderPrice(context) {
-    return IntrinsicHeight(
+    return SizedBox(
+      height: 100,
       child: DetailItem(
         onClick: () => {},
         subtitle: Text(
@@ -358,7 +358,8 @@ class _PostContentToShowState extends State<PostContentToShow> {
       chunks.length,
       (index) {
         List<Widget> items = buildWidgetListFromMap(chunks[index], context);
-        return IntrinsicHeight(
+        return SizedBox(
+          height: 100,
           child: Row(
             children: items,
           ),

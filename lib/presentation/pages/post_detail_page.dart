@@ -148,14 +148,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
       }
       var duplicate = favorites.where((e) => e.id == product!.id).toList();
       return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.9,
-        child: PostContentToShow(
-          isFavorite: duplicate.isNotEmpty,
-          handleSaveToFavorite: () => updateFavorites(favorites, product!),
-          product: product!,
-          currentUser: currentUser!,
-          authToken: authToken!,
-          postCreator: postCreator,
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: PostContentToShow(
+            isFavorite: duplicate.isNotEmpty,
+            handleSaveToFavorite: () => updateFavorites(favorites, product!),
+            product: product!,
+            currentUser: currentUser!,
+            authToken: authToken!,
+            postCreator: postCreator,
+          ),
         ),
       );
     });
