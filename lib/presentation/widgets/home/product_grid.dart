@@ -22,7 +22,6 @@ class ProductList extends StatefulWidget {
   final PageAndLimitModel? pageAndLimit;
   final FilterCriteriaModel? filterValues;
   final Function(Loaded) onRefreshed;
-  final RefreshController refreshController;
   const ProductList({
     Key? key,
     required this.products,
@@ -30,7 +29,6 @@ class ProductList extends StatefulWidget {
     required this.pageAndLimit,
     required this.filterValues,
     required this.onRefreshed,
-    required this.refreshController,
   }) : super(key: key);
 
   @override
@@ -40,7 +38,8 @@ class ProductList extends StatefulWidget {
 class _ProductListState extends State<ProductList> {
   SetFavoriteProductsCubit? setFavoriteProductsCubit;
   List<Product> favorites = [];
-
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   @override
   void initState() {
     super.initState();
@@ -96,13 +95,13 @@ class _ProductListState extends State<ProductList> {
       if (state is Loaded) {
         handleAddingNewItemsAndUpdatingState(state);
       } else if (state is Error) {
-        widget.refreshController.loadFailed();
+        _refreshController.loadFailed();
       }
       return SmartRefresher(
-        controller: widget.refreshController,
+        controller: _refreshController,
         onRefresh: () async {
           await Future.delayed(const Duration(milliseconds: 300));
-          widget.refreshController.refreshCompleted();
+          _refreshController.refreshCompleted();
         },
         onLoading: () async {
           await Future.delayed(const Duration(milliseconds: 300));
@@ -111,9 +110,9 @@ class _ProductListState extends State<ProductList> {
                   widget.pageAndLimit!,
                   widget.filterValues,
                 );
-            widget.refreshController.loadComplete();
+            _refreshController.loadComplete();
           } else {
-            widget.refreshController.loadNoData();
+            _refreshController.loadNoData();
           }
         },
         header: const WaterDropHeader(),

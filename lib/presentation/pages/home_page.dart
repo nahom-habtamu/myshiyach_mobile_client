@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../data/models/filter/filter_criteria_model.dart';
 import '../../data/models/product/page_and_limit_model.dart';
@@ -38,8 +37,7 @@ class _HomePageState extends State<HomePage> {
   List<Product> products = [];
   List<Product> favorites = [];
   List<MainCategory> categories = [];
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+
   @override
   void initState() {
     super.initState();
@@ -84,7 +82,9 @@ class _HomePageState extends State<HomePage> {
           selectedMainCategory = filterValues?.mainCategory;
           products = [];
         });
-        // _refreshController.refreshToIdle();
+        if (value != null && !value.areAllValuesNull()) {
+          fetchAllNeededToDisplayProductList();
+        }
       },
       onSearchQueryChanged: (value) {
         setState(() {
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
               FilterCriteriaModel.addKeyWord(filterValues, searchKeyword);
           filterValues = addedKeyword;
         });
-        // _refreshController.refreshToIdle();
+        fetchAllNeededToDisplayProductList();
       },
       categories: categories,
       products: products,
@@ -176,7 +176,6 @@ class _HomePageState extends State<HomePage> {
   buildProductList(List<Product> filteredProducts) {
     return Expanded(
       child: ProductList(
-        refreshController: _refreshController,
         filterValues: filterValues,
         products: filteredProducts,
         favorites: favorites,
@@ -243,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                         filterValues = alteredFilter;
                       },
                     );
-                    _refreshController.resetNoData();
+                    fetchAllNeededToDisplayProductList();
                   },
                 ),
               )
@@ -278,7 +277,7 @@ class _HomePageState extends State<HomePage> {
                         filterValues = alteredFilter;
                       },
                     );
-                    _refreshController.resetNoData();
+                    fetchAllNeededToDisplayProductList();
                   },
                 ),
               )
