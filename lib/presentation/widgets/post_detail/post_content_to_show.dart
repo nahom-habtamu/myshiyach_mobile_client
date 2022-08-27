@@ -418,8 +418,10 @@ class _PostContentToShowState extends State<PostContentToShow> {
               if (favorites.isEmpty) favorites = state.favorites;
             });
           });
-          var contentOtherThanCurrentProduct =
-              state.products.where((p) => p.id != widget.product.id).toList();
+          var contentOtherThanCurrentProduct = state.products
+              .where((p) =>
+                  p.id != widget.product.id && p.title != widget.product.title)
+              .toList();
           return Column(
             children: [
               const Divider(),
@@ -448,7 +450,7 @@ class _PostContentToShowState extends State<PostContentToShow> {
                         (MediaQuery.of(context).size.height) *
                         1.47,
                   ),
-                  itemCount: state.products.length,
+                  itemCount: contentOtherThanCurrentProduct.length,
                   itemBuilder: (context, index) {
                     var duplicate = favorites
                         .where((element) =>
@@ -459,7 +461,7 @@ class _PostContentToShowState extends State<PostContentToShow> {
                       isFavorite: duplicate.isEmpty,
                       onFavoritesTap: () => updateFavorites(
                           duplicate, contentOtherThanCurrentProduct[index]),
-                      product: state.products[index],
+                      product: contentOtherThanCurrentProduct[index],
                     );
                   },
                 ),
