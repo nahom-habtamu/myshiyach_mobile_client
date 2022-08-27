@@ -8,6 +8,7 @@ class FilterProducts {
     FilterCriteriaModel? filterCriteria,
   ) {
     if (filterCriteria == null || filterCriteria.areAllValuesNull()) {
+      products.sort(((a, b) => _compareRefreshedAt(a, b)));
       return products;
     }
 

@@ -84,20 +84,17 @@ class _HomePageState extends State<HomePage> {
           filterValues = value;
           selectedMainCategory = filterValues?.mainCategory;
         });
-        if (value != null && !value.areAllValuesNull()) {
-          fetchAllNeededToDisplayProductList();
-        }
+        fetchAllNeededToDisplayProductList();
       },
       onSearchQueryChanged: (value) {
         setState(() {
           searchKeyword = value.trim();
-          var addedKeyword =
-              FilterCriteriaModel.addKeyWord(filterValues, searchKeyword);
+          var addedKeyword = FilterCriteriaModel.addKeyWord(
+            filterValues,
+            searchKeyword.isEmpty ? null : searchKeyword,
+          );
           filterValues = addedKeyword;
         });
-        if (value != null && !value.areAllValuesNull()) {
-          fetchAllNeededToDisplayProductList();
-        }
       },
       categories: categories,
       products: products,
@@ -143,9 +140,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   showProducts() {
-    var productsToDisplay = filterValues == null
-        ? products
-        : context.read<FilterProductsCubit>().call(products, filterValues!);
+    var productsToDisplay =
+        context.read<FilterProductsCubit>().call(products, filterValues);
     return buildProductList(productsToDisplay);
   }
 

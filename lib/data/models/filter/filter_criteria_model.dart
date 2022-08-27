@@ -89,7 +89,8 @@ class FilterCriteriaModel {
         brand == null &&
         city == null &&
         sortByPriceAscending == null &&
-        sortByCreatedByAscending == null;
+        sortByCreatedByAscending == null &&
+        keyword == null;
   }
 
   @override
