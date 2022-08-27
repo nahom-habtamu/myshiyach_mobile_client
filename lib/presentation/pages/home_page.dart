@@ -48,6 +48,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   fetchAllNeededToDisplayProductList() {
+    setState(() {
+      products = [];
+    });
     context
         .read<DisplayAllProductsCubit>()
         .call(PageAndLimitModel.initialDefault(), filterValues);
@@ -80,7 +83,6 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           filterValues = value;
           selectedMainCategory = filterValues?.mainCategory;
-          products = [];
         });
         if (value != null && !value.areAllValuesNull()) {
           fetchAllNeededToDisplayProductList();
@@ -93,7 +95,9 @@ class _HomePageState extends State<HomePage> {
               FilterCriteriaModel.addKeyWord(filterValues, searchKeyword);
           filterValues = addedKeyword;
         });
-        fetchAllNeededToDisplayProductList();
+        if (value != null && !value.areAllValuesNull()) {
+          fetchAllNeededToDisplayProductList();
+        }
       },
       categories: categories,
       products: products,
