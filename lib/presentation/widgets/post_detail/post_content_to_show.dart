@@ -467,7 +467,10 @@ class _PostContentToShowState extends State<PostContentToShow> {
             ],
           );
         } else if (state is Loading) {
-          return const CircularProgressIndicator();
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: const Center(child: CircularProgressIndicator()),
+          );
         }
         return Container();
       },
