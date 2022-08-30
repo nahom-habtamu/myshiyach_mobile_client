@@ -9,7 +9,7 @@ class FilterProducts {
   ) {
     if (filterCriteria == null || filterCriteria.areAllValuesNull()) {
       products.sort(((a, b) => _compareRefreshedAt(a, b)));
-      return products;
+      return products.toSet().toList();
     }
 
     var filteredByMainCategory = _filterByMainCategory(
@@ -40,7 +40,7 @@ class FilterProducts {
         ? <Product>[]
         : _sortProduct(filterCriteria, filteredByKeyword);
 
-    return sortedProduct;
+    return sortedProduct.toSet().toList();
   }
 
   List<Product> _filterByMainCategory(

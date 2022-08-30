@@ -28,4 +28,15 @@ class Product {
     required this.productImages,
     this.productDetail,
   });
+
+  @override
+  bool operator ==(other) {
+    if (other is! Product) {
+      return false;
+    }
+    return id == other.id;
+  }
+
+  @override
+  int get hashCode => (id).hashCode;
 }
