@@ -107,19 +107,11 @@ class _SearchBarState extends State<SearchBar> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 5),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.black12,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5),
-                ),
-              ),
-              child: Stack(
-                children: [
-                  renderGoToFiltersButton(),
-                  renderActiveFilterIndicatingLabel()
-                ],
-              ),
+            child: Stack(
+              children: [
+                renderGoToFiltersButton(),
+                renderActiveFilterIndicatingLabel()
+              ],
             ),
           )
         ],

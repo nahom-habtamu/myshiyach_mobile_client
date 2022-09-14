@@ -39,12 +39,19 @@ class _ProductGridItemState extends State<ProductGridItem> {
         );
       },
       child: Container(
-        margin: const EdgeInsets.all(5),
+        margin: const EdgeInsets.all(4),
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
             Radius.circular(15),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x87DAD3D3),
+              blurRadius: 2,
+              spreadRadius: 1,
+            )
+          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -155,7 +162,7 @@ class _ProductGridItemState extends State<ProductGridItem> {
           },
           child: CircleAvatar(
             radius: heightOfMobile * 2,
-            backgroundColor: const Color(0xFFE9E1E1),
+            backgroundColor: Colors.transparent,
             child: Center(
               child: Icon(
                 widget.isFavorite ? Icons.favorite_border : Icons.favorite,
