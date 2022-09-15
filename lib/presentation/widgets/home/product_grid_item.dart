@@ -70,15 +70,58 @@ class _ProductGridItemState extends State<ProductGridItem> {
   FittedBox renderTitle(title) {
     return FittedBox(
       fit: BoxFit.fitWidth,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 5.0),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.45,
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.1,
+              fontSize: heightOfMobile * 2,
+            ),
+            overflow: TextOverflow.clip,
+          ),
+        ),
+      ),
+    );
+  }
+
+  renderDescription(String description) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 5.0),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.45,
+        height: heightOfMobile * 4,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: Text(
+            description,
+            style: const TextStyle(
+              color: Color(0xff888888),
+              fontSize: 10,
+              letterSpacing: 0.2,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+    );
+  }
+
+  renderCity(city) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 5.0),
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.45,
         child: Text(
-          title,
+          city,
           style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.1,
-            fontSize: heightOfMobile * 2,
+            color: const Color(0xff11435E),
+            fontSize: heightOfMobile * 1.5,
+            fontWeight: FontWeight.bold,
           ),
           overflow: TextOverflow.clip,
         ),
@@ -86,93 +129,65 @@ class _ProductGridItemState extends State<ProductGridItem> {
     );
   }
 
-  renderDescription(String description) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.45,
-      height: heightOfMobile * 4,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
-        child: Text(
-          description,
-          style: const TextStyle(
-            color: Color(0xff888888),
-            fontSize: 10,
-            letterSpacing: 0.2,
-          ),
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-    );
-  }
-
-  renderCity(city) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.45,
-      child: Text(
-        city,
-        style: TextStyle(
-          color: const Color(0xff11435E),
-          fontSize: heightOfMobile * 1.5,
-          fontWeight: FontWeight.bold,
-        ),
-        overflow: TextOverflow.clip,
-      ),
-    );
-  }
-
   renderPrice(price) {
-    return Container(
-      color: const Color(0xffF5FFF8),
-      width: MediaQuery.of(context).size.width * 0.45,
-      child: Text(
-        PriceFormatterUtil.formatToPrice(price) + ' Birr',
-        style: TextStyle(
-          color: const Color(0xff34A853),
-          fontSize: heightOfMobile * 1.8,
-          fontWeight: FontWeight.w700,
+    return Padding(
+      padding: const EdgeInsets.only(left: 5.0),
+      child: Container(
+        color: const Color(0xffF5FFF8),
+        width: MediaQuery.of(context).size.width * 0.45,
+        child: Text(
+          PriceFormatterUtil.formatToPrice(price) + ' Birr',
+          style: TextStyle(
+            color: const Color(0xff34A853),
+            fontSize: heightOfMobile * 1.8,
+            fontWeight: FontWeight.w700,
+          ),
+          overflow: TextOverflow.clip,
         ),
-        overflow: TextOverflow.clip,
       ),
     );
   }
 
   renderTimerAndFavoriteIcon(Product product) {
-    return Row(
-      children: [
-        Icon(
-          Icons.access_time_rounded,
-          size: heightOfMobile * 2,
-          color: Colors.grey,
-        ),
-        const SizedBox(
-          width: 6,
-        ),
-        Expanded(
-          child: Text(
-            DateFormatterUtil.formatProductCreatedAtTime(product.refreshedAt),
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: heightOfMobile * 1.6,
-            ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 5.0),
+      child: Row(
+        children: [
+          Icon(
+            Icons.access_time_rounded,
+            size: heightOfMobile * 2,
+            color: Colors.grey,
           ),
-        ),
-        GestureDetector(
-          onTap: () {
-            widget.onFavoritesTap();
-          },
-          child: CircleAvatar(
-            radius: heightOfMobile * 2,
-            backgroundColor: Colors.transparent,
-            child: Center(
-              child: Icon(
-                widget.isFavorite ? Icons.favorite_border : Icons.favorite,
-                size: heightOfMobile * 3,
-                color: Colors.red,
+          const SizedBox(
+            width: 6,
+          ),
+          Expanded(
+            child: Text(
+              DateFormatterUtil.formatProductCreatedAtTime(product.refreshedAt),
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: heightOfMobile * 1.6,
               ),
             ),
           ),
-        ),
-      ],
+          GestureDetector(
+            onTap: () {
+              widget.onFavoritesTap();
+            },
+            child: CircleAvatar(
+              radius: heightOfMobile * 2,
+              backgroundColor: Colors.transparent,
+              child: Center(
+                child: Icon(
+                  widget.isFavorite ? Icons.favorite_border : Icons.favorite,
+                  size: heightOfMobile * 3,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

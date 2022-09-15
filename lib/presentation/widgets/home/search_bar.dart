@@ -143,7 +143,7 @@ class _SearchBarState extends State<SearchBar> {
         left: 2,
         top: 5,
         child: CircleAvatar(
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0xFFFAF6F6),
           radius: 8,
           child: Center(
             child: Text(
