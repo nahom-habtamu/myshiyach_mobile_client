@@ -47,33 +47,30 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xff11435E),
-        appBar: CustomAppBar(
-          title: AppLocalizations.of(context).savedPostsAppBarText,
-        ),
-        body: CurvedContainer(
-          child:
-              BlocBuilder<GetFavoriteProductsCubit, GetFavoriteProductsState>(
-            builder: (context, state) {
-              if (state is Loaded) {
-                return buildProductList(state.products);
-              } else if (state is Loading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (state is Error) {
-                return buildErrorContent();
-              }
-              if (state is NoNetwork) {
-                return buildNoNetworkContent();
-              } else {
-                return buildEmptyStateContent();
-              }
-            },
-          ),
+    return Scaffold(
+      backgroundColor: const Color(0xff11435E),
+      appBar: CustomAppBar(
+        title: AppLocalizations.of(context).savedPostsAppBarText,
+      ),
+      body: CurvedContainer(
+        child: BlocBuilder<GetFavoriteProductsCubit, GetFavoriteProductsState>(
+          builder: (context, state) {
+            if (state is Loaded) {
+              return buildProductList(state.products);
+            } else if (state is Loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (state is Error) {
+              return buildErrorContent();
+            }
+            if (state is NoNetwork) {
+              return buildNoNetworkContent();
+            } else {
+              return buildEmptyStateContent();
+            }
+          },
         ),
       ),
     );

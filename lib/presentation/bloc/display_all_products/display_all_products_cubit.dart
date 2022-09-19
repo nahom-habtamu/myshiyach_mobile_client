@@ -45,7 +45,6 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
         var favoriteProducts = await getFavoriteProducts.call();
         var categories = await getAllCategories.call();
         if (result.products.isNotEmpty && categories.isNotEmpty) {
-          // sortProductByCreatedTime(result.products);
           emit(Loaded(result, categories, favoriteProducts));
         } else {
           emit(Empty());

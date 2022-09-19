@@ -193,13 +193,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  updateStateOnRefresh(newState) {
+  updateStateOnRefresh(newState, updatedFavorites) {
     var productsToAddInState = List<ProductModel>.from(newState.result.products)
         .where((p) => products.where((pis) => pis.id == p.id).isEmpty)
         .toList();
 
     setState(() {
       products = [...products, ...productsToAddInState];
+      favorites = [...updatedFavorites];
       pageAndLimit = newState.result.products.isNotEmpty
           ? PageAndLimitModel.fromPaginationLimit(newState.result.next)
           : null;

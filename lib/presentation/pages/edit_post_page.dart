@@ -87,18 +87,16 @@ class _EditPostPageState extends State<EditPostPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xff11435E),
-        appBar: CustomAppBar(
-          title: AppLocalizations.of(context).editPostAppBarText,
-        ),
-        body: product != null
-            ? CurvedContainer(
-                child: renderMainContent(),
-              )
-            : Container(),
+    return Scaffold(
+      backgroundColor: const Color(0xff11435E),
+      appBar: CustomAppBar(
+        title: AppLocalizations.of(context).editPostAppBarText,
       ),
+      body: product != null
+          ? CurvedContainer(
+              child: renderMainContent(),
+            )
+          : Container(),
     );
   }
 

@@ -60,17 +60,15 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xff11435E),
-        appBar: CustomAppBar(
-          title: AppLocalizations.of(context).chatDetailAppBarText,
-        ),
-        body: BlocBuilder<GetConversationByIdCubit, Stream<Conversation>>(
-          builder: (context, conversationStream) {
-            return buildChatDetail(conversationStream);
-          },
-        ),
+    return Scaffold(
+      backgroundColor: const Color(0xff11435E),
+      appBar: CustomAppBar(
+        title: AppLocalizations.of(context).chatDetailAppBarText,
+      ),
+      body: BlocBuilder<GetConversationByIdCubit, Stream<Conversation>>(
+        builder: (context, conversationStream) {
+          return buildChatDetail(conversationStream);
+        },
       ),
     );
   }

@@ -11,15 +11,13 @@ class PostConfirmationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xff11435E),
-        appBar: CustomAppBar(
-          title: AppLocalizations.of(context).postConfirmationAppBarText,
-        ),
-        body: CurvedContainer(
-          child: renderContent(context),
-        ),
+    return Scaffold(
+      backgroundColor: const Color(0xff11435E),
+      appBar: CustomAppBar(
+        title: AppLocalizations.of(context).postConfirmationAppBarText,
+      ),
+      body: CurvedContainer(
+        child: renderContent(context),
       ),
     );
   }

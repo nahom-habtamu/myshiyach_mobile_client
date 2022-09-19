@@ -17,12 +17,12 @@ import 'custom_footer_for_lazy_loading.dart';
 import 'product_grid_item.dart';
 
 class ProductList extends StatefulWidget {
-  final List<Product> favorites;
+  List<Product> favorites;
   final List<Product> products;
   final PageAndLimitModel? pageAndLimit;
   final FilterCriteriaModel? filterValues;
-  final Function(Loaded) onRefreshed;
-  const ProductList({
+  final Function(Loaded, List<Product>) onRefreshed;
+  ProductList({
     Key? key,
     required this.products,
     required this.favorites,
@@ -37,20 +37,11 @@ class ProductList extends StatefulWidget {
 
 class _ProductListState extends State<ProductList> {
   SetFavoriteProductsCubit? setFavoriteProductsCubit;
-  List<Product> favorites = [];
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   @override
   void initState() {
     super.initState();
-    initializeState();
-  }
-
-  void initializeState() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      favorites = [...widget.favorites];
-      setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
-    });
   }
 
   Widget buildErrorContent() {
@@ -140,14 +131,14 @@ class _ProductListState extends State<ProductList> {
 
   void handleAddingNewItemsAndUpdatingState(Loaded state) {
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-      widget.onRefreshed(state);
+      widget.onRefreshed(state, widget.favorites);
       context.read<GetPaginatedProductsCubit>().clear();
     });
   }
 
   ProductGridItem buildProduct(Product product) {
     var duplicate =
-        favorites.where((element) => element.id == product.id).toList();
+        widget.favorites.where((element) => element.id == product.id).toList();
     return ProductGridItem(
       product: product,
       isFavorite: duplicate.isEmpty,
@@ -159,20 +150,23 @@ class _ProductListState extends State<ProductList> {
 
   void updateFavorites(List<Product> duplicate, Product product) {
     if (duplicate.isNotEmpty) {
-      favorites.removeWhere((element) => element.id == product.id);
+      widget.favorites.removeWhere((element) => element.id == product.id);
       setState(() {});
     } else {
       setState(() {
-        favorites = [...favorites, product];
+        widget.favorites = [...widget.favorites, product];
       });
     }
     List<ProductModel> favoritesToSave = parseListToProductModelList();
-    setFavoriteProductsCubit!.setFavoriteProducts.call(favoritesToSave);
+    context
+        .read<SetFavoriteProductsCubit>()
+        .setFavoriteProducts
+        .call(favoritesToSave);
   }
 
   List<ProductModel> parseListToProductModelList() {
     var favoritesToSave =
-        favorites.map((e) => ProductModel.fromProduct(e)).toList();
+        widget.favorites.map((e) => ProductModel.fromProduct(e)).toList();
     return favoritesToSave;
   }
 }
