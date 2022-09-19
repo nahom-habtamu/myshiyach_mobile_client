@@ -6,4 +6,6 @@ abstract class UserService {
   Future<void> changePassword(String phoneNumber, String password);
   Future<LoginRequestModel?> getStoredUserCredential();
   Future<void> storeUserCredentials(LoginRequestModel loginRequestModel);
+  Future<void> storeIsAppOpenedFirstTime();
+  Future<bool> getIsAppOpenedFirstTime();
 }

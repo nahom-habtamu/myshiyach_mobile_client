@@ -32,4 +32,14 @@ class UserRepository extends UserService {
   Future<void> changePassword(String phoneNumber, String password) {
     return remoteDataSource.changePassword(phoneNumber, password);
   }
+
+  @override
+  Future<bool> getIsAppOpenedFirstTime() {
+    return localDataSource.getIsAppOpenedFirstTime();
+  }
+
+  @override
+  Future<void> storeIsAppOpenedFirstTime() {
+    return localDataSource.setIsAppOpenedFirstTime();
+  }
 }

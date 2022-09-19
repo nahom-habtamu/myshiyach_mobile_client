@@ -47,6 +47,7 @@ import '../../domain/usecases/get_categories.dart';
 import '../../domain/usecases/get_conversation_by_id.dart';
 import '../../domain/usecases/get_conversation_by_members.dart';
 import '../../domain/usecases/get_favorite_products.dart';
+import '../../domain/usecases/get_is_app_opened_first_time.dart';
 import '../../domain/usecases/get_paginated_products.dart';
 import '../../domain/usecases/get_product_by_id.dart';
 import '../../domain/usecases/get_products_by_category.dart';
@@ -58,6 +59,7 @@ import '../../domain/usecases/mark_messages_as_read.dart';
 import '../../domain/usecases/refresh_product.dart';
 import '../../domain/usecases/register_user.dart';
 import '../../domain/usecases/set_favorite_product.dart';
+import '../../domain/usecases/set_is_app_opened_first_time.dart';
 import '../../domain/usecases/store_user_credentails.dart';
 import '../../domain/usecases/update_product.dart';
 import '../../domain/usecases/upload_product_pictures.dart';
@@ -77,6 +79,7 @@ import '../../presentation/bloc/get_all_conversations/get_all_conversations_cubi
 import '../../presentation/bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../../presentation/bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../../presentation/bloc/get_favorite_products/get_favorite_products_cubit.dart';
+import '../../presentation/bloc/get_paginated_products/get_is_app_opened_first_time_cubit.dart';
 import '../../presentation/bloc/get_paginated_products/get_paginated_products_cubit.dart';
 import '../../presentation/bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
 import '../../presentation/bloc/get_product_by_id/get_product_by_id_cubit.dart';
@@ -90,6 +93,7 @@ import '../../presentation/bloc/mark_messages_as_read/mark_messages_as_read_cubi
 import '../../presentation/bloc/refresh_product/refresh_product_cubit.dart';
 import '../../presentation/bloc/register_user/register_user_cubit.dart';
 import '../../presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../../presentation/bloc/set_is_app_opened_first_time/set_is_app_opened_first_time_cubit.dart';
 import '../../presentation/bloc/update_product/update_product_cubit.dart';
 import '../../presentation/bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import 'network_info.dart';
@@ -171,6 +175,8 @@ Future<void> init() async {
   sl.registerFactory(() => GetProductByIdCubit(sl()));
   sl.registerFactory(() => GenerateShareLinkForProductCubit(sl()));
   sl.registerFactory(() => GetProductsByCategoryCubit(sl(), sl()));
+  sl.registerFactory(() => SetIsAppOpenedFirstTimeCubit(sl()));
+  sl.registerFactory(() => GetIsAppOpenedFirstTimeCubit(sl()));
 
   // usecases
   sl.registerLazySingleton(() => Login(sl()));
@@ -203,6 +209,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => MarkMessagesAsRead(sl()));
   sl.registerLazySingleton(() => GenerateShareLinkForProduct(sl()));
   sl.registerLazySingleton(() => GetProductsByCategory(sl()));
+  sl.registerLazySingleton(() => GetIsAppOpenedFirstTime(sl()));
+  sl.registerLazySingleton(() => SetIsAppOpenedFirstTime(sl()));
 
   // repositories
 

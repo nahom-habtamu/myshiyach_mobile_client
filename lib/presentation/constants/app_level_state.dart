@@ -16,6 +16,7 @@ import '../bloc/get_all_conversations/get_all_conversations_cubit.dart';
 import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
+import '../bloc/get_paginated_products/get_is_app_opened_first_time_cubit.dart';
 import '../bloc/get_paginated_products/get_paginated_products_cubit.dart';
 import '../bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
 import '../bloc/get_products_by_category/get_products_by_category_cubit.dart';
@@ -28,6 +29,7 @@ import '../bloc/mark_messages_as_read/mark_messages_as_read_cubit.dart';
 import '../bloc/refresh_product/refresh_product_cubit.dart';
 import '../bloc/register_user/register_user_cubit.dart';
 import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../bloc/set_is_app_opened_first_time/set_is_app_opened_first_time_cubit.dart';
 import '../bloc/update_product/update_product_cubit.dart';
 import '../bloc/verify_phone_number/verify_phone_number_cubit.dart';
 
@@ -120,6 +122,12 @@ class AppLevelState {
       ),
       BlocProvider(
         create: (_) => sl<GetProductsByCategoryCubit>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<GetIsAppOpenedFirstTimeCubit>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<SetIsAppOpenedFirstTimeCubit>(),
       )
     ];
   }

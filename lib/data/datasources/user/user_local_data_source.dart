@@ -20,4 +20,15 @@ class UserLocalDataSource {
     await sharedPreferences.setString("USERNAME", loginRequestModel.userName);
     await sharedPreferences.setString("PASSWORD", loginRequestModel.password);
   }
+
+  Future<bool> getIsAppOpenedFirstTime() async {
+    final String? value =
+        sharedPreferences.getString("IS_APP_OPENED_FIRST_TIME");
+
+    return value == null;
+  }
+
+  Future<void> setIsAppOpenedFirstTime() async {
+    await sharedPreferences.setString("IS_APP_OPENED_FIRST_TIME", "true");
+  }
 }

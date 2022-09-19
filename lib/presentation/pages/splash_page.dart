@@ -8,10 +8,12 @@ import '../../domain/enitites/login_result.dart';
 import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
+import '../bloc/get_paginated_products/get_is_app_opened_first_time_cubit.dart';
 import '../bloc/get_product_by_id/get_product_by_id_cubit.dart';
 import '../screen_arguments/post_detail_page_arguments.dart';
 import '../widgets/common/no_network_content.dart';
 import 'intro_page.dart';
+import 'login_page.dart';
 import 'master_page.dart';
 import 'post_detail_page.dart';
 
@@ -47,11 +49,14 @@ class _SplashPageState extends State<SplashPage> {
           });
         }
         if (state is AuthError) {
-          SchedulerBinding.instance!.addPostFrameCallback((_) {
-            Navigator.pushReplacementNamed(
-              context,
-              IntroPage.routeName,
-            );
+          SchedulerBinding.instance!.addPostFrameCallback((_) async {
+            var isAppOpenedFirstTime =
+                await context.read<GetIsAppOpenedFirstTimeCubit>().execute();
+            if (isAppOpenedFirstTime) {
+              Navigator.pushReplacementNamed(context, IntroPage.routeName);
+            } else {
+              Navigator.pushReplacementNamed(context, LoginPage.routeName);
+            }
           });
         }
         if (state is AuthNoNetwork) {

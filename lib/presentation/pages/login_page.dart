@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../data/models/login/login_request_model.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
+import '../bloc/set_is_app_opened_first_time/set_is_app_opened_first_time_cubit.dart';
 import '../utils/show_toast.dart';
 import '../widgets/auth_input.dart';
 import '../widgets/common/action_button.dart';
@@ -24,13 +25,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String userName = "";
   String password = "";
-  bool rememberMe = false;
   final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     context.read<AuthCubit>().clear();
+    context.read<SetIsAppOpenedFirstTimeCubit>().execute();
   }
 
   @override
