@@ -20,11 +20,11 @@ class CategoryItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Container(
-          height: 32,
+          height: 28,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: 12.0,
-              vertical: 3,
+              horizontal: 10.0,
+              vertical: 2,
             ),
             child: Center(
               child: Text(
@@ -40,7 +40,7 @@ class CategoryItem extends StatelessWidget {
             border:
                 !isActive ? Border.all(color: const Color(0xFF686666)) : null,
             borderRadius: const BorderRadius.all(
-              Radius.circular(10),
+              Radius.circular(6),
             ),
           ),
         ),

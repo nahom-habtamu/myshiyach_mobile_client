@@ -60,8 +60,16 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff11435E),
-      appBar: CustomAppBar(title: AppLocalizations.of(context).homeHeader),
+      appBar: CustomAppBar(
+        title: AppLocalizations.of(context).homeHeader,
+        isShort: true,
+      ),
       body: CurvedContainer(
+        padding: const EdgeInsets.only(
+          left: 15,
+          right: 15,
+          bottom: 10,
+        ),
         child: Column(
           children: [
             renderSearchAndFilterBar(),
@@ -219,7 +227,7 @@ class _HomePageState extends State<HomePage> {
   buildMainCategorySlider(List<MainCategory> categories) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.only(bottom: 10),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -255,7 +263,7 @@ class _HomePageState extends State<HomePage> {
   buildSubCategorySlider(List<SubCategory> categories) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.only(bottom: 10),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(

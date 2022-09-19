@@ -50,64 +50,74 @@ class _LoginPageState extends State<LoginPage> {
       child: SingleChildScrollView(
         child: Form(
           key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 40,
-              ),
-              renderLoginPageHeaders(),
-              const SizedBox(
-                height: 55,
-              ),
-              PhoneNumberInput(
-                onChanged: (value) => setState(() => userName = value),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              AuthInput(
-                obsecureText: true,
-                hintText: AppLocalizations.of(context).loginPasswordHint,
-                onChanged: (value) => setState(() => password = value),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context).loginPasswordEmptyError;
-                  } else if (value.length < 6) {
-                    return AppLocalizations.of(context)
-                        .loginPasswordTooShortError;
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              renderRememberMeAndForgotPassword(),
-              const SizedBox(
-                height: 20,
-              ),
-              BlocBuilder<AuthCubit, AuthState>(
-                builder: (context, state) {
-                  if (state is AuthLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
-                    return renderLoginButton();
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: renderLoginResult(),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              renderPageSwitcher()
-            ],
+          child: FocusTraversalGroup(
+            policy: OrderedTraversalPolicy(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 40,
+                ),
+                renderLoginPageHeaders(),
+                const SizedBox(
+                  height: 55,
+                ),
+                FocusTraversalOrder(
+                  order: const NumericFocusOrder(2.0),
+                  child: PhoneNumberInput(
+                    onChanged: (value) => setState(() => userName = value),
+                  ),
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                FocusTraversalOrder(
+                  order: const NumericFocusOrder(2.0),
+                  child: AuthInput(
+                    obsecureText: true,
+                    hintText: AppLocalizations.of(context).loginPasswordHint,
+                    onChanged: (value) => setState(() => password = value),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return AppLocalizations.of(context)
+                            .loginPasswordEmptyError;
+                      } else if (value.length < 6) {
+                        return AppLocalizations.of(context)
+                            .loginPasswordTooShortError;
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                renderRememberMeAndForgotPassword(),
+                const SizedBox(
+                  height: 20,
+                ),
+                BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, state) {
+                    if (state is AuthLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else {
+                      return renderLoginButton();
+                    }
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: renderLoginResult(),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                renderPageSwitcher()
+              ],
+            ),
           ),
         ),
       ),
