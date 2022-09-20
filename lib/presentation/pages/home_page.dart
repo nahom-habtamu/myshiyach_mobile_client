@@ -65,11 +65,6 @@ class _HomePageState extends State<HomePage> {
         isShort: true,
       ),
       body: CurvedContainer(
-        padding: const EdgeInsets.only(
-          left: 15,
-          right: 15,
-          bottom: 10,
-        ),
         child: Column(
           children: [
             renderSearchAndFilterBar(),

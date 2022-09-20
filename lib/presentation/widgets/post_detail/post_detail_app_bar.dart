@@ -17,6 +17,7 @@ class PostDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
         AppLocalizations.of(context).postDetailAppBarText,
         style: const TextStyle(
           color: Colors.white,
+          fontSize: 19,
         ),
       ),
       iconTheme: const IconThemeData(color: Colors.white),
@@ -53,5 +54,5 @@ class PostDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size(double.infinity, 60);
+  Size get preferredSize => const Size(double.infinity, 45);
 }

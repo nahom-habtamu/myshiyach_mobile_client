@@ -7,7 +7,6 @@ class CurvedContainer extends StatelessWidget {
     Key? key,
     required this.child,
     this.padding = const EdgeInsets.only(
-      top: 25,
       left: 15,
       right: 15,
       bottom: 10,

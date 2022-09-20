@@ -14,9 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         title,
-        style: const TextStyle(
-          color: Colors.white,
-        ),
+        style: const TextStyle(color: Colors.white, fontSize: 19),
       ),
       iconTheme: const IconThemeData(color: Colors.white),
       backgroundColor: const Color(0xff11435E),
@@ -26,5 +24,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size(double.infinity, isShort ? 45 : 60);
+  Size get preferredSize => const Size(double.infinity, 45);
 }

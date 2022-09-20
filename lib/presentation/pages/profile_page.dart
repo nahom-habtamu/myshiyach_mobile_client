@@ -56,6 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        const SizedBox(height: 10),
         CircleAvatar(
           radius: 50,
           child: Container(
@@ -67,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: 10),
         Text(
           currentUser!.fullName,
           style: const TextStyle(
@@ -80,10 +81,13 @@ class _ProfilePageState extends State<ProfilePage> {
         const SizedBox(
           height: 5,
         ),
-        Text(
-          currentUser?.email ?? "",
-          style: const TextStyle(
-            fontSize: 14,
+        Visibility(
+          visible: currentUser?.email != null && currentUser!.email!.isNotEmpty,
+          child: Text(
+            currentUser?.email ?? "",
+            style: const TextStyle(
+              fontSize: 14,
+            ),
           ),
         ),
         const Divider(),
