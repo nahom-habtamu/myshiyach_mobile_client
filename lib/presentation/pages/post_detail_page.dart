@@ -223,9 +223,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
         .read<SetFavoriteProductsCubit>()
         .setFavoriteProducts
         .call(favoritesToSave);
-    context
-        .read<GetPostDetailContentCubit>()
-        .execute(product.createdBy, authToken!);
   }
 
   List<ProductModel> buildListWithProductRemoved(

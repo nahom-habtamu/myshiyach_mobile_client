@@ -42,10 +42,12 @@ class PostContentToShow extends StatefulWidget {
 
 class _PostContentToShowState extends State<PostContentToShow> {
   List<Product> favorites = [];
+  late bool isFavorite;
 
   @override
   void initState() {
     super.initState();
+    isFavorite = widget.isFavorite;
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       context.read<GetProductsByCategoryCubit>().call(
             widget.product.mainCategory,
@@ -112,8 +114,13 @@ class _PostContentToShowState extends State<PostContentToShow> {
             renderCreatorInformation(context),
             renderProductTimes(context),
             SaveToFavoritesButton(
-              isFavorite: widget.isFavorite,
-              onPressed: widget.handleSaveToFavorite,
+              isFavorite: isFavorite,
+              onPressed: () {
+                setState(() {
+                  isFavorite = !isFavorite;
+                });
+                widget.handleSaveToFavorite();
+              },
             )
           ],
         ),
