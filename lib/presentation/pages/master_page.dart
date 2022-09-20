@@ -128,7 +128,7 @@ class _MasterPageState extends State<MasterPage> {
             renderChatItem(context),
             BottomNavigationBarItem(
               icon: const Icon(
-                Icons.all_inbox,
+                Icons.add_box,
                 size: 28,
               ),
               label: AppLocalizations.of(context).masterNavigationBarTextThree,
