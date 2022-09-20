@@ -56,6 +56,18 @@ class _ProfilePageState extends State<ProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        CircleAvatar(
+          radius: 50,
+          child: Container(
+            child: Center(
+              child: Text(
+                currentUser!.fullName[0],
+                style: const TextStyle(fontSize: 25),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
         Text(
           currentUser!.fullName,
           style: const TextStyle(
@@ -74,19 +86,12 @@ class _ProfilePageState extends State<ProfilePage> {
             fontSize: 14,
           ),
         ),
-        const SizedBox(
-          height: 35,
-        ),
+        const Divider(),
         SettingsItemHeader(
           content: AppLocalizations.of(context).profilePageGeneralHeaderText,
         ),
         const SizedBox(
           height: 15,
-        ),
-        SettingItem(
-          leadingIcon: Icons.payment,
-          title: AppLocalizations.of(context).profilePagePaymentTitle,
-          subTitle: AppLocalizations.of(context).profilePagePaymentSubTitle,
         ),
         SettingItem(
           leadingIcon: Icons.my_library_add,
@@ -98,44 +103,6 @@ class _ProfilePageState extends State<ProfilePage> {
               MyPostsPage.routeName,
             );
           },
-        ),
-        SettingItem(
-          title: AppLocalizations.of(context).profilePageLocationTitle,
-          subTitle: AppLocalizations.of(context).profilePageLocationSubTitle,
-          leadingIcon: Icons.location_on,
-        ),
-        SettingItem(
-          title: AppLocalizations.of(context).profilePageAccountTitle,
-          subTitle: AppLocalizations.of(context).profilePageAccountSubTitle,
-          leadingIcon: Icons.camera_alt,
-        ),
-        SettingItem(
-          title: AppLocalizations.of(context).profilePageReferTitle,
-          subTitle: AppLocalizations.of(context).profilePageReferSubTitle,
-          leadingIcon: Icons.share,
-        ),
-        const SizedBox(
-          height: 25,
-        ),
-        SettingsItemHeader(
-          content:
-              AppLocalizations.of(context).profilePageNotificationsHeaderText,
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        SettingItem(
-          title: AppLocalizations.of(context).profilePageNotificationsTitle,
-          subTitle:
-              AppLocalizations.of(context).profilePageNotificationsSubTitle,
-          leadingIcon: Icons.notifications,
-          trailingIconType: "SWITCH",
-        ),
-        SettingItem(
-          title: AppLocalizations.of(context).profilePagePromotionTitle,
-          subTitle: AppLocalizations.of(context).profilePagePromotionSubTitle,
-          leadingIcon: Icons.notifications,
-          trailingIconType: "SWITCH",
         ),
         const SizedBox(
           height: 25,
