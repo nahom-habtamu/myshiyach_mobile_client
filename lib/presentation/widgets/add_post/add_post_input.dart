@@ -33,7 +33,7 @@ class AddPostInput extends StatelessWidget {
         color: Colors.black,
         fontSize: 15,
       ),
-      textAlign: TextAlign.center,
+      textAlign: TextAlign.left,
       onChanged: (value) => onChanged(value),
       validator: (value) => validator(value),
       inputFormatters: isPrice
