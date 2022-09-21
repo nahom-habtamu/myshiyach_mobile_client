@@ -6,9 +6,13 @@ import '../../constants/login_page_constants.dart';
 
 class PhoneNumberInput extends StatefulWidget {
   final Function(String) onChanged;
+  final Function(String)? onSubmitted;
+  final FocusNode? focusNode;
   const PhoneNumberInput({
     Key? key,
     required this.onChanged,
+    this.onSubmitted,
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -21,6 +25,9 @@ class _PhoneNumberInputState extends State<PhoneNumberInput> {
     return IntlPhoneField(
       initialCountryCode: "ET",
       style: loginInputTextStyle,
+      focusNode: widget.focusNode,
+      textInputAction: TextInputAction.next,
+      onSubmitted: widget.onSubmitted,
       onChanged: (phone) => widget.onChanged(phone.completeNumber),
       decoration: InputDecoration(
         labelText: AppLocalizations.of(context).loginPhoneNumberHint,

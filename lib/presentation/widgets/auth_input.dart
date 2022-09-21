@@ -7,12 +7,17 @@ class AuthInput extends StatefulWidget {
   final String hintText;
   final Function(String) onChanged;
   final Function validator;
+  final FocusNode? focusNode;
+  final Function(String)? onSubmitted;
+
   const AuthInput({
     Key? key,
     this.obsecureText = false,
     required this.hintText,
     required this.onChanged,
     required this.validator,
+    this.focusNode,
+    this.onSubmitted,
   }) : super(key: key);
 
   @override
@@ -31,8 +36,13 @@ class _AuthInputState extends State<AuthInput> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      focusNode: widget.focusNode,
       obscureText: isPasswordVisible,
       style: loginInputTextStyle,
+      onFieldSubmitted: widget.onSubmitted,
+      textInputAction: widget.focusNode == null
+          ? TextInputAction.done
+          : TextInputAction.next,
       onChanged: (value) => widget.onChanged(value),
       validator: (value) => widget.validator(value),
       decoration: InputDecoration(

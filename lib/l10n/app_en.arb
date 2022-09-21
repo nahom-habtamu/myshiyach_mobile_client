@@ -101,7 +101,7 @@
     "loginPasswordEmptyError" : "Enter Password",
     "loginPasswordTooShortError" : "Please Enter 6 or more characters",
     "loginForgotPasswordText" : "Forgot Password ?",
-    "loginDontHaveAccountText" : "Don't Have an Account",
+    "loginDontHaveAccountText" : "Don't Have an Account ?",
     "loginSignUpText" : " Sign Up ",
     "loginButtonText" : "Login",
 
