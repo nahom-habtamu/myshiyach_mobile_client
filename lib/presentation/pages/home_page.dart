@@ -62,7 +62,6 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: const Color(0xff11435E),
       appBar: CustomAppBar(
         title: AppLocalizations.of(context).homeHeader,
-        isShort: true,
       ),
       body: CurvedContainer(
         child: Column(
