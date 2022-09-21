@@ -14,6 +14,7 @@ import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/pop_up_dialog.dart';
 import '../widgets/profile/setting_item.dart';
 import '../widgets/profile/settings_item_header.dart';
+import 'contact_us_page.dart';
 import 'login_page.dart';
 import 'my_posts_page.dart';
 
@@ -121,6 +122,8 @@ class _ProfilePageState extends State<ProfilePage> {
           title: AppLocalizations.of(context).profilePageContactTitle,
           subTitle: AppLocalizations.of(context).profilePageContactSubTitle,
           leadingIcon: Icons.call,
+          onPressed: () =>
+              Navigator.pushNamed(context, ContactUsPage.routeName),
         ),
         BlocBuilder<ChangeLanguageCubit, String>(
           builder: (context, state) {

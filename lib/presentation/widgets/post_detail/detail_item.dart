@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class DetailItem extends StatelessWidget {
   final Widget title;
   final Widget subtitle;
-  final Function onClick;
+  final Function? onClick;
   final bool isCurved;
   final Color? color;
   const DetailItem({
     Key? key,
     required this.title,
     required this.subtitle,
-    required this.onClick,
+    this.onClick,
     this.isCurved = false,
     this.color,
   }) : super(key: key);
@@ -18,7 +18,7 @@ class DetailItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onClick(),
+      onTap: () => onClick == null ? () {} : onClick!(),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 12,
@@ -26,7 +26,7 @@ class DetailItem extends StatelessWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: color ?? Colors.white,
+            color: color ?? (onClick != null ? Colors.white12 : Colors.white),
             boxShadow: const [
               BoxShadow(
                 color: Color(0xFFECE9E9),
