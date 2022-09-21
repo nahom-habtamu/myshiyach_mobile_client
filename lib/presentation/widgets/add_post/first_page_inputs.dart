@@ -30,6 +30,9 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
   String mainCategory = "";
   final formKey = GlobalKey<FormState>();
 
+  final desciptionFocusNode = FocusNode();
+  final titleFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -91,6 +94,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             height: 20,
           ),
           AddPostInput(
+            onSubmitted: (_) => desciptionFocusNode.requestFocus(),
             initialValue: title,
             hintText: AppLocalizations.of(context).commonTitleInputHintText,
             sizeLimit: 30,
@@ -106,6 +110,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             height: 20,
           ),
           AddPostInput(
+            focusNode: desciptionFocusNode,
             initialValue: description,
             hintText:
                 AppLocalizations.of(context).commonDescriptionInputHintText,
@@ -123,6 +128,7 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
             height: 20,
           ),
           AddPostInput(
+            onSubmitted: (_) => handleGoingToNextInputs(),
             initialValue: price == 0.0 ? "" : price.toString(),
             hintText: AppLocalizations.of(context).commonPriceInputHintText,
             onChanged: (value) => price = double.parse(
@@ -152,16 +158,19 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
           PostButton(
             isPost: false,
             onTap: () {
-              if (formKey.currentState!.validate()) {
-                Map<String, dynamic> firstPageInputs =
-                    buildFirstPageInputValues();
-                widget.onNextPressed(firstPageInputs);
-              }
+              handleGoingToNextInputs();
             },
           )
         ],
       ),
     );
+  }
+
+  void handleGoingToNextInputs() {
+    if (formKey.currentState!.validate()) {
+      Map<String, dynamic> firstPageInputs = buildFirstPageInputValues();
+      widget.onNextPressed(firstPageInputs);
+    }
   }
 
   List<Map<String, String>> buildMainCategoriesToDisplay() {

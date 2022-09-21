@@ -12,6 +12,8 @@ class AddPostInput extends StatelessWidget {
   final bool isOnlyNumbers;
   final bool isTextArea;
   final int sizeLimit;
+  final FocusNode? focusNode;
+  final Function(String)? onSubmitted;
   const AddPostInput({
     Key? key,
     required this.hintText,
@@ -22,11 +24,15 @@ class AddPostInput extends StatelessWidget {
     this.isTextArea = false,
     this.isOnlyNumbers = false,
     this.sizeLimit = 0,
+    this.focusNode,
+    this.onSubmitted,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      focusNode: focusNode,
+      onFieldSubmitted: onSubmitted,
       initialValue: initialValue,
       maxLines: isTextArea ? 5 : 1,
       style: const TextStyle(
