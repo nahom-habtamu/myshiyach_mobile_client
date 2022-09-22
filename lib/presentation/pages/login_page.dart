@@ -27,6 +27,8 @@ class _LoginPageState extends State<LoginPage> {
   String password = "";
   final formKey = GlobalKey<FormState>();
 
+  var passwordFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -63,32 +65,31 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 55,
                 ),
-                FocusTraversalOrder(
-                  order: const NumericFocusOrder(2.0),
-                  child: PhoneNumberInput(
-                    onChanged: (value) => setState(() => userName = value),
-                  ),
+                PhoneNumberInput(
+                  onChanged: (value) => setState(() => userName = value),
+                  onSubmitted: (_) {
+                    passwordFocusNode.requestFocus();
+                  },
                 ),
                 const SizedBox(
                   height: 25,
                 ),
-                FocusTraversalOrder(
-                  order: const NumericFocusOrder(2.0),
-                  child: AuthInput(
-                    obsecureText: true,
-                    hintText: AppLocalizations.of(context).loginPasswordHint,
-                    onChanged: (value) => setState(() => password = value),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(context)
-                            .loginPasswordEmptyError;
-                      } else if (value.length < 6) {
-                        return AppLocalizations.of(context)
-                            .loginPasswordTooShortError;
-                      }
-                      return null;
-                    },
-                  ),
+                AuthInput(
+                  focusNode: passwordFocusNode,
+                  onSubmitted: (_) => handleLogin(),
+                  obsecureText: true,
+                  hintText: AppLocalizations.of(context).loginPasswordHint,
+                  onChanged: (value) => setState(() => password = value),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return AppLocalizations.of(context)
+                          .loginPasswordEmptyError;
+                    } else if (value.length < 6) {
+                      return AppLocalizations.of(context)
+                          .loginPasswordTooShortError;
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(
                   height: 20,
@@ -239,15 +240,19 @@ class _LoginPageState extends State<LoginPage> {
   ActionButton renderLoginButton() {
     return ActionButton(
       onPressed: () {
-        if (formKey.currentState!.validate()) {
-          var requestBody = LoginRequestModel(
-            userName: userName,
-            password: password,
-          );
-          context.read<AuthCubit>().loginUser(requestBody);
-        }
+        handleLogin();
       },
       text: AppLocalizations.of(context).loginButtonText,
     );
+  }
+
+  void handleLogin() {
+    if (formKey.currentState!.validate()) {
+      var requestBody = LoginRequestModel(
+        userName: userName,
+        password: password,
+      );
+      context.read<AuthCubit>().loginUser(requestBody);
+    }
   }
 }

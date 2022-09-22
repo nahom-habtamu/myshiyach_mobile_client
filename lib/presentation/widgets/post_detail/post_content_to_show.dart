@@ -233,7 +233,6 @@ class _PostContentToShowState extends State<PostContentToShow> {
         children: [
           Expanded(
             child: DetailItem(
-              onClick: () => {},
               subtitle: renderTimeContent(widget.product.createdAt),
               title: Row(
                 children: [
@@ -250,7 +249,6 @@ class _PostContentToShowState extends State<PostContentToShow> {
           ),
           Expanded(
             child: DetailItem(
-              onClick: () => {},
               subtitle: renderTimeContent(widget.product.refreshedAt),
               title: Row(
                 children: [
@@ -277,7 +275,6 @@ class _PostContentToShowState extends State<PostContentToShow> {
         children: [
           Expanded(
             child: DetailItem(
-              onClick: () => {},
               subtitle: Text(widget.product.title),
               title: Row(
                 children: [
@@ -294,7 +291,6 @@ class _PostContentToShowState extends State<PostContentToShow> {
           ),
           Expanded(
             child: DetailItem(
-              onClick: () => {},
               subtitle: Text(widget.product.city),
               title: Row(
                 children: [
@@ -318,7 +314,6 @@ class _PostContentToShowState extends State<PostContentToShow> {
     return SizedBox(
       height: 100,
       child: DetailItem(
-        onClick: () => {},
         subtitle: Text(
           PriceFormatterUtil.formatToPrice(widget.product.price) + ' Birr',
           style: const TextStyle(
@@ -381,7 +376,6 @@ class _PostContentToShowState extends State<PostContentToShow> {
           .map(
             (e) => Expanded(
               child: DetailItem(
-                onClick: () => {},
                 title: Text(e.key),
                 subtitle: Text(e.value),
               ),

@@ -11,17 +11,19 @@ import '../../utils/show_toast.dart';
 import 'action_button.dart';
 
 class VerifyPhoneNumberButton extends StatefulWidget {
+  final bool isActive;
   final String phoneNumber;
   final Function(String pin, String verificationId) renderActionButton;
   final Function renderErrorWidget;
   final Function onVerifyClicked;
-  const VerifyPhoneNumberButton({
-    Key? key,
-    required this.phoneNumber,
-    required this.renderActionButton,
-    required this.renderErrorWidget,
-    required this.onVerifyClicked,
-  }) : super(key: key);
+  const VerifyPhoneNumberButton(
+      {Key? key,
+      required this.phoneNumber,
+      required this.renderActionButton,
+      required this.renderErrorWidget,
+      required this.onVerifyClicked,
+      required this.isActive})
+      : super(key: key);
 
   @override
   State<VerifyPhoneNumberButton> createState() =>
@@ -77,13 +79,16 @@ class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
             );
           }
           return ActionButton(
-            onPressed: () {
-              if (widget.onVerifyClicked()) {
-                context
-                    .read<VerifyPhoneNumberCubit>()
-                    .verify(widget.phoneNumber);
-              }
-            },
+            onPressed: widget.isActive
+                ? () {
+                    if (widget.onVerifyClicked()) {
+                      context
+                          .read<VerifyPhoneNumberCubit>()
+                          .verify(widget.phoneNumber);
+                    }
+                  }
+                : () {},
+            backgroundColor: widget.isActive ? null : const Color(0xFF807E7E),
             text: AppLocalizations.of(context).verifyPhoneNumberButtonText,
           );
         }

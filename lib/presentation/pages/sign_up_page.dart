@@ -32,6 +32,9 @@ class _SignUpPageState extends State<SignUpPage> {
   bool areTermsAndConditionsAgreed = false;
 
   final formKey = GlobalKey<FormState>();
+  var phoneNumberFocusNode = FocusNode();
+  var passwordFocusNode = FocusNode();
+  var passwordRepeatFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +53,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 25,
                   ),
                   AuthInput(
+                    onSubmitted: (_) => phoneNumberFocusNode.requestFocus(),
                     hintText: AppLocalizations.of(context).signUpFullNameHint,
                     onChanged: (value) => {
                       setState(() {
@@ -71,12 +75,16 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 25,
                   ),
                   PhoneNumberInput(
+                    focusNode: phoneNumberFocusNode,
+                    onSubmitted: (_) => passwordFocusNode.requestFocus(),
                     onChanged: (value) => setState(() => phoneNumber = value),
                   ),
                   const SizedBox(
                     height: 25,
                   ),
                   AuthInput(
+                    focusNode: passwordFocusNode,
+                    onSubmitted: (_) => passwordRepeatFocusNode.requestFocus(),
                     hintText: AppLocalizations.of(context).signUpPasswordHint,
                     onChanged: (value) => {
                       setState(() {
@@ -99,6 +107,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 25,
                   ),
                   AuthInput(
+                    focusNode: passwordRepeatFocusNode,
+                    onSubmitted: (_) =>
+                        setState(() => areTermsAndConditionsAgreed = true),
                     hintText: AppLocalizations.of(context).signUpPassRepeatHint,
                     onChanged: (value) => {
                       setState(() {
@@ -130,7 +141,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         width: 15,
                         height: 25,
                         child: Transform.scale(
-                          scale: 0.75,
+                          scale: 0.9,
                           child: Checkbox(
                             value: areTermsAndConditionsAgreed,
                             onChanged: (value) {
@@ -158,17 +169,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 20,
                   ),
                   VerifyPhoneNumberButton(
+                    isActive: areTermsAndConditionsAgreed,
                     onVerifyClicked: () {
-                      if (areTermsAndConditionsAgreed) {
-                        return formKey.currentState!.validate();
-                      } else {
-                        showToast(
-                          context,
-                          AppLocalizations.of(context)
-                              .signUpTermsAndConditionError,
-                        );
-                        return false;
-                      }
+                      return handleVerification(context);
                     },
                     phoneNumber: phoneNumber,
                     renderActionButton: renderRegisterButton,
@@ -222,6 +225,18 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+  bool handleVerification(BuildContext context) {
+    if (areTermsAndConditionsAgreed) {
+      return formKey.currentState!.validate();
+    } else {
+      showToast(
+        context,
+        AppLocalizations.of(context).signUpTermsAndConditionError,
+      );
+      return false;
+    }
   }
 
   renderRegisterButton(String pin, String verificationId) {

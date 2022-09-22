@@ -40,66 +40,45 @@ class _SortValuePickerState extends State<SortValuePicker> {
           ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(vertical: 5),
       width: MediaQuery.of(context).size.width,
-      child: Column(
+      child: ExpansionTile(
+        title: Text(widget.sortingCriteriaTitle),
+        trailing: const Text(
+          '...',
+          style: TextStyle(fontSize: 25),
+        ),
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5.0, top: 5),
-            child: Text(
-              widget.sortingCriteriaTitle,
-              style: const TextStyle(
-                fontSize: 18,
-                fontStyle: FontStyle.italic,
+          SizedBox(
+            height: 40,
+            child: ListTile(
+              title: Text(
+                AppLocalizations.of(context).filterAscendingText,
+                style: const TextStyle(fontSize: 13),
+              ),
+              leading: Radio(
+                value: 0,
+                groupValue: selectedSortValue,
+                onChanged: (value) => handleValueChanged(value as int),
               ),
             ),
           ),
-          Column(
-            children: [
-              SizedBox(
-                height: 40,
-                child: ListTile(
-                  title: Text(
-                    AppLocalizations.of(context).filterNoneText,
-                    style: const TextStyle(fontSize: 13),
-                  ),
-                  leading: Radio(
-                    value: -1,
-                    groupValue: selectedSortValue,
-                    onChanged: (value) => handleValueChanged(value as int),
-                  ),
-                ),
+          SizedBox(
+            height: 40,
+            child: ListTile(
+              title: Text(
+                AppLocalizations.of(context).filterDescendingText,
+                style: const TextStyle(fontSize: 13),
               ),
-              SizedBox(
-                height: 40,
-                child: ListTile(
-                  title: Text(
-                    AppLocalizations.of(context).filterAscendingText,
-                    style: const TextStyle(fontSize: 13),
-                  ),
-                  leading: Radio(
-                    value: 0,
-                    groupValue: selectedSortValue,
-                    onChanged: (value) => handleValueChanged(value as int),
-                  ),
-                ),
+              leading: Radio(
+                value: 1,
+                groupValue: selectedSortValue,
+                onChanged: (value) => handleValueChanged(value as int),
               ),
-              SizedBox(
-                height: 40,
-                child: ListTile(
-                  title: Text(
-                    AppLocalizations.of(context).filterDescendingText,
-                    style: const TextStyle(fontSize: 13),
-                  ),
-                  leading: Radio(
-                    value: 1,
-                    groupValue: selectedSortValue,
-                    onChanged: (value) => handleValueChanged(value as int),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
+          const SizedBox(
+            height: 10,
+          )
         ],
       ),
     );

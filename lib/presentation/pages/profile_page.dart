@@ -120,9 +120,8 @@ class _ProfilePageState extends State<ProfilePage> {
           title: AppLocalizations.of(context).profilePageContactTitle,
           subTitle: AppLocalizations.of(context).profilePageContactSubTitle,
           leadingIcon: Icons.call,
-          onPressed: () {
-            Navigator.pushNamed(context, ContactUsPage.routeName);
-          },
+          onPressed: () =>
+              Navigator.pushNamed(context, ContactUsPage.routeName),
         ),
         BlocBuilder<ChangeLanguageCubit, String>(
           builder: (context, state) {

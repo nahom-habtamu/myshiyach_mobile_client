@@ -63,6 +63,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 height: 30,
               ),
               VerifyPhoneNumberButton(
+                isActive: true,
                 onVerifyClicked: () {
                   return formKey.currentState!.validate();
                 },

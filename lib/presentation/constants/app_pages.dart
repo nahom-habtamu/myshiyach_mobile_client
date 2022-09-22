@@ -46,11 +46,7 @@ class AppPages {
       ProfilePage.routeName: (context) => const ProfilePage(),
       PostsCreatedByUserPage.routeName: (context) =>
           const PostsCreatedByUserPage(),
-      ContactUsPage.routeName: (context) =>
-          const ContactUsPage(),
+      ContactUsPage.routeName: (context) => const ContactUsPage()
     };
   }
-}
-
-class ContactUs {
 }

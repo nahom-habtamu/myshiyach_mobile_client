@@ -71,9 +71,9 @@ class _FilterDataPageState extends State<FilterDataPage> {
           title: AppLocalizations.of(context).filterAppBarText,
         ),
         body: CurvedContainer(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(5),
+          child: Padding(
+            padding: const EdgeInsets.all(5),
+            child: SingleChildScrollView(
               child: Column(
                 children: [
                   PriceRangeInputDialog(
@@ -97,11 +97,11 @@ class _FilterDataPageState extends State<FilterDataPage> {
                   ),
                   renderSubCategories(),
                   const SizedBox(height: 20),
-                  renderConditionsCheckBoxWrapper(),
+                  renderCityDropdown(),
                   const SizedBox(height: 20),
                   renderBrandDropdown(),
-                  const SizedBox(height: 20),
-                  renderCityDropdown(),
+                  const SizedBox(height: 2),
+                  renderConditionsCheckBoxWrapper(),
                   const SizedBox(height: 20),
                   renderFilterButtons(),
                 ],
