@@ -41,7 +41,7 @@ class _SearchBarState extends State<SearchBar> {
     filterResult = widget.initialFilterCriteria;
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: 70,
+      height: 60,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -50,7 +50,7 @@ class _SearchBarState extends State<SearchBar> {
               controller: _controller,
               style: const TextStyle(
                 color: Colors.black,
-                fontSize: 12,
+                fontSize: 14,
               ),
               onChanged: (value) => {
                 widget.onSearchQueryChanged(value),
@@ -86,12 +86,12 @@ class _SearchBarState extends State<SearchBar> {
                 ),
                 prefixIcon: const Icon(
                   Icons.search,
-                  size: 25,
+                  size: 20,
                 ),
                 suffixIcon: IconButton(
                   icon: const Icon(
                     Icons.close,
-                    size: 25,
+                    size: 20,
                   ),
                   onPressed: () {
                     _controller.text = "";
@@ -99,10 +99,7 @@ class _SearchBarState extends State<SearchBar> {
                   },
                 ),
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 5,
-                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 15),
                 filled: true,
                 fillColor: Colors.white,
               ),

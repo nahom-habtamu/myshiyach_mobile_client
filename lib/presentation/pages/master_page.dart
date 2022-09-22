@@ -115,7 +115,7 @@ class _MasterPageState extends State<MasterPage> {
     return Scaffold(
       body: pagesToShow.elementAt(_selectedIndex),
       bottomNavigationBar: SizedBox(
-        height: 70,
+        height: 60,
         child: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(

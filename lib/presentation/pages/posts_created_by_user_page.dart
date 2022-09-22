@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/product.dart';
@@ -18,8 +17,8 @@ import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
 import '../widgets/common/error_content.dart';
 import '../widgets/common/no_network_content.dart';
+import '../widgets/common/profile_avatar_and_data.dart';
 import '../widgets/home/product_grid_item.dart';
-import '../widgets/post_detail/detail_item.dart';
 import '../widgets/post_detail/send_message_button.dart';
 import 'add_post_page.dart';
 
@@ -143,51 +142,7 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: Text(
-            AppLocalizations.of(context)
-                .postsCreatedByUserPageUserInformationText,
-            style: const TextStyle(
-              fontSize: 22,
-              fontStyle: FontStyle.italic,
-              color: Colors.black45,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        SizedBox(
-          height: 100,
-          child: Row(
-            children: [
-              Expanded(
-                child: DetailItem(
-                  isCurved: true,
-                  color: const Color(0xFFDAD9D9),
-                  title: Text(
-                      AppLocalizations.of(context).postDetailOwnerNameText),
-                  subtitle: Text(user.fullName),
-                  onClick: () {},
-                ),
-              ),
-              Expanded(
-                child: DetailItem(
-                  isCurved: true,
-                  color: const Color(0xFFDAD9D9),
-                  title: Text(AppLocalizations.of(context)
-                      .postDetailOwnerPhoneNumberText),
-                  subtitle: Text(user.phoneNumber),
-                  onClick: () async {
-                    final _call = 'tel:${user.phoneNumber}';
-                    if (await canLaunchUrl(Uri.parse(_call))) {
-                      await launchUrl(Uri.parse(_call));
-                    }
-                  },
-                ),
-              )
-            ],
-          ),
-        ),
+        ProfileAvatarAndData(user: user),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: SendMessageButton(

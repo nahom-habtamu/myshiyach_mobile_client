@@ -12,6 +12,7 @@ import '../bloc/logout/logout_state.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/pop_up_dialog.dart';
+import '../widgets/common/profile_avatar_and_data.dart';
 import '../widgets/profile/setting_item.dart';
 import '../widgets/profile/settings_item_header.dart';
 import 'contact_us_page.dart';
@@ -57,41 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 10),
-        CircleAvatar(
-          radius: 50,
-          child: Container(
-            child: Center(
-              child: Text(
-                currentUser!.fullName[0],
-                style: const TextStyle(fontSize: 25),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          currentUser!.fullName,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            letterSpacing: 0.4,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Visibility(
-          visible: currentUser?.email != null && currentUser!.email!.isNotEmpty,
-          child: Text(
-            currentUser?.email ?? "",
-            style: const TextStyle(
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const Divider(),
+        ProfileAvatarAndData(user: currentUser),
         SettingsItemHeader(
           content: AppLocalizations.of(context).profilePageGeneralHeaderText,
         ),
