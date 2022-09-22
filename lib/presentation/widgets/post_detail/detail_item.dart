@@ -26,10 +26,11 @@ class DetailItem extends StatelessWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: color ?? (onClick != null ? Colors.white12 : Colors.white),
-            boxShadow: const [
+            color: color ?? Colors.white,
+            boxShadow: [
               BoxShadow(
-                color: Color(0xFFECE9E9),
+                color:
+                    onClick != null ? Colors.black38 : const Color(0xFFECE9E9),
                 blurRadius: 1,
                 spreadRadius: 1,
               )

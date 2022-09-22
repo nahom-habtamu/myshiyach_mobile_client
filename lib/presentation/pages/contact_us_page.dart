@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mnale_client/presentation/widgets/common/curved_container.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/post_detail/detail_item.dart';
 
@@ -31,29 +31,58 @@ class ContactUsPage extends StatelessWidget {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
+                Row(
                   children: [
-                    DetailItem(
-                      title: const Text('PhoneNumber'),
-                      subtitle: const Text('8090'),
-                      onClick: () async {
-                        const _call = 'tel:8090';
-                        if (await canLaunchUrl(Uri.parse(_call))) {
-                          await launchUrl(Uri.parse(_call));
-                        }
-                      },
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: DetailItem(
+                        isCurved: true,
+                        title: Row(
+                          children: const [
+                            Icon(
+                              Icons.phone,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text('Call Us'),
+                          ],
+                        ),
+                        subtitle: const Text('091111222211'),
+                        onClick: () async {
+                          const _call = 'tel:091111222211';
+                          if (await canLaunchUrl(Uri.parse(_call))) {
+                            await launchUrl(Uri.parse(_call));
+                          }
+                        },
+                      ),
                     ),
-                    DetailItem(
-                      title: const Text('Email'),
-                      subtitle: const Text('someemail@gmail.com'),
-                      onClick: () async {
-                        final Uri emailLaunchUri = Uri(
-                          scheme: 'mailto',
-                          path: 'someemail@gmail.com',
-                        );
-                        launchUrl(emailLaunchUri);
-                      },
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.57,
+                      child: DetailItem(
+                        isCurved: true,
+                        title: Row(
+                          children: const [
+                            Icon(
+                              Icons.email,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text('Email Us'),
+                          ],
+                        ),
+                        subtitle: const Text('someemail@gmail.com'),
+                        onClick: () async {
+                          final Uri emailLaunchUri = Uri(
+                            scheme: 'mailto',
+                            path: 'someemail@gmail.com',
+                          );
+                          launchUrl(emailLaunchUri);
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -64,9 +93,9 @@ class ContactUsPage extends StatelessWidget {
                     ),
                     child: Text(
                       'About Our Company',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                      ),
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ),
                   subtitle: Padding(
@@ -83,8 +112,10 @@ class ContactUsPage extends StatelessWidget {
                     ),
                     child: Text(
                       'About Our Product',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -95,69 +126,39 @@ class ContactUsPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'Developers',
-                    style: TextStyle(fontSize: 20),
+                DetailItem(
+                  title: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Address',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15.0),
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          const _call = 'tel:+251926849888';
-                          if (await canLaunchUrl(Uri.parse(_call))) {
-                            await launchUrl(Uri.parse(_call));
-                          }
-                        },
-                        child: const ListTile(
-                          title: Text('Nahom Habtamu'),
-                          leading: CircleAvatar(
-                            radius: 30,
-                            child: Text('N'),
-                          ),
-                          subtitle: Text('Phone Number - +251926849888'),
-                          trailing: Icon(Icons.phone),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(bottom: 15.0),
+                    child: Column(
+                      children: const [
+                        ListTile(
+                          title: Text('City'),
+                          subtitle: Text('Addis Ababa'),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          const _call = 'tel:+251926849888';
-                          if (await canLaunchUrl(Uri.parse(_call))) {
-                            await launchUrl(Uri.parse(_call));
-                          }
-                        },
-                        child: const ListTile(
-                          title: Text('Natnael Masresha'),
-                          leading: CircleAvatar(
-                            radius: 30,
-                            child: Text('N'),
-                          ),
-                          subtitle: Text('Phone Number - +251926849888'),
-                          trailing: Icon(Icons.phone),
+                        Divider(),
+                        ListTile(
+                          title: Text('Address Line'),
+                          subtitle: Text('Bole Rwanda'),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          const _call = 'tel:+251926849888';
-                          if (await canLaunchUrl(Uri.parse(_call))) {
-                            await launchUrl(Uri.parse(_call));
-                          }
-                        },
-                        child: const ListTile(
-                          title: Text('Yonathan Zelalem'),
-                          leading: CircleAvatar(
-                            radius: 30,
-                            child: Text('Y'),
-                          ),
-                          subtitle: Text('Phone Number - +251926849888'),
-                          trailing: Icon(Icons.phone),
-                        ),
-                      )
-                    ],
+                        Divider(),
+                        ListTile(
+                          title: Text('Specific Address'),
+                          subtitle: Text(
+                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the'),
+                        )
+                      ],
+                    ),
                   ),
                 )
               ],
