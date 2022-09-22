@@ -41,67 +41,70 @@ class _SearchBarState extends State<SearchBar> {
     filterResult = widget.initialFilterCriteria;
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: 60,
+      height: 55,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: TextFormField(
-              controller: _controller,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-              ),
-              onChanged: (value) => {
-                widget.onSearchQueryChanged(value),
-              },
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context).homeSearchBarHint,
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(16.0),
-                  ),
-                  borderSide: BorderSide(
-                    color: Colors.black26,
-                    width: 1,
-                  ),
+            child: SizedBox(
+              height: 35,
+              child: TextFormField(
+                controller: _controller,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
                 ),
-                enabledBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(16.0),
+                onChanged: (value) => {
+                  widget.onSearchQueryChanged(value),
+                },
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).homeSearchBarHint,
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                    borderSide: BorderSide(
+                      color: Colors.black26,
+                      width: 1,
+                    ),
                   ),
-                  borderSide: BorderSide(
-                    color: Colors.black26,
-                    width: 1,
+                  enabledBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                    borderSide: BorderSide(
+                      color: Colors.black26,
+                      width: 1,
+                    ),
                   ),
-                ),
-                focusedBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(16.0),
+                  focusedBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
+                    borderSide: BorderSide(
+                      color: Colors.black26,
+                      width: 1,
+                    ),
                   ),
-                  borderSide: BorderSide(
-                    color: Colors.black26,
-                    width: 1,
-                  ),
-                ),
-                prefixIcon: const Icon(
-                  Icons.search,
-                  size: 20,
-                ),
-                suffixIcon: IconButton(
-                  icon: const Icon(
-                    Icons.close,
+                  prefixIcon: const Icon(
+                    Icons.search,
                     size: 20,
                   ),
-                  onPressed: () {
-                    _controller.text = "";
-                    widget.onSearchQueryChanged("");
-                  },
+                  suffixIcon: IconButton(
+                    icon: const Icon(
+                      Icons.close,
+                      size: 20,
+                    ),
+                    onPressed: () {
+                      _controller.text = "";
+                      widget.onSearchQueryChanged("");
+                    },
+                  ),
+                  isDense: true,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
-                isDense: true,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                filled: true,
-                fillColor: Colors.white,
               ),
             ),
           ),
