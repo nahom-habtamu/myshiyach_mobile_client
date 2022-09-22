@@ -52,20 +52,6 @@ class _SortValuePickerState extends State<SortValuePicker> {
             height: 40,
             child: ListTile(
               title: Text(
-                AppLocalizations.of(context).filterNoneText,
-                style: const TextStyle(fontSize: 13),
-              ),
-              leading: Radio(
-                value: -1,
-                groupValue: selectedSortValue,
-                onChanged: (value) => handleValueChanged(value as int),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 40,
-            child: ListTile(
-              title: Text(
                 AppLocalizations.of(context).filterAscendingText,
                 style: const TextStyle(fontSize: 13),
               ),
