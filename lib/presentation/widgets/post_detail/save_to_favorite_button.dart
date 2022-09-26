@@ -20,12 +20,12 @@ class SaveToFavoritesButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 15,
-                backgroundColor: Color(0xFFE6E2E2),
+                backgroundColor: const Color(0xFFE6E2E2),
                 child: Icon(
-                  Icons.favorite_outline,
-                  color: Color.fromARGB(255, 255, 0, 1),
+                  isFavorite ? Icons.favorite : Icons.favorite_outline,
+                  color: const Color.fromARGB(255, 255, 0, 1),
                 ),
               ),
               const SizedBox(

@@ -129,8 +129,8 @@ class _PostContentToShowState extends State<PostContentToShow> {
   }
 
   renderDescription(BuildContext context) {
-    return SizedBox(
-      height: 100,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 100),
       child: Align(
         alignment: Alignment.center,
         child: Container(
