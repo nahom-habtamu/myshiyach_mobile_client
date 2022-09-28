@@ -21,6 +21,7 @@ import '../pages/posts_created_by_user_page.dart';
 import '../pages/profile_page.dart';
 import '../pages/sign_up_page.dart';
 import '../pages/splash_page.dart';
+import '../pages/terms_and_services_page.dart';
 
 class AppPages {
   static Map<String, WidgetBuilder> get() {
@@ -46,7 +47,8 @@ class AppPages {
       ProfilePage.routeName: (context) => const ProfilePage(),
       PostsCreatedByUserPage.routeName: (context) =>
           const PostsCreatedByUserPage(),
-      ContactUsPage.routeName: (context) => const ContactUsPage()
+      ContactUsPage.routeName: (context) => const ContactUsPage(),
+      TermsAndServicesPage.routeName: (context) => const TermsAndServicesPage(),
     };
   }
 }

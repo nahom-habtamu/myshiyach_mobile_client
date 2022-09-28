@@ -18,6 +18,7 @@ import '../widgets/profile/settings_item_header.dart';
 import 'contact_us_page.dart';
 import 'login_page.dart';
 import 'my_posts_page.dart';
+import 'terms_and_services_page.dart';
 
 class ProfilePage extends StatefulWidget {
   static String routeName = '/profilePage';
@@ -91,6 +92,13 @@ class _ProfilePageState extends State<ProfilePage> {
           leadingIcon: Icons.call,
           onPressed: () =>
               Navigator.pushNamed(context, ContactUsPage.routeName),
+        ),
+        SettingItem(
+          title: "Privacy Policy",
+          subTitle: "Please Check out Applications Terms and Services",
+          leadingIcon: Icons.privacy_tip,
+          onPressed: () =>
+              Navigator.pushNamed(context, TermsAndServicesPage.routeName),
         ),
         BlocBuilder<ChangeLanguageCubit, String>(
           builder: (context, state) {
