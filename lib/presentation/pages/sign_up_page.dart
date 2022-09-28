@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../data/models/register_user/register_user_request_model.dart';
 import '../bloc/register_user/register_user_cubit.dart';
 import '../bloc/register_user/register_user_state.dart';
+import '../constants/login_page_constants.dart';
 import '../screen_arguments/sign_up_button_arguments.dart';
 import '../utils/show_toast.dart';
 import '../widgets/auth_input.dart';
@@ -95,7 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       if (value == null || value.isEmpty) {
                         return AppLocalizations.of(context)
                             .signUpPasswordEmptyError;
-                      } else if (value.length < 6) {
+                      } else if (value.length < passwordInputMinLength) {
                         return AppLocalizations.of(context)
                             .signUpPasswordTooShort;
                       }
@@ -120,7 +121,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       if (value == null || value.isEmpty) {
                         return AppLocalizations.of(context)
                             .signUpPassRepeatEmptyError;
-                      } else if (value.length < 6) {
+                      } else if (value.length < passwordInputMinLength) {
                         return AppLocalizations.of(context)
                             .signUpPassRepeatTooShort;
                       } else if (value != password) {

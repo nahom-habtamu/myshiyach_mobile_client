@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const passwordInputMinLength = 8;
+
 const loginInputTextStyle = TextStyle(
   color: Colors.black,
   fontSize: 14,
