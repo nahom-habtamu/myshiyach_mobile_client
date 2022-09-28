@@ -44,6 +44,13 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    desciptionFocusNode.dispose();
+    titleFocusNode.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var mainCategoryToShowOnDropDown = buildMainCategoriesToDisplay();
     var subCategoryToShowOnDropDown = buildSubCategoriesToDisplay();

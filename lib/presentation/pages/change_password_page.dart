@@ -24,11 +24,19 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   String phoneNumber = '';
   final formKey = GlobalKey<FormState>();
 
+  var passwordRepeatFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
     clearChangePasswordState();
     initalizePhoneNumberFromArgument();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    passwordRepeatFocusNode.dispose();
   }
 
   void clearChangePasswordState() {
@@ -72,6 +80,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               AuthInput(
                 hintText: AppLocalizations.of(context).changePasswordInputHint,
                 onChanged: (value) => password = value,
+                onSubmitted: (value) => passwordRepeatFocusNode.requestFocus(),
                 obsecureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -92,6 +101,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     AppLocalizations.of(context).changePasswordRepeatInputHint,
                 onChanged: (value) => password = value,
                 obsecureText: true,
+                focusNode: passwordRepeatFocusNode,
+                onSubmitted: (value) => handleSubmission(),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return AppLocalizations.of(context)
@@ -144,14 +155,18 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         }
         return ActionButton(
           onPressed: () {
-            if (formKey.currentState!.validate()) {
-              context.read<ChangePasswordCubit>().call(phoneNumber, password);
-            }
+            handleSubmission();
           },
           text: AppLocalizations.of(context).changePasswordButtonText,
         );
       },
     );
+  }
+
+  void handleSubmission() {
+    if (formKey.currentState!.validate()) {
+      context.read<ChangePasswordCubit>().call(phoneNumber, password);
+    }
   }
 
   Column renderChangePasswordPageHeaders() {

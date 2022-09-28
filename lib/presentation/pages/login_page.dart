@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../data/models/login/login_request_model.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
+import '../bloc/change_password/change_password_cubit.dart';
 import '../bloc/set_is_app_opened_first_time/set_is_app_opened_first_time_cubit.dart';
 import '../utils/show_toast.dart';
 import '../widgets/auth_input.dart';
@@ -36,6 +37,13 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     context.read<AuthCubit>().clear();
     context.read<SetIsAppOpenedFirstTimeCubit>().execute();
+    context.read<ChangePasswordCubit>().clear();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    passwordFocusNode.dispose();
   }
 
   @override

@@ -38,6 +38,14 @@ class _SignUpPageState extends State<SignUpPage> {
   var passwordRepeatFocusNode = FocusNode();
 
   @override
+  void dispose() {
+    super.dispose();
+    phoneNumberFocusNode.dispose();
+    passwordFocusNode.dispose();
+    passwordRepeatFocusNode.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
