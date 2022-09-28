@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../bloc/change_password/change_password_cubit.dart';
 import '../bloc/change_password/change_password_state.dart';
+import '../constants/login_page_constants.dart';
 import '../utils/show_toast.dart';
 import '../widgets/auth_input.dart';
 import '../widgets/common/action_button.dart';
@@ -86,7 +87,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   if (value == null || value.isEmpty) {
                     return AppLocalizations.of(context)
                         .changePasswordInputValidationEmptyText;
-                  } else if (value.length < 6) {
+                  } else if (value.length < passwordInputMinLength) {
                     return AppLocalizations.of(context)
                         .changePasswordInputValidationTooShortText;
                   }
@@ -107,7 +108,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   if (value == null || value.isEmpty) {
                     return AppLocalizations.of(context)
                         .changePasswordInputValidationEmptyText;
-                  } else if (value.length < 6) {
+                  } else if (value.length < passwordInputMinLength) {
                     return AppLocalizations.of(context)
                         .changePasswordInputValidationTooShortText;
                   } else if (value != password) {

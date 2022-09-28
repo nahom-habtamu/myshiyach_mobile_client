@@ -31,7 +31,6 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
   final formKey = GlobalKey<FormState>();
 
   final desciptionFocusNode = FocusNode();
-  final titleFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -47,7 +46,6 @@ class _FirstPageInputsState extends State<FirstPageInputs> {
   void dispose() {
     super.dispose();
     desciptionFocusNode.dispose();
-    titleFocusNode.dispose();
   }
 
   @override
