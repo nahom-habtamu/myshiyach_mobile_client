@@ -12,6 +12,7 @@ import '../../domain/enitites/sub_category.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
 import '../bloc/filter/filter_products_cubit.dart';
+import '../bloc/get_paginated_products/get_paginated_products_cubit.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/error_content.dart';
@@ -144,6 +145,17 @@ class _HomePageState extends State<HomePage> {
   showProducts() {
     var productsToDisplay =
         context.read<FilterProductsCubit>().call(products, filterValues);
+    if (productsToDisplay.isEmpty && searchKeyword.isNotEmpty) {
+      SchedulerBinding.instance!.addPostFrameCallback(((timeStamp) {
+        context.read<GetPaginatedProductsCubit>().call(
+              PageAndLimitModel.initialDefault(),
+              filterValues,
+            );
+        setState(() {
+          searchKeyword = "";
+        });
+      }));
+    }
     return buildProductList(productsToDisplay);
   }
 
