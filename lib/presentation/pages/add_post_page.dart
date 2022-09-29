@@ -85,6 +85,7 @@ class _AddPostPageState extends State<AddPostPage> {
         title: AppLocalizations.of(context).addPostAppBarText,
       ),
       body: CurvedContainer(
+        padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
         child: SingleChildScrollView(child: renderMainContent()),
       ),
     );
@@ -173,9 +174,6 @@ class _AddPostPageState extends State<AddPostPage> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 20,
-            ),
             renderAppropriateInput(
               categories,
               cities,

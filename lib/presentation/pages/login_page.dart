@@ -12,10 +12,8 @@ import '../utils/show_toast.dart';
 import '../widgets/auth_input.dart';
 import '../widgets/common/action_button.dart';
 import '../widgets/common/phone_number_input.dart';
-import '../constants/login_page_constants.dart';
 import 'forgot_password_page.dart';
 import 'master_page.dart';
-
 import 'sign_up_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -94,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                     if (value == null || value.isEmpty) {
                       return AppLocalizations.of(context)
                           .loginPasswordEmptyError;
-                    } else if (value.length < passwordInputMinLength) {
+                    } else if (value.length < 4) {
                       return AppLocalizations.of(context)
                           .loginPasswordTooShortError;
                     }

@@ -148,9 +148,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         }
         if (state is ChangePasswordSuccessfull) {
           SchedulerBinding.instance!.addPostFrameCallback((_) {
-            Navigator.pushReplacementNamed(
+            Navigator.popUntil(
               context,
-              LoginPage.routeName,
+              ModalRoute.withName(LoginPage.routeName),
             );
           });
         }
