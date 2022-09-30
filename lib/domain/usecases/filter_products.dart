@@ -139,10 +139,7 @@ class FilterProducts {
     return filterCriteria.keyword == null
         ? true
         : product.description.contains(
-              RegExp(r'' + filterCriteria.keyword!, caseSensitive: false),
-            ) ||
-            product.title.contains(
-              RegExp(r'' + filterCriteria.keyword!, caseSensitive: false),
-            );
+            RegExp(r'' + filterCriteria.keyword!, caseSensitive: false),
+          );
   }
 }
