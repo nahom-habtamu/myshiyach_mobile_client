@@ -45,7 +45,7 @@ class MessageBubble extends StatelessWidget {
                   const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15),
               child: Center(
                 child: Text(
-                  message.text,
+                  message.content,
                   style: TextStyle(
                     color: message.senderId == strangerId
                         ? Colors.white

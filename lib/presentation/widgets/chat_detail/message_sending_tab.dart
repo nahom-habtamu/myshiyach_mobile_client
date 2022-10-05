@@ -1,18 +1,17 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../constants/login_page_constants.dart';
 
 class MessageSendingTab extends StatefulWidget {
+  final Function onFilePickerClicked;
   final Function(String) onMessageChanged;
   final Function onMessageSend;
   const MessageSendingTab({
     Key? key,
     required this.onMessageChanged,
     required this.onMessageSend,
+    required this.onFilePickerClicked,
   }) : super(key: key);
 
   @override
@@ -21,7 +20,6 @@ class MessageSendingTab extends StatefulWidget {
 
 class _MessageSendingTabState extends State<MessageSendingTab> {
   final _controller = TextEditingController();
-  List<dynamic> pickedFiles = [];
 
   @override
   Widget build(BuildContext context) {
@@ -55,47 +53,12 @@ class _MessageSendingTabState extends State<MessageSendingTab> {
               ),
             ),
             IconButton(
-              onPressed: () async {
-                FilePickerResult? result = await FilePicker.platform.pickFiles(
-                  allowMultiple: true,
-                  type: FileType.image,
-                );
-                if (result != null) {
-                  List<File> files =
-                      result.paths.map((path) => File(path!)).toList();
-                  setState(() {
-                    pickedFiles = files;
-                  });
-                }
+              onPressed: () {
+                widget.onFilePickerClicked();
               },
-              icon: Stack(
-                children: [
-                  const Icon(
-                    Icons.filter,
-                    size: 25,
-                  ),
-                  Visibility(
-                    visible: pickedFiles.isNotEmpty,
-                    child: Positioned(
-                      right: -2,
-                      top: 0,
-                      child: CircleAvatar(
-                        backgroundColor: const Color(0xFFFAF6F6),
-                        radius: 8,
-                        child: Center(
-                          child: Text(
-                            pickedFiles.length.toString(),
-                            style: const TextStyle(
-                              color: Colors.red,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
+              icon: const Icon(
+                Icons.filter,
+                size: 25,
               ),
             ),
             IconButton(

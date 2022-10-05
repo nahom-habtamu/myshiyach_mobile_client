@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../core/utils/date_time_formatter.dart';
 import '../../data/models/conversation/message_model.dart';
@@ -14,11 +15,13 @@ import '../bloc/auth/auth_state.dart';
 import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../bloc/mark_messages_as_read/mark_messages_as_read_cubit.dart';
 import '../screen_arguments/chat_detail_page_arguments.dart';
+import '../widgets/chat_detail/image_container_bubble.dart';
 import '../widgets/chat_detail/message_bubble.dart';
 import '../widgets/chat_detail/message_sending_tab.dart';
 import '../widgets/chat_detail/stanger_user_info.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
+import '../widgets/edit_post/post_images.dart';
 
 class ChatDetailPage extends StatefulWidget {
   static String routeName = '/chatDetailPage';
@@ -32,7 +35,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   User? currentUser;
   String messageContent = "";
   ChatDetailPageArguments? args;
+  List<dynamic> pickedFiles = [];
   final ScrollController _scrollController = ScrollController();
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -183,17 +188,110 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     return MessageSendingTab(
       onMessageChanged: (value) => setState(() => messageContent = value),
       onMessageSend: () => handleAddingMessage(),
+      onFilePickerClicked: () async {
+        dynamic pickedImages = await pickImages();
+        if (pickedImages != null) {
+          setState(() => pickedFiles = pickedImages!);
+          showModalBottomSheet<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return showFileSendingPreview(context);
+            },
+          );
+        }
+      },
+    );
+  }
+
+  dynamic pickImages() async {
+    var pickedImages = await _picker.pickMultiImage(
+      maxHeight: 480,
+      maxWidth: 600,
+      imageQuality: 60,
+    );
+    return pickedImages;
+  }
+
+  showFileSendingPreview(BuildContext context) {
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
+          ),
+          height: 250,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Picked Files',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              const SizedBox(height: 25),
+              PostImages(
+                pickedImages: pickedFiles,
+                imagesAlreadyInProduct: const [],
+                onStateChange: (updatedPostImages, updatedPickedImages) {
+                  setState(() {
+                    pickedFiles = [...updatedPickedImages];
+                  });
+                },
+              ),
+              const SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton(
+                    child: const Text('Add'),
+                    onPressed: () async {
+                      var pickedImages = await pickImages();
+                      if (pickedImages != null) {
+                        setState(() {
+                          pickedFiles = [...pickedFiles, ...pickedImages];
+                        });
+                      }
+                    },
+                  ),
+                  Row(
+                    children: [
+                      TextButton(
+                        child: const Text('Close'),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      TextButton(
+                        child: const Text('Send Files'),
+                        onPressed: () {
+                          // TODO the main part
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   void handleAddingMessage() async {
     if (messageContent.isNotEmpty) {
       var messageToAdd = MessageModel(
-        text: messageContent,
+        content: messageContent,
         senderId: currentUser!.id,
         recieverId: args!.strangerUser.id,
         createdDateTime: DateTime.now().toIso8601String(),
         isSeen: false,
+        type: "TEXT_MESSAGE",
       );
       context
           .read<AddMessageToConversationCubit>()
@@ -223,12 +321,23 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemBuilder: (context, index) => MessageBubble(
-          message: messages[index],
-          strangerId: args!.strangerUser.id,
-          isSentByCurrentUser:
-              messages[index].senderId == args!.strangerUser.id,
-        ),
+        itemBuilder: (context, index) {
+          if (messages[index].type == "IMAGE") {
+            return ImageMessageContainer(
+              message: messages[index],
+              strangerId: args!.strangerUser.id,
+              isSentByCurrentUser:
+                  messages[index].senderId == args!.strangerUser.id,
+            );
+          } else {
+            return MessageBubble(
+              message: messages[index],
+              strangerId: args!.strangerUser.id,
+              isSentByCurrentUser:
+                  messages[index].senderId == args!.strangerUser.id,
+            );
+          }
+        },
         itemCount: messages.length,
       ),
     );

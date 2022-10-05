@@ -106,12 +106,13 @@ class ConversationFirebaseDataSource extends ConversationDataSource {
         (e) {
           if (e.recieverId == currentUserId && !e.isSeen) {
             return MessageModel(
-              text: e.text,
-              senderId: e.senderId,
-              recieverId: e.recieverId,
-              createdDateTime: e.createdDateTime,
-              isSeen: true,
-            ).toJson();
+                    content: e.content,
+                    senderId: e.senderId,
+                    recieverId: e.recieverId,
+                    createdDateTime: e.createdDateTime,
+                    isSeen: true,
+                    type: e.type)
+                .toJson();
           } else {
             return MessageModel.fromMessage(e).toJson();
           }
