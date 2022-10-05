@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -18,6 +21,7 @@ class MessageSendingTab extends StatefulWidget {
 
 class _MessageSendingTabState extends State<MessageSendingTab> {
   final _controller = TextEditingController();
+  List<dynamic> pickedFiles = [];
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,7 @@ class _MessageSendingTabState extends State<MessageSendingTab> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
+              width: MediaQuery.of(context).size.width * 0.7,
               child: TextFormField(
                 style: loginInputTextStyle.copyWith(fontSize: 14),
                 controller: _controller,
@@ -48,6 +52,50 @@ class _MessageSendingTabState extends State<MessageSendingTab> {
                 minLines: 1,
                 maxLines: 5,
                 keyboardType: TextInputType.multiline,
+              ),
+            ),
+            IconButton(
+              onPressed: () async {
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  allowMultiple: true,
+                  type: FileType.image,
+                );
+                if (result != null) {
+                  List<File> files =
+                      result.paths.map((path) => File(path!)).toList();
+                  setState(() {
+                    pickedFiles = files;
+                  });
+                }
+              },
+              icon: Stack(
+                children: [
+                  const Icon(
+                    Icons.filter,
+                    size: 25,
+                  ),
+                  Visibility(
+                    visible: pickedFiles.isNotEmpty,
+                    child: Positioned(
+                      right: -2,
+                      top: 0,
+                      child: CircleAvatar(
+                        backgroundColor: const Color(0xFFFAF6F6),
+                        radius: 8,
+                        child: Center(
+                          child: Text(
+                            pickedFiles.length.toString(),
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
             IconButton(
