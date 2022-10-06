@@ -9,7 +9,9 @@ import '../../data/models/conversation/message_model.dart';
 import '../../domain/enitites/conversation.dart';
 import '../../domain/enitites/message.dart';
 import '../../domain/enitites/user.dart';
-import '../bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
+import '../bloc/add_message_to_conversation/add_image_message_to_conversation_cubit.dart';
+import '../bloc/add_message_to_conversation/add_image_message_to_conversation_state.dart';
+import '../bloc/add_message_to_conversation/add_text_message_to_conversation_cubit.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
@@ -187,7 +189,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   renderMessageSendingTab(Conversation conversation) {
     return MessageSendingTab(
       onMessageChanged: (value) => setState(() => messageContent = value),
-      onMessageSend: () => handleAddingMessage(),
+      onMessageSend: () => handleAddingTextMessage(),
       onFilePickerClicked: () async {
         dynamic pickedImages = await pickImages();
         if (pickedImages != null) {
@@ -195,7 +197,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           showModalBottomSheet<void>(
             context: context,
             builder: (BuildContext context) {
-              return showFileSendingPreview(context);
+              return showFileSendingPreview();
             },
           );
         }
@@ -212,7 +214,133 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     return pickedImages;
   }
 
-  showFileSendingPreview(BuildContext context) {
+  showFileSendingPreview() {
+    return ImageMessageSendingPreview(
+      initiallyPickedFiles: pickedFiles,
+      onMessageSend: () => handleAddingImageMessage(),
+    );
+  }
+
+  void handleAddingTextMessage() async {
+    if (messageContent.isNotEmpty) {
+      var messageToAdd = MessageModel(
+        content: messageContent,
+        senderId: currentUser!.id,
+        recieverId: args!.strangerUser.id,
+        createdDateTime: DateTime.now().toIso8601String(),
+        isSeen: false,
+        type: "TEXT_MESSAGE",
+      );
+      context
+          .read<AddTextMessageToConversationCubit>()
+          .call(args!.conversationId, messageToAdd);
+      await handleScrollingToBottom();
+    }
+  }
+
+  void handleAddingImageMessage() async {
+    if (pickedFiles.isNotEmpty) {
+      List<MessageModel> fileMessagesToSend = [];
+
+      for (var i = 0; i < pickedFiles.length; i++) {
+        var messageToAdd = MessageModel(
+          content: '',
+          senderId: currentUser!.id,
+          recieverId: args!.strangerUser.id,
+          createdDateTime: DateTime.now().toIso8601String(),
+          isSeen: false,
+          type: "IMAGE",
+        );
+        fileMessagesToSend.add(messageToAdd);
+      }
+      context.read<AddImageMessageToConversationCubit>().call(
+            args!.conversationId,
+            fileMessagesToSend,
+            pickedFiles,
+          );
+      await handleScrollingToBottom();
+    }
+  }
+
+  Future<void> handleScrollingToBottom() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn,
+      );
+    });
+  }
+
+  renderChatDetailStrangerInfo() {
+    return StrangerUserInfo(strangerUser: args!.strangerUser);
+  }
+
+  renderMessageBubbles(List<Message> messages) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          if (messages[index].type == "IMAGE") {
+            return ImageMessageContainer(
+              message: messages[index],
+              strangerId: args!.strangerUser.id,
+              isSentByCurrentUser:
+                  messages[index].senderId == args!.strangerUser.id,
+            );
+          } else {
+            return MessageBubble(
+              message: messages[index],
+              strangerId: args!.strangerUser.id,
+              isSentByCurrentUser:
+                  messages[index].senderId == args!.strangerUser.id,
+            );
+          }
+        },
+        itemCount: messages.length,
+      ),
+    );
+  }
+}
+
+class ImageMessageSendingPreview extends StatefulWidget {
+  final dynamic initiallyPickedFiles;
+  final Function onMessageSend;
+  const ImageMessageSendingPreview({
+    Key? key,
+    required this.initiallyPickedFiles,
+    required this.onMessageSend,
+  }) : super(key: key);
+
+  @override
+  State<ImageMessageSendingPreview> createState() =>
+      _ImageMessageSendingPreviewState();
+}
+
+class _ImageMessageSendingPreviewState
+    extends State<ImageMessageSendingPreview> {
+  dynamic pickedFiles = [];
+
+  @override
+  void initState() {
+    super.initState();
+    pickedFiles = [...widget.initiallyPickedFiles];
+  }
+
+  dynamic pickImages() async {
+    var pickedImages = await ImagePicker().pickMultiImage(
+      maxHeight: 480,
+      maxWidth: 600,
+      imageQuality: 60,
+    );
+    return pickedImages;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Container(
@@ -266,12 +394,39 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         child: const Text('Close'),
                         onPressed: () => Navigator.pop(context),
                       ),
-                      TextButton(
-                        child: const Text('Send Files'),
-                        onPressed: () {
-                          // TODO the main part
-                        },
-                      ),
+                      BlocBuilder<AddImageMessageToConversationCubit,
+                              AddImageMessageToConversationState>(
+                          builder: (context, state) {
+                        if (state is AddImageMessageToConversationSuccessfull) {
+                          SchedulerBinding.instance!
+                              .addPostFrameCallback((timeStamp) {
+                            Navigator.pop(context);
+                          });
+                        } else if (state
+                            is AddImageMessageToConversationError) {
+                          SchedulerBinding.instance!
+                              .addPostFrameCallback((timeStamp) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  state.message,
+                                ),
+                              ),
+                            );
+                          });
+                        } else if (state
+                            is AddImageMessageToConversationLoading) {
+                          return const SizedBox(
+                            width: 25,
+                            height: 25,
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return TextButton(
+                          child: const Text('Send Files'),
+                          onPressed: () => widget.onMessageSend(),
+                        );
+                      }),
                     ],
                   ),
                 ],
@@ -280,66 +435,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           ),
         );
       },
-    );
-  }
-
-  void handleAddingMessage() async {
-    if (messageContent.isNotEmpty) {
-      var messageToAdd = MessageModel(
-        content: messageContent,
-        senderId: currentUser!.id,
-        recieverId: args!.strangerUser.id,
-        createdDateTime: DateTime.now().toIso8601String(),
-        isSeen: false,
-        type: "TEXT_MESSAGE",
-      );
-      context
-          .read<AddMessageToConversationCubit>()
-          .call(args!.conversationId, messageToAdd);
-      await handleScrollingToBottom();
-    }
-  }
-
-  Future<void> handleScrollingToBottom() async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.fastOutSlowIn,
-      );
-    });
-  }
-
-  renderChatDetailStrangerInfo() {
-    return StrangerUserInfo(strangerUser: args!.strangerUser);
-  }
-
-  renderMessageBubbles(List<Message> messages) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          if (messages[index].type == "IMAGE") {
-            return ImageMessageContainer(
-              message: messages[index],
-              strangerId: args!.strangerUser.id,
-              isSentByCurrentUser:
-                  messages[index].senderId == args!.strangerUser.id,
-            );
-          } else {
-            return MessageBubble(
-              message: messages[index],
-              strangerId: args!.strangerUser.id,
-              isSentByCurrentUser:
-                  messages[index].senderId == args!.strangerUser.id,
-            );
-          }
-        },
-        itemCount: messages.length,
-      ),
     );
   }
 }

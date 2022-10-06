@@ -16,7 +16,5 @@ abstract class ConversationService {
     String conversationId,
     MessageModel messageToAdd,
   );
-  void markAllMessagesAsRead(
-    String currentUserId,String conversationId
-  );
+  void markAllMessagesAsRead(String currentUserId, String conversationId);
 }

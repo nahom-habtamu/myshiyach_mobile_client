@@ -1,7 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/services/injection_container.dart';
-import '../bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
+import '../bloc/add_message_to_conversation/add_image_message_to_conversation_cubit.dart';
+import '../bloc/add_message_to_conversation/add_text_message_to_conversation_cubit.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/authenticate_phone_number/authenticate_phone_number.cubit.dart';
 import '../bloc/change_language/change_language_cubit.dart';
@@ -73,7 +74,10 @@ class AppLevelState {
         create: (_) => sl<GetUserByIdCubit>(),
       ),
       BlocProvider(
-        create: (_) => sl<AddMessageToConversationCubit>(),
+        create: (_) => sl<AddTextMessageToConversationCubit>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<AddImageMessageToConversationCubit>(),
       ),
       BlocProvider(
         create: (_) => sl<DeleteProductByIdCubit>(),

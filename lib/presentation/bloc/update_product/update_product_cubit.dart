@@ -3,16 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/services/network_info.dart';
 import '../../../data/models/product/edit_product_model.dart';
 import '../../../domain/usecases/update_product.dart';
-import '../../../domain/usecases/upload_product_pictures.dart';
+import '../../../domain/usecases/upload_pictures.dart';
 import 'update_product_state.dart';
 
 class UpdateProductCubit extends Cubit<UpdateProductState> {
   final UpdateProduct updateProduct;
-  final UploadProductPictures uploadProductPictures;
+  final UploadPictures uploadPictures;
   final NetworkInfo networkInfo;
   UpdateProductCubit({
     required this.updateProduct,
-    required this.uploadProductPictures,
+    required this.uploadPictures,
     required this.networkInfo,
   }) : super(EditPostEmpty());
 
@@ -28,11 +28,14 @@ class UpdateProductCubit extends Cubit<UpdateProductState> {
     String token,
   ) async {
     try {
-      if(await networkInfo.isConnected()){
+      if (await networkInfo.isConnected()) {
         emit(EditPostEmpty());
         emit(EditPostLoading());
         if (imagesToUpload.isNotEmpty) {
-          var uploadedPictures = await uploadProductPictures.call(imagesToUpload);
+          var uploadedPictures = await uploadPictures.call(
+            imagesToUpload,
+            "product_images",
+          );
           editProductModel.productImages = [
             ...uploadedPictures,
             ...productImages
@@ -42,8 +45,7 @@ class UpdateProductCubit extends Cubit<UpdateProductState> {
         }
         var product = await updateProduct.call(id, editProductModel, token);
         emit(EditPostSuccessfull(product));
-      }
-      else {
+      } else {
         emit(EditPostNoNetwork());
       }
     } catch (e) {

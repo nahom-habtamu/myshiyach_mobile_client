@@ -6,8 +6,8 @@ class AddMessageToConversation {
 
   const AddMessageToConversation(this.repository);
 
-  void call(String conversationId, MessageModel messageToAdd) {
-    repository.addMessageToConversation(
+  Future<void> call(String conversationId, MessageModel messageToAdd) async {
+    return repository.addMessageToConversation(
       conversationId,
       messageToAdd,
     );

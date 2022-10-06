@@ -16,8 +16,9 @@ class ConversationRepository extends ConversationService {
 
   @override
   void addMessageToConversation(
-      String conversationId, MessageModel messageToAdd) {
-    remoteDataSource.addMessageToConversation(conversationId, messageToAdd);
+      String conversationId, MessageModel messageToAdd) async {
+    return remoteDataSource.addMessageToConversation(
+        conversationId, messageToAdd);
   }
 
   @override

@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/models/conversation/message_model.dart';
 import '../../../domain/usecases/add_message_to_conversation.dart';
 
-class AddMessageToConversationCubit extends Cubit<void> {
+class AddTextMessageToConversationCubit extends Cubit<void> {
   final AddMessageToConversation addMessageToConversation;
 
-  AddMessageToConversationCubit(this.addMessageToConversation)
+  AddTextMessageToConversationCubit(this.addMessageToConversation)
       : super(const Stream.empty());
 
-  void call(String conversationId, MessageModel messageToAdd) {
-    addMessageToConversation.call(conversationId, messageToAdd);
+  void call(String conversationId, MessageModel messageToAdd) async {
+    return addMessageToConversation.call(conversationId, messageToAdd);
   }
 }

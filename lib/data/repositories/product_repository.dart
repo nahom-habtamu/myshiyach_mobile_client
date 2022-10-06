@@ -52,11 +52,6 @@ class ProductRepository extends ProductService {
   }
 
   @override
-  Future<List<String>> uploadProductPictures(List<dynamic> images) {
-    return storageService.uploadFiles(images);
-  }
-
-  @override
   Future<String> deleteProduct(String id, String token) {
     return remoteDataSource.deleteProduct(id, token);
   }

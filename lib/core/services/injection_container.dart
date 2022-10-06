@@ -24,6 +24,7 @@ import '../../data/repositories/city_repository.dart';
 import '../../data/repositories/conversation_repository.dart';
 import '../../data/repositories/product_repository.dart';
 import '../../data/repositories/token_repository.dart';
+import '../../data/repositories/upload_pictures_repository.dart';
 import '../../data/repositories/user_repository.dart';
 import '../../domain/contracts/auth_service.dart';
 import '../../domain/contracts/category_service.dart';
@@ -31,6 +32,7 @@ import '../../domain/contracts/city_service.dart';
 import '../../domain/contracts/conversation_service.dart';
 import '../../domain/contracts/product_service.dart';
 import '../../domain/contracts/token_service.dart';
+import '../../domain/contracts/upload_pictures_service.dart';
 import '../../domain/contracts/user_service.dart';
 import '../../domain/usecases/add_message_to_conversation.dart';
 import '../../domain/usecases/authenticate_phone_number.dart';
@@ -62,9 +64,10 @@ import '../../domain/usecases/set_favorite_product.dart';
 import '../../domain/usecases/set_is_app_opened_first_time.dart';
 import '../../domain/usecases/store_user_credentails.dart';
 import '../../domain/usecases/update_product.dart';
-import '../../domain/usecases/upload_product_pictures.dart';
+import '../../domain/usecases/upload_pictures.dart';
 import '../../domain/usecases/verify_phone_number.dart';
-import '../../presentation/bloc/add_message_to_conversation/add_message_to_conversation_cubit.dart';
+import '../../presentation/bloc/add_message_to_conversation/add_image_message_to_conversation_cubit.dart';
+import '../../presentation/bloc/add_message_to_conversation/add_text_message_to_conversation_cubit.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
 import '../../presentation/bloc/authenticate_phone_number/authenticate_phone_number.cubit.dart';
 import '../../presentation/bloc/change_language/change_language_cubit.dart';
@@ -138,7 +141,7 @@ Future<void> init() async {
   sl.registerFactory(() => LogOutCubit(storeUserCredentials: sl()));
   sl.registerFactory(
     () => UpdateProductCubit(
-        updateProduct: sl(), uploadProductPictures: sl(), networkInfo: sl()),
+        updateProduct: sl(), uploadPictures: sl(), networkInfo: sl()),
   );
   sl.registerFactory(
     () => GetDataNeededToManagePostCubit(
@@ -146,7 +149,7 @@ Future<void> init() async {
   );
   sl.registerFactory(() => GetAllConversationsCubit(sl(), sl()));
   sl.registerFactory(() => GetUserByIdCubit(sl()));
-  sl.registerFactory(() => AddMessageToConversationCubit(sl()));
+  sl.registerFactory(() => AddTextMessageToConversationCubit(sl()));
   sl.registerFactory(() => GetConversationByIdCubit(sl()));
   sl.registerFactory(() => DeleteProductByIdCubit(sl()));
   sl.registerFactory(() => GetAllCategoriesCubit(sl()));
@@ -169,7 +172,7 @@ Future<void> init() async {
   sl.registerFactory(
     () => CreateProductCubit(
       createProduct: sl(),
-      uploadProductPictures: sl(),
+      uploadPictures: sl(),
     ),
   );
   sl.registerFactory(() => GetProductByIdCubit(sl()));
@@ -177,6 +180,7 @@ Future<void> init() async {
   sl.registerFactory(() => GetProductsByCategoryCubit(sl(), sl()));
   sl.registerFactory(() => SetIsAppOpenedFirstTimeCubit(sl()));
   sl.registerFactory(() => GetIsAppOpenedFirstTimeCubit(sl()));
+  sl.registerFactory(() => AddImageMessageToConversationCubit(sl(), sl()));
 
   // usecases
   sl.registerLazySingleton(() => Login(sl()));
@@ -190,7 +194,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SetFavoriteProducts(sl()));
   sl.registerLazySingleton(() => GetAllCategories(sl()));
   sl.registerLazySingleton(() => CreateProduct(sl()));
-  sl.registerLazySingleton(() => UploadProductPictures(sl()));
+  sl.registerLazySingleton(() => UploadPictures(sl()));
   sl.registerLazySingleton(() => GetAllConversations(sl()));
   sl.registerLazySingleton(() => ExtractToken(sl()));
   sl.registerLazySingleton(() => AddMessageToConversation(sl()));
@@ -234,6 +238,12 @@ Future<void> init() async {
     () => ConversationRepository(sl()),
   );
 
+  //  Upload Pictures Service
+
+  sl.registerLazySingleton<UploadPicturesService>(
+    () => UploadPicturesRepository(sl()),
+  );
+
   // Token Service
 
   sl.registerLazySingleton<TokenService>(
@@ -249,11 +259,12 @@ Future<void> init() async {
   // Product Service
   sl.registerLazySingleton<ProductService>(
     () => ProductRepository(
-        remoteDataSource: sl(),
-        networkInfo: sl(),
-        localDataSource: sl(),
-        storageService: sl(),
-        dynamicLinkDataSource: sl()),
+      remoteDataSource: sl(),
+      networkInfo: sl(),
+      localDataSource: sl(),
+      storageService: sl(),
+      dynamicLinkDataSource: sl(),
+    ),
   );
 
   // Category

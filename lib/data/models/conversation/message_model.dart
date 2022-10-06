@@ -1,14 +1,14 @@
 import '../../../domain/enitites/message.dart';
 
 class MessageModel extends Message {
-  MessageModel(
-      {required String content,
-      required String senderId,
-      required String recieverId,
-      required String createdDateTime,
-      required bool isSeen,
-      required String type})
-      : super(
+  MessageModel({
+    required String content,
+    required String senderId,
+    required String recieverId,
+    required String createdDateTime,
+    required bool isSeen,
+    required String type,
+  }) : super(
           content: content,
           senderId: senderId,
           recieverId: recieverId,

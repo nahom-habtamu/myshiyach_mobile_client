@@ -23,9 +23,9 @@ class ConversationFirebaseDataSource extends ConversationDataSource {
   }
 
   @override
-  void addMessageToConversation(
-      String conversationId, MessageModel messageToAdd) {
-    conversations!.doc(conversationId).update({
+  Future<void> addMessageToConversation(
+      String conversationId, MessageModel messageToAdd) async {
+    return conversations!.doc(conversationId).update({
       "messages": FieldValue.arrayUnion([messageToAdd.toJson()])
     });
   }
@@ -106,13 +106,13 @@ class ConversationFirebaseDataSource extends ConversationDataSource {
         (e) {
           if (e.recieverId == currentUserId && !e.isSeen) {
             return MessageModel(
-                    content: e.content,
-                    senderId: e.senderId,
-                    recieverId: e.recieverId,
-                    createdDateTime: e.createdDateTime,
-                    isSeen: true,
-                    type: e.type)
-                .toJson();
+              content: e.content,
+              senderId: e.senderId,
+              recieverId: e.recieverId,
+              createdDateTime: e.createdDateTime,
+              isSeen: true,
+              type: e.type,
+            ).toJson();
           } else {
             return MessageModel.fromMessage(e).toJson();
           }

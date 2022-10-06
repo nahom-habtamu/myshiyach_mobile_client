@@ -1,5 +1,5 @@
 class Message {
-  final String content;
+  String content;
   final String senderId;
   final String recieverId;
   final String createdDateTime;

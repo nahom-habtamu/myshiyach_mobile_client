@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../bloc/add_message_to_conversation/add_image_message_to_conversation_cubit.dart';
 import '../../constants/login_page_constants.dart';
 
 class MessageSendingTab extends StatefulWidget {
@@ -54,6 +56,7 @@ class _MessageSendingTabState extends State<MessageSendingTab> {
             ),
             IconButton(
               onPressed: () {
+                context.read<AddImageMessageToConversationCubit>().clear();
                 widget.onFilePickerClicked();
               },
               icon: const Icon(
