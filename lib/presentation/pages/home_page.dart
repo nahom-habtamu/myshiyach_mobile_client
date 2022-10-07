@@ -145,11 +145,9 @@ class _HomePageState extends State<HomePage> {
     var productsToDisplay =
         context.read<FilterProductsCubit>().call(products, filterValues);
     if (productsToDisplay.isEmpty) {
-      return Expanded(
+      return const Expanded(
         child: Center(
-          child: Text(searchKeyword.isNotEmpty
-              ? "No products Found in State"
-              : 'No products Found'),
+          child: Text('No products Found'),
         ),
       );
     }

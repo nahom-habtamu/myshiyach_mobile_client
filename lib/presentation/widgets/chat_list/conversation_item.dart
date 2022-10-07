@@ -108,7 +108,9 @@ class _ConversationItemState extends State<ConversationItem> {
                     child: Text(
                       widget.conversation.messages.isEmpty
                           ? ""
-                          : widget.conversation.messages.last.content,
+                          : widget.conversation.messages.last.type == "IMAGE"
+                              ? "image"
+                              : widget.conversation.messages.last.content,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
