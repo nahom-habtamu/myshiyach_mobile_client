@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -10,7 +11,6 @@ import '../../domain/enitites/conversation.dart';
 import '../../domain/enitites/message.dart';
 import '../../domain/enitites/user.dart';
 import '../bloc/add_message_to_conversation/add_image_message_to_conversation_cubit.dart';
-import '../bloc/add_message_to_conversation/add_image_message_to_conversation_state.dart';
 import '../bloc/add_message_to_conversation/add_text_message_to_conversation_cubit.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
@@ -18,12 +18,12 @@ import '../bloc/get_conversation_by_id.dart/get_conversation_by_id_cubit.dart';
 import '../bloc/mark_messages_as_read/mark_messages_as_read_cubit.dart';
 import '../screen_arguments/chat_detail_page_arguments.dart';
 import '../widgets/chat_detail/image_container_bubble.dart';
+import '../widgets/chat_detail/image_message_sending_preview.dart';
 import '../widgets/chat_detail/message_bubble.dart';
 import '../widgets/chat_detail/message_sending_tab.dart';
 import '../widgets/chat_detail/stanger_user_info.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
-import '../widgets/edit_post/post_images.dart';
 
 class ChatDetailPage extends StatefulWidget {
   static String routeName = '/chatDetailPage';
@@ -38,7 +38,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   String messageContent = "";
   ChatDetailPageArguments? args;
   List<dynamic> pickedFiles = [];
-  final ScrollController _scrollController = ScrollController();
+  late ScrollController _scrollController;
+  bool isFloatingButtonVisible = false;
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -48,7 +49,19 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       args =
           ModalRoute.of(context)!.settings.arguments as ChatDetailPageArguments;
       initializeCurrentUser();
-      markAllMessagesAsRead(args!.conversationId);
+      _scrollController = ScrollController();
+      _scrollController.addListener(() {
+        if (_scrollController.position.atEdge) {
+          bool isTop = _scrollController.position.pixels == 0;
+          if (!isTop) {
+            setState(() {
+              isFloatingButtonVisible = false;
+            });
+            markAllMessagesAsRead(args!.conversationId);
+            handleScrollingToBottom();
+          }
+        }
+      });
     });
   }
 
@@ -61,12 +74,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
+    _scrollController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    const duration = Duration(milliseconds: 200);
+
     return Scaffold(
       backgroundColor: const Color(0xff11435E),
       appBar: CustomAppBar(
@@ -76,6 +91,31 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         builder: (context, conversationStream) {
           return buildChatDetail(conversationStream);
         },
+      ),
+      floatingActionButton: AnimatedSlide(
+        duration: duration,
+        offset: isFloatingButtonVisible ? Offset.zero : const Offset(0, 3),
+        child: AnimatedOpacity(
+          duration: duration,
+          opacity: isFloatingButtonVisible ? 1 : 0,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 50.0),
+            child: SizedBox(
+              height: 40,
+              width: 40,
+              child: FittedBox(
+                child: FloatingActionButton(
+                  child: const Icon(Icons.arrow_downward_sharp),
+                  backgroundColor: Colors.grey,
+                  onPressed: () {
+                    markAllMessagesAsRead(args!.conversationId);
+                    handleScrollingToBottom();
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -93,11 +133,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             child: CircularProgressIndicator(),
           );
         }
-
-        SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-          markAllMessagesAsRead(args!.conversationId);
-        });
-
         return renderMainContent(snapshot.data!);
       },
     );
@@ -169,11 +204,28 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     );
 
     return Expanded(
-      child: ListView.builder(
-        shrinkWrap: true,
-        controller: _scrollController,
-        itemBuilder: ((context, index) => generatedWidgets[index]),
-        itemCount: generatedWidgets.length,
+      child: NotificationListener<UserScrollNotification>(
+        onNotification: ((notification) {
+          final ScrollDirection direction = notification.direction;
+          setState(() {
+            if (direction == ScrollDirection.reverse) {
+              isFloatingButtonVisible = true;
+            } else if (direction == ScrollDirection.forward) {
+              isFloatingButtonVisible = false;
+            }
+          });
+          return true;
+        }),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: _scrollController,
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: ((context, index) => generatedWidgets[index]),
+            itemCount: generatedWidgets.length,
+          ),
+        ),
       ),
     );
   }
@@ -217,7 +269,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   showFileSendingPreview() {
     return ImageMessageSendingPreview(
       initiallyPickedFiles: pickedFiles,
-      onMessageSend: () => handleAddingImageMessage(),
+      onMessageSendIsSuccessfull: () async => await handleScrollingToBottom(),
+      onSendButtonClicked: () => handleAddingImageMessage(),
     );
   }
 
@@ -258,18 +311,21 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             fileMessagesToSend,
             pickedFiles,
           );
-      await handleScrollingToBottom();
     }
   }
 
   Future<void> handleScrollingToBottom() async {
-    await Future.delayed(const Duration(milliseconds: 300));
     SchedulerBinding.instance!.addPostFrameCallback((_) {
+      setState(() {
+        isFloatingButtonVisible = false;
+      });
+      // Future.delayed(const Duration(milliseconds: 300), () {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 500),
         curve: Curves.fastOutSlowIn,
       );
+      // });
     });
   }
 
@@ -302,139 +358,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         },
         itemCount: messages.length,
       ),
-    );
-  }
-}
-
-class ImageMessageSendingPreview extends StatefulWidget {
-  final dynamic initiallyPickedFiles;
-  final Function onMessageSend;
-  const ImageMessageSendingPreview({
-    Key? key,
-    required this.initiallyPickedFiles,
-    required this.onMessageSend,
-  }) : super(key: key);
-
-  @override
-  State<ImageMessageSendingPreview> createState() =>
-      _ImageMessageSendingPreviewState();
-}
-
-class _ImageMessageSendingPreviewState
-    extends State<ImageMessageSendingPreview> {
-  dynamic pickedFiles = [];
-
-  @override
-  void initState() {
-    super.initState();
-    pickedFiles = [...widget.initiallyPickedFiles];
-  }
-
-  dynamic pickImages() async {
-    var pickedImages = await ImagePicker().pickMultiImage(
-      maxHeight: 480,
-      maxWidth: 600,
-      imageQuality: 60,
-    );
-    return pickedImages;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return StatefulBuilder(
-      builder: (BuildContext context, StateSetter setState) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25),
-              topRight: Radius.circular(25),
-            ),
-          ),
-          height: 250,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                'Picked Files',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-              const SizedBox(height: 25),
-              PostImages(
-                pickedImages: pickedFiles,
-                imagesAlreadyInProduct: const [],
-                onStateChange: (updatedPostImages, updatedPickedImages) {
-                  setState(() {
-                    pickedFiles = [...updatedPickedImages];
-                  });
-                },
-              ),
-              const SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    child: const Text('Add'),
-                    onPressed: () async {
-                      var pickedImages = await pickImages();
-                      if (pickedImages != null) {
-                        setState(() {
-                          pickedFiles = [...pickedFiles, ...pickedImages];
-                        });
-                      }
-                    },
-                  ),
-                  Row(
-                    children: [
-                      TextButton(
-                        child: const Text('Close'),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      BlocBuilder<AddImageMessageToConversationCubit,
-                              AddImageMessageToConversationState>(
-                          builder: (context, state) {
-                        if (state is AddImageMessageToConversationSuccessfull) {
-                          SchedulerBinding.instance!
-                              .addPostFrameCallback((timeStamp) {
-                            Navigator.pop(context);
-                          });
-                        } else if (state
-                            is AddImageMessageToConversationError) {
-                          SchedulerBinding.instance!
-                              .addPostFrameCallback((timeStamp) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  state.message,
-                                ),
-                              ),
-                            );
-                          });
-                        } else if (state
-                            is AddImageMessageToConversationLoading) {
-                          return const SizedBox(
-                            width: 25,
-                            height: 25,
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        return TextButton(
-                          child: const Text('Send Files'),
-                          onPressed: () => widget.onMessageSend(),
-                        );
-                      }),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }
