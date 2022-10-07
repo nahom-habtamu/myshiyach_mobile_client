@@ -208,7 +208,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         onNotification: ((notification) {
           final ScrollDirection direction = notification.direction;
           setState(() {
-            if (direction == ScrollDirection.reverse) {
+            if (direction == ScrollDirection.reverse &&
+                !_scrollController.position.atEdge) {
               isFloatingButtonVisible = true;
             } else if (direction == ScrollDirection.forward) {
               isFloatingButtonVisible = false;
@@ -319,13 +320,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       setState(() {
         isFloatingButtonVisible = false;
       });
-      // Future.delayed(const Duration(milliseconds: 300), () {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 500),
         curve: Curves.fastOutSlowIn,
       );
-      // });
     });
   }
 
