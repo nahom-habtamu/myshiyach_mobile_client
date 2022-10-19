@@ -17,7 +17,7 @@ import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/error_content.dart';
 import '../widgets/common/no_network_content.dart';
 import '../widgets/home/category_item.dart';
-import '../widgets/home/product_grid.dart';
+import '../widgets/home/product_grid_with_pagination.dart';
 import '../widgets/home/search_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -51,9 +51,14 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       products = [];
     });
-    context
-        .read<DisplayAllProductsCubit>()
-        .call(PageAndLimitModel.initialDefault(), filterValues);
+
+    var pageAndLimitForSearch = PageAndLimitModel(limit: 100000000, page: 1);
+
+    context.read<DisplayAllProductsCubit>().call(
+        (filterValues?.keyword != null && filterValues!.keyword!.isNotEmpty)
+            ? pageAndLimitForSearch
+            : PageAndLimitModel.initialDefault(),
+        filterValues);
   }
 
   @override
@@ -88,7 +93,7 @@ class _HomePageState extends State<HomePage> {
         });
         fetchAllNeededToDisplayProductList();
       },
-      onSearchQueryChanged: (value) {
+      onSearchSubmitted: (value) {
         setState(() {
           searchKeyword = value.trim();
           var addedKeyword = FilterCriteriaModel.addKeyWord(
@@ -97,6 +102,7 @@ class _HomePageState extends State<HomePage> {
           );
           filterValues = addedKeyword;
         });
+        fetchAllNeededToDisplayProductList();
       },
       categories: categories,
       products: products,
@@ -184,13 +190,20 @@ class _HomePageState extends State<HomePage> {
 
   buildProductList(List<Product> filteredProducts) {
     return Expanded(
-      child: ProductList(
-        filterValues: filterValues,
-        products: filteredProducts,
-        favorites: favorites,
-        pageAndLimit: pageAndLimit,
-        onRefreshed: updateStateOnRefresh,
-      ),
+      child:
+          (filterValues?.keyword != null && filterValues!.keyword!.isNotEmpty)
+              ? ProductGridWithOutPagination(
+                  products: filteredProducts,
+                  favorites: favorites,
+                  searchKeyword: searchKeyword,
+                )
+              : ProductGridWithPagination(
+                  filterValues: filterValues,
+                  products: filteredProducts,
+                  favorites: favorites,
+                  pageAndLimit: pageAndLimit,
+                  onRefreshed: updateStateOnRefresh,
+                ),
     );
   }
 

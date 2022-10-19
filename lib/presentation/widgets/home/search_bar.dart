@@ -11,7 +11,7 @@ class SearchBar extends StatefulWidget {
   final Function onSearchFilterApplied;
   final List<MainCategory> categories;
   final List<Product> products;
-  final Function onSearchQueryChanged;
+  final Function onSearchSubmitted;
   final FilterCriteriaModel? initialFilterCriteria;
 
   const SearchBar({
@@ -19,7 +19,7 @@ class SearchBar extends StatefulWidget {
     required this.categories,
     required this.onSearchFilterApplied,
     required this.products,
-    required this.onSearchQueryChanged,
+    required this.onSearchSubmitted,
     required this.initialFilterCriteria,
   }) : super(key: key);
 
@@ -54,8 +54,12 @@ class _SearchBarState extends State<SearchBar> {
                   color: Colors.black,
                   fontSize: 14,
                 ),
-                onChanged: (value) => {
-                  widget.onSearchQueryChanged(value),
+                textInputAction: TextInputAction.search,
+                onFieldSubmitted: (value) => {
+                  widget.onSearchSubmitted(value),
+                },
+                onChanged: (value) {
+                  if (value.isEmpty) widget.onSearchSubmitted("");
                 },
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context).homeSearchBarHint,
@@ -97,7 +101,7 @@ class _SearchBarState extends State<SearchBar> {
                     ),
                     onPressed: () {
                       _controller.text = "";
-                      widget.onSearchQueryChanged("");
+                      widget.onSearchSubmitted("");
                     },
                   ),
                   isDense: true,
