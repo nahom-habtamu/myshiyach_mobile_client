@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../domain/enitites/main_category.dart';
@@ -117,8 +118,16 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
               PostButton(
                 onTap: () {
                   if (formKey.currentState!.validate()) {
-                    var secondInputValues = buildSecondPageInputs();
-                    widget.onPost(secondInputValues);
+                    if (pickedImages.isNotEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please Add Images'),
+                        ),
+                      );
+                    } else {
+                      var secondInputValues = buildSecondPageInputs();
+                      widget.onPost(secondInputValues);
+                    }
                   }
                 },
               )
