@@ -20,6 +20,7 @@ import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../screen_arguments/post_detail_page_arguments.dart';
 import '../widgets/common/error_content.dart';
 import '../widgets/common/no_network_content.dart';
+import '../widgets/common/pop_up_dialog.dart';
 import '../widgets/post_detail/post_content_to_show.dart';
 import '../widgets/post_detail/post_detail_app_bar.dart';
 import 'edit_post_page.dart';
@@ -188,7 +189,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     return null;
   }
 
-  handleAppBarMenuClicked(String value) {
+  handleAppBarMenuClicked(String value) async {
     List<String> values = [
       AppLocalizations.of(context).postDetailEditText,
       AppLocalizations.of(context).postDetailRefreshText,
@@ -205,7 +206,18 @@ class _PostDetailPageState extends State<PostDetailPage> {
     } else if (value == values[1]) {
       refreshProduct(product!);
     } else if (value == values[2]) {
-      deleteProduct(product!);
+      var result = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return PopupDialog(
+            content:
+                AppLocalizations.of(context).savedPostsDeleteConfirmDialogText,
+          );
+        },
+      );
+      if (result) {
+        deleteProduct(product!);
+      }
     } else if (value == values[3]) {
       handleProductShare(product!.id);
     }
