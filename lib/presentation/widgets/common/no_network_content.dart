@@ -18,9 +18,8 @@ class NoNetworkContent extends StatelessWidget {
       onButtonClicked: () {
         onButtonClicked();
       },
-      hintText: AppLocalizations.of(context).commonFallBackNoNetworkHintText,
-      buttonText:
-          AppLocalizations.of(context).commonFallBackNoNetworkButtonText,
+      hintText: AppLocalizations.of(context).commonFallBackNoNetworkButtonText,
+      buttonText: AppLocalizations.of(context).commonFallBackNoNetworkHintText,
     );
   }
 }
