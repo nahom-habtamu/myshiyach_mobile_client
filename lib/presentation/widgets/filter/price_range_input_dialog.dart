@@ -19,8 +19,6 @@ class PriceRangeInputDialog extends StatefulWidget {
 class _PriceRangeInputDialogState extends State<PriceRangeInputDialog> {
   double minPriceFromDialog = 0;
   double maxPriceFromDialog = 0;
-  TextEditingController controllerMin = TextEditingController();
-  TextEditingController controllerMax = TextEditingController();
 
   @override
   void initState() {
@@ -79,7 +77,9 @@ class _PriceRangeInputDialogState extends State<PriceRangeInputDialog> {
             height: 170,
             child: Column(
               children: [
-                TextField(
+                TextFormField(
+                  // key: Key("Min$minPriceFromDialog"),
+                  initialValue: minPriceFromDialog.toString(),
                   onChanged: (value) {
                     setState(() {
                       if (value.isNotEmpty) {
@@ -91,7 +91,9 @@ class _PriceRangeInputDialogState extends State<PriceRangeInputDialog> {
                     hintText: AppLocalizations.of(context).filterMinPriceText,
                   ),
                 ),
-                TextField(
+                TextFormField(
+                  // key: Key("Min$maxPriceFromDialog"),
+                  initialValue: maxPriceFromDialog.toString(),
                   onChanged: (value) {
                     setState(() {
                       if (value.isNotEmpty) {
