@@ -117,12 +117,14 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
               PostButton(
                 onTap: () {
                   if (formKey.currentState!.validate()) {
-                    if (pickedImages.isNotEmpty) {
+                    if (pickedImages.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Please Add Images'),
+                          content: Text('Please Pick Post Images...'),
+                          backgroundColor: Colors.deepOrange,
                         ),
                       );
+                      return;
                     } else {
                       var secondInputValues = buildSecondPageInputs();
                       widget.onPost(secondInputValues);
