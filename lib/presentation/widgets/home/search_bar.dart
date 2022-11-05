@@ -6,6 +6,7 @@ import '../../../domain/enitites/main_category.dart';
 import '../../../domain/enitites/product.dart';
 import '../../pages/filter_data_page.dart';
 import '../../screen_arguments/filter_page_argument.dart';
+import '../../utils/custom_search_history_delegate.dart';
 
 class SearchBar extends StatefulWidget {
   final Function onSearchFilterApplied;
@@ -29,11 +30,36 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   FilterCriteriaModel? filterResult;
-  final TextEditingController _controller = TextEditingController();
+  String keyword = "";
 
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> _showSearch() async {
+    final searchText = await showSearch<String>(
+      context: context,
+      delegate: CustomSearchHistoryDelegate(
+        onSearchChanged: _getRecentSearchesLike,
+      ),
+    );
+    if (searchText != null) {
+      setState(() {
+        keyword = searchText;
+      });
+      widget.onSearchSubmitted(searchText);
+    }
+    // await _saveToRecentSearches(searchText);
+  }
+
+  Future<List<String>> _getRecentSearchesLike(String query) async {
+    // final pref = await SharedPreferences.getInstance();
+    // final allSearches = pref.getStringList("recentSearches");
+    // return allSearches.where((search) => search.startsWith(query)).toList();
+
+    return Future.delayed(
+        const Duration(seconds: 1), (() => ["nmb", "test", "check"]));
   }
 
   @override
@@ -49,18 +75,18 @@ class _SearchBarState extends State<SearchBar> {
             child: SizedBox(
               height: 35,
               child: TextFormField(
-                controller: _controller,
+                key: Key(keyword),
+                initialValue: keyword,
+                readOnly: true,
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 14,
                 ),
                 textInputAction: TextInputAction.search,
-                onFieldSubmitted: (value) => {
-                  widget.onSearchSubmitted(value),
-                },
                 onChanged: (value) {
                   if (value.isEmpty) widget.onSearchSubmitted("");
                 },
+                onTap: () => _showSearch(),
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context).homeSearchBarHint,
                   border: const OutlineInputBorder(
@@ -100,8 +126,10 @@ class _SearchBarState extends State<SearchBar> {
                       size: 20,
                     ),
                     onPressed: () {
-                      _controller.text = "";
-                      widget.onSearchSubmitted("");
+                      setState(() {
+                        keyword = "";
+                      });
+                      widget.onSearchSubmitted(keyword);
                     },
                   ),
                   isDense: true,
