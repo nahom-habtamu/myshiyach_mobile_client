@@ -16,6 +16,8 @@ import '../../data/datasources/firebase/firebase_storage_data_source.dart';
 import '../../data/datasources/product/product_data_source.dart';
 import '../../data/datasources/product/product_local_data_source.dart';
 import '../../data/datasources/product/product_remote_data_source.dart';
+import '../../data/datasources/search_delegate/search_delegate_data_source.dart';
+import '../../data/datasources/search_delegate/search_delegate_shared_pref_data_source.dart';
 import '../../data/datasources/user/user_local_data_source.dart';
 import '../../data/datasources/user/user_remote_data_source.dart';
 import '../../data/repositories/auth_repository.dart';
@@ -23,6 +25,7 @@ import '../../data/repositories/category_repository.dart';
 import '../../data/repositories/city_repository.dart';
 import '../../data/repositories/conversation_repository.dart';
 import '../../data/repositories/product_repository.dart';
+import '../../data/repositories/search_delegate_repository.dart';
 import '../../data/repositories/token_repository.dart';
 import '../../data/repositories/upload_pictures_repository.dart';
 import '../../data/repositories/user_repository.dart';
@@ -31,9 +34,11 @@ import '../../domain/contracts/category_service.dart';
 import '../../domain/contracts/city_service.dart';
 import '../../domain/contracts/conversation_service.dart';
 import '../../domain/contracts/product_service.dart';
+import '../../domain/contracts/search_delegate_service.dart';
 import '../../domain/contracts/token_service.dart';
 import '../../domain/contracts/upload_pictures_service.dart';
 import '../../domain/contracts/user_service.dart';
+import '../../domain/usecases/add_keyword_to_search_history.dart';
 import '../../domain/usecases/add_message_to_conversation.dart';
 import '../../domain/usecases/authenticate_phone_number.dart';
 import '../../domain/usecases/change_password.dart';
@@ -54,6 +59,7 @@ import '../../domain/usecases/get_paginated_products.dart';
 import '../../domain/usecases/get_product_by_id.dart';
 import '../../domain/usecases/get_products_by_category.dart';
 import '../../domain/usecases/get_products_by_user_id.dart';
+import '../../domain/usecases/get_recent_searches.dart';
 import '../../domain/usecases/get_stored_user_credentials.dart';
 import '../../domain/usecases/get_user_by_id.dart';
 import '../../domain/usecases/login.dart';
@@ -66,6 +72,7 @@ import '../../domain/usecases/store_user_credentails.dart';
 import '../../domain/usecases/update_product.dart';
 import '../../domain/usecases/upload_pictures.dart';
 import '../../domain/usecases/verify_phone_number.dart';
+import '../../presentation/bloc/add_keyword_to_search_history/add_keyword_to_search_history_cubit.dart';
 import '../../presentation/bloc/add_message_to_conversation/add_image_message_to_conversation_cubit.dart';
 import '../../presentation/bloc/add_message_to_conversation/add_text_message_to_conversation_cubit.dart';
 import '../../presentation/bloc/auth/auth_cubit.dart';
@@ -88,6 +95,7 @@ import '../../presentation/bloc/get_post_detail_content/get_post_detail_content_
 import '../../presentation/bloc/get_product_by_id/get_product_by_id_cubit.dart';
 import '../../presentation/bloc/get_products_by_category/get_products_by_category_cubit.dart';
 import '../../presentation/bloc/get_products_by_user_id/get_products_by_user_id_cubit.dart';
+import '../../presentation/bloc/get_recent_searches/get_recent_searches_cubit.dart';
 import '../../presentation/bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_cubit.dart';
 import '../../presentation/bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../../presentation/bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
@@ -181,6 +189,8 @@ Future<void> init() async {
   sl.registerFactory(() => SetIsAppOpenedFirstTimeCubit(sl()));
   sl.registerFactory(() => GetIsAppOpenedFirstTimeCubit(sl()));
   sl.registerFactory(() => AddImageMessageToConversationCubit(sl(), sl()));
+  sl.registerFactory(() => AddKeywordToSearchHistoryCubit(sl()));
+  sl.registerFactory(() => GetRecentSearchesCubit(sl()));
 
   // usecases
   sl.registerLazySingleton(() => Login(sl()));
@@ -215,6 +225,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetProductsByCategory(sl()));
   sl.registerLazySingleton(() => GetIsAppOpenedFirstTime(sl()));
   sl.registerLazySingleton(() => SetIsAppOpenedFirstTime(sl()));
+  sl.registerLazySingleton(() => GetRecentSearches(sl()));
+  sl.registerLazySingleton(() => AddKeywordToSearchHistory(sl()));
 
   // repositories
 
@@ -272,6 +284,10 @@ Future<void> init() async {
     () => CategoryRepository(remoteDataSource: sl()),
   );
 
+  sl.registerLazySingleton<SearchDelegateService>(
+    () => SearchDelegateRepository(sl()),
+  );
+
   // Data Sources
 
   // Auth
@@ -299,6 +315,11 @@ Future<void> init() async {
   // DYNAMIC LINK SERVICE
   sl.registerLazySingleton<DynamicLinkDataSource>(
     () => FirebaseDynamicLinkDataSource(),
+  );
+
+  // SEARCH DELEGATE SERVICE
+  sl.registerLazySingleton<SearchDelegateDataSource>(
+    () => SearchDelegateSharedPrefDataSource(sl()),
   );
 
   //  User

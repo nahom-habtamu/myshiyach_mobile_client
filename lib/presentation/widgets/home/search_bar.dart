@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../data/models/filter/filter_criteria_model.dart';
 import '../../../domain/enitites/main_category.dart';
 import '../../../domain/enitites/product.dart';
+import '../../bloc/add_keyword_to_search_history/add_keyword_to_search_history_cubit.dart';
+import '../../bloc/get_recent_searches/get_recent_searches_cubit.dart';
 import '../../pages/filter_data_page.dart';
 import '../../screen_arguments/filter_page_argument.dart';
 import '../../utils/custom_search_history_delegate.dart';
@@ -49,17 +52,12 @@ class _SearchBarState extends State<SearchBar> {
         keyword = searchText;
       });
       widget.onSearchSubmitted(searchText);
+      context.read<AddKeywordToSearchHistoryCubit>().execute(keyword);
     }
-    // await _saveToRecentSearches(searchText);
   }
 
-  Future<List<String>> _getRecentSearchesLike(String query) async {
-    // final pref = await SharedPreferences.getInstance();
-    // final allSearches = pref.getStringList("recentSearches");
-    // return allSearches.where((search) => search.startsWith(query)).toList();
-
-    return Future.delayed(
-        const Duration(seconds: 1), (() => ["nmb", "test", "check"]));
+  Future<List<String>> _getRecentSearchesLike(_) async {
+    return context.read<GetRecentSearchesCubit>().execute(keyword);
   }
 
   @override

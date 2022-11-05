@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/services/injection_container.dart';
+import '../bloc/add_keyword_to_search_history/add_keyword_to_search_history_cubit.dart';
 import '../bloc/add_message_to_conversation/add_image_message_to_conversation_cubit.dart';
 import '../bloc/add_message_to_conversation/add_text_message_to_conversation_cubit.dart';
 import '../bloc/auth/auth_cubit.dart';
@@ -22,6 +23,7 @@ import '../bloc/get_paginated_products/get_paginated_products_cubit.dart';
 import '../bloc/get_post_detail_content/get_post_detail_content_cubit.dart';
 import '../bloc/get_products_by_category/get_products_by_category_cubit.dart';
 import '../bloc/get_products_by_user_id/get_products_by_user_id_cubit.dart';
+import '../bloc/get_recent_searches/get_recent_searches_cubit.dart';
 import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_cubit.dart';
 import '../bloc/get_user_by_id/get_user_by_id_cubit.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
@@ -132,6 +134,12 @@ class AppLevelState {
       ),
       BlocProvider(
         create: (_) => sl<SetIsAppOpenedFirstTimeCubit>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<GetRecentSearchesCubit>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<AddKeywordToSearchHistoryCubit>(),
       )
     ];
   }

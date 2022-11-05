@@ -53,7 +53,8 @@ class _HomePageState extends State<HomePage> {
       products = [];
     });
 
-    var pageAndLimitForSearch = PageAndLimitModel(limit: 100000000, page: 1);
+    var pageAndLimitForSearch =
+        PageAndLimitModel(limit: 10000000000000000, page: 1);
 
     context.read<DisplayAllProductsCubit>().call(
         (filterValues?.keyword != null && filterValues!.keyword!.isNotEmpty)
