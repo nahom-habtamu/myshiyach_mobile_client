@@ -24,16 +24,15 @@ class RegisterUserCubit extends Cubit<RegisterUserState> {
   void signUpUser(
       RegisterUserRequestModel request, PhoneAuthCredential credential) async {
     try {
-
-      if(await networkInfo.isConnected()){
+      if (await networkInfo.isConnected()) {
         emit(RegisterUserEmpty());
         emit(RegisterUserLoading());
         await authenticatePhoneNumber.call(credential);
         await registerUser.call(request);
         emit(RegisterUserSuccessfull());
+      } else {
+        emit(RegisterUserNoNetwork());
       }
-      emit(RegisterUserNoNetwork());
-
     } catch (e) {
       emit(RegisterUserError(message: e.toString()));
     }
