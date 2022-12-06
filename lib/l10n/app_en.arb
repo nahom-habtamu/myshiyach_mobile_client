@@ -7,6 +7,7 @@
     "addPostButtonCancelText" : "Cancel",
     "addPostButtonPostText" : "Post",
     "addPostButtonNextText" : "Next",
+    "addPostNoImageWarning" : "Please Pick Product Images",
 
     "changePasswordIntroHeaderOne" : "Change Your Password?",
     "changePasswordIntroHeaderTwo" : "Type in your new password here .",
@@ -51,6 +52,23 @@
     "commonFallBackNoNetworkCaptionText" : "Please Connect to the internet to access our app features.",
     "commonFallBackNoNetworkButtonText" : "No Network",
     "commonFallBackNoNetworkHintText" : "Try Again",
+
+
+    "contactUsAppBarText" : "Contact Us",
+    "contactUsCallUsText" : "Call Us",
+    "contactUsEmailUsText" : "Email Us",
+    "contactUsAboutOurCompanyText" : "About Our Company",
+    "contactUsAboutOurCompanyValue" : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book",
+    "contactUsAboutOurProductText" : "About Our Product",
+    "contactUsAboutOurProductValue" : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book",
+    "contactUsAddressText" : "Address",
+    "contactUsCityText" : "City",
+    "contactUsCityValueText" : "Addis Ababa",
+    "contactUsAddressLineText" : "Address Line",
+    "contactUsAddressLineValueText" : "Bole Rwanda",
+    "contactUsSpecificAddressText" : "Specific Adress",
+    "contactUsSpecificAddressValueText" : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the",
+
 
     "editPostAppBarText" : "Edit Post",
     "editPostSaveButtonText" : "Save Changes",
@@ -154,6 +172,10 @@
     "postDetailOwnerPhoneNumberText" : "Phone No",
     "postDetailOwnerNameText" : "Name",
     "postDetailSendMessageButton" : "Send Message",
+    "postDetailAddToFavoriteButton" : "Add To Favorites",
+    "postDetailRemoveFromFavoriteButton" : "Remove From Favorites",
+    "postDetailRecommendedItems" : "Recommended Items",
+    "postDetailBirr" : "Birr",
 
     "profilePageAppBarText" : "Profile",
 
@@ -178,6 +200,8 @@
     "profilePageMoreHeaderText" : "More",
     "profilePageContactTitle" : "Contact Us",
     "profilePageContactSubTitle" : "For More Information",    
+    "profilePagePrivacyPolicyTitle" : "Privacy Policy",    
+    "profilePagePrivacyPolicySubTitle" : "Check out applications terms and services",    
     "profilePageLanguageTitle" : "Change Language",
     "profilePageLanguageSubTitle" : "Swap between Amharic and English Languages",
     "profilePageLogoutHeader" : "Logout",

@@ -94,8 +94,9 @@ class _ProfilePageState extends State<ProfilePage> {
               Navigator.pushNamed(context, ContactUsPage.routeName),
         ),
         SettingItem(
-          title: "Privacy Policy",
-          subTitle: "Please Check out Applications Terms and Services",
+          title: AppLocalizations.of(context).profilePagePrivacyPolicyTitle,
+          subTitle:
+              AppLocalizations.of(context).profilePagePrivacyPolicySubTitle,
           leadingIcon: Icons.privacy_tip,
           onPressed: () =>
               Navigator.pushNamed(context, TermsAndServicesPage.routeName),

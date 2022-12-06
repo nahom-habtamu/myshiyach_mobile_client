@@ -130,8 +130,9 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
                     if (formKey.currentState!.validate()) {
                       if (pickedImages.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please Pick Post Images...'),
+                          SnackBar(
+                            content: Text(AppLocalizations.of(context)
+                                .addPostNoImageWarning),
                             backgroundColor: Colors.deepOrange,
                           ),
                         );

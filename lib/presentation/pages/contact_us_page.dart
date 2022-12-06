@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
@@ -13,7 +14,8 @@ class ContactUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff11435E),
-      appBar: const CustomAppBar(title: "Contact Us"),
+      appBar:
+          CustomAppBar(title: AppLocalizations.of(context).contactUsAppBarText),
       body: CurvedContainer(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Padding(
@@ -40,14 +42,15 @@ class ContactUsPage extends StatelessWidget {
                       child: DetailItem(
                         isCurved: true,
                         title: Row(
-                          children: const [
-                            Icon(
+                          children: [
+                            const Icon(
                               Icons.phone,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
-                            Text('Call Us'),
+                            Text(AppLocalizations.of(context)
+                                .contactUsCallUsText),
                           ],
                         ),
                         subtitle: const Text('091111222211'),
@@ -64,14 +67,15 @@ class ContactUsPage extends StatelessWidget {
                       child: DetailItem(
                         isCurved: true,
                         title: Row(
-                          children: const [
-                            Icon(
+                          children: [
+                            const Icon(
                               Icons.email,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
-                            Text('Email Us'),
+                            Text(AppLocalizations.of(context)
+                                .contactUsEmailUsText),
                           ],
                         ),
                         subtitle: const Text('someemail@gmail.com'),
@@ -86,53 +90,55 @@ class ContactUsPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                const DetailItem(
+                DetailItem(
                   title: Padding(
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       vertical: 8.0,
                     ),
                     child: Text(
-                      'About Our Company',
+                      AppLocalizations.of(context).contactUsAboutOurCompanyText,
                       textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ),
                   subtitle: Padding(
-                    padding: EdgeInsets.only(bottom: 15.0),
+                    padding: const EdgeInsets.only(bottom: 15.0),
                     child: Text(
-                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book',
+                      AppLocalizations.of(context)
+                          .contactUsAboutOurCompanyValue,
                     ),
                   ),
                 ),
-                const DetailItem(
+                DetailItem(
                   title: Padding(
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       vertical: 8.0,
                     ),
                     child: Text(
-                      'About Our Product',
+                      AppLocalizations.of(context).contactUsAboutOurProductText,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   subtitle: Padding(
-                    padding: EdgeInsets.only(bottom: 15.0),
+                    padding: const EdgeInsets.only(bottom: 15.0),
                     child: Text(
-                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book',
+                      AppLocalizations.of(context)
+                          .contactUsAboutOurProductValue,
                     ),
                   ),
                 ),
                 DetailItem(
-                  title: const Padding(
-                    padding: EdgeInsets.all(8.0),
+                  title: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Address',
+                      AppLocalizations.of(context).contactUsAddressText,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -141,21 +147,26 @@ class ContactUsPage extends StatelessWidget {
                   subtitle: Padding(
                     padding: const EdgeInsets.only(bottom: 15.0),
                     child: Column(
-                      children: const [
+                      children: [
                         ListTile(
-                          title: Text('City'),
-                          subtitle: Text('Addis Ababa'),
+                          title: Text(
+                              AppLocalizations.of(context).contactUsCityText),
+                          subtitle: Text(AppLocalizations.of(context)
+                              .contactUsCityValueText),
                         ),
-                        Divider(),
+                        const Divider(),
                         ListTile(
-                          title: Text('Address Line'),
-                          subtitle: Text('Bole Rwanda'),
+                          title: Text(AppLocalizations.of(context)
+                              .contactUsAddressLineText),
+                          subtitle: Text(AppLocalizations.of(context)
+                              .contactUsAddressLineValueText),
                         ),
-                        Divider(),
+                        const Divider(),
                         ListTile(
-                          title: Text('Specific Address'),
-                          subtitle: Text(
-                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the'),
+                          title: Text(AppLocalizations.of(context)
+                              .contactUsSpecificAddressText),
+                          subtitle: Text(AppLocalizations.of(context)
+                              .contactUsSpecificAddressValueText),
                         )
                       ],
                     ),

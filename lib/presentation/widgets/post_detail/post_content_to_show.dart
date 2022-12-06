@@ -323,7 +323,8 @@ class _PostContentToShowState extends State<PostContentToShow> {
       height: 100,
       child: DetailItem(
         subtitle: Text(
-          PriceFormatterUtil.formatToPrice(widget.product.price) + ' Birr',
+          PriceFormatterUtil.formatToPrice(widget.product.price) +
+              ' ${AppLocalizations.of(context).postDetailBirr}',
           style: const TextStyle(
             color: Color(0xff34A853),
             fontSize: 18,
@@ -447,11 +448,11 @@ class _PostContentToShowState extends State<PostContentToShow> {
           return Column(
             children: [
               const Divider(),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15.0),
                 child: Text(
-                  'Recommended Items',
-                  style: TextStyle(
+                  AppLocalizations.of(context).postDetailRecommendedItems,
+                  style: const TextStyle(
                     fontSize: 22,
                     fontStyle: FontStyle.italic,
                     color: Colors.black45,

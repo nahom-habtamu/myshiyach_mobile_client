@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SaveToFavoritesButton extends StatelessWidget {
   final bool isFavorite;
@@ -32,7 +33,11 @@ class SaveToFavoritesButton extends StatelessWidget {
                 width: 8,
               ),
               Text(
-                isFavorite ? 'Remove From Favorites' : 'Add To Favorites',
+                isFavorite
+                    ? AppLocalizations.of(context)
+                        .postDetailRemoveFromFavoriteButton
+                    : AppLocalizations.of(context)
+                        .postDetailAddToFavoriteButton,
                 style: const TextStyle(fontSize: 16),
               ),
             ],
