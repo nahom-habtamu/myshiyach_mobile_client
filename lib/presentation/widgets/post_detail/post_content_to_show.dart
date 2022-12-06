@@ -347,15 +347,15 @@ class _PostContentToShowState extends State<PostContentToShow> {
   }
 
   renderTimeContent(String time) {
-    return Text(
-      DateFormatterUtil.formatProductCreatedAtTime(
-        time,
-      ),
-      style: const TextStyle(
-        color: Colors.grey,
-        fontSize: 12,
-      ),
-    );
+    return BlocBuilder<ChangeLanguageCubit, String>(builder: (context, state) {
+      return Text(
+        DateFormatterUtil.formatProductCreatedAtTime(time, state),
+        style: const TextStyle(
+          color: Colors.grey,
+          fontSize: 12,
+        ),
+      );
+    });
   }
 
   List<Widget> buildOtherDetail(context) {

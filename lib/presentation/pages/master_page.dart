@@ -115,13 +115,15 @@ class _MasterPageState extends State<MasterPage> {
     return Scaffold(
       body: pagesToShow.elementAt(_selectedIndex),
       bottomNavigationBar: SizedBox(
-        height: 62,
+        height: 53,
         child: BottomNavigationBar(
+          selectedFontSize: 12,
+          unselectedFontSize: 12,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: const Icon(
                 Icons.pentagon_rounded,
-                size: 28,
+                size: 25,
               ),
               label: AppLocalizations.of(context).masterNavigationBarTextOne,
             ),
@@ -129,21 +131,21 @@ class _MasterPageState extends State<MasterPage> {
             BottomNavigationBarItem(
               icon: const Icon(
                 Icons.add_box,
-                size: 28,
+                size: 25,
               ),
               label: AppLocalizations.of(context).masterNavigationBarTextThree,
             ),
             BottomNavigationBarItem(
               icon: const Icon(
                 Icons.save,
-                size: 28,
+                size: 25,
               ),
               label: AppLocalizations.of(context).masterNavigationBarTextFour,
             ),
             BottomNavigationBarItem(
               icon: const Icon(
                 Icons.settings,
-                size: 28,
+                size: 25,
               ),
               label: AppLocalizations.of(context).masterNavigationBarTextFive,
             ),

@@ -1,7 +1,10 @@
 import 'package:intl/intl.dart';
 
 class DateFormatterUtil {
-  static String formatProductCreatedAtTime(String dateTimeString) {
+  static String formatProductCreatedAtTime(
+    String dateTimeString,
+    String language,
+  ) {
     final DateTime currentDate = DateTime.now();
     final DateTime createdAt =
         DateFormat('MM/dd/yyyy, HH:mm:ss a').parse(dateTimeString);
@@ -12,16 +15,16 @@ class DateFormatterUtil {
     var differenceInHours = difference.inHours;
     var differenceInDays = difference.inDays;
 
-    if (differeneInMinutes <= 2) return "Just Now";
+    if (differeneInMinutes <= 2) return language == "en" ? "Just Now" : "አሁን";
     if (differeneInMinutes > 2 && differeneInMinutes < 59) {
       return "$differeneInMinutes mins ago";
     }
 
     if (differenceInHours >= 1 && differenceInHours < 24) {
-      return "$differenceInHours ${differenceInHours == 1 ? "hour" : "hours"} ago";
+      return "$differenceInHours ${differenceInHours == 1 ? language == "en" ? "hour" : 'ሰአት' : language == "en" ? "hours" : "ሰአታት"} ${language == "en" ? "ago" : "በፊት"}";
     }
 
-    return "$differenceInDays ${differenceInDays == 1 ? "day" : "days"} ago";
+    return "$differenceInDays ${differenceInDays == 1 ? language == "en" ? "day" : 'ቀን' : language == "en" ? "days" : "ቀናት"} ${language == "en" ? "ago" : "በፊት"}";
   }
 
   static DateTime parseMessageCreatedDate(String dateTimeString) {

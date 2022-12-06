@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mnale_client/presentation/bloc/change_language/change_language_cubit.dart';
 
 import '../../../core/utils/date_time_formatter.dart';
 import '../../../core/utils/price_formatter.dart';
 import '../../../domain/enitites/product.dart';
+import '../../bloc/change_language/change_language_cubit.dart';
 import '../../pages/post_detail_page.dart';
 import '../../screen_arguments/post_detail_page_arguments.dart';
 
@@ -166,13 +166,19 @@ class _ProductGridItemState extends State<ProductGridItem> {
             width: 6,
           ),
           Expanded(
-            child: Text(
-              DateFormatterUtil.formatProductCreatedAtTime(product.refreshedAt),
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: heightOfMobile * 1.6,
-              ),
-            ),
+            child: BlocBuilder<ChangeLanguageCubit, String>(
+                builder: (context, state) {
+              return Text(
+                DateFormatterUtil.formatProductCreatedAtTime(
+                  product.refreshedAt,
+                  state,
+                ),
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: heightOfMobile * 1.6,
+                ),
+              );
+            }),
           ),
           GestureDetector(
             onTap: () {
