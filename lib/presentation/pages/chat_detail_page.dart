@@ -49,20 +49,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       args =
           ModalRoute.of(context)!.settings.arguments as ChatDetailPageArguments;
       initializeCurrentUser();
-      _scrollController = ScrollController();
-      _scrollController.addListener(() {
-        if (_scrollController.position.atEdge) {
-          bool isTop = _scrollController.position.pixels == 0;
-          if (!isTop) {
-            setState(() {
-              isFloatingButtonVisible = false;
-            });
-            markAllMessagesAsRead(args!.conversationId);
-            handleScrollingToBottom();
-          }
-        }
-      });
     });
+    _scrollController = ScrollController();
   }
 
   void initializeCurrentUser() {
@@ -124,6 +112,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     return StreamBuilder<Conversation>(
       stream: conversationStream,
       builder: (BuildContext context, AsyncSnapshot<Conversation> snapshot) {
+        if (snapshot.data != null && snapshot.data!.messages.length < 6) {
+          SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+            markAllMessagesAsRead(args!.conversationId);
+          });
+        }
+
         if (snapshot.hasError) {
           return Text(AppLocalizations.of(context).chatDetailFetchError);
         }
