@@ -203,7 +203,7 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
                     .toList()
               ],
               onChanged: (value) {
-                handleRequiredFeildChanged(e.objectKey, value);
+                handleRequiredFeildChanged(e, value);
               },
               validator: (value) {
                 return validateRequiredFeild(e.title, value);
@@ -220,7 +220,7 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
             AddPostInput(
               hintText: e.objectKey,
               onChanged: (value) {
-                handleRequiredFeildChanged(e.objectKey, value);
+                handleRequiredFeildChanged(e, value);
               },
               validator: (value) {
                 return validateRequiredFeild(e.objectKey, value);
@@ -235,9 +235,15 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
     }).toList();
   }
 
-  handleRequiredFeildChanged(String objectKey, String? value) {
+  handleRequiredFeildChanged(
+    RequiredMainCategoryField requiredFeild,
+    String? value,
+  ) {
     setState(() {
-      otherRequiredFeilds[objectKey] = value;
+      otherRequiredFeilds[requiredFeild.objectKey] = {
+        "title": requiredFeild.title,
+        "value": value
+      };
     });
   }
 

@@ -98,8 +98,8 @@ class FilterCriteriaModel {
     return '''{ 
       MaxPrice : $maxPrice , 
       MinPrice : $minPrice , 
-      MainCategory : ${mainCategory!.title} ,  
-      SubCategory : ${subCategory!.title},  
+      MainCategory : ${mainCategory?.title} ,  
+      SubCategory : ${subCategory?.title},  
       brand : $brand,  
       city : $city,  
       sortByPriceAscending : $sortByPriceAscending,  

@@ -9,6 +9,7 @@ import '../../../core/utils/price_formatter.dart';
 import '../../../data/models/product/product_model.dart';
 import '../../../domain/enitites/product.dart';
 import '../../../domain/enitites/user.dart';
+import '../../bloc/change_language/change_language_cubit.dart';
 import '../../bloc/get_products_by_category/get_products_by_category_cubit.dart';
 import '../../bloc/get_products_by_category/get_products_by_category_state.dart';
 import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
@@ -291,7 +292,14 @@ class _PostContentToShowState extends State<PostContentToShow> {
           ),
           Expanded(
             child: DetailItem(
-              subtitle: Text(widget.product.city),
+              subtitle: BlocBuilder<ChangeLanguageCubit, String>(
+                  builder: (context, state) {
+                return Text(
+                  state == "en"
+                      ? widget.product.city.split(';').first
+                      : widget.product.city.split(';').last,
+                );
+              }),
               title: Row(
                 children: [
                   const Icon(
@@ -374,12 +382,25 @@ class _PostContentToShowState extends State<PostContentToShow> {
     return List<Widget>.from(
       chunk
           .map(
-            (e) => Expanded(
-              child: DetailItem(
-                title: Text(e.key),
-                subtitle: Text(e.value),
-              ),
-            ),
+            (e) => BlocBuilder<ChangeLanguageCubit, String>(
+                builder: (context, state) {
+              var title = e.value["title"] as String;
+              var value = e.value["value"] as String;
+              return Expanded(
+                child: DetailItem(
+                  title: Text(state == "en"
+                      ? title.split(";").first
+                      : title.split(";").last),
+                  subtitle: Text(
+                    value.split(";").isNotEmpty
+                        ? state == "en"
+                            ? value.split(";").first
+                            : value.split(";").last
+                        : e.value["value"],
+                  ),
+                ),
+              );
+            }),
           )
           .toList(),
     );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/presentation/bloc/change_language/change_language_cubit.dart';
 
 import '../../../core/utils/date_time_formatter.dart';
 import '../../../core/utils/price_formatter.dart';
@@ -111,22 +113,24 @@ class _ProductGridItemState extends State<ProductGridItem> {
     );
   }
 
-  renderCity(city) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 5.0),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.45,
-        child: Text(
-          city,
-          style: TextStyle(
-            color: const Color(0xff11435E),
-            fontSize: heightOfMobile * 1.5,
-            fontWeight: FontWeight.bold,
+  renderCity(String city) {
+    return BlocBuilder<ChangeLanguageCubit, String>(builder: (context, state) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 5.0),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.45,
+          child: Text(
+            state == "en" ? city.split(";").first : city.split(";").last,
+            style: TextStyle(
+              color: const Color(0xff11435E),
+              fontSize: heightOfMobile * 1.5,
+              fontWeight: FontWeight.bold,
+            ),
+            overflow: TextOverflow.clip,
           ),
-          overflow: TextOverflow.clip,
         ),
-      ),
-    );
+      );
+    });
   }
 
   renderPrice(price) {

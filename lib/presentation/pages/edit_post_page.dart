@@ -291,7 +291,7 @@ class _EditPostPageState extends State<EditPostPage> {
         return Column(
           children: [
             AddPostDropDownInput(
-              initialValue: product?.productDetail?[e.objectKey] ?? "",
+              initialValue: product?.productDetail?[e.objectKey]["value"] ?? "",
               hintText: language == "en"
                   ? e.title.split(";").first
                   : e.title.split(";").last,
@@ -306,7 +306,7 @@ class _EditPostPageState extends State<EditPostPage> {
                     .toList()
               ],
               onChanged: (value) {
-                handleRequiredFeildChanged(e.objectKey, value);
+                handleRequiredFeildChanged(e, value);
               },
               validator: (value) {
                 return validateRequiredFeild(e.title, value);
@@ -321,12 +321,12 @@ class _EditPostPageState extends State<EditPostPage> {
         return Column(
           children: [
             AddPostInput(
-              initialValue: product!.productDetail?[e.objectKey] ?? '',
+              initialValue: product!.productDetail?[e.objectKey]["value"] ?? '',
               hintText: language == "en"
                   ? e.title.split(";").first
                   : e.title.split(";").last,
               onChanged: (value) {
-                handleRequiredFeildChanged(e.objectKey, value);
+                handleRequiredFeildChanged(e, value);
               },
               validator: (value) {
                 return validateRequiredFeild(e.objectKey, value);
@@ -341,9 +341,13 @@ class _EditPostPageState extends State<EditPostPage> {
     }).toList();
   }
 
-  handleRequiredFeildChanged(String objectKey, String? value) {
+  handleRequiredFeildChanged(
+      RequiredMainCategoryField requiredField, String? value) {
     setState(() {
-      productDetail[objectKey] = value;
+      productDetail[requiredField.objectKey] = {
+        "title": requiredField.title,
+        "value": value
+      };
     });
   }
 

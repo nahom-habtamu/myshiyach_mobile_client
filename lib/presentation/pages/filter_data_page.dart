@@ -156,6 +156,9 @@ class _FilterDataPageState extends State<FilterDataPage> {
       sortByPriceAscending: sortByPriceAscending,
       keyword: null,
     );
+
+    print(filterValues);
+
     Navigator.pop(
       context,
       filterValues.areAllValuesNull() ? null : filterValues,
@@ -238,17 +241,9 @@ class _FilterDataPageState extends State<FilterDataPage> {
       visible: brandToDisplay != null,
       child: FilterDropDownInput(
         key: Key(
-          selectedBrand != null
-              ? ""
-              : language == "en"
-                  ? selectedBrand!.split(";").first
-                  : selectedBrand!.split(";").last,
+          selectedBrand ?? "",
         ),
-        initialValue: selectedBrand != null
-            ? ""
-            : language == "en"
-                ? selectedBrand!.split(";").first
-                : selectedBrand!.split(";").last,
+        initialValue: selectedBrand ?? "",
         hintText: AppLocalizations.of(context).filterBrandInputHint,
         items: brandToDisplay ?? [],
         onChanged: (value) {

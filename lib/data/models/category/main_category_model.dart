@@ -41,9 +41,11 @@ class MainCategoryModel extends MainCategory {
 class RequiredMainCategoryFieldModel extends RequiredMainCategoryField {
   RequiredMainCategoryFieldModel({
     required String objectKey,
+    required String title,
     required bool isDropDown,
     List<String> dropDownValues = const [],
   }) : super(
+          title: title,
           objectKey: objectKey,
           isDropDown: isDropDown,
           dropDownValues: dropDownValues,
@@ -52,6 +54,7 @@ class RequiredMainCategoryFieldModel extends RequiredMainCategoryField {
   factory RequiredMainCategoryFieldModel.fromJson(dynamic requiredFeildJson) {
     return RequiredMainCategoryFieldModel(
       objectKey: requiredFeildJson["objectKey"],
+      title: requiredFeildJson["title"],
       isDropDown: requiredFeildJson["isDropDown"],
       dropDownValues: List<String>.from(requiredFeildJson["dropDownValues"]),
     );
