@@ -16,11 +16,13 @@ class MainCategory {
 
 class RequiredMainCategoryField {
   final String objectKey;
+  final String title;
   final bool isDropDown;
   final List<String> dropDownValues;
 
   RequiredMainCategoryField({
     required this.objectKey,
+    required this.title,
     required this.isDropDown,
     this.dropDownValues = const [],
   });

@@ -9,6 +9,7 @@ import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
 import '../../domain/enitites/sub_category.dart';
+import '../bloc/change_language/change_language_cubit.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
 import '../bloc/filter/filter_products_cubit.dart';
@@ -70,16 +71,18 @@ class _HomePageState extends State<HomePage> {
       appBar: CustomAppBar(
         title: AppLocalizations.of(context).homeHeader,
       ),
-      body: CurvedContainer(
-        child: Column(
-          children: [
-            renderSearchAndFilterBar(),
-            renderMainCategories(),
-            renderSubCategories(),
-            renderProductBuilder(),
-          ],
-        ),
-      ),
+      body: BlocBuilder<ChangeLanguageCubit, String>(builder: (context, state) {
+        return CurvedContainer(
+          child: Column(
+            children: [
+              renderSearchAndFilterBar(),
+              renderMainCategories(state),
+              renderSubCategories(state),
+              renderProductBuilder(),
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -223,14 +226,14 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  renderMainCategories() {
+  renderMainCategories(String language) {
     if (categories.isEmpty) {
       return Container();
     }
-    return buildMainCategorySlider(categories);
+    return buildMainCategorySlider(categories, language);
   }
 
-  renderSubCategories() {
+  renderSubCategories(String language) {
     if (categories.isEmpty || selectedMainCategory == null) {
       return Container();
     }
@@ -238,10 +241,10 @@ class _HomePageState extends State<HomePage> {
     var subCategories = categories
         .firstWhere((c) => c.id == selectedMainCategory!.id)
         .subCategories;
-    return buildSubCategorySlider(subCategories);
+    return buildSubCategorySlider(subCategories, language);
   }
 
-  buildMainCategorySlider(List<MainCategory> categories) {
+  buildMainCategorySlider(List<MainCategory> categories, String language) {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.only(bottom: 10),
@@ -251,7 +254,9 @@ class _HomePageState extends State<HomePage> {
           children: categories
               .map(
                 (e) => CategoryItem(
-                  category: e.title,
+                  category: language == "en"
+                      ? e.title.split(";").first
+                      : e.title.split(";").last,
                   isActive: selectedMainCategory?.id == e.id,
                   onTap: () {
                     setState(
@@ -277,7 +282,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  buildSubCategorySlider(List<SubCategory> categories) {
+  buildSubCategorySlider(
+    List<SubCategory> categories,
+    String language,
+  ) {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.only(bottom: 10),
@@ -287,7 +295,9 @@ class _HomePageState extends State<HomePage> {
           children: categories
               .map(
                 (e) => CategoryItem(
-                  category: e.title,
+                  category: language == "en"
+                      ? e.title.split(";").first
+                      : e.title.split(";").last,
                   isActive: selectedSubCategory?.id == e.id,
                   onTap: () {
                     setState(

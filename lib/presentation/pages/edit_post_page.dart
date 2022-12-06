@@ -9,6 +9,7 @@ import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
+import '../bloc/change_language/change_language_cubit.dart';
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_cubit.dart';
 import '../bloc/get_data_needed_to_manage_post/get_data_needed_to_manage_post_state.dart';
 import '../bloc/update_product/update_product_cubit.dart';
@@ -93,14 +94,16 @@ class _EditPostPageState extends State<EditPostPage> {
         title: AppLocalizations.of(context).editPostAppBarText,
       ),
       body: product != null
-          ? CurvedContainer(
-              child: renderMainContent(),
-            )
+          ? BlocBuilder<ChangeLanguageCubit, String>(builder: (context, state) {
+              return CurvedContainer(
+                child: renderMainContent(state),
+              );
+            })
           : Container(),
     );
   }
 
-  renderMainContent() {
+  renderMainContent(String language) {
     return BlocBuilder<GetDataNeededToManagePostCubit,
         GetDataNeededToManagePostState>(
       builder: (context, state) {
@@ -111,9 +114,11 @@ class _EditPostPageState extends State<EditPostPage> {
         }
         if (state is Loaded) {
           var mainCategoryToShowOnDropDown =
-              buildMainCategoriesToDisplay(state.categories);
-          var citiesToShowOnDropDown = buildCititesToDisplay(state.cities);
-          var subCategoriesToShow = buildSubCategoryToDisplay(state.categories);
+              buildMainCategoriesToDisplay(state.categories, language);
+          var citiesToShowOnDropDown =
+              buildCititesToDisplay(state.cities, language);
+          var subCategoriesToShow =
+              buildSubCategoryToDisplay(state.categories, language);
 
           return SingleChildScrollView(
             child: Form(
@@ -260,7 +265,7 @@ class _EditPostPageState extends State<EditPostPage> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  ...buildRequiredFeildsInput(state.categories),
+                  ...buildRequiredFeildsInput(state.categories, language),
                   renderSaveButton(),
                   const SizedBox(height: 20),
                   renderEditError()
@@ -274,7 +279,10 @@ class _EditPostPageState extends State<EditPostPage> {
     );
   }
 
-  List<Widget> buildRequiredFeildsInput(List<MainCategory> categories) {
+  List<Widget> buildRequiredFeildsInput(
+    List<MainCategory> categories,
+    String language,
+  ) {
     var requiredFeilds = categories
         .firstWhere((element) => element.id == mainCategory)
         .requiredFeilds;
@@ -284,17 +292,24 @@ class _EditPostPageState extends State<EditPostPage> {
           children: [
             AddPostDropDownInput(
               initialValue: product?.productDetail?[e.objectKey] ?? "",
-              hintText: e.objectKey,
+              hintText: language == "en"
+                  ? e.title.split(";").first
+                  : e.title.split(";").last,
               items: [
                 ...e.dropDownValues
-                    .map((m) => {"value": m, "preview": m})
+                    .map((m) => {
+                          "value": m,
+                          "preview": language == "en"
+                              ? m.split(';').first
+                              : m.split(';').last
+                        })
                     .toList()
               ],
               onChanged: (value) {
                 handleRequiredFeildChanged(e.objectKey, value);
               },
               validator: (value) {
-                return validateRequiredFeild(e.objectKey, value);
+                return validateRequiredFeild(e.title, value);
               },
             ),
             const SizedBox(
@@ -307,7 +322,9 @@ class _EditPostPageState extends State<EditPostPage> {
           children: [
             AddPostInput(
               initialValue: product!.productDetail?[e.objectKey] ?? '',
-              hintText: e.objectKey,
+              hintText: language == "en"
+                  ? e.title.split(";").first
+                  : e.title.split(";").last,
               onChanged: (value) {
                 handleRequiredFeildChanged(e.objectKey, value);
               },
@@ -330,9 +347,9 @@ class _EditPostPageState extends State<EditPostPage> {
     });
   }
 
-  validateRequiredFeild(String objectKey, String? value) {
+  validateRequiredFeild(String title, String? value) {
     if (value == null || value.isEmpty) {
-      return "Please Select" + objectKey;
+      return "Please Select" + title;
     }
     return null;
   }
@@ -427,20 +444,45 @@ class _EditPostPageState extends State<EditPostPage> {
   }
 
   List<Map<String, String>> buildMainCategoriesToDisplay(
-      List<MainCategory> categories) {
-    return categories.map((m) => {"value": m.id, "preview": m.title}).toList();
+    List<MainCategory> categories,
+    String language,
+  ) {
+    return categories
+        .map((m) => {
+              "value": m.id,
+              "preview": language == "en"
+                  ? m.title.split(';').first
+                  : m.title.split(';').last
+            })
+        .toList();
   }
 
-  List<Map<String, String>> buildCititesToDisplay(List<String> cities) =>
-      cities.map((m) => {"value": m, "preview": m}).toList();
+  List<Map<String, String>> buildCititesToDisplay(
+    List<String> cities,
+    String language,
+  ) =>
+      cities
+          .map((m) => {
+                "value": m,
+                "preview":
+                    language == "en" ? m.split(';').first : m.split(';').last
+              })
+          .toList();
 
   List<Map<String, String>> buildSubCategoryToDisplay(
-      List<MainCategory> categories) {
+    List<MainCategory> categories,
+    String language,
+  ) {
     return mainCategory.isNotEmpty
         ? categories
             .firstWhere((element) => element.id == mainCategory)
             .subCategories
-            .map((m) => {"value": m.id, "preview": m.title})
+            .map((m) => {
+                  "value": m.id,
+                  "preview": language == "en"
+                      ? m.title.split(';').first
+                      : m.title.split(';').last
+                })
             .toList()
         : [];
   }

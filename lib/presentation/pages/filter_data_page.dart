@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../bloc/change_language/change_language_cubit.dart';
 
 import '../../data/models/filter/filter_criteria_model.dart';
 import '../../domain/enitites/main_category.dart';
@@ -70,45 +72,48 @@ class _FilterDataPageState extends State<FilterDataPage> {
         appBar: CustomAppBar(
           title: AppLocalizations.of(context).filterAppBarText,
         ),
-        body: CurvedContainer(
-          child: Padding(
-            padding: const EdgeInsets.all(5),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  PriceRangeInputDialog(
-                    key: Key(
-                      (minPriceFromDialog! * maxPriceFromDialog!).toString(),
+        body:
+            BlocBuilder<ChangeLanguageCubit, String>(builder: (context, state) {
+          return CurvedContainer(
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    PriceRangeInputDialog(
+                      key: Key(
+                        (minPriceFromDialog! * maxPriceFromDialog!).toString(),
+                      ),
+                      initialMin: minPriceFromDialog!,
+                      initialMax: maxPriceFromDialog!,
+                      onChanged: (min, max) {
+                        setState(() {
+                          minPriceFromDialog = min;
+                          maxPriceFromDialog = max;
+                        });
+                      },
                     ),
-                    initialMin: minPriceFromDialog!,
-                    initialMax: maxPriceFromDialog!,
-                    onChanged: (min, max) {
-                      setState(() {
-                        minPriceFromDialog = min;
-                        maxPriceFromDialog = max;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  renderMainCategories(),
-                  Visibility(
-                    child: const SizedBox(height: 20),
-                    visible: selectedMainCategory != null,
-                  ),
-                  renderSubCategories(),
-                  const SizedBox(height: 20),
-                  renderCityDropdown(),
-                  const SizedBox(height: 20),
-                  renderBrandDropdown(),
-                  const SizedBox(height: 2),
-                  renderConditionsCheckBoxWrapper(),
-                  const SizedBox(height: 20),
-                  renderFilterButtons(),
-                ],
+                    const SizedBox(height: 20),
+                    renderMainCategories(state),
+                    Visibility(
+                      child: const SizedBox(height: 20),
+                      visible: selectedMainCategory != null,
+                    ),
+                    renderSubCategories(state),
+                    const SizedBox(height: 20),
+                    renderCityDropdown(state),
+                    const SizedBox(height: 20),
+                    renderBrandDropdown(state),
+                    const SizedBox(height: 2),
+                    renderConditionsCheckBoxWrapper(),
+                    const SizedBox(height: 20),
+                    renderFilterButtons(),
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
@@ -170,13 +175,18 @@ class _FilterDataPageState extends State<FilterDataPage> {
     });
   }
 
-  renderMainCategories() {
+  renderMainCategories(String language) {
     return FilterDropDownInput(
       key: Key(selectedMainCategory?.id ?? ""),
       initialValue: selectedMainCategory?.id ?? "",
       hintText: AppLocalizations.of(context).filterMainCategoryInputHint,
       items: args.allCategories
-          .map((m) => {"value": m.id, "preview": m.title})
+          .map((m) => {
+                "value": m.id,
+                "preview": language == "en"
+                    ? m.title.split(";").first
+                    : m.title.split(";").last
+              })
           .toList(),
       onChanged: (value) {
         var mainCategory = args.allCategories.firstWhere((e) => e.id == value);
@@ -190,7 +200,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
     );
   }
 
-  renderSubCategories() {
+  renderSubCategories(String language) {
     var subCategoriesToDisplay = selectedMainCategory != null
         ? args.allCategories
             .firstWhere((e) => e.id == selectedMainCategory!.id)
@@ -203,7 +213,12 @@ class _FilterDataPageState extends State<FilterDataPage> {
         initialValue: selectedSubCategory?.id ?? "",
         hintText: AppLocalizations.of(context).filterSubCategoryInputHint,
         items: subCategoriesToDisplay
-            .map((m) => {"value": m.id, "preview": m.title})
+            .map((m) => {
+                  "value": m.id,
+                  "preview": language == "en"
+                      ? m.title.split(";").first
+                      : m.title.split(";").last
+                })
             .toList(),
         onChanged: (value) {
           var subCategory =
@@ -217,13 +232,23 @@ class _FilterDataPageState extends State<FilterDataPage> {
     );
   }
 
-  renderBrandDropdown() {
-    var brandToDisplay = getBrandsForCategory(args.allCategories);
+  renderBrandDropdown(String language) {
+    var brandToDisplay = getBrandsForCategory(args.allCategories, language);
     return Visibility(
       visible: brandToDisplay != null,
       child: FilterDropDownInput(
-        key: Key(selectedBrand ?? ""),
-        initialValue: selectedBrand ?? "",
+        key: Key(
+          selectedBrand != null
+              ? ""
+              : language == "en"
+                  ? selectedBrand!.split(";").first
+                  : selectedBrand!.split(";").last,
+        ),
+        initialValue: selectedBrand != null
+            ? ""
+            : language == "en"
+                ? selectedBrand!.split(";").first
+                : selectedBrand!.split(";").last,
         hintText: AppLocalizations.of(context).filterBrandInputHint,
         items: brandToDisplay ?? [],
         onChanged: (value) {
@@ -236,14 +261,20 @@ class _FilterDataPageState extends State<FilterDataPage> {
     );
   }
 
-  renderCityDropdown() {
+  renderCityDropdown(String language) {
     return Visibility(
       visible: args.cities.isNotEmpty,
       child: FilterDropDownInput(
         key: Key(selectedCity ?? ""),
         initialValue: selectedCity ?? "",
         hintText: AppLocalizations.of(context).filterCityInputHint,
-        items: args.cities.map((m) => {"value": m, "preview": m}).toList(),
+        items: args.cities
+            .map((m) => {
+                  "value": m,
+                  "preview":
+                      language == "en" ? m.split(";").first : m.split(";").last
+                })
+            .toList(),
         onChanged: (value) {
           setState(() {
             selectedCity = value;
@@ -255,7 +286,9 @@ class _FilterDataPageState extends State<FilterDataPage> {
   }
 
   List<Map<String, String>>? getBrandsForCategory(
-      List<MainCategory> categories) {
+    List<MainCategory> categories,
+    String language,
+  ) {
     if (selectedMainCategory == null) return null;
 
     var requiredFeildsContainingBrand = categories
@@ -267,7 +300,11 @@ class _FilterDataPageState extends State<FilterDataPage> {
     if (requiredFeildsContainingBrand.isEmpty) return null;
 
     var brandToDisplay = requiredFeildsContainingBrand.first.dropDownValues
-        .map((m) => {"value": m, "preview": m})
+        .map((m) => {
+              "value": m,
+              "preview":
+                  language == "en" ? m.split(";").first : m.split(";").last
+            })
         .toList();
 
     return brandToDisplay;
