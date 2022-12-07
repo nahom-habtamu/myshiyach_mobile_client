@@ -76,10 +76,10 @@ class FilterProducts {
   }
 
   bool _matchByBrand(Product p, FilterCriteriaModel filterCriteria) {
-    if (p.productDetail == null || p.productDetail!["brand"] == null) {
+    if (p.productDetail == null || p.productDetail!["brand"]["value"] == null) {
       return false;
     }
-    return p.productDetail!["brand"] == filterCriteria.brand;
+    return p.productDetail!["brand"]["value"] == filterCriteria.brand;
   }
 
   List<Product> _filterByPrice(
