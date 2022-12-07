@@ -52,7 +52,16 @@
     "commonFallBackNoNetworkCaptionText" : "Please Connect to the internet to access our app features.",
     "commonFallBackNoNetworkButtonText" : "No Network",
     "commonFallBackNoNetworkHintText" : "Try Again",
+    "commonImageSendingPreviewCloseButton" : "Close",
+    "commonImageSendingPreviewAddButton" : "Add",
+    "commonImageSendingPreviewSendButton" : "Send Files",
+    "commonImageSendingPreviewPickedFiles" : "Picked Files",
+    "commonFilterByPriceApplyButtonText" : "Apply",
 
+    "lazyLoaderPullUpToLoadText" : "Pull up load",
+    "lazyLoaderLoadFailedText" : "Load Failed! Click retry!",
+    "lazyLoaderReleaseToLoadMoreText" : "Release to load more",
+    "lazyLoaderNoMoreDataText" : "No more Data",
 
     "contactUsAppBarText" : "Contact Us",
     "contactUsCallUsText" : "Call Us",
@@ -89,6 +98,7 @@
     "filterRemoveButtonText" : "Remove Filters",
     "filterApplyButtonText" : "Apply Filters",
     "filterModalHeaderText" : "Price Control",
+    "filterModalApplyButtonText" : "Apply",
 
     "forgotPassowordPhoneInputHintText" : "Enter Phone",
     "forgotPassowordButtonText" : "Continue",
@@ -232,6 +242,7 @@
     "signUpTermsAndConditionError" : "You should agree with our terms to continue",
     "signUpAlreadyHaveAnAccount" : "Already have an account ? ",
     "signInText" : " Sign In ",
+    "signUpText" : " Sign Up",
     "signUpFailedErrorMessage" : "Registration Failed",
 
     "verifyPhoneNumberButtonText" : "Continue",

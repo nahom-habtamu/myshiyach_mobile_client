@@ -269,7 +269,10 @@ class _SignUpPageState extends State<SignUpPage> {
       builder: (context, state) {
         if (state is RegisterUserNoNetwork) {
           SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-            showToast(context, "No Network");
+            showToast(
+              context,
+              AppLocalizations.of(context).commonFallBackNoNetworkCaptionText,
+            );
           });
         }
         if (state is RegisterUserError) {

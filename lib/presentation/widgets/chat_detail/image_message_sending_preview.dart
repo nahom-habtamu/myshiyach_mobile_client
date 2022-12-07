@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../bloc/add_message_to_conversation/add_image_message_to_conversation_cubit.dart';
 import '../../bloc/add_message_to_conversation/add_image_message_to_conversation_state.dart';
@@ -59,9 +60,10 @@ class _ImageMessageSendingPreviewState
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Picked Files',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)
+                    .commonImageSendingPreviewPickedFiles,
+                style: const TextStyle(
                   fontSize: 22,
                   fontStyle: FontStyle.italic,
                 ),
@@ -81,7 +83,10 @@ class _ImageMessageSendingPreviewState
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   TextButton(
-                    child: const Text('Add'),
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .commonImageSendingPreviewAddButton,
+                    ),
                     onPressed: () async {
                       var pickedImages = await pickImages();
                       if (pickedImages != null) {
@@ -94,7 +99,8 @@ class _ImageMessageSendingPreviewState
                   Row(
                     children: [
                       TextButton(
-                        child: const Text('Close'),
+                        child: Text(AppLocalizations.of(context)
+                            .commonImageSendingPreviewCloseButton),
                         onPressed: () => Navigator.pop(context),
                       ),
                       BlocBuilder<AddImageMessageToConversationCubit,
@@ -127,7 +133,10 @@ class _ImageMessageSendingPreviewState
                           );
                         }
                         return TextButton(
-                          child: const Text('Send Files'),
+                          child: Text(
+                            AppLocalizations.of(context)
+                                .commonImageSendingPreviewSendButton,
+                          ),
                           onPressed: () => widget.onSendButtonClicked(),
                         );
                       }),

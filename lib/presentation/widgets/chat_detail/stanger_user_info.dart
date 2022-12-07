@@ -63,7 +63,7 @@ class StrangerUserInfo extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  strangerUser.email ?? "no email",
+                  strangerUser.email ?? "---",
                   style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 15,

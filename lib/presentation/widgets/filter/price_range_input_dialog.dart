@@ -92,7 +92,6 @@ class _PriceRangeInputDialogState extends State<PriceRangeInputDialog> {
                   ),
                 ),
                 TextFormField(
-                  // key: Key("Min$maxPriceFromDialog"),
                   initialValue: maxPriceFromDialog.toString(),
                   onChanged: (value) {
                     setState(() {
@@ -111,7 +110,9 @@ class _PriceRangeInputDialogState extends State<PriceRangeInputDialog> {
                     widget.onChanged(minPriceFromDialog, maxPriceFromDialog);
                     Navigator.pop(context);
                   },
-                  child: const Text('Apply'),
+                  child: Text(
+                    AppLocalizations.of(context).filterModalApplyButtonText,
+                  ),
                 )
               ],
             ),

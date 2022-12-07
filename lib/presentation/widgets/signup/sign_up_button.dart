@@ -2,11 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../screen_arguments/sign_up_button_arguments.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../bloc/register_user/register_user_cubit.dart';
 import '../../bloc/register_user/register_user_state.dart';
 import '../../pages/login_page.dart';
+import '../../screen_arguments/sign_up_button_arguments.dart';
 import '../common/action_button.dart';
 
 class SignUpButton extends StatelessWidget {
@@ -39,7 +40,7 @@ class SignUpButton extends StatelessWidget {
                     credential,
                   );
             },
-            text: 'Submit',
+            text: AppLocalizations.of(context).signUpText,
           );
         }
       },

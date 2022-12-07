@@ -380,7 +380,10 @@ class _EditPostPageState extends State<EditPostPage> {
       }
       if (state is EditPostNoNetwork) {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
-          showToast(context, "Please Connect To Network");
+          showToast(
+            context,
+            AppLocalizations.of(context).commonFallBackNoNetworkCaptionText,
+          );
         });
       }
       if (state is EditPostSuccessfull) {

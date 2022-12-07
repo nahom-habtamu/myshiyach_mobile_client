@@ -161,7 +161,10 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context, state) {
         if (state is AuthNoNetwork) {
           SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-            showToast(context, "Please Connect To Network");
+            showToast(
+              context,
+              AppLocalizations.of(context).commonFallBackNoNetworkCaptionText,
+            );
           });
         }
         if (state is AuthSuccessfull) {

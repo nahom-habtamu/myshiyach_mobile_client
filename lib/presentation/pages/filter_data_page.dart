@@ -156,9 +156,6 @@ class _FilterDataPageState extends State<FilterDataPage> {
       sortByPriceAscending: sortByPriceAscending,
       keyword: null,
     );
-
-    print(filterValues);
-
     Navigator.pop(
       context,
       filterValues.areAllValuesNull() ? null : filterValues,

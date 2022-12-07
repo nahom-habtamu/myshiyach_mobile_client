@@ -52,6 +52,15 @@
     "commonFallBackNoNetworkCaptionText" : "ኔትዎርክ ተቋርጧል",
     "commonFallBackNoNetworkButtonText" : "እንደገና ይሞክሩ ፡፡",
     "commonFallBackNoNetworkHintText" : "እባክዎን መተግበሪያውን ለመጠቀም ከአውታር መረብ ጋር ይገናኙ ፡፡",
+    "commonImageSendingPreviewCloseButton" : "ዝጋ",
+    "commonImageSendingPreviewAddButton" : "ጨምር",
+    "commonImageSendingPreviewSendButton" : "ፎቶዎቹን ላክ",
+    "commonImageSendingPreviewPickedFiles" : "የተመረጡ ፎቶዎች",
+
+    "lazyLoaderPullUpToLoadText" : "ለመጨመር ወደላይ ይጎትቱ",
+    "lazyLoaderLoadFailedText" : "እቃዎችን መጨመር አልተቻለም! እባክዎን እንደገና ይሞክሩ",
+    "lazyLoaderReleaseToLoadMoreText" : "የጎተቱትን ሲለቁ እቃዎች ይጨመራሉ",
+    "lazyLoaderNoMoreDataText" : "ተጨማሪ እቃዎች የሉንም",
 
     "contactUsAppBarText" : "ስለ እኛ",
     "contactUsCallUsText" : "ይደውሉ",
@@ -87,6 +96,7 @@
     "filterRemoveButtonText" : "ማጣሪያዎችን ደምስስ",
     "filterApplyButtonText" : "ማጣሪያዎችን ተግብር",
     "filterModalHeaderText" : "ዋጋ መቆጣጠርያ",
+    "filterModalApplyButtonText" : "ተግብር",
 
     "forgotPassowordPhoneInputHintText" : "ስልክ ቁጥር አስገባ",
     "forgotPassowordButtonText" : "ቀጥል",
@@ -230,6 +240,7 @@
     "signUpTermsAndConditionError" : "ለመቀጠል ከውላችን ጋር መስማማት አለብዎት",
     "signUpAlreadyHaveAnAccount" : "መለያ አለዎት ? ",
     "signInText" : " ወደ ማረጋገጫ ",
+    "signUpText" : " አካውንት ፍጠር ",
     "signUpFailedErrorMessage" : "መለያ መፍጠር አልተሳካም",
 
     "verifyPhoneNumberButtonText" : "ቀጥል",

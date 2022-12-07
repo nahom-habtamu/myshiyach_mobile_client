@@ -45,7 +45,8 @@ class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
       builder: (context, state) {
         if (state is NoNetwork) {
           SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-            showToast(context, "No Network");
+            showToast(context,
+                AppLocalizations.of(context).commonFallBackNoNetworkButtonText);
           });
         }
         if (state is Error) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../core/utils/date_time_formatter.dart';
 import '../../../core/utils/price_formatter.dart';
@@ -140,7 +141,9 @@ class _ProductGridItemState extends State<ProductGridItem> {
         color: const Color(0xffF5FFF8),
         width: MediaQuery.of(context).size.width * 0.45,
         child: Text(
-          PriceFormatterUtil.formatToPrice(price) + ' Birr',
+          PriceFormatterUtil.formatToPrice(price) +
+              " " +
+              AppLocalizations.of(context).postDetailBirr,
           style: TextStyle(
             color: const Color(0xff34A853),
             fontSize: heightOfMobile * 1.8,
