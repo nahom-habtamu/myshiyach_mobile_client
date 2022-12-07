@@ -33,6 +33,7 @@ dependencies:
   firebase_dynamic_links: ^4.3.3
   share_plus: ^4.0.10+1
   file_picker: ^4.6.1
+  flutter_launcher_icons: ^0.11.0
 
 dev_dependencies:
   flutter_test:
