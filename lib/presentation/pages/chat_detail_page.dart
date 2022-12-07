@@ -112,7 +112,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     return StreamBuilder<Conversation>(
       stream: conversationStream,
       builder: (BuildContext context, AsyncSnapshot<Conversation> snapshot) {
-        if (snapshot.data != null && snapshot.data!.messages.length < 6) {
+        if (snapshot.data != null && snapshot.data!.messages.length < 15) {
           SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
             markAllMessagesAsRead(args!.conversationId);
           });
