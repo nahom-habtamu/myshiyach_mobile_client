@@ -74,6 +74,8 @@ class _FilterDataPageState extends State<FilterDataPage> {
         ),
         body:
             BlocBuilder<ChangeLanguageCubit, String>(builder: (context, state) {
+          var brandToDisplay = getBrandsForCategory(args.allCategories, state);
+
           return CurvedContainer(
             child: Padding(
               padding: const EdgeInsets.all(5),
@@ -103,8 +105,11 @@ class _FilterDataPageState extends State<FilterDataPage> {
                     const SizedBox(height: 20),
                     renderCityDropdown(state),
                     const SizedBox(height: 20),
-                    renderBrandDropdown(state),
-                    const SizedBox(height: 2),
+                    renderBrandDropdown(brandToDisplay),
+                    Visibility(
+                      child: const SizedBox(height: 20),
+                      visible: brandToDisplay != null,
+                    ),
                     renderConditionsCheckBoxWrapper(),
                     const SizedBox(height: 20),
                     renderFilterButtons(),
@@ -232,8 +237,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
     );
   }
 
-  renderBrandDropdown(String language) {
-    var brandToDisplay = getBrandsForCategory(args.allCategories, language);
+  renderBrandDropdown(List<Map<String, String>>? brandToDisplay) {
     return Visibility(
       visible: brandToDisplay != null,
       child: FilterDropDownInput(
