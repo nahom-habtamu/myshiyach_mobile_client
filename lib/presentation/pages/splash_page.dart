@@ -44,12 +44,12 @@ class _SplashPageState extends State<SplashPage> {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
         if (state is AuthSuccessfull) {
-          SchedulerBinding.instance!.addPostFrameCallback((_) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
             handleSuccessCase(context, state.currentUser, state.loginResult);
           });
         }
         if (state is AuthError) {
-          SchedulerBinding.instance!.addPostFrameCallback((_) async {
+          SchedulerBinding.instance.addPostFrameCallback((_) async {
             var isAppOpenedFirstTime =
                 await context.read<GetIsAppOpenedFirstTimeCubit>().execute();
             if (isAppOpenedFirstTime) {

@@ -113,7 +113,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       stream: conversationStream,
       builder: (BuildContext context, AsyncSnapshot<Conversation> snapshot) {
         if (snapshot.data != null && snapshot.data!.messages.length < 15) {
-          SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
             markAllMessagesAsRead(args!.conversationId);
           });
         }
@@ -310,7 +310,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   }
 
   Future<void> handleScrollingToBottom() async {
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       setState(() {
         isFloatingButtonVisible = false;
       });

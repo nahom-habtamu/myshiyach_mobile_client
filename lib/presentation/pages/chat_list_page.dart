@@ -26,7 +26,7 @@ class _ChatListPageState extends State<ChatListPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fetchConversations();
     });
   }

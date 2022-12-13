@@ -107,14 +107,14 @@ class _ImageMessageSendingPreviewState
                               AddImageMessageToConversationState>(
                           builder: (context, state) {
                         if (state is AddImageMessageToConversationSuccessfull) {
-                          SchedulerBinding.instance!
+                          SchedulerBinding.instance
                               .addPostFrameCallback((timeStamp) {
                             widget.onMessageSendIsSuccessfull();
                             Navigator.pop(context);
                           });
                         } else if (state
                             is AddImageMessageToConversationError) {
-                          SchedulerBinding.instance!
+                          SchedulerBinding.instance
                               .addPostFrameCallback((timeStamp) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(

@@ -30,7 +30,7 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fetchFavoriteProducts();
       setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
     });

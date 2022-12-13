@@ -41,7 +41,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   }
 
   void clearChangePasswordState() {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<ChangePasswordCubit>().clear();
     });
   }
@@ -139,7 +139,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           );
         }
         if (state is ChangePasswordError) {
-          SchedulerBinding.instance!.addPostFrameCallback((_) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
             showToast(
               context,
               AppLocalizations.of(context).changePasswordErrorText,
@@ -147,7 +147,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           });
         }
         if (state is ChangePasswordSuccessfull) {
-          SchedulerBinding.instance!.addPostFrameCallback((_) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
             Navigator.popUntil(
               context,
               ModalRoute.withName(LoginPage.routeName),

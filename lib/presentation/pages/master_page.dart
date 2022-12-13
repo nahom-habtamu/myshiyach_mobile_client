@@ -37,7 +37,7 @@ class _MasterPageState extends State<MasterPage> {
     getCurrentUser();
     getAllConversation();
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       handleDynamicLink(context);
     });
   }

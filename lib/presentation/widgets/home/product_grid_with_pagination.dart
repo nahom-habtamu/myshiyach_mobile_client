@@ -133,7 +133,7 @@ class _ProductGridWithPaginationState extends State<ProductGridWithPagination> {
   }
 
   void handleAddingNewItemsAndUpdatingState(Loaded state) {
-    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       widget.onRefreshed(state, widget.favorites);
       context.read<GetPaginatedProductsCubit>().clear();
     });

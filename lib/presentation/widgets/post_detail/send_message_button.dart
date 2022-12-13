@@ -40,7 +40,7 @@ class SendMessageButton extends StatelessWidget {
                   context.read<GetConversationByIdCubit>().call(
                         state.chatDetailPageArguments.conversationId,
                       );
-                  SchedulerBinding.instance!.addPostFrameCallback((_) {
+                  SchedulerBinding.instance.addPostFrameCallback((_) {
                     Navigator.pushReplacementNamed(
                       context,
                       ChatDetailPage.routeName,

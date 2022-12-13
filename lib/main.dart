@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback(((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback(((timeStamp) {
       handleDynamicLink();
     }));
   }
@@ -77,7 +77,7 @@ class _MyAppState extends State<MyApp> {
       providers: [...AppLevelState.get()],
       child: BlocBuilder<ChangeLanguageCubit, String>(
         builder: (context, state) {
-          SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
             if (_locale?.languageCode != Locale(state).languageCode) {
               setState(() {
                 _locale = Locale(state);

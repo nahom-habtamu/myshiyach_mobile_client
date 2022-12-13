@@ -49,7 +49,7 @@ class _PostContentToShowState extends State<PostContentToShow> {
   void initState() {
     super.initState();
     isFavorite = widget.isFavorite;
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<GetProductsByCategoryCubit>().call(
             widget.product.mainCategory,
             widget.product.subCategory,
@@ -436,7 +436,7 @@ class _PostContentToShowState extends State<PostContentToShow> {
     return BlocBuilder<GetProductsByCategoryCubit, GetProductsByCategoryState>(
       builder: (context, state) {
         if (state is Loaded) {
-          SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
             setState(() {
               if (favorites.isEmpty) favorites = state.favorites;
             });

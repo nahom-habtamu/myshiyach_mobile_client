@@ -79,7 +79,7 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
         GetUserAndProductsByUserIdState>(
       builder: (context, state) {
         if (state is GetUserAndProductsByUserIdLoaded) {
-          SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
             if (favorites.isEmpty) {
               setState(() {
                 favorites = state.favorites;

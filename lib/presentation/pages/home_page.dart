@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       selectedMainCategory = filterValues?.mainCategory;
       fetchAllNeededToDisplayProductList();
     });
@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         } else if (state is Loaded) {
-          SchedulerBinding.instance!.addPostFrameCallback(
+          SchedulerBinding.instance.addPostFrameCallback(
             ((timeStamp) {
               updateState(state);
               context.read<DisplayAllProductsCubit>().clear();

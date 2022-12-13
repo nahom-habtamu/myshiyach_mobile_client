@@ -379,7 +379,7 @@ class _EditPostPageState extends State<EditPostPage> {
         );
       }
       if (state is EditPostNoNetwork) {
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
           showToast(
             context,
             AppLocalizations.of(context).commonFallBackNoNetworkCaptionText,
@@ -387,7 +387,7 @@ class _EditPostPageState extends State<EditPostPage> {
         });
       }
       if (state is EditPostSuccessfull) {
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacementNamed(
             context,
             PostDetailPage.routeName,

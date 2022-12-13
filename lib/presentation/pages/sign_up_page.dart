@@ -268,7 +268,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return BlocBuilder<RegisterUserCubit, RegisterUserState>(
       builder: (context, state) {
         if (state is RegisterUserNoNetwork) {
-          SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
             showToast(
               context,
               AppLocalizations.of(context).commonFallBackNoNetworkCaptionText,

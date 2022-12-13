@@ -165,7 +165,7 @@ class _AddPostPageState extends State<AddPostPage> {
     return BlocBuilder<CreateProductCubit, CreateProductState>(
         builder: (context, state) {
       if (state is AddPostError) {
-        SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+        SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
           showToast(context, state.message);
         });
       }
@@ -183,7 +183,7 @@ class _AddPostPageState extends State<AddPostPage> {
       } else if (state is AddPostLoading) {
         return renderLoadingSpinner();
       } else {
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacementNamed(
             context,
             PostConfirmationPage.routeName,
