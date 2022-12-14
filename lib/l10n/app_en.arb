@@ -56,7 +56,6 @@
     "commonImageSendingPreviewAddButton" : "Add",
     "commonImageSendingPreviewSendButton" : "Send Files",
     "commonImageSendingPreviewPickedFiles" : "Picked Files",
-    "commonFilterByPriceApplyButtonText" : "Apply",
 
     "lazyLoaderPullUpToLoadText" : "Pull up load",
     "lazyLoaderLoadFailedText" : "Load Failed! Click retry!",
