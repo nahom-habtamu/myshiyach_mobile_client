@@ -12,6 +12,7 @@
         </intent>
     </queries>
     <application
+        android:usesCleartextTraffic="true"
         android:label="MyShiyach"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
