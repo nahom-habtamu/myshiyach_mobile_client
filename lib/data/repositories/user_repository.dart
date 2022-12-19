@@ -14,6 +14,11 @@ class UserRepository extends UserService {
   });
 
   @override
+  Future<UserModel> reportUser(String id, String token) {
+    return remoteDataSource.reportUser(id, token);
+  }
+
+  @override
   Future<UserModel> getUserById(String id, String token) {
     return remoteDataSource.getUserById(id, token);
   }

@@ -5,24 +5,21 @@ import '../../../domain/usecases/report_product.dart';
 import 'report_product_state.dart';
 
 class ReportProductCubit extends Cubit<ReportProductState> {
-  final ReportProduct refreshProduct;
+  final ReportProduct reportProduct;
   final NetworkInfo networkInfo;
-  ReportProductCubit(this.refreshProduct, this.networkInfo)
+  ReportProductCubit(this.reportProduct, this.networkInfo)
       : super(ReportPostEmpty());
 
   void clear() {
     emit(ReportPostEmpty());
   }
 
-  void call(
-    String id,
-    String token,
-  ) async {
+  void call(String id, String token) async {
     try {
       if (await networkInfo.isConnected()) {
         emit(ReportPostEmpty());
         emit(ReportPostLoading());
-        var product = await refreshProduct.call(id, token);
+        var product = await reportProduct.call(id, token);
         emit(ReportPostSuccessfull(product));
       } else {
         emit(ReportPostNoNetwork());

@@ -6,11 +6,13 @@ class UserModel extends User {
     required String? email,
     required String phoneNumber,
     required String id,
+    required bool isReported,
   }) : super(
           fullName: fullName,
           email: email,
           phoneNumber: phoneNumber,
           id: id,
+          isReported: isReported,
         );
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class UserModel extends User {
       email: json["email"],
       phoneNumber: json["phoneNumber"],
       id: json["_id"],
+      isReported: json["isReported"],
     );
   }
 }

@@ -161,6 +161,8 @@
     "postsCreatedByUserPageEmptyButtonText" : "ወደ መነሻ ገጽ ሂድ",
     "postsCreatedByUserPageUserInformationText" : "የተጠቃሚው መረጃዎች",
     "postsCreatedByUserPageProductText" : "ልጥፎች",
+    "postsCreatedByUserPageReportUserSuccessText" : "ተጠቃሚውን ለአስተዳደሮች ጠቁመናል",
+
 
     "postDetailAppBarText" : "የእቃ ዝርዝር",
     "postDetailEditText" : "ማስተካከያ",

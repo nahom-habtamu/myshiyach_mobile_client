@@ -11,9 +11,9 @@ import '../bloc/auth/auth_state.dart';
 import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_cubit.dart';
 import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_state.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
+import '../bloc/report_user/report_user_cubit.dart';
 import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../widgets/common/curved_container.dart';
-import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
 import '../widgets/common/error_content.dart';
 import '../widgets/common/no_network_content.dart';
@@ -63,9 +63,48 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff11435E),
-      appBar: CustomAppBar(
-        title: AppLocalizations.of(context).postsCreatedByUserPageAppBarText,
-      ),
+      appBar: AppBar(
+          title: Text(
+            AppLocalizations.of(context).postsCreatedByUserPageAppBarText,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 19,
+            ),
+          ),
+          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: const Color(0xff11435E),
+          elevation: 0,
+          centerTitle: true,
+          actions: [
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                context.read<ReportUserCubit>().call(userId, accessToken);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(context)
+                          .postsCreatedByUserPageReportUserSuccessText,
+                    ),
+                    backgroundColor: Colors.deepOrange,
+                  ),
+                );
+              },
+              itemBuilder: (BuildContext context) {
+                var contentToShowOnPopup = [
+                  AppLocalizations.of(context).postDetailReportText,
+                ];
+                return contentToShowOnPopup.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(
+                      choice,
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  );
+                }).toList();
+              },
+            )
+          ]),
       body: CurvedContainer(
         child: SingleChildScrollView(
           child: renderBody(),

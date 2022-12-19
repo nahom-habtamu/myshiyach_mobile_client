@@ -162,6 +162,7 @@
     "postsCreatedByUserPageEmptyButtonText" : "Go To Home",
     "postsCreatedByUserPageUserInformationText" : "User Information",
     "postsCreatedByUserPageProductText" : "Products by User",
+    "postsCreatedByUserPageReportUserSuccessText" : "User Reported Successfully",
 
     "postDetailAppBarText" : "Post Detail",
     "postDetailEditText" : "Edit",

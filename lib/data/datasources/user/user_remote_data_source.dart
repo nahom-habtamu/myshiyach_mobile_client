@@ -22,6 +22,22 @@ class UserRemoteDataSource {
     return UserModel.fromJson(json.decode(response.body));
   }
 
+  Future<UserModel> reportUser(String id, String token) async {
+    String endPoint = '$baseUrl/users/report/$id';
+    final response = await http.post(
+      Uri.parse(endPoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': token
+      },
+    );
+
+    if (response.statusCode < 200 && response.statusCode > 300) {
+      throw Exception("User Reporting Failed");
+    }
+    return UserModel.fromJson(json.decode(response.body));
+  }
+
   Future<void> changePassword(String phoneNumber, String password) async {
     String endPoint = '$baseUrl/users/changePassword';
     final response = await http.post(

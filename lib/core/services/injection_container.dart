@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
-import 'package:mnale_client/domain/usecases/report_product.dart';
-import 'package:mnale_client/presentation/bloc/report_product/report_product_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -68,6 +66,8 @@ import '../../domain/usecases/login.dart';
 import '../../domain/usecases/mark_messages_as_read.dart';
 import '../../domain/usecases/refresh_product.dart';
 import '../../domain/usecases/register_user.dart';
+import '../../domain/usecases/report_product.dart';
+import '../../domain/usecases/report_user.dart';
 import '../../domain/usecases/set_favorite_product.dart';
 import '../../domain/usecases/set_is_app_opened_first_time.dart';
 import '../../domain/usecases/store_user_credentails.dart';
@@ -105,6 +105,8 @@ import '../../presentation/bloc/logout/logout_cubit.dart';
 import '../../presentation/bloc/mark_messages_as_read/mark_messages_as_read_cubit.dart';
 import '../../presentation/bloc/refresh_product/refresh_product_cubit.dart';
 import '../../presentation/bloc/register_user/register_user_cubit.dart';
+import '../../presentation/bloc/report_product/report_product_cubit.dart';
+import '../../presentation/bloc/report_user/report_user_cubit.dart';
 import '../../presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../../presentation/bloc/set_is_app_opened_first_time/set_is_app_opened_first_time_cubit.dart';
 import '../../presentation/bloc/update_product/update_product_cubit.dart';
@@ -194,6 +196,7 @@ Future<void> init() async {
   sl.registerFactory(() => AddKeywordToSearchHistoryCubit(sl()));
   sl.registerFactory(() => GetRecentSearchesCubit(sl()));
   sl.registerFactory(() => ReportProductCubit(sl(), sl()));
+  sl.registerFactory(() => ReportUserCubit(sl(), sl()));
 
   // usecases
   sl.registerLazySingleton(() => Login(sl()));
@@ -231,6 +234,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetRecentSearches(sl()));
   sl.registerLazySingleton(() => AddKeywordToSearchHistory(sl()));
   sl.registerLazySingleton(() => ReportProduct(sl()));
+  sl.registerLazySingleton(() => ReportUser(sl()));
 
   // repositories
 
