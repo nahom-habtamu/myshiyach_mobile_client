@@ -24,5 +24,6 @@ abstract class ProductService {
   );
   Future<List<ProductModel>> getProductsByCreatorId(String userId);
   Future<ProductModel> refreshProduct(String id, String token);
+  Future<ProductModel> reportProduct(String id, String token);
   Future<String> generateShareLink(String id);
 }

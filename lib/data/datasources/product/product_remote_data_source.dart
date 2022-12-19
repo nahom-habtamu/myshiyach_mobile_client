@@ -184,4 +184,24 @@ class ProductRemoteDataSource extends ProductDataSource {
     }
     throw Exception("Couldn't Fetch Products");
   }
+
+  @override
+  Future<ProductModel> reportProduct(String id, String token) async {
+    final String endPoint = '$baseUrl/products/report/$id';
+    final response = await http.post(
+      Uri.parse(endPoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': token
+      },
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      var product = ProductModel.fromJson(
+        json.decode(response.body),
+      );
+      return product;
+    }
+    throw Exception("Couldn't Report Product");
+  }
 }

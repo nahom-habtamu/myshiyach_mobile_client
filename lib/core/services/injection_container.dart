@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mnale_client/domain/usecases/report_product.dart';
+import 'package:mnale_client/presentation/bloc/report_product/report_product_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth/auth_data_source.dart';
@@ -191,6 +193,7 @@ Future<void> init() async {
   sl.registerFactory(() => AddImageMessageToConversationCubit(sl(), sl()));
   sl.registerFactory(() => AddKeywordToSearchHistoryCubit(sl()));
   sl.registerFactory(() => GetRecentSearchesCubit(sl()));
+  sl.registerFactory(() => ReportProductCubit(sl(), sl()));
 
   // usecases
   sl.registerLazySingleton(() => Login(sl()));
@@ -227,6 +230,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SetIsAppOpenedFirstTime(sl()));
   sl.registerLazySingleton(() => GetRecentSearches(sl()));
   sl.registerLazySingleton(() => AddKeywordToSearchHistory(sl()));
+  sl.registerLazySingleton(() => ReportProduct(sl()));
 
   // repositories
 

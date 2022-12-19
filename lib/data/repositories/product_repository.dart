@@ -89,4 +89,9 @@ class ProductRepository extends ProductService {
   Future<List<ProductModel>> getAllProducts() {
     return remoteDataSource.getAllProducts();
   }
+
+  @override
+  Future<ProductModel> reportProduct(String id, String token) {
+    return remoteDataSource.reportProduct(id, token);
+  }
 }

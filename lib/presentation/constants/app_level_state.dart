@@ -31,6 +31,7 @@ import '../bloc/logout/logout_cubit.dart';
 import '../bloc/mark_messages_as_read/mark_messages_as_read_cubit.dart';
 import '../bloc/refresh_product/refresh_product_cubit.dart';
 import '../bloc/register_user/register_user_cubit.dart';
+import '../bloc/report_product/report_product_cubit.dart';
 import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../bloc/set_is_app_opened_first_time/set_is_app_opened_first_time_cubit.dart';
 import '../bloc/update_product/update_product_cubit.dart';
@@ -140,6 +141,9 @@ class AppLevelState {
       ),
       BlocProvider(
         create: (_) => sl<AddKeywordToSearchHistoryCubit>(),
+      ),
+      BlocProvider(
+        create: (_) => sl<ReportProductCubit>(),
       )
     ];
   }

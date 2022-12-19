@@ -168,6 +168,8 @@
     "postDetailRefreshText" : "አድስ",
     "postDetailSaveText" : "አስቀመጥ",
     "postDetailShareText" : "አጋራ",
+    "postDetailReportText" : "ጠቁም",
+    "postDetailReportSuccessText" : "እቃውን ለአስተዳዳሪዎች ጠቁመናል",
     "postDetailRefreshError" : "እቃውን ማደስ አልተሳካም",
     "postDetailDescriptionText" : "ማብራሪያ",
     "postDetailTitleText" : "ርእስ",

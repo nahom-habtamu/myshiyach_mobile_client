@@ -169,6 +169,8 @@
     "postDetailRefreshText" : "Refresh",
     "postDetailSaveText" : "Save",
     "postDetailShareText" : "Share",
+    "postDetailReportText" : "Report",
+    "postDetailReportSuccessText" : "Product Reported To Admins",
     "postDetailRefreshError" : "Error on Refreshing Product",
     "postDetailDescriptionText" : "Description",
     "postDetailTitleText" : "Title",

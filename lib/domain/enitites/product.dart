@@ -10,6 +10,7 @@ class Product {
   final String createdAt;
   final String refreshedAt;
   final String createdBy;
+  final bool isReported;
   final List<String> productImages;
   Map<String, dynamic>? productDetail;
 
@@ -25,6 +26,7 @@ class Product {
     required this.createdAt,
     required this.refreshedAt,
     required this.createdBy,
+    required this.isReported,
     required this.productImages,
     this.productDetail,
   });

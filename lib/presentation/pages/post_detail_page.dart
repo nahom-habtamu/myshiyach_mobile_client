@@ -16,6 +16,7 @@ import '../bloc/get_post_detail_content/get_post_detail_content_state.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/refresh_product/refresh_product_cubit.dart';
 import '../bloc/refresh_product/refresh_product_state.dart';
+import '../bloc/report_product/report_product_cubit.dart';
 import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../screen_arguments/post_detail_page_arguments.dart';
 import '../widgets/common/error_content.dart';
@@ -195,6 +196,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       AppLocalizations.of(context).postDetailRefreshText,
       AppLocalizations.of(context).postDetailDeleteText,
       AppLocalizations.of(context).postDetailShareText,
+      AppLocalizations.of(context).postDetailReportText,
     ];
 
     if (value == values[0]) {
@@ -220,6 +222,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
       }
     } else if (value == values[3]) {
       handleProductShare(product!.id);
+    } else if (value == values[4]) {
+      handleProductReport(product!.id);
     }
   }
 
@@ -267,5 +271,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
     if (content != null) {
       Share.share(content);
     }
+  }
+
+  void handleProductReport(String id) async {
+    context.read<ReportProductCubit>().call(id, authToken!);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context).postDetailReportSuccessText),
+        backgroundColor: Colors.deepOrange,
+      ),
+    );
   }
 }
