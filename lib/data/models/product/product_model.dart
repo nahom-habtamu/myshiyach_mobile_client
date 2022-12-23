@@ -13,7 +13,7 @@ class ProductModel extends Product {
     required String createdAt,
     required String refreshedAt,
     required String createdBy,
-    required bool isReported,
+    required bool? isReported,
     required List<String> productImages,
     Map<String, dynamic>? productDetail,
   }) : super(

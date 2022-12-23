@@ -10,7 +10,7 @@ class Product {
   final String createdAt;
   final String refreshedAt;
   final String createdBy;
-  final bool isReported;
+  final bool? isReported;
   final List<String> productImages;
   Map<String, dynamic>? productDetail;
 
