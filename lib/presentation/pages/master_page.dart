@@ -115,15 +115,15 @@ class _MasterPageState extends State<MasterPage> {
     return Scaffold(
       body: pagesToShow.elementAt(_selectedIndex),
       bottomNavigationBar: SizedBox(
-        height: 53,
+        height: 55,
         child: BottomNavigationBar(
           selectedFontSize: 12,
           unselectedFontSize: 12,
-          items: <BottomNavigationBarItem>[
+          iconSize: 25,
+          items: [
             BottomNavigationBarItem(
               icon: const Icon(
                 Icons.pentagon_rounded,
-                size: 25,
               ),
               label: AppLocalizations.of(context).masterNavigationBarTextOne,
             ),
@@ -131,21 +131,18 @@ class _MasterPageState extends State<MasterPage> {
             BottomNavigationBarItem(
               icon: const Icon(
                 Icons.add_box,
-                size: 25,
               ),
               label: AppLocalizations.of(context).masterNavigationBarTextThree,
             ),
             BottomNavigationBarItem(
               icon: const Icon(
                 Icons.save,
-                size: 25,
               ),
               label: AppLocalizations.of(context).masterNavigationBarTextFour,
             ),
             BottomNavigationBarItem(
               icon: const Icon(
                 Icons.settings,
-                size: 25,
               ),
               label: AppLocalizations.of(context).masterNavigationBarTextFive,
             ),
@@ -172,13 +169,11 @@ class _MasterPageState extends State<MasterPage> {
                     snapshot.data!.isEmpty) {
                   return const Icon(
                     Icons.chat,
-                    size: 25,
                   );
                 } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
                   return const Icon(
                     Icons.chat,
-                    size: 25,
                   );
                 }
 
@@ -191,7 +186,6 @@ class _MasterPageState extends State<MasterPage> {
           } else {
             return const Icon(
               Icons.chat,
-              size: 25,
             );
           }
         },
@@ -202,31 +196,33 @@ class _MasterPageState extends State<MasterPage> {
 
   Stack renderChatBarWithMessageIndicator(int unreadMessagesCount) {
     return Stack(
-      children: [
-        const Icon(
-          Icons.chat,
-          size: 25,
-        ),
+      children: <Widget>[
+        const Icon(Icons.chat),
         Visibility(
           visible: unreadMessagesCount > 0,
           child: Positioned(
-            top: 2,
-            left: 5,
-            child: CircleAvatar(
-              backgroundColor: Colors.red,
-              radius: 6.5,
-              child: Center(
-                child: Text(
-                  unreadMessagesCount.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 11,
-                  ),
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.all(1),
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              constraints: const BoxConstraints(
+                minWidth: 12,
+                minHeight: 12,
+              ),
+              child: Text(
+                unreadMessagesCount.toString(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 8,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
           ),
-        ),
+        )
       ],
     );
   }

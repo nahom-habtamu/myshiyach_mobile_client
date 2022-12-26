@@ -15,7 +15,7 @@ import 'presentation/pages/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp ();
   await di.init();
   runApp(
     MultiBlocProvider(
