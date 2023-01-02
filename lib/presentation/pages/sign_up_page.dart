@@ -178,6 +178,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 20,
                   ),
                   VerifyPhoneNumberButton(
+                    checkIfAlreadyRegistered: true,
                     isActive: areTermsAndConditionsAgreed,
                     onVerifyClicked: () {
                       return handleVerification(context);

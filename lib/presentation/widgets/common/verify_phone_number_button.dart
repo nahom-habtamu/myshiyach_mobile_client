@@ -16,12 +16,14 @@ class VerifyPhoneNumberButton extends StatefulWidget {
   final Function(String pin, String verificationId) renderActionButton;
   final Function renderErrorWidget;
   final Function onVerifyClicked;
+  final bool checkIfAlreadyRegistered;
   const VerifyPhoneNumberButton(
       {Key? key,
       required this.phoneNumber,
       required this.renderActionButton,
       required this.renderErrorWidget,
       required this.onVerifyClicked,
+      this.checkIfAlreadyRegistered = false,
       required this.isActive})
       : super(key: key);
 
@@ -83,9 +85,10 @@ class _VerifyPhoneNumberButtonState extends State<VerifyPhoneNumberButton> {
             onPressed: widget.isActive
                 ? () {
                     if (widget.onVerifyClicked()) {
-                      context
-                          .read<VerifyPhoneNumberCubit>()
-                          .verify(widget.phoneNumber);
+                      context.read<VerifyPhoneNumberCubit>().verify(
+                            widget.phoneNumber,
+                            widget.checkIfAlreadyRegistered,
+                          );
                     }
                   }
                 : () {},

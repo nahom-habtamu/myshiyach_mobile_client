@@ -1,6 +1,6 @@
 {
     "language" : "አማርኛ",
-    "appTitle" : "የኔ ሽያጭ",
+    "appTitle" : "ማይ ሽያጭ",
 
     "addPostAppBarText" : "እቃ ለጥፍ",
     "addPostEmptyCategories" : "ባዶ መደቦች",
@@ -15,7 +15,7 @@
     "changePasswordRepeatInputHint" : "ሚስጥር ቁጥር ይድገሙ",
     "changePasswordInputValidationEmptyText" : "ሚስጥር ቁጥር ያስገቡ",
     "changePasswordInputValidationTooShortText" 
-        : "ከ 6 ፊደል የበለጠ ሚስጥር ቁጥር ያስገቡ",
+        : "ከ 8 ፊደል የበለጠ ሚስጥር ቁጥር ያስገቡ",
     "changePasswordInputValidationNotMatchText" : "ሚስጥር ቁጥሩ አንድ አይደለም",
     "changePasswordErrorText" : "ሚስጥር ቁጥር መቀየር አልተሳካም!!!",
     "changePasswordButtonText" : "ሚስጥር ቁጥር ቀይር",
@@ -125,7 +125,7 @@
     "loginPhoneNumberError" : "ያልተፈቀደ ስልክ ቁጥር",
     "loginPasswordHint" : "ምስጢር ቁጥር",
     "loginPasswordEmptyError" : "ምስጢር ቁጥር አስገባ",
-    "loginPasswordTooShortError" : "ከ 6 ፊደል የበለጠ ሚስጥር ቁጥር ያስገቡ",
+    "loginPasswordTooShortError" : "ከ 8 ፊደል የበለጠ ሚስጥር ቁጥር ያስገቡ",
     "loginForgotPasswordText" : "ሚስጥር ቁጥር ረሱ ?",
     "loginDontHaveAccountText" : "መለያ የለዎትም ?",
     "loginSignUpText" : " መለያ ፍጠሩለኝ ",
@@ -152,7 +152,7 @@
 
     "postConfirmationAppBarText" : "የእቃ ልትፍ ማረጋገጫ",
     "postConfirmationAdPlaced" : "እቃዎ ተለጥፏል",
-    "postConfirmationAdPlacedSuccessfull" : "ልጥፍዎ በተሳካ ሁኔታ ተቀምጧል፣ የሎጂስቲክ ቡድናችን በቅርቡ ከእርስዎ ጋር ይገናኛል። ለማንኛውም እርዳታ (+251) 12345678 ይደውሉ",
+    "postConfirmationAdPlacedSuccessfull" : "ልጥፍዎ በተሳካ ሁኔታ ተቀምጧል፣ የሎጂስቲክ ቡድናችን በቅርቡ ከእርስዎ ጋር ይገናኛል። ለማንኛውም እርዳታ (+251) 12345878 ይደውሉ",
     "postConfirmationGoToHomePageButtonText" : "ወደ መነሻ ገጽ ሂድ",
 
     "postsCreatedByUserPageAppBarText" : "የተመረጡ እቃዎች",
@@ -234,10 +234,10 @@
     "signUpFullNameTooShort" : "ያስገቡት ሙሉ ስም እጅግ ትንሽ ነው",
     "signUpPasswordHint" : "ምስጢር ቁጠር",
     "signUpPasswordEmptyError" : "ምስጢር ቁጠር ያስገቡ",
-    "signUpPasswordTooShort" : "ከ 6 ፊደል የበለጠ ሚስጥር ቁጥር ያስገቡ",
+    "signUpPasswordTooShort" : "ከ 8 ፊደል የበለጠ ሚስጥር ቁጥር ያስገቡ",
     "signUpPassRepeatHint" : "ምስጢር ቁጠር ማረጋገጫ",
     "signUpPassRepeatEmptyError" : "ምስጢር ቁጠር ያስገቡ",
-    "signUpPassRepeatTooShort" : "ከ 6 ፊደል የበለጠ ሚስጥር ቁጥር ያስገቡ",
+    "signUpPassRepeatTooShort" : "ከ 8 ፊደል የበለጠ ሚስጥር ቁጥር ያስገቡ",
     "signUpPassRepeatNotMatch" : "ሚስጥር ቁጥሩ አንድ አይደለም",
     "signUpTermsAndConditionOne" : "መለያ በመፍጠር በእኛ\n ውል እና ሁኔታዎች ተስማምተሃል",
     "signUpTermsAndConditionTwo" : "",

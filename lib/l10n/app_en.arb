@@ -15,7 +15,7 @@
     "changePasswordRepeatInputHint" : "Password Repeat",
     "changePasswordInputValidationEmptyText" : "Please Enter Password",
     "changePasswordInputValidationTooShortText" 
-        : "Please Enter 6 or more characters",
+        : "Please Enter 8 or more characters",
     "changePasswordInputValidationNotMatchText" : "Passwords Don't Match",
     "changePasswordErrorText" : "Change Password Failed!!!",
     "changePasswordButtonText" : "Change Password",
@@ -126,7 +126,7 @@
     "loginPhoneNumberError" : "Invalid PhoneNumber",
     "loginPasswordHint" : "Password",
     "loginPasswordEmptyError" : "Enter Password",
-    "loginPasswordTooShortError" : "Please Enter 6 or more characters",
+    "loginPasswordTooShortError" : "Please Enter 8 or more characters",
     "loginForgotPasswordText" : "Forgot Password ?",
     "loginDontHaveAccountText" : "Don't Have an Account ?",
     "loginSignUpText" : " Sign Up ",
@@ -234,10 +234,10 @@
     "signUpFullNameTooShort" : "Please Enter Your Full Name",
     "signUpPasswordHint" : "Password",
     "signUpPasswordEmptyError" : "Please Enter Password",
-    "signUpPasswordTooShort" : "Please Enter 6 or more characters",
+    "signUpPasswordTooShort" : "Please Enter 8 or more characters",
     "signUpPassRepeatHint" : "Confirm Password",
     "signUpPassRepeatEmptyError" : "Please Enter Password",
-    "signUpPassRepeatTooShort" : "Please Enter 6 or more characters",
+    "signUpPassRepeatTooShort" : "Please Enter 8 or more characters",
     "signUpPassRepeatNotMatch" : "Password Don't Match",
     "signUpTermsAndConditionOne" : "By creating an account, you agree to our\n",
     "signUpTermsAndConditionTwo" : "Term and Conditions ",
@@ -248,5 +248,5 @@
     "signUpFailedErrorMessage" : "Registration Failed",
 
     "verifyPhoneNumberButtonText" : "Continue",
-    "verifyPhoneNumberErrorText" : "Phone Verification Failed"
+    "verifyPhoneNumberErrorText" : "Phone Verification Failed Or User Already Registered"
 }

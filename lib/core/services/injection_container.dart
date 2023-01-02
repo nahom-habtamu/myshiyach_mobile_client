@@ -62,6 +62,7 @@ import '../../domain/usecases/get_products_by_user_id.dart';
 import '../../domain/usecases/get_recent_searches.dart';
 import '../../domain/usecases/get_stored_user_credentials.dart';
 import '../../domain/usecases/get_user_by_id.dart';
+import '../../domain/usecases/get_user_by_username.dart';
 import '../../domain/usecases/login.dart';
 import '../../domain/usecases/mark_messages_as_read.dart';
 import '../../domain/usecases/refresh_product.dart';
@@ -127,7 +128,7 @@ Future<void> init() async {
       networkInfo: sl(),
     ),
   );
-  sl.registerFactory(() => VerifyPhoneNumberCubit(sl(), sl()));
+  sl.registerFactory(() => VerifyPhoneNumberCubit(sl(), sl(), sl()));
   sl.registerFactory(() => RegisterUserCubit(sl(), sl(), sl()));
   sl.registerFactory(() => DisplayAllProductsCubit(sl(), sl(), sl(), sl()));
   sl.registerFactory(() => GetPaginatedProductsCubit(sl()));
@@ -201,6 +202,7 @@ Future<void> init() async {
   // usecases
   sl.registerLazySingleton(() => Login(sl()));
   sl.registerLazySingleton(() => GetUserById(sl()));
+  sl.registerLazySingleton(() => GetUserByUsername(sl()));
   sl.registerLazySingleton(() => VerifyPhoneNumber(sl()));
   sl.registerLazySingleton(() => AuthenticatePhoneNumber(sl()));
   sl.registerLazySingleton(() => RegisterUser(sl()));

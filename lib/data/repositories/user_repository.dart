@@ -47,4 +47,9 @@ class UserRepository extends UserService {
   Future<void> storeIsAppOpenedFirstTime() {
     return localDataSource.setIsAppOpenedFirstTime();
   }
+
+  @override
+  Future<UserModel> getUserByUsername(String username) {
+    return remoteDataSource.getUserByUsername(username);
+  }
 }

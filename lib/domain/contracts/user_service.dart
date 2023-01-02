@@ -3,6 +3,7 @@ import '../../data/models/user/user_model.dart';
 
 abstract class UserService {
   Future<UserModel> getUserById(String id, String token);
+  Future<UserModel> getUserByUsername(String username);
   Future<UserModel> reportUser(String id, String token);
   Future<void> changePassword(String phoneNumber, String password);
   Future<LoginRequestModel?> getStoredUserCredential();

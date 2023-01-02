@@ -22,6 +22,21 @@ class UserRemoteDataSource {
     return UserModel.fromJson(json.decode(response.body));
   }
 
+  Future<UserModel> getUserByUsername(String username) async {
+    String endPoint = '$baseUrl/users/username/$username';
+    final response = await http.get(
+      Uri.parse(endPoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode < 200 && response.statusCode > 300) {
+      throw Exception("User Not Found");
+    }
+    return UserModel.fromJson(json.decode(response.body));
+  }
+
   Future<UserModel> reportUser(String id, String token) async {
     String endPoint = '$baseUrl/users/report/$id';
     final response = await http.post(
