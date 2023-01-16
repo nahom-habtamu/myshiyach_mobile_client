@@ -511,7 +511,7 @@ class _PostContentToShowState extends State<PostContentToShow> {
       setState(() {});
     } else {
       setState(() {
-        favorites = [...favorites, product];
+        favorites = [product, ...favorites];
       });
     }
     List<ProductModel> favoritesToSave = parseListToProductModelList();

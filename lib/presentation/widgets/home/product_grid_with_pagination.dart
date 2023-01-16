@@ -157,7 +157,7 @@ class _ProductGridWithPaginationState extends State<ProductGridWithPagination> {
       setState(() {});
     } else {
       setState(() {
-        widget.favorites = [...widget.favorites, product];
+        widget.favorites = [product, ...widget.favorites];
       });
     }
     List<ProductModel> favoritesToSave = parseListToProductModelList();
