@@ -251,7 +251,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   List<ProductModel> buildListWithProductAdded(
       List<Product> favoriteProducts, Product product) {
-    return [...favoriteProducts, product]
+    return [product, ...favoriteProducts]
         .map((e) => ProductModel.fromProduct(e))
         .toList();
   }
