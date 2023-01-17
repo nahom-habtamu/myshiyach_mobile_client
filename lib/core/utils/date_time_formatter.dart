@@ -6,9 +6,9 @@ class DateFormatterUtil {
     String language,
   ) {
     final DateTime currentDate = DateTime.now();
-    final DateTime createdAt =
-        DateFormat('yyyy-MM-ddTHH:mm:ss').parse(dateTimeString);
-        // 2023-01-16T18:35:32.435Z
+    final DateTime createdAt = DateFormat('yyyy-MM-ddTHH:mm:ss')
+        .parse(dateTimeString)
+        .add(const Duration(hours: 3));
 
     final difference = currentDate.difference(createdAt);
 
