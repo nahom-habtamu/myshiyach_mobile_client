@@ -46,7 +46,7 @@ class FilterCriteriaModel {
       brand: original?.brand,
       city: original?.city,
       sortByPriceAscending: original?.sortByPriceAscending,
-      sortByCreatedByAscending: original?.sortByCreatedByAscending,
+      sortByCreatedByAscending: original?.sortByCreatedByAscending ?? true,
       keyword: keyword,
     );
   }
@@ -61,7 +61,7 @@ class FilterCriteriaModel {
       brand: original?.brand,
       city: original?.city,
       sortByPriceAscending: original?.sortByPriceAscending,
-      sortByCreatedByAscending: original?.sortByCreatedByAscending,
+      sortByCreatedByAscending: original?.sortByCreatedByAscending ?? true,
       keyword: original?.keyword,
     );
   }
@@ -76,7 +76,7 @@ class FilterCriteriaModel {
       brand: original?.brand,
       city: original?.city,
       sortByPriceAscending: original?.sortByPriceAscending,
-      sortByCreatedByAscending: original?.sortByCreatedByAscending,
+      sortByCreatedByAscending: original?.sortByCreatedByAscending ?? true,
       keyword: original?.keyword,
     );
   }
