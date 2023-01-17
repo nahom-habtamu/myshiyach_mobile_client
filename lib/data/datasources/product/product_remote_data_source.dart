@@ -31,7 +31,7 @@ class ProductRemoteDataSource extends ProductDataSource {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-    ).timeout(const Duration(seconds: 60));
+    ).timeout(const Duration(seconds: 15));
 
     if (response.statusCode == 200) {
       var result = GetPaginatedProductsResultModel.fromJson(

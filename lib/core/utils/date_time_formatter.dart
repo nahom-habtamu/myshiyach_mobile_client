@@ -7,17 +7,18 @@ class DateFormatterUtil {
   ) {
     final DateTime currentDate = DateTime.now();
     final DateTime createdAt =
-        DateFormat('MM/dd/yyyy, HH:mm:ss a').parse(dateTimeString);
+        DateFormat('yyyy-MM-ddTHH:mm:ss').parse(dateTimeString);
+        // 2023-01-16T18:35:32.435Z
 
     final difference = currentDate.difference(createdAt);
 
-    var differeneInMinutes = difference.inMinutes;
+    var differenceInMinutes = difference.inMinutes;
     var differenceInHours = difference.inHours;
     var differenceInDays = difference.inDays;
 
-    if (differeneInMinutes <= 2) return language == "en" ? "Just Now" : "አሁን";
-    if (differeneInMinutes > 2 && differeneInMinutes < 59) {
-      return "$differeneInMinutes mins ago";
+    if (differenceInMinutes <= 2) return language == "en" ? "Just Now" : "አሁን";
+    if (differenceInMinutes > 2 && differenceInMinutes < 59) {
+      return "$differenceInMinutes mins ago";
     }
 
     if (differenceInHours >= 1 && differenceInHours < 24) {
@@ -32,7 +33,7 @@ class DateFormatterUtil {
   }
 
   static DateTime parseProductCreatedDate(String dateTimeString) {
-    return DateFormat('MM/dd/yyyy, HH:mm:ss a').parse(dateTimeString);
+    return DateFormat('yyyy-MM-ddTHH:mm:ss').parse(dateTimeString);
   }
 
   static String extractDateFromDateTime(String dateTimeString) {
