@@ -276,7 +276,9 @@ class _PostContentToShowState extends State<PostContentToShow> {
         children: [
           Expanded(
             child: DetailItem(
-              subtitle: Text(widget.product.title),
+              subtitle: Text(widget.product.title.length > 20
+                  ? widget.product.title.substring(0, 20) + '...'
+                  : widget.product.title),
               title: Row(
                 children: [
                   const Icon(

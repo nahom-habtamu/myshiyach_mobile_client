@@ -60,7 +60,9 @@ class _ProductGridItemState extends State<ProductGridItem> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             renderProductListItemImage(widget.product.productImages.first),
-            renderTitle(widget.product.title),
+            renderTitle(widget.product.title.length > 20
+                ? widget.product.title.substring(0, 20) + '...'
+                : widget.product.title),
             renderPrice(widget.product.price),
             renderCity(widget.product.city),
             renderTimerAndFavoriteIcon(widget.product),
