@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mnale_client/domain/usecases/get_user_by_id.dart';
 
 import '../../../core/services/network_info.dart';
 import '../../../core/utils/date_time_formatter.dart';
@@ -15,11 +16,13 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
   final GetAllCategories getAllCategories;
   final GetFavoriteProducts getFavoriteProducts;
   final NetworkInfo networkInfo;
+  final GetUserById getUserById;
   DisplayAllProductsCubit(
     this.getAllProducts,
     this.getAllCategories,
     this.getFavoriteProducts,
     this.networkInfo,
+    this.getUserById,
   ) : super(Empty());
 
   int _compareCreatedAt(Product a, Product b) {
@@ -33,18 +36,20 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
   }
 
   void call(
-      PageAndLimitModel pageAndLimit,
-      FilterCriteriaModel? filterCriteriaModel,
-      String token,
-      List<String> favoriteProductsIds) async {
+    PageAndLimitModel pageAndLimit,
+    FilterCriteriaModel? filterCriteriaModel,
+    String token,
+    String userId,
+  ) async {
     try {
       if (await networkInfo.isConnected()) {
         emit(Empty());
         emit(Loading());
         var result =
             await getAllProducts.call(pageAndLimit, filterCriteriaModel);
+        var user = await getUserById.call(userId, token);
         var favoriteProducts =
-            await getFavoriteProducts.call(token, favoriteProductsIds);
+            await getFavoriteProducts.call(token, user.favoriteProducts);
         var categories = await getAllCategories.call();
         if (result.products.isNotEmpty && categories.isNotEmpty) {
           emit(Loaded(result, categories, favoriteProducts));

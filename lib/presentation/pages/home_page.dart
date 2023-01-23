@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
               : PageAndLimitModel.initialDefault(),
           filterValues,
           accessToken,
-          currentUser?.favoriteProducts ?? [],
+          currentUser?.id ?? "",
         );
   }
 
@@ -183,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                   PageAndLimitModel.initialDefault(),
                   filterValues,
                   accessToken,
-                  currentUser?.favoriteProducts ?? [],
+                  currentUser?.id ?? "",
                 ),
           ),
         ),
@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                   pageAndLimit!,
                   filterValues,
                   accessToken,
-                  currentUser?.favoriteProducts ?? [],
+                  currentUser?.id ?? "",
                 ),
           ),
         ),

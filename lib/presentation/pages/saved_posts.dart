@@ -41,7 +41,7 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
     if (authState is AuthSuccessfull) {
       context.read<GetFavoriteProductsCubit>().execute(
             authState.loginResult.token,
-            authState.currentUser.favoriteProducts,
+            authState.currentUser.id,
           );
     }
   }

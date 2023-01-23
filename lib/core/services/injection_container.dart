@@ -69,9 +69,9 @@ import '../../domain/usecases/refresh_product.dart';
 import '../../domain/usecases/register_user.dart';
 import '../../domain/usecases/report_product.dart';
 import '../../domain/usecases/report_user.dart';
-import '../../domain/usecases/update_favorite_product.dart';
 import '../../domain/usecases/set_is_app_opened_first_time.dart';
 import '../../domain/usecases/store_user_credentails.dart';
+import '../../domain/usecases/update_favorite_product.dart';
 import '../../domain/usecases/update_product.dart';
 import '../../domain/usecases/upload_pictures.dart';
 import '../../domain/usecases/verify_phone_number.dart';
@@ -130,13 +130,14 @@ Future<void> init() async {
   );
   sl.registerFactory(() => VerifyPhoneNumberCubit(sl(), sl(), sl()));
   sl.registerFactory(() => RegisterUserCubit(sl(), sl(), sl()));
-  sl.registerFactory(() => DisplayAllProductsCubit(sl(), sl(), sl(), sl()));
+  sl.registerFactory(() => DisplayAllProductsCubit(sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory(() => GetPaginatedProductsCubit(sl()));
   sl.registerFactory(
     () => GetFavoriteProductsCubit(
       getFavoriteProducts: sl(),
       getProductById: sl(),
       networkInfo: sl(),
+      getUserById: sl()
     ),
   );
   sl.registerFactory(() => UpdateFavoriteProductsCubit(sl()));
