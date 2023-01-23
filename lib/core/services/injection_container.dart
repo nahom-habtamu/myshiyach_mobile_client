@@ -130,15 +130,15 @@ Future<void> init() async {
   );
   sl.registerFactory(() => VerifyPhoneNumberCubit(sl(), sl(), sl()));
   sl.registerFactory(() => RegisterUserCubit(sl(), sl(), sl()));
-  sl.registerFactory(() => DisplayAllProductsCubit(sl(), sl(), sl(), sl(), sl()));
+  sl.registerFactory(
+      () => DisplayAllProductsCubit(sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory(() => GetPaginatedProductsCubit(sl()));
   sl.registerFactory(
     () => GetFavoriteProductsCubit(
-      getFavoriteProducts: sl(),
-      getProductById: sl(),
-      networkInfo: sl(),
-      getUserById: sl()
-    ),
+        getFavoriteProducts: sl(),
+        getProductById: sl(),
+        networkInfo: sl(),
+        getUserById: sl()),
   );
   sl.registerFactory(() => UpdateFavoriteProductsCubit(sl()));
   sl.registerFactory(
@@ -191,7 +191,7 @@ Future<void> init() async {
   );
   sl.registerFactory(() => GetProductByIdCubit(sl()));
   sl.registerFactory(() => GenerateShareLinkForProductCubit(sl()));
-  sl.registerFactory(() => GetProductsByCategoryCubit(sl(), sl()));
+  sl.registerFactory(() => GetProductsByCategoryCubit(sl(), sl(), sl()));
   sl.registerFactory(() => SetIsAppOpenedFirstTimeCubit(sl()));
   sl.registerFactory(() => GetIsAppOpenedFirstTimeCubit(sl()));
   sl.registerFactory(() => AddImageMessageToConversationCubit(sl(), sl()));

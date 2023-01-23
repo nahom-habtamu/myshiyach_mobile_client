@@ -58,7 +58,7 @@ class _PostContentToShowState extends State<PostContentToShow> {
               widget.product.mainCategory,
               widget.product.subCategory,
               authState.loginResult.token,
-              authState.currentUser.favoriteProducts,
+              authState.currentUser.id,
             );
       }
     });

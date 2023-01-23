@@ -40,6 +40,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   User? currentUser;
   String? authToken;
   bool isFromDynamicLink = false;
+  List<Product> favorites = [];
 
   @override
   void initState() {
@@ -61,7 +62,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
     context.read<HandleGoingToMessageCubit>().clear();
     context.read<RefreshProductCubit>().clear();
     context.read<GetPostDetailContentCubit>().execute(
-        product!.createdBy, authToken!, currentUser?.favoriteProducts ?? []);
+          currentUser!.id,
+          authToken!,
+        );
   }
 
   @override
@@ -88,7 +91,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
               } else if (state is NoNetwork) {
                 return buildNoNetworkContent();
               } else if (state is Loaded) {
-                return renderBody(state.favoriteProducts, state.postCreator);
+                SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+                  if (favorites.isEmpty) {
+                    setState(() {
+                      favorites = [...state.favoriteProducts];
+                    });
+                  }
+                  // context.read<GetPostDetailContentCubit>().clear();
+                });
+                return renderBody(state.postCreator);
               }
               return Container();
             },
@@ -116,7 +127,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  renderBody(List<Product> favorites, User postCreator) {
+  renderBody(User postCreator) {
     return BlocBuilder<RefreshProductCubit, RefreshProductState>(
         builder: (context, state) {
       if (state is RefreshPostLoading) {
@@ -153,7 +164,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         child: SingleChildScrollView(
           child: PostContentToShow(
             isFavorite: duplicate.isNotEmpty,
-            handleSaveToFavorite: () => updateFavorites(favorites, product!),
+            handleSaveToFavorite: () => updateFavorites(product!),
             product: product!,
             currentUser: currentUser!,
             authToken: authToken!,
@@ -226,14 +237,17 @@ class _PostDetailPageState extends State<PostDetailPage> {
     }
   }
 
-  void updateFavorites(List<Product> favoriteProducts, Product product) {
-    var duplicate = favoriteProducts.where((e) => e.id == product.id).toList();
+  void updateFavorites(Product product) {
+    var duplicate = favorites.where((e) => e.id == product.id).toList();
     List<ProductModel> favoritesToSave = [];
     if (duplicate.isEmpty) {
-      favoritesToSave = buildListWithProductAdded(favoriteProducts, product);
+      favoritesToSave = buildListWithProductAdded(favorites, product);
     } else {
-      favoritesToSave = buildListWithProductRemoved(favoriteProducts, product);
+      favoritesToSave = buildListWithProductRemoved(favorites, product);
     }
+    setState(() {
+      favorites = favoritesToSave;
+    });
     context.read<AuthCubit>().updateFavoriteProducts(
           authToken!,
           currentUser!,
