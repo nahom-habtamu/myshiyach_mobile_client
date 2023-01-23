@@ -16,16 +16,14 @@ class GetProductsByCategoryCubit extends Cubit<GetProductsByCategoryState> {
     emit(NotTriggered());
   }
 
-  void call(
-    String mainCategory,
-    String subCategory,
-  ) async {
+  void call(String mainCategory, String subCategory, String token,
+      List<String> favoriteProductIds) async {
     try {
       emit(NotTriggered());
       emit(Loading());
       var products =
           await getProductsByCategory.call(mainCategory, subCategory);
-      var favorites = await getFavoriteProducts.call();
+      var favorites = await getFavoriteProducts.call(token, favoriteProductIds);
       if (products.isNotEmpty) {
         emit(Loaded(products, favorites));
       } else {

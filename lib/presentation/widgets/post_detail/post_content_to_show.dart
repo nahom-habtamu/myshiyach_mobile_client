@@ -9,10 +9,12 @@ import '../../../core/utils/price_formatter.dart';
 import '../../../data/models/product/product_model.dart';
 import '../../../domain/enitites/product.dart';
 import '../../../domain/enitites/user.dart';
+import '../../bloc/auth/auth_cubit.dart';
+import '../../bloc/auth/auth_state.dart';
 import '../../bloc/change_language/change_language_cubit.dart';
 import '../../bloc/get_products_by_category/get_products_by_category_cubit.dart';
 import '../../bloc/get_products_by_category/get_products_by_category_state.dart';
-import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../../bloc/update_favorite_products/update_favorite_products_cubit.dart';
 import '../../pages/posts_created_by_user_page.dart';
 import '../home/product_grid_item.dart';
 import 'detail_item.dart';
@@ -50,10 +52,15 @@ class _PostContentToShowState extends State<PostContentToShow> {
     super.initState();
     isFavorite = widget.isFavorite;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<GetProductsByCategoryCubit>().call(
-            widget.product.mainCategory,
-            widget.product.subCategory,
-          );
+      var authState = context.read<AuthCubit>().state;
+      if (authState is AuthSuccessfull) {
+        context.read<GetProductsByCategoryCubit>().call(
+              widget.product.mainCategory,
+              widget.product.subCategory,
+              authState.loginResult.token,
+              authState.currentUser.favoriteProducts,
+            );
+      }
     });
   }
 
@@ -517,10 +524,20 @@ class _PostContentToShowState extends State<PostContentToShow> {
       });
     }
     List<ProductModel> favoritesToSave = parseListToProductModelList();
-    context
-        .read<SetFavoriteProductsCubit>()
-        .setFavoriteProducts
-        .call(favoritesToSave);
+
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      context.read<AuthCubit>().updateFavoriteProducts(
+            authState.loginResult.token,
+            authState.currentUser,
+            favoritesToSave.map((e) => e.id).toList(),
+          );
+      context.read<UpdateFavoriteProductsCubit>().execute(
+            authState.currentUser.id,
+            authState.loginResult.token,
+            favoritesToSave,
+          );
+    }
   }
 
   List<ProductModel> parseListToProductModelList() {

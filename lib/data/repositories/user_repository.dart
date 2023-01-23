@@ -52,4 +52,10 @@ class UserRepository extends UserService {
   Future<UserModel> getUserByUsername(String username) {
     return remoteDataSource.getUserByUsername(username);
   }
+
+  @override
+  Future<UserModel> updateFavoriteProducts(
+      String id, String token, List<String> favoriteProducts) {
+    return remoteDataSource.updateFavoriteProducts(id, token, favoriteProducts);
+  }
 }

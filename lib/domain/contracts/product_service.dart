@@ -12,8 +12,8 @@ abstract class ProductService {
   );
   Future<ProductModel> getProductById(String id, String token);
   Future<List<ProductModel>> getAllProducts();
-  Future<List<ProductModel>> getAllFavoriteProducts();
-  Future<void> setFavoriteProducts(List<ProductModel> products);
+  Future<List<ProductModel>> getAllFavoriteProducts(
+      String token, List<String> favoriteProducts);
   Future<ProductModel> createProduct(
       AddProductModel addProductModel, String token);
   Future<String> deleteProduct(String id, String token);

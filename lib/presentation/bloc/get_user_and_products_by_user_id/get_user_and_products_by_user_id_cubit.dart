@@ -19,7 +19,8 @@ class GetUserAndProductsByUserIdCubit
     required this.getUserById,
   }) : super(GetUserAndProductsByUserIdEmpty());
 
-  void call(String userId, String token) async {
+  void call(
+      String userId, String token, List<String> favoriteProductsIds) async {
     try {
       if (await networkInfo.isConnected()) {
         emit(GetUserAndProductsByUserIdEmpty());
@@ -27,7 +28,8 @@ class GetUserAndProductsByUserIdCubit
         var user = await getUserById.call(userId, token);
         var products = await getMyProducts.call(userId);
         if (products.isNotEmpty) {
-          var favorites = await getFavoriteProducts.call();
+          var favorites =
+              await getFavoriteProducts.call(token, favoriteProductsIds);
           emit(GetUserAndProductsByUserIdLoaded(
             favorites: favorites,
             products: products,

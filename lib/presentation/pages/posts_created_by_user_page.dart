@@ -12,7 +12,7 @@ import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_i
 import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_state.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/report_user/report_user_cubit.dart';
-import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../bloc/update_favorite_products/update_favorite_products_cubit.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/empty_state_content.dart';
 import '../widgets/common/error_content.dart';
@@ -56,7 +56,9 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
   }
 
   void fetchPostsCreatedByUser(String userId) {
-    context.read<GetUserAndProductsByUserIdCubit>().call(userId, accessToken);
+    context
+        .read<GetUserAndProductsByUserIdCubit>()
+        .call(userId, accessToken, currentUser?.favoriteProducts ?? []);
   }
 
   @override
@@ -247,9 +249,9 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
     }
     List<ProductModel> favoritesToSave = parseListToProductModelList();
     context
-        .read<SetFavoriteProductsCubit>()
-        .setFavoriteProducts
-        .call(favoritesToSave);
+        .read<UpdateFavoriteProductsCubit>()
+        .updateFavoriteProducts
+        .call(currentUser!.id, accessToken, favoritesToSave);
   }
 
   List<ProductModel> parseListToProductModelList() {

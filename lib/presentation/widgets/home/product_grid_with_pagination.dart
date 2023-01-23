@@ -10,9 +10,11 @@ import '../../../data/models/filter/filter_criteria_model.dart';
 import '../../../data/models/product/page_and_limit_model.dart';
 import '../../../data/models/product/product_model.dart';
 import '../../../domain/enitites/product.dart';
+import '../../bloc/auth/auth_cubit.dart';
+import '../../bloc/auth/auth_state.dart';
 import '../../bloc/get_paginated_products/get_paginated_products_cubit.dart';
 import '../../bloc/get_paginated_products/get_paginated_products_state.dart';
-import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../../bloc/update_favorite_products/update_favorite_products_cubit.dart';
 import '../common/empty_state_content.dart';
 import '../common/error_content.dart';
 import 'custom_footer_for_lazy_loading.dart';
@@ -39,7 +41,7 @@ class ProductGridWithPagination extends StatefulWidget {
 }
 
 class _ProductGridWithPaginationState extends State<ProductGridWithPagination> {
-  SetFavoriteProductsCubit? setFavoriteProductsCubit;
+  UpdateFavoriteProductsCubit? updateFavoriteProductsCubit;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   @override
@@ -161,10 +163,20 @@ class _ProductGridWithPaginationState extends State<ProductGridWithPagination> {
       });
     }
     List<ProductModel> favoritesToSave = parseListToProductModelList();
-    context
-        .read<SetFavoriteProductsCubit>()
-        .setFavoriteProducts
-        .call(favoritesToSave);
+
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      context.read<AuthCubit>().updateFavoriteProducts(
+            authState.loginResult.token,
+            authState.currentUser,
+            favoritesToSave.map((e) => e.id).toList(),
+          );
+      context.read<UpdateFavoriteProductsCubit>().execute(
+            authState.currentUser.id,
+            authState.loginResult.token,
+            favoritesToSave,
+          );
+    }
   }
 
   List<ProductModel> parseListToProductModelList() {

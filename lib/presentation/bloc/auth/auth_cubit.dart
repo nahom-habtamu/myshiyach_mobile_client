@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mnale_client/core/services/network_info.dart';
+import 'package:mnale_client/data/models/login/login_result_model.dart';
 
 import '../../../data/models/login/login_request_model.dart';
+import '../../../domain/enitites/user.dart';
 import '../../../domain/usecases/extract_token.dart';
 import '../../../domain/usecases/get_stored_user_credentials.dart';
 import '../../../domain/usecases/get_user_by_id.dart';
@@ -27,6 +29,23 @@ class AuthCubit extends Cubit<AuthState> {
 
   void clear() {
     emit(AuthNotTriggered());
+  }
+
+  void updateFavoriteProducts(
+      String token, User oldUser, List<String> favoriteProducts) async {
+    emit(
+      AuthSuccessfull(
+        LoginResultModel(token: token),
+        User(
+          fullName: oldUser.fullName,
+          email: oldUser.email,
+          phoneNumber: oldUser.phoneNumber,
+          id: oldUser.id,
+          isReported: oldUser.isReported,
+          favoriteProducts: favoriteProducts,
+        ),
+      ),
+    );
   }
 
   void loginUser(LoginRequestModel? request) async {

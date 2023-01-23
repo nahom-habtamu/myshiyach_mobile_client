@@ -7,12 +7,14 @@ class UserModel extends User {
     required String phoneNumber,
     required String id,
     required bool isReported,
+    required List<String> favoriteProducts,
   }) : super(
           fullName: fullName,
           email: email,
           phoneNumber: phoneNumber,
           id: id,
           isReported: isReported,
+          favoriteProducts: favoriteProducts,
         );
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,7 @@ class UserModel extends User {
       phoneNumber: json["phoneNumber"],
       id: json["_id"],
       isReported: json["isReported"],
+      favoriteProducts: List<String>.from(json["favoriteProducts"]),
     );
   }
 }

@@ -72,4 +72,28 @@ class UserRemoteDataSource {
       throw Exception("Registration Failed");
     }
   }
+
+  Future<UserModel> updateFavoriteProducts(
+    String id,
+    String token,
+    List<String> favoriteProducts,
+  ) async {
+    String endPoint = '$baseUrl/users/updateFavoriteProducts/$id';
+    var body = jsonEncode(
+      {"favoriteProducts": favoriteProducts},
+    );
+    final response = await http.post(
+      Uri.parse(endPoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': token
+      },
+      body: body,
+    );
+
+    if (response.statusCode < 200 && response.statusCode > 300) {
+      throw Exception("Error Updating Favorite Products");
+    }
+    return UserModel.fromJson(json.decode(response.body));
+  }
 }

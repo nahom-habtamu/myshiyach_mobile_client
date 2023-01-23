@@ -9,6 +9,9 @@ import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/main_category.dart';
 import '../../domain/enitites/product.dart';
 import '../../domain/enitites/sub_category.dart';
+import '../../domain/enitites/user.dart';
+import '../bloc/auth/auth_cubit.dart';
+import '../bloc/auth/auth_state.dart';
 import '../bloc/change_language/change_language_cubit.dart';
 import '../bloc/display_all_products/display_all_products_cubit.dart';
 import '../bloc/display_all_products/display_all_products_state.dart';
@@ -39,12 +42,15 @@ class _HomePageState extends State<HomePage> {
   List<Product> products = [];
   List<Product> favorites = [];
   List<MainCategory> categories = [];
+  String accessToken = "";
+  User? currentUser;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       selectedMainCategory = filterValues?.mainCategory;
+      initializeCurrentUser();
       fetchAllNeededToDisplayProductList();
     });
   }
@@ -58,10 +64,13 @@ class _HomePageState extends State<HomePage> {
         PageAndLimitModel(limit: 10000000000000000, page: 1);
 
     context.read<DisplayAllProductsCubit>().call(
-        (filterValues?.keyword != null && filterValues!.keyword!.isNotEmpty)
-            ? pageAndLimitForSearch
-            : PageAndLimitModel.initialDefault(),
-        filterValues);
+          (filterValues?.keyword != null && filterValues!.keyword!.isNotEmpty)
+              ? pageAndLimitForSearch
+              : PageAndLimitModel.initialDefault(),
+          filterValues,
+          accessToken,
+          currentUser?.favoriteProducts ?? [],
+        );
   }
 
   @override
@@ -170,9 +179,12 @@ class _HomePageState extends State<HomePage> {
       child: Center(
         child: SingleChildScrollView(
           child: NoNetworkContent(
-            onButtonClicked: () => context
-                .read<DisplayAllProductsCubit>()
-                .call(PageAndLimitModel.initialDefault(), filterValues),
+            onButtonClicked: () => context.read<DisplayAllProductsCubit>().call(
+                  PageAndLimitModel.initialDefault(),
+                  filterValues,
+                  accessToken,
+                  currentUser?.favoriteProducts ?? [],
+                ),
           ),
         ),
       ),
@@ -184,9 +196,12 @@ class _HomePageState extends State<HomePage> {
       child: Center(
         child: SingleChildScrollView(
           child: ErrorContent(
-            onButtonClicked: () => context
-                .read<DisplayAllProductsCubit>()
-                .call(pageAndLimit!, filterValues),
+            onButtonClicked: () => context.read<DisplayAllProductsCubit>().call(
+                  pageAndLimit!,
+                  filterValues,
+                  accessToken,
+                  currentUser?.favoriteProducts ?? [],
+                ),
           ),
         ),
       ),
@@ -320,5 +335,13 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void initializeCurrentUser() {
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      accessToken = authState.loginResult.token;
+      currentUser = authState.currentUser;
+    }
   }
 }

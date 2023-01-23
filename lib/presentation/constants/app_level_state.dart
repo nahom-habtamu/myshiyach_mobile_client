@@ -33,8 +33,8 @@ import '../bloc/refresh_product/refresh_product_cubit.dart';
 import '../bloc/register_user/register_user_cubit.dart';
 import '../bloc/report_product/report_product_cubit.dart';
 import '../bloc/report_user/report_user_cubit.dart';
-import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../bloc/set_is_app_opened_first_time/set_is_app_opened_first_time_cubit.dart';
+import '../bloc/update_favorite_products/update_favorite_products_cubit.dart';
 import '../bloc/update_product/update_product_cubit.dart';
 import '../bloc/verify_phone_number/verify_phone_number_cubit.dart';
 
@@ -60,7 +60,7 @@ class AppLevelState {
         create: (_) => sl<GetFavoriteProductsCubit>(),
       ),
       BlocProvider(
-        create: (_) => sl<SetFavoriteProductsCubit>(),
+        create: (_) => sl<UpdateFavoriteProductsCubit>(),
       ),
       BlocProvider(
         create: (_) => sl<GetDataNeededToManagePostCubit>(),

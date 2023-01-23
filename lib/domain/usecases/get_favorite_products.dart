@@ -6,8 +6,10 @@ class GetFavoriteProducts {
 
   GetFavoriteProducts(this.repository);
 
-  Future<List<Product>> call() async {
-    var parsedResult = await repository.getAllFavoriteProducts();
+  Future<List<Product>> call(
+      String token, List<String> favoriteProducts) async {
+    var parsedResult =
+        await repository.getAllFavoriteProducts(token, favoriteProducts);
     return parsedResult;
   }
 }

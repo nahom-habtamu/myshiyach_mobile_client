@@ -36,16 +36,6 @@ class ProductRepository extends ProductService {
   }
 
   @override
-  Future<List<ProductModel>> getAllFavoriteProducts() {
-    return localDataSource.getFavoriteProducts();
-  }
-
-  @override
-  Future<void> setFavoriteProducts(List<ProductModel> products) {
-    return localDataSource.setFavoriteProducts(products);
-  }
-
-  @override
   Future<ProductModel> createProduct(
       AddProductModel addProductModel, String token) {
     return remoteDataSource.createProduct(addProductModel, token);
@@ -93,5 +83,17 @@ class ProductRepository extends ProductService {
   @override
   Future<ProductModel> reportProduct(String id, String token) {
     return remoteDataSource.reportProduct(id, token);
+  }
+
+  @override
+  Future<List<ProductModel>> getAllFavoriteProducts(
+      String token, List<String> favoriteProducts) async {
+    List<ProductModel> products = [];
+
+    for (var fav in favoriteProducts) {
+      var fullProduct = await remoteDataSource.getProductById(fav, token);
+      products = [...products, fullProduct];
+    }
+    return products;
   }
 }

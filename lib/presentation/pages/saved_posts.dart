@@ -8,7 +8,7 @@ import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
 import '../bloc/get_favorite_products/get_favorite_products_cubit.dart';
 import '../bloc/get_favorite_products/get_favorite_products_state.dart';
-import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../bloc/update_favorite_products/update_favorite_products_cubit.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/common/empty_state_content.dart';
@@ -25,14 +25,14 @@ class SavedPostsPage extends StatefulWidget {
 }
 
 class _SavedPostsPageState extends State<SavedPostsPage> {
-  SetFavoriteProductsCubit? setFavoriteProductsCubit;
+  UpdateFavoriteProductsCubit? updateFavoriteProductsCubit;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       fetchFavoriteProducts();
-      setFavoriteProductsCubit = context.read<SetFavoriteProductsCubit>();
+      updateFavoriteProductsCubit = context.read<UpdateFavoriteProductsCubit>();
     });
   }
 
@@ -41,6 +41,7 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
     if (authState is AuthSuccessfull) {
       context.read<GetFavoriteProductsCubit>().execute(
             authState.loginResult.token,
+            authState.currentUser.favoriteProducts,
           );
     }
   }
@@ -111,15 +112,27 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
   void handleProductDismissal(List<Product> products, int index) {
     var updatedProducts = [...products];
     updatedProducts.removeWhere((element) => element.id == products[index].id);
-    updateDataInLocalSource(updatedProducts);
+    updateFavoriteProducts(updatedProducts);
     fetchFavoriteProducts();
   }
 
-  void updateDataInLocalSource(List<Product> products) {
+  void updateFavoriteProducts(List<Product> products) {
     var mappedToProductModel =
         products.map((e) => ProductModel.fromProduct(e)).toList();
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      context.read<AuthCubit>().updateFavoriteProducts(
+            authState.loginResult.token,
+            authState.currentUser,
+            mappedToProductModel.map((e) => e.id).toList(),
+          );
 
-    setFavoriteProductsCubit!.setFavoriteProducts(mappedToProductModel);
+      updateFavoriteProductsCubit!.updateFavoriteProducts(
+        authState.currentUser.id,
+        authState.loginResult.token,
+        mappedToProductModel,
+      );
+    }
   }
 
   Widget buildEmptyStateContent() {

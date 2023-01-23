@@ -16,18 +16,16 @@ class GetPostDetailContentCubit extends Cubit<GetPostDetailContentState> {
   }) : super(Empty());
 
   void execute(
-    String userId,
-    String token,
-  ) async {
+      String userId, String token, List<String> favoriteProductsIds) async {
     try {
-      if(await networkInfo.isConnected()){
+      if (await networkInfo.isConnected()) {
         emit(Empty());
         emit(Loading());
-        var products = await getFavoriteProducts.call();
+        var products =
+            await getFavoriteProducts.call(token, favoriteProductsIds);
         var user = await getUserById.call(userId, token);
         emit(Loaded(products, user));
-      }
-      else {
+      } else {
         emit(NoNetwork());
       }
     } catch (e) {

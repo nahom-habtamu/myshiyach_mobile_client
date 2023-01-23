@@ -33,16 +33,18 @@ class DisplayAllProductsCubit extends Cubit<DisplayAllProductsState> {
   }
 
   void call(
-    PageAndLimitModel pageAndLimit,
-    FilterCriteriaModel? filterCriteriaModel,
-  ) async {
+      PageAndLimitModel pageAndLimit,
+      FilterCriteriaModel? filterCriteriaModel,
+      String token,
+      List<String> favoriteProductsIds) async {
     try {
       if (await networkInfo.isConnected()) {
         emit(Empty());
         emit(Loading());
         var result =
             await getAllProducts.call(pageAndLimit, filterCriteriaModel);
-        var favoriteProducts = await getFavoriteProducts.call();
+        var favoriteProducts =
+            await getFavoriteProducts.call(token, favoriteProductsIds);
         var categories = await getAllCategories.call();
         if (result.products.isNotEmpty && categories.isNotEmpty) {
           emit(Loaded(result, categories, favoriteProducts));

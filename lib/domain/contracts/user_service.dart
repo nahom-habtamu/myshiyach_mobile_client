@@ -10,4 +10,6 @@ abstract class UserService {
   Future<void> storeUserCredentials(LoginRequestModel loginRequestModel);
   Future<void> storeIsAppOpenedFirstTime();
   Future<bool> getIsAppOpenedFirstTime();
+  Future<UserModel> updateFavoriteProducts(
+      String id, String token, List<String> favoriteProducts);
 }

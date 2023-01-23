@@ -4,6 +4,7 @@ class User {
   final String phoneNumber;
   final String id;
   final bool isReported;
+  final List<String> favoriteProducts;
 
   User({
     required this.fullName,
@@ -11,5 +12,6 @@ class User {
     required this.phoneNumber,
     required this.id,
     required this.isReported,
+    required this.favoriteProducts,
   });
 }

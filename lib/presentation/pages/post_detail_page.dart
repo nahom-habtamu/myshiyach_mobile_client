@@ -17,7 +17,7 @@ import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/refresh_product/refresh_product_cubit.dart';
 import '../bloc/refresh_product/refresh_product_state.dart';
 import '../bloc/report_product/report_product_cubit.dart';
-import '../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../bloc/update_favorite_products/update_favorite_products_cubit.dart';
 import '../screen_arguments/post_detail_page_arguments.dart';
 import '../widgets/common/error_content.dart';
 import '../widgets/common/no_network_content.dart';
@@ -60,9 +60,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
     });
     context.read<HandleGoingToMessageCubit>().clear();
     context.read<RefreshProductCubit>().clear();
-    context
-        .read<GetPostDetailContentCubit>()
-        .execute(product!.createdBy, authToken!);
+    context.read<GetPostDetailContentCubit>().execute(
+        product!.createdBy, authToken!, currentUser?.favoriteProducts ?? []);
   }
 
   @override
@@ -235,10 +234,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
     } else {
       favoritesToSave = buildListWithProductRemoved(favoriteProducts, product);
     }
+    context.read<AuthCubit>().updateFavoriteProducts(
+          authToken!,
+          currentUser!,
+          favoritesToSave.map((e) => e.id).toList(),
+        );
     context
-        .read<SetFavoriteProductsCubit>()
-        .setFavoriteProducts
-        .call(favoritesToSave);
+        .read<UpdateFavoriteProductsCubit>()
+        .updateFavoriteProducts
+        .call(currentUser!.id, authToken!, favoritesToSave);
   }
 
   List<ProductModel> buildListWithProductRemoved(

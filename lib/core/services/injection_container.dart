@@ -69,7 +69,7 @@ import '../../domain/usecases/refresh_product.dart';
 import '../../domain/usecases/register_user.dart';
 import '../../domain/usecases/report_product.dart';
 import '../../domain/usecases/report_user.dart';
-import '../../domain/usecases/set_favorite_product.dart';
+import '../../domain/usecases/update_favorite_product.dart';
 import '../../domain/usecases/set_is_app_opened_first_time.dart';
 import '../../domain/usecases/store_user_credentails.dart';
 import '../../domain/usecases/update_product.dart';
@@ -108,8 +108,8 @@ import '../../presentation/bloc/refresh_product/refresh_product_cubit.dart';
 import '../../presentation/bloc/register_user/register_user_cubit.dart';
 import '../../presentation/bloc/report_product/report_product_cubit.dart';
 import '../../presentation/bloc/report_user/report_user_cubit.dart';
-import '../../presentation/bloc/set_favorite_products/set_favorite_products_cubit.dart';
 import '../../presentation/bloc/set_is_app_opened_first_time/set_is_app_opened_first_time_cubit.dart';
+import '../../presentation/bloc/update_favorite_products/update_favorite_products_cubit.dart';
 import '../../presentation/bloc/update_product/update_product_cubit.dart';
 import '../../presentation/bloc/verify_phone_number/verify_phone_number_cubit.dart';
 import 'network_info.dart';
@@ -134,12 +134,12 @@ Future<void> init() async {
   sl.registerFactory(() => GetPaginatedProductsCubit(sl()));
   sl.registerFactory(
     () => GetFavoriteProductsCubit(
-        getFavoriteProducts: sl(),
-        getProductById: sl(),
-        setFavoriteProducts: sl(),
-        networkInfo: sl()),
+      getFavoriteProducts: sl(),
+      getProductById: sl(),
+      networkInfo: sl(),
+    ),
   );
-  sl.registerFactory(() => SetFavoriteProductsCubit(sl()));
+  sl.registerFactory(() => UpdateFavoriteProductsCubit(sl()));
   sl.registerFactory(
     () => GetUserAndProductsByUserIdCubit(
       getMyProducts: sl(),
@@ -209,7 +209,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetPaginatedProducts(sl()));
   sl.registerLazySingleton(() => GetFavoriteProducts(sl()));
   sl.registerLazySingleton(() => UpdateProduct(sl()));
-  sl.registerLazySingleton(() => SetFavoriteProducts(sl()));
+  sl.registerLazySingleton(() => UpdateFavoriteProducts(sl()));
   sl.registerLazySingleton(() => GetAllCategories(sl()));
   sl.registerLazySingleton(() => CreateProduct(sl()));
   sl.registerLazySingleton(() => UploadPictures(sl()));

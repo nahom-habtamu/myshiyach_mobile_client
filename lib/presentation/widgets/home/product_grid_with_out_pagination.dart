@@ -5,7 +5,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../data/models/product/product_model.dart';
 import '../../../domain/enitites/product.dart';
-import '../../bloc/set_favorite_products/set_favorite_products_cubit.dart';
+import '../../bloc/auth/auth_cubit.dart';
+import '../../bloc/auth/auth_state.dart';
+import '../../bloc/update_favorite_products/update_favorite_products_cubit.dart';
 import '../common/empty_state_content.dart';
 import '../common/error_content.dart';
 import 'product_grid_item.dart';
@@ -28,7 +30,7 @@ class ProductGridWithOutPagination extends StatefulWidget {
 
 class _ProductGridWithOutPaginationState
     extends State<ProductGridWithOutPagination> {
-  SetFavoriteProductsCubit? setFavoriteProductsCubit;
+  UpdateFavoriteProductsCubit? updateFavoriteProductsCubit;
   @override
   void initState() {
     super.initState();
@@ -102,10 +104,19 @@ class _ProductGridWithOutPaginationState
       });
     }
     List<ProductModel> favoritesToSave = parseListToProductModelList();
-    context
-        .read<SetFavoriteProductsCubit>()
-        .setFavoriteProducts
-        .call(favoritesToSave);
+    var authState = context.read<AuthCubit>().state;
+    if (authState is AuthSuccessfull) {
+      context.read<AuthCubit>().updateFavoriteProducts(
+            authState.loginResult.token,
+            authState.currentUser,
+            favoritesToSave.map((e) => e.id).toList(),
+          );
+      context.read<UpdateFavoriteProductsCubit>().execute(
+            authState.currentUser.id,
+            authState.loginResult.token,
+            favoritesToSave,
+          );
+    }
   }
 
   List<ProductModel> parseListToProductModelList() {
