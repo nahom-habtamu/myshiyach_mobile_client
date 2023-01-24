@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:facebook_app_events/facebook_app_events.dart';
 
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
@@ -15,10 +16,15 @@ class TermsAndServicesPage extends StatefulWidget {
 }
 
 class _TermsAndServicesPageState extends State<TermsAndServicesPage> {
+  static final facebookAppEvents = FacebookAppEvents();
+
   @override
   void initState() {
     super.initState();
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    facebookAppEvents.logEvent(
+      name: 'privacy_page_opened',
+    );
   }
 
   @override

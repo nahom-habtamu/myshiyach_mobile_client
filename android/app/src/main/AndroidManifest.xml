@@ -11,11 +11,25 @@
             <data android:scheme="tel" />
         </intent>
     </queries>
+    
     <application
         android:usesCleartextTraffic="true"
         android:label="MyShiyach"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                    "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="MyShiyach" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -57,5 +71,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+   	    <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
     </application>
 </manifest>
