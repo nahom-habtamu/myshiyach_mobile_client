@@ -62,6 +62,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     context.read<HandleGoingToMessageCubit>().clear();
     context.read<RefreshProductCubit>().clear();
     context.read<GetPostDetailContentCubit>().execute(
+          args.product.createdBy,
           currentUser!.id,
           authToken!,
         );
