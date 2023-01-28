@@ -1,3 +1,4 @@
+import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,6 +45,7 @@ class _HomePageState extends State<HomePage> {
   List<MainCategory> categories = [];
   String accessToken = "";
   User? currentUser;
+  static final facebookAppEvents = FacebookAppEvents();
 
   @override
   void initState() {
@@ -108,6 +110,10 @@ class _HomePageState extends State<HomePage> {
         fetchAllNeededToDisplayProductList();
       },
       onSearchSubmitted: (value) {
+        facebookAppEvents.logEvent(
+          name: 'search_applied',
+          parameters: {"Keyword": value},
+        );
         setState(() {
           searchKeyword = value.trim();
           var addedKeyword = FilterCriteriaModel.addKeyWord(

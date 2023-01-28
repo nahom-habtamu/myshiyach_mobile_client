@@ -1,3 +1,4 @@
+import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,6 +47,7 @@ class PostContentToShow extends StatefulWidget {
 class _PostContentToShowState extends State<PostContentToShow> {
   List<Product> favorites = [];
   late bool isFavorite;
+  static final facebookAppEvents = FacebookAppEvents();
 
   @override
   void initState() {
@@ -193,7 +195,9 @@ class _PostContentToShowState extends State<PostContentToShow> {
         children: [
           Expanded(
             child: DetailItem(
-              onClick: () => onDetailItemClicked(context),
+              onClick: () {
+                onDetailItemClicked(context);
+              },
               subtitle: Text(widget.postCreator?.fullName ?? ""),
               title: Row(
                 children: [
@@ -209,6 +213,10 @@ class _PostContentToShowState extends State<PostContentToShow> {
           Expanded(
             child: DetailItem(
               onClick: () async {
+                facebookAppEvents.logEvent(
+                  name: 'seller_phone_number_clicked',
+                  parameters: {"PhoneNumber": widget.product.contactPhone},
+                );
                 final _call = 'tel:${widget.product.contactPhone}';
                 if (await canLaunchUrl(Uri.parse(_call))) {
                   await launchUrl(Uri.parse(_call));

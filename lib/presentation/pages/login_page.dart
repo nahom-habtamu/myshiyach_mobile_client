@@ -1,3 +1,4 @@
+import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +30,8 @@ class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
 
   var passwordFocusNode = FocusNode();
+
+  static final facebookAppEvents = FacebookAppEvents();
 
   @override
   void initState() {
@@ -168,6 +171,9 @@ class _LoginPageState extends State<LoginPage> {
           });
         }
         if (state is AuthSuccessfull) {
+          facebookAppEvents.logEvent(
+            name: 'login_active',
+          );
           SchedulerBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacementNamed(
               context,
