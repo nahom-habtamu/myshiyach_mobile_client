@@ -1,7 +1,6 @@
 import 'package:mnale_client/data/models/filter/filter_criteria_model.dart';
 import 'package:mnale_client/data/models/product/page_and_limit_model.dart';
 import 'package:mnale_client/domain/enitites/main_category.dart';
-import 'package:mnale_client/domain/enitites/page_and_limit.dart';
 import 'package:mnale_client/domain/enitites/sub_category.dart';
 
 import '../../core/utils/date_time_formatter.dart';
