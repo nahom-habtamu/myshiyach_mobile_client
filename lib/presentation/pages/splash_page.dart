@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:in_app_update/in_app_update.dart';
 
 import '../../domain/enitites/login_result.dart';
 import '../../domain/enitites/user.dart';
@@ -27,14 +28,44 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  AppUpdateInfo? _updateInfo;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  void showSnack(String text) {
+    if (_scaffoldKey.currentContext != null) {
+      ScaffoldMessenger.of(_scaffoldKey.currentContext!)
+          .showSnackBar(SnackBar(content: Text(text)));
+    }
+  }
+
+  void performImmediateUpdate() async {
+    if (_updateInfo?.updateAvailability == UpdateAvailability.updateAvailable) {
+      await InAppUpdate.performImmediateUpdate();
+    }
+  }
+
+  Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+      setState(() {
+        _updateInfo = info;
+      });
+      performImmediateUpdate();
+    }).catchError((e) {
+      showSnack(e.toString());
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    checkForUpdate();
     context.read<AuthCubit>().loginUser(null);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(_updateInfo);
     return Scaffold(
       body: renderBody(),
     );
