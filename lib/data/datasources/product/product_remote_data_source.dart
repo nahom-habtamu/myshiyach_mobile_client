@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../../core/constants/api_information.dart';
+import '../../../core/utils/date_time_formatter.dart';
 import '../../models/filter/filter_criteria_model.dart';
 import '../../models/product/add_product_model.dart';
 import '../../models/product/edit_product_model.dart';
@@ -116,14 +117,20 @@ class ProductRemoteDataSource extends ProductDataSource {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-
     if (response.statusCode == 200) {
       var products = ProductModel.parseProductsFromJson(
         json.decode(response.body),
       );
+      products.sort(((a, b) => _compareRefreshedAt(a, b)));
       return products;
     }
     throw Exception("Couldn't Fetch Products By User");
+  }
+
+  int _compareRefreshedAt(ProductModel a, ProductModel b) {
+    var firstDate = DateFormatterUtil.parseProductCreatedDate(a.refreshedAt);
+    var secondDate = DateFormatterUtil.parseProductCreatedDate(b.refreshedAt);
+    return secondDate.compareTo(firstDate);
   }
 
   @override
