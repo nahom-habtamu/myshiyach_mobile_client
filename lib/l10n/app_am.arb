@@ -45,6 +45,8 @@
     "commonCityInputEmptyText" : "ከተማ ይምረጡ",
     "commonContactPersonInputHintText" : "ስልክ ቁጥር",
     "commonContactPersonInputEmptyText" : "እባክዎን ስልክ ቁጥር ያስገቡ",
+    "commonContactNameInputHintText" : "ስም",
+    "commonContactNameInputEmptyText" : "እባክዎን ስም ያስገቡ",
 
     "commonFallBackErrorCaptionText" : "ችግር ተፈጥሯል",
     "commonFallBackErrorButtonText" : "እንደገና ይሞክሩ",

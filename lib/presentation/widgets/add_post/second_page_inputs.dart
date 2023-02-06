@@ -38,6 +38,7 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
   String brand = "";
   String city = "";
   String contactPhone = "";
+  String contactName = "";
 
   final formKey = GlobalKey<FormState>();
 
@@ -51,6 +52,7 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
       ...widget.initialValue["productImages"] ?? [],
     ];
     contactPhone = widget.initialValue["contactPhone"] ?? "";
+    contactName = widget.initialValue["contactName"] ?? "";
   }
 
   parseCitiesToDisplay(String language) {
@@ -120,6 +122,23 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
             const SizedBox(
               height: 20,
             ),
+            AddPostInput(
+              initialValue: contactName,
+              isOnlyNumbers: true,
+              hintText:
+                  AppLocalizations.of(context).commonContactNameInputHintText,
+              onChanged: (value) => contactName = value,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return AppLocalizations.of(context)
+                      .commonContactNameInputHintText;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             renderRequiredFields(state),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -170,6 +189,7 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
       "city": city,
       "brand": brand,
       "contactPhone": contactPhone,
+      "contactName": contactName,
       "productImages": pickedImages,
       "productDetail": {...otherRequiredFeilds},
     };

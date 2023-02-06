@@ -46,6 +46,7 @@ class _EditPostPageState extends State<EditPostPage> {
   String subCategory = "";
   String city = "";
   String contactPhone = "";
+  String contactName = "";
   Map<String, dynamic> productDetail = {};
 
   final formKey = GlobalKey<FormState>();
@@ -67,6 +68,7 @@ class _EditPostPageState extends State<EditPostPage> {
         subCategory = product!.subCategory;
         city = product!.city;
         contactPhone = product!.contactPhone;
+        contactName = product!.contactName;
       });
     });
   }
@@ -178,6 +180,20 @@ class _EditPostPageState extends State<EditPostPage> {
                       if (value == null || value.isEmpty) {
                         return AppLocalizations.of(context)
                             .commonContactPersonInputHintText;
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  AddPostInput(
+                    hintText: AppLocalizations.of(context)
+                        .commonContactNameInputHintText,
+                    onChanged: (value) => setState(() => contactName = value),
+                    initialValue: product!.contactName,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return AppLocalizations.of(context)
+                            .commonContactNameInputHintText;
                       }
                       return null;
                     },
@@ -421,6 +437,7 @@ class _EditPostPageState extends State<EditPostPage> {
       subCategory: subCategory,
       price: price,
       contactPhone: contactPhone,
+      contactName: contactName,
       productImages: [],
       title: title,
       productDetail: productDetail,

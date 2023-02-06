@@ -53,6 +53,7 @@ class _AddPostPageState extends State<AddPostPage> {
       accessToken = authState.loginResult.token;
       mergedInputValues = {
         "contactPhone": authState.currentUser.phoneNumber,
+        "contactName": authState.currentUser.fullName,
       };
     }
   }

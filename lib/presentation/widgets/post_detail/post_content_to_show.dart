@@ -198,7 +198,7 @@ class _PostContentToShowState extends State<PostContentToShow> {
               onClick: () {
                 onDetailItemClicked(context);
               },
-              subtitle: Text(widget.postCreator?.fullName ?? ""),
+              subtitle: displayProductContactName(),
               title: Row(
                 children: [
                   const Icon(Icons.person),
@@ -240,6 +240,18 @@ class _PostContentToShowState extends State<PostContentToShow> {
         ],
       ),
     );
+  }
+
+  Text displayProductContactName() {
+    var text = "";
+
+    if (widget.product.contactName.isNotEmpty) {
+      text = widget.product.contactName;
+    } else {
+      text = widget.postCreator?.fullName ?? "";
+    }
+
+    return Text(text);
   }
 
   renderProductTimes(context) {

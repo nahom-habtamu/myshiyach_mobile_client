@@ -92,6 +92,7 @@ class ProductRemoteDataSource extends ProductDataSource {
     String endPoint = '$baseUrl/products/$id';
 
     var body = jsonEncode(editProductModel.toJson());
+
     final response = await http.patch(
       Uri.parse(endPoint),
       headers: <String, String>{

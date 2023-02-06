@@ -5,6 +5,7 @@ class EditProductModel {
   final String? mainCategory;
   final String? subCategory;
   final String? contactPhone;
+  final String? contactName;
   final String? city;
   List<String>? productImages;
   Map<String, dynamic>? productDetail;
@@ -16,6 +17,7 @@ class EditProductModel {
     this.mainCategory,
     this.subCategory,
     this.contactPhone,
+    this.contactName,
     this.city,
     this.productImages,
     this.productDetail,
@@ -28,6 +30,7 @@ class EditProductModel {
         "mainCategory": mainCategory,
         "subCategory": subCategory,
         "contactPhone": contactPhone,
+        "contactName": contactName,
         "city": city,
         "productImages": productImages,
         "productDetail": productDetail

@@ -45,6 +45,8 @@
     "commonCityInputEmptyText" : "Please Enter City",
     "commonContactPersonInputHintText" : "Contact Person",
     "commonContactPersonInputEmptyText" : "Please Enter Contact Person",
+    "commonContactNameInputHintText" : "Contact Name",
+    "commonContactNameInputEmptyText" : "Please Enter Contact Name",
 
     "commonFallBackErrorCaptionText" : "Oops",
     "commonFallBackErrorButtonText" : "Retry",
