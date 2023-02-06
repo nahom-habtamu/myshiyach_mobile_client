@@ -49,7 +49,7 @@ class ProductModel extends Product {
       createdBy: jsonProduct["createdBy"],
       city: jsonProduct["city"],
       contactPhone: jsonProduct["contactPhone"],
-      contactName: jsonProduct["contactName"],
+      contactName: jsonProduct["contactName"] ?? "",
       productDetail: jsonProduct["productDetail"] == null
           ? null
           : Map<String, dynamic>.from(jsonProduct["productDetail"]),

@@ -24,7 +24,7 @@ class Product {
     required this.subCategory,
     required this.city,
     required this.contactPhone,
-    this.contactName = "",
+    required this.contactName,
     required this.createdAt,
     required this.refreshedAt,
     required this.createdBy,

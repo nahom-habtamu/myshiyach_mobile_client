@@ -56,7 +56,9 @@ class RequiredMainCategoryFieldModel extends RequiredMainCategoryField {
       objectKey: requiredFeildJson["objectKey"],
       title: requiredFeildJson["title"],
       isDropDown: requiredFeildJson["isDropDown"],
-      dropDownValues: List<String>.from(requiredFeildJson["dropDownValues"]),
+      dropDownValues: List<String>.from(requiredFeildJson["dropDownValues"])
+          .toSet()
+          .toList(),
     );
   }
 
