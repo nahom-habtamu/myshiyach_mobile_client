@@ -91,15 +91,19 @@ class ProductRepository extends ProductService {
     List<ProductModel> products = [];
 
     for (var fav in favoriteProducts) {
-      ProductModel? fullProductData;
-      try {
-        fullProductData = await remoteDataSource.getProductById(fav, token);
-      } finally {
-        if (fullProductData != null) {
-          products = [...products, fullProductData];
-        }
+      var productDetail = await getProduct(fav, token);
+      if (productDetail != null) {
+        products = [...products, productDetail];
       }
     }
     return products;
+  }
+
+  Future<ProductModel?> getProduct(String id, String token) async {
+    try {
+      return await remoteDataSource.getProductById(id, token);
+    } catch (e) {
+      return null;
+    }
   }
 }
