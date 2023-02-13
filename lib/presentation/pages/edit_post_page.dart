@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mnale_client/presentation/pages/master_page.dart';
 
 import '../../core/utils/price_formatter.dart';
 import '../../data/models/product/edit_product_model.dart';
@@ -406,7 +407,7 @@ class _EditPostPageState extends State<EditPostPage> {
         SchedulerBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacementNamed(
             context,
-            PostDetailPage.routeName,
+            MasterPage.routeName,
             arguments: PostDetalPageArguments(
               isFromDynamicLink: false,
               product: state.product,

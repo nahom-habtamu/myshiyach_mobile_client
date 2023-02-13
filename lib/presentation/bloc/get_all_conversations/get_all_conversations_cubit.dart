@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mnale_client/core/services/network_info.dart';
-import 'package:mnale_client/presentation/bloc/get_all_conversations/get_all_conversations_state.dart';
+import 'get_all_conversations_state.dart';
 
 import '../../../domain/usecases/get_all_conversations.dart';
 

@@ -28,8 +28,9 @@ import 'edit_post_page.dart';
 import 'master_page.dart';
 
 class PostDetailPage extends StatefulWidget {
+  final PostDetalPageArguments args;
   static String routeName = "/postDetail";
-  const PostDetailPage({Key? key}) : super(key: key);
+  const PostDetailPage({Key? key, required this.args}) : super(key: key);
 
   @override
   State<PostDetailPage> createState() => _PostDetailPageState();
@@ -51,18 +52,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   void initalizeNeededData() {
-    var args =
-        ModalRoute.of(context)!.settings.arguments as PostDetalPageArguments;
     setState(() {
-      currentUser = getCurrentUser() ?? args.currentUser;
-      authToken = getToken() ?? args.token;
-      product = args.product;
-      isFromDynamicLink = args.isFromDynamicLink;
+      currentUser = getCurrentUser() ?? widget.args.currentUser;
+      authToken = getToken() ?? widget.args.token;
+      product = widget.args.product;
+      isFromDynamicLink = widget.args.isFromDynamicLink;
     });
     context.read<HandleGoingToMessageCubit>().clear();
     context.read<RefreshProductCubit>().clear();
     context.read<GetPostDetailContentCubit>().execute(
-          args.product.createdBy,
+          widget.args.product.createdBy,
           currentUser!.id,
           authToken!,
         );
@@ -70,42 +69,31 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (isFromDynamicLink) {
-          Navigator.pushReplacementNamed(context, MasterPage.routeName);
-        }
-        return true;
-      },
-      child: SafeArea(
-        child: Scaffold(
-          appBar: renderAppBar(),
-          body:
-              BlocBuilder<GetPostDetailContentCubit, GetPostDetailContentState>(
-            builder: (context, state) {
-              if (state is Loading || product == null) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is Error) {
-                return buildErrorContent();
-              } else if (state is NoNetwork) {
-                return buildNoNetworkContent();
-              } else if (state is Loaded) {
-                SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-                  if (favorites.isEmpty) {
-                    setState(() {
-                      favorites = [...state.favoriteProducts];
-                    });
-                  }
-                  // context.read<GetPostDetailContentCubit>().clear();
+    return Scaffold(
+      appBar: renderAppBar(),
+      body: BlocBuilder<GetPostDetailContentCubit, GetPostDetailContentState>(
+        builder: (context, state) {
+          if (state is Loading || product == null) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is Error) {
+            return buildErrorContent();
+          } else if (state is NoNetwork) {
+            return buildNoNetworkContent();
+          } else if (state is Loaded) {
+            SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+              if (favorites.isEmpty) {
+                setState(() {
+                  favorites = [...state.favoriteProducts];
                 });
-                return renderBody(state.postCreator);
               }
-              return Container();
-            },
-          ),
-        ),
+              // context.read<GetPostDetailContentCubit>().clear();
+            });
+            return renderBody(state.postCreator);
+          }
+          return Container();
+        },
       ),
     );
   }

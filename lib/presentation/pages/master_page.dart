@@ -2,6 +2,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mnale_client/presentation/pages/post_detail_page.dart';
 
 import '../../domain/enitites/conversation.dart';
 import '../../domain/enitites/login_result.dart';
@@ -15,7 +16,6 @@ import '../screen_arguments/post_detail_page_arguments.dart';
 import 'add_post_page.dart';
 import 'chat_list_page.dart';
 import 'home_page.dart';
-import 'post_detail_page.dart';
 import 'profile_page.dart';
 import 'saved_posts.dart';
 
@@ -31,14 +31,38 @@ class _MasterPageState extends State<MasterPage> {
   int _selectedIndex = 0;
   User? currentUser;
   LoginResult? loginResult;
+
+  PostDetalPageArguments? postDetalPageArguments;
+
+  List<Widget> pagesToShow = [
+    const HomePage(),
+    const ChatListPage(),
+    const AddPostPage(),
+    const SavedPostsPage(),
+    const ProfilePage(),
+  ];
+
   @override
   void initState() {
     super.initState();
     getCurrentUser();
     getAllConversation();
-
+    initializePostDetailArgsAndNavigateToPostDetailPageIfItHasValue();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       handleDynamicLink(context);
+    });
+  }
+
+  void initializePostDetailArgsAndNavigateToPostDetailPageIfItHasValue() {
+    Future.delayed(Duration.zero, () {
+      var args =
+          ModalRoute.of(context)!.settings.arguments as PostDetalPageArguments?;
+
+      if (args != null) {
+        setState(() {
+          postDetalPageArguments = args;
+        });
+      }
     });
   }
 
@@ -66,30 +90,21 @@ class _MasterPageState extends State<MasterPage> {
         .call(productId!, loginResult!.token);
 
     if (product != null) {
-      Navigator.pushReplacementNamed(
-        context,
-        PostDetailPage.routeName,
-        arguments: PostDetalPageArguments(
+      setState(() {
+        postDetalPageArguments = PostDetalPageArguments(
           product: product,
           isFromDynamicLink: true,
           currentUser: currentUser,
           token: loginResult!.token,
-        ),
-      );
+        );
+      });
     }
   }
-
-  List<Widget> pagesToShow = [
-    const HomePage(),
-    const ChatListPage(),
-    const AddPostPage(),
-    const SavedPostsPage(),
-    const ProfilePage(),
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      postDetalPageArguments = null;
     });
   }
 
@@ -113,7 +128,9 @@ class _MasterPageState extends State<MasterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pagesToShow.elementAt(_selectedIndex),
+      body: postDetalPageArguments != null
+          ? PostDetailPage(args: postDetalPageArguments!)
+          : pagesToShow.elementAt(_selectedIndex),
       bottomNavigationBar: SizedBox(
         height: 55,
         child: BottomNavigationBar(
@@ -148,7 +165,8 @@ class _MasterPageState extends State<MasterPage> {
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: const Color(0xFF141313),
+          selectedItemColor: postDetalPageArguments == null ?const Color(0xFF141313) : Colors.grey,
+          unselectedItemColor: Colors.grey,
           onTap: _onItemTapped,
           type: BottomNavigationBarType.fixed,
         ),

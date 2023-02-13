@@ -150,7 +150,7 @@ class _SplashPageState extends State<SplashPage> {
     if (product != null) {
       Navigator.pushReplacementNamed(
         context,
-        PostDetailPage.routeName,
+        MasterPage.routeName,
         arguments: PostDetalPageArguments(
           product: product,
           isFromDynamicLink: true,

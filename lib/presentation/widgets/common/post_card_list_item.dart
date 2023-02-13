@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mnale_client/presentation/pages/master_page.dart';
 
 import '../../../domain/enitites/product.dart';
 import '../../pages/post_detail_page.dart';
@@ -61,7 +62,7 @@ class PostCardListItem extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(
           context,
-          PostDetailPage.routeName,
+          MasterPage.routeName,
           arguments: PostDetalPageArguments(
             product: product,
             isFromDynamicLink: false,

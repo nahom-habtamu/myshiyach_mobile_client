@@ -15,7 +15,6 @@ import '../pages/master_page.dart';
 import '../pages/my_posts_page.dart';
 import '../pages/otp_verification_page.dart';
 import '../pages/post_confirmation_page.dart';
-import '../pages/post_detail_page.dart';
 import '../pages/post_image_screen.dart';
 import '../pages/posts_created_by_user_page.dart';
 import '../pages/profile_page.dart';
@@ -32,7 +31,6 @@ class AppPages {
       LoginPage.routeName: (context) => const LoginPage(),
       SignUpPage.routeName: (context) => const SignUpPage(),
       MasterPage.routeName: (context) => const MasterPage(),
-      PostDetailPage.routeName: (context) => const PostDetailPage(),
       AddPostPage.routeName: (context) => const AddPostPage(),
       ChatListPage.routeName: (context) => const ChatListPage(),
       ChatDetailPage.routeName: (context) => const ChatDetailPage(),

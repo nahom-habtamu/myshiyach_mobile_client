@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mnale_client/presentation/pages/master_page.dart';
 
 import '../../../core/utils/date_time_formatter.dart';
 import '../../../core/utils/price_formatter.dart';
@@ -34,7 +35,7 @@ class _ProductGridItemState extends State<ProductGridItem> {
       onTap: () {
         Navigator.pushNamed(
           context,
-          PostDetailPage.routeName,
+          MasterPage.routeName,
           arguments: PostDetalPageArguments(
             product: widget.product,
             isFromDynamicLink: false,
