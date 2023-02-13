@@ -1,11 +1,10 @@
-import 'package:mnale_client/data/models/filter/filter_criteria_model.dart';
-import 'package:mnale_client/data/models/product/page_and_limit_model.dart';
-import 'package:mnale_client/domain/enitites/main_category.dart';
-import 'package:mnale_client/domain/enitites/sub_category.dart';
-
 import '../../core/utils/date_time_formatter.dart';
+import '../../data/models/filter/filter_criteria_model.dart';
+import '../../data/models/product/page_and_limit_model.dart';
 import '../contracts/product_service.dart';
+import '../enitites/main_category.dart';
 import '../enitites/product.dart';
+import '../enitites/sub_category.dart';
 
 class GetProductsByCategory {
   final ProductService repository;
@@ -21,6 +20,7 @@ class GetProductsByCategory {
         mainCategory:
             MainCategory(id: mainCategory, title: "", subCategories: []),
         subCategory: SubCategory(id: subCategory, title: ""),
+        createdBy: null,
         brand: null,
         city: null,
         sortByPriceAscending: null,

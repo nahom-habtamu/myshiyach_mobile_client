@@ -157,6 +157,7 @@ class _FilterDataPageState extends State<FilterDataPage> {
       city: selectedCity,
       maxPrice: maxPriceFromDialog,
       minPrice: minPriceFromDialog,
+      createdBy: null,
       sortByCreatedByAscending: sortByCreatedByAscending,
       sortByPriceAscending: sortByPriceAscending,
       keyword: null,

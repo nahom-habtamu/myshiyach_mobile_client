@@ -15,28 +15,28 @@ class ProfileAvatarAndData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 10),
+        const SizedBox(height: 3),
         CircleAvatar(
           backgroundColor: const Color(0xff11435E),
-          radius: 50,
+          radius: 30,
           child: Center(
             child: Text(
-              user!.fullName[0],
-              style: const TextStyle(fontSize: 25),
+              user!.fullName[0].toUpperCase(),
+              style: const TextStyle(fontSize: 26),
             ),
           ),
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 3),
         Text(
           user!.fullName,
           style: const TextStyle(
             color: Colors.black,
-            fontSize: 18,
+            fontSize: 16,
             letterSpacing: 0.4,
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 5),
+        const SizedBox(height: 2),
         GestureDetector(
           onTap: () async {
             final _call = 'tel:${user!.phoneNumber}';
@@ -50,14 +50,14 @@ class ProfileAvatarAndData extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                vertical: 8.0,
+                vertical: 5.0,
                 horizontal: 30,
               ),
               child: Text(
                 user!.phoneNumber,
                 style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 14,
+                  fontSize: 12,
                   letterSpacing: 0.4,
                 ),
               ),

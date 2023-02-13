@@ -8,6 +8,7 @@ class FilterCriteriaModel {
   final SubCategory? subCategory;
   final String? brand;
   final String? city;
+  final String? createdBy;
   final bool? sortByPriceAscending;
   final bool? sortByCreatedByAscending;
   String? keyword;
@@ -17,6 +18,7 @@ class FilterCriteriaModel {
     required this.minPrice,
     required this.mainCategory,
     required this.subCategory,
+    required this.createdBy,
     required this.brand,
     required this.city,
     required this.sortByPriceAscending,
@@ -29,6 +31,7 @@ class FilterCriteriaModel {
     this.minPrice = 0.0,
     this.mainCategory,
     this.subCategory,
+    this.createdBy,
     this.brand,
     this.city,
     this.sortByPriceAscending,
@@ -43,6 +46,7 @@ class FilterCriteriaModel {
       minPrice: original?.minPrice ?? 0.0,
       mainCategory: original?.mainCategory,
       subCategory: original?.subCategory,
+      createdBy: original?.createdBy,
       brand: original?.brand,
       city: original?.city,
       sortByPriceAscending: original?.sortByPriceAscending,
@@ -58,6 +62,7 @@ class FilterCriteriaModel {
       minPrice: original?.minPrice ?? 0.0,
       mainCategory: mainCategory,
       subCategory: null,
+      createdBy: original?.createdBy,
       brand: original?.brand,
       city: original?.city,
       sortByPriceAscending: original?.sortByPriceAscending,
@@ -72,6 +77,7 @@ class FilterCriteriaModel {
       maxPrice: original?.maxPrice ?? 0.0,
       minPrice: original?.minPrice ?? 0.0,
       mainCategory: original?.mainCategory,
+      createdBy: original?.createdBy,
       subCategory: subCategory,
       brand: original?.brand,
       city: original?.city,
@@ -86,6 +92,7 @@ class FilterCriteriaModel {
         (minPrice == null || minPrice == 0.0) &&
         mainCategory == null &&
         subCategory == null &&
+        createdBy == null &&
         brand == null &&
         city == null &&
         sortByPriceAscending == null &&
@@ -100,6 +107,7 @@ class FilterCriteriaModel {
       MinPrice : $minPrice , 
       MainCategory : ${mainCategory?.title} ,  
       SubCategory : ${subCategory?.title},  
+      CreatedBy : $createdBy,  
       brand : $brand,  
       city : $city,  
       sortByPriceAscending : $sortByPriceAscending,  
@@ -113,6 +121,7 @@ class FilterCriteriaModel {
       "minPrice": minPrice,
       "mainCategory": mainCategory?.id,
       "subCategory": subCategory?.id,
+      "createdBy": createdBy,
       "brand": brand,
       "city": city,
       "sortByPriceAscending": sortByPriceAscending,

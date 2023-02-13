@@ -3,13 +3,17 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../data/models/filter/filter_criteria_model.dart';
+import '../../data/models/product/page_and_limit_model.dart';
 import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/product.dart';
 import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
-import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_cubit.dart';
-import '../bloc/get_user_and_products_by_user_id/get_user_and_products_by_user_id_state.dart';
+import '../bloc/display_all_products/display_all_products_cubit.dart';
+import '../bloc/display_all_products/display_all_products_state.dart';
+import '../bloc/get_user_by_id/get_user_by_id_cubit.dart';
+import '../bloc/get_user_by_id/get_user_by_id_state.dart';
 import '../bloc/handle_going_to_message/handle_going_to_message_cubit.dart';
 import '../bloc/report_user/report_user_cubit.dart';
 import '../bloc/update_favorite_products/update_favorite_products_cubit.dart';
@@ -18,7 +22,7 @@ import '../widgets/common/empty_state_content.dart';
 import '../widgets/common/error_content.dart';
 import '../widgets/common/no_network_content.dart';
 import '../widgets/common/profile_avatar_and_data.dart';
-import '../widgets/home/product_grid_item.dart';
+import '../widgets/home/product_grid_with_pagination.dart';
 import '../widgets/post_detail/send_message_button.dart';
 import 'add_post_page.dart';
 
@@ -33,8 +37,11 @@ class PostsCreatedByUserPage extends StatefulWidget {
 class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
   String accessToken = "";
   User? currentUser;
+  User? strangerUser;
   String userId = "";
   List<Product> favorites = [];
+  List<Product> productsToDisplay = [];
+  PageAndLimitModel? pageAndLimit = PageAndLimitModel.initialDefault();
 
   @override
   void initState() {
@@ -43,6 +50,7 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
     context.read<HandleGoingToMessageCubit>().clear();
     Future.delayed(Duration.zero, () {
       userId = ModalRoute.of(context)!.settings.arguments as String;
+      initializeUser(userId);
       fetchPostsCreatedByUser(userId);
     });
   }
@@ -56,9 +64,12 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
   }
 
   void fetchPostsCreatedByUser(String userId) {
-    context
-        .read<GetUserAndProductsByUserIdCubit>()
-        .call(userId, accessToken, currentUser?.favoriteProducts ?? []);
+    context.read<DisplayAllProductsCubit>().call(
+          PageAndLimitModel.initialDefault(),
+          FilterCriteriaModel.empty(createdBy: userId),
+          accessToken,
+          currentUser?.id ?? "",
+        );
   }
 
   @override
@@ -108,43 +119,22 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
             )
           ]),
       body: CurvedContainer(
-        child: SingleChildScrollView(
-          child: renderBody(),
-        ),
+        child: renderBody(),
       ),
     );
   }
 
-  renderBody() {
-    return BlocBuilder<GetUserAndProductsByUserIdCubit,
-        GetUserAndProductsByUserIdState>(
-      builder: (context, state) {
-        if (state is GetUserAndProductsByUserIdLoaded) {
-          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-            if (favorites.isEmpty) {
-              setState(() {
-                favorites = state.favorites;
-              });
-            }
-          });
-
-          return buildProductListAndHeader(state.products, state.user);
-        } else if (state is GetUserAndProductsByUserIdLoading) {
-          return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else if (state is GetUserAndProductsByUserIdError) {
-          return buildErrorContent();
-        } else if (state is GetUserAndProductsByUserIdNoNetwork) {
-          return buildNoNetworkContent();
-        } else {
-          return buildEmptyStateContent();
-        }
-      },
-    );
+  void updateState(Loaded state) {
+    var updatedProductList = [
+      ...productsToDisplay,
+      ...state.paginatedResult.products
+    ];
+    setState(() {
+      productsToDisplay = updatedProductList;
+      favorites = [...state.favorites];
+      pageAndLimit =
+          PageAndLimitModel.fromPaginationLimit(state.paginatedResult.next);
+    });
   }
 
   buildEmptyStateContent() {
@@ -179,60 +169,89 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
     );
   }
 
-  buildProductListAndHeader(List<Product> products, User user) {
+  renderBody() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        ProfileAvatarAndData(user: user),
+        SizedBox(
+          height: 142,
+          child: displayUserTab(),
+        ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: SendMessageButton(
             currentUser: currentUser!,
             receiverId: userId,
             authToken: accessToken,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: Text(
-            AppLocalizations.of(context).postsCreatedByUserPageProductText,
-            style: const TextStyle(
-              fontSize: 22,
-              fontStyle: FontStyle.italic,
-              color: Colors.black45,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 5.0,
-              mainAxisSpacing: 5.0,
-              childAspectRatio: MediaQuery.of(context).size.width /
-                  (MediaQuery.of(context).size.height) *
-                  1.47,
-            ),
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              var duplicate = favorites
-                  .where((element) => element.id == products[index].id)
-                  .toList();
-              return ProductGridItem(
-                isFavorite: duplicate.isEmpty,
-                onFavoritesTap: () =>
-                    updateFavorites(duplicate, products[index]),
-                product: products[index],
-              );
-            },
-          ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.9 - 210,
+          child: displayProducts(),
         ),
       ],
     );
+  }
+
+  BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>
+      displayProducts() {
+    return BlocBuilder<DisplayAllProductsCubit, DisplayAllProductsState>(
+      builder: (context, state) {
+        if (state is Loaded) {
+          SchedulerBinding.instance.addPostFrameCallback(
+            ((timeStamp) {
+              updateState(state);
+              context.read<DisplayAllProductsCubit>().clear();
+            }),
+          );
+        } else if (state is Loading) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (state is Error) {
+          return buildErrorContent();
+        } else if (state is NoNetwork) {
+          return buildNoNetworkContent();
+        }
+        return Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: ProductGridWithPagination(
+            filterValues: FilterCriteriaModel.empty(createdBy: userId),
+            products: productsToDisplay,
+            favorites: favorites,
+            pageAndLimit: pageAndLimit,
+            onRefreshed: updateStateOnRefresh,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget displayUserTab() {
+    if (strangerUser != null) {
+      return ProfileAvatarAndData(user: strangerUser);
+    } else {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+  }
+
+  updateStateOnRefresh(newState, updatedFavorites) {
+    var productsToAddInState = List<ProductModel>.from(newState.result.products)
+        .where((p) => productsToDisplay.where((pis) => pis.id == p.id).isEmpty)
+        .toList();
+
+    setState(() {
+      productsToDisplay = [...productsToDisplay, ...productsToAddInState];
+      favorites = [...updatedFavorites];
+      pageAndLimit = newState.result.products.isNotEmpty
+          ? PageAndLimitModel.fromPaginationLimit(newState.result.next)
+          : null;
+    });
   }
 
   void updateFavorites(
@@ -258,5 +277,15 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
     var favoritesToSave =
         favorites.map((e) => ProductModel.fromProduct(e)).toList();
     return favoritesToSave;
+  }
+
+  void initializeUser(String userId) async {
+    if (context.read<GetUserByIdCubit>().state is! GetUserByIdLoaded) {
+      var stranger =
+          await context.read<GetUserByIdCubit>().call(userId, accessToken);
+      setState(() {
+        strangerUser = stranger;
+      });
+    }
   }
 }
