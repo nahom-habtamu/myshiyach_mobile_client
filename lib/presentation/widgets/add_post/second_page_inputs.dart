@@ -124,7 +124,6 @@ class _SecondPageInputsState extends State<SecondPageInputs> {
             ),
             AddPostInput(
               initialValue: contactName,
-              isOnlyNumbers: true,
               hintText:
                   AppLocalizations.of(context).commonContactNameInputHintText,
               onChanged: (value) => contactName = value,
