@@ -1,5 +1,5 @@
 import '../../domain/contracts/upload_pictures_service.dart';
-import '../datasources/firebase/firebase_storage_data_source.dart';
+import '../datasources/storage/storage_data_source.dart';
 
 class UploadPicturesRepository extends UploadPicturesService {
   final StorageDataSource storageService;

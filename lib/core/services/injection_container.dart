@@ -11,13 +11,14 @@ import '../../data/datasources/city/city_data_source.dart';
 import '../../data/datasources/city/city_remote_data_source.dart';
 import '../../data/datasources/conversation/conversation_data_source.dart';
 import '../../data/datasources/conversation/conversation_firebase_data_source.dart';
-import '../../data/datasources/firebase/firebase_dynamic_link_data_souce.dart';
-import '../../data/datasources/firebase/firebase_storage_data_source.dart';
+import '../../data/datasources/dynamic_link/firebase_dynamic_link_data_souce.dart';
 import '../../data/datasources/product/product_data_source.dart';
 import '../../data/datasources/product/product_local_data_source.dart';
 import '../../data/datasources/product/product_remote_data_source.dart';
 import '../../data/datasources/search_delegate/search_delegate_data_source.dart';
 import '../../data/datasources/search_delegate/search_delegate_shared_pref_data_source.dart';
+import '../../data/datasources/storage/custom_storage_data_source.dart';
+import '../../data/datasources/storage/storage_data_source.dart';
 import '../../data/datasources/user/user_local_data_source.dart';
 import '../../data/datasources/user/user_remote_data_source.dart';
 import '../../data/repositories/auth_repository.dart';
@@ -320,7 +321,7 @@ Future<void> init() async {
 
   // UPLOAD SERVICE
   sl.registerLazySingleton<StorageDataSource>(
-    () => FirebaseStorageDataSource(),
+    () => CustomStorageDataSource(),
   );
 
   // DYNAMIC LINK SERVICE

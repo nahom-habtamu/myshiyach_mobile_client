@@ -1,10 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-
-abstract class StorageDataSource {
-  Future<List<String>> uploadFiles(List<dynamic> images, String bucketName);
-}
+import 'storage_data_source.dart';
 
 class FirebaseStorageDataSource extends StorageDataSource {
   @override

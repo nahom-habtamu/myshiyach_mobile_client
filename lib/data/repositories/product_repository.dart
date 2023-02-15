@@ -1,9 +1,9 @@
 import '../../core/services/network_info.dart';
 import '../../domain/contracts/product_service.dart';
-import '../datasources/firebase/firebase_dynamic_link_data_souce.dart';
-import '../datasources/firebase/firebase_storage_data_source.dart';
+import '../datasources/dynamic_link/firebase_dynamic_link_data_souce.dart';
 import '../datasources/product/product_local_data_source.dart';
 import '../datasources/product/product_remote_data_source.dart';
+import '../datasources/storage/storage_data_source.dart';
 import '../models/filter/filter_criteria_model.dart';
 import '../models/product/add_product_model.dart';
 import '../models/product/edit_product_model.dart';
