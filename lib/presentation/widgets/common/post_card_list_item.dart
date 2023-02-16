@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mnale_client/presentation/pages/master_page.dart';
 
 import '../../../domain/enitites/product.dart';
-import '../../pages/post_detail_page.dart';
 import '../../screen_arguments/post_detail_page_arguments.dart';
 import 'pop_up_dialog.dart';
 

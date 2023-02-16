@@ -25,7 +25,6 @@ import '../widgets/common/pop_up_dialog.dart';
 import '../widgets/post_detail/post_content_to_show.dart';
 import '../widgets/post_detail/post_detail_app_bar.dart';
 import 'edit_post_page.dart';
-import 'master_page.dart';
 
 class PostDetailPage extends StatefulWidget {
   final PostDetalPageArguments args;

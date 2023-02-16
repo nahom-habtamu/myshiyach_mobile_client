@@ -16,7 +16,6 @@ import '../widgets/common/no_network_content.dart';
 import 'intro_page.dart';
 import 'login_page.dart';
 import 'master_page.dart';
-import 'post_detail_page.dart';
 
 class SplashPage extends StatefulWidget {
   static String routeName = "/splashPage";

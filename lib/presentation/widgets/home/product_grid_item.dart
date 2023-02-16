@@ -7,7 +7,6 @@ import '../../../core/utils/date_time_formatter.dart';
 import '../../../core/utils/price_formatter.dart';
 import '../../../domain/enitites/product.dart';
 import '../../bloc/change_language/change_language_cubit.dart';
-import '../../pages/post_detail_page.dart';
 import '../../screen_arguments/post_detail_page_arguments.dart';
 
 class ProductGridItem extends StatefulWidget {

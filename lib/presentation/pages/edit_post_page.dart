@@ -24,7 +24,6 @@ import '../widgets/common/action_button.dart';
 import '../widgets/common/curved_container.dart';
 import '../widgets/common/custom_app_bar.dart';
 import '../widgets/edit_post/post_images.dart';
-import 'post_detail_page.dart';
 
 class EditPostPage extends StatefulWidget {
   static String routeName = '/editPostPage';
