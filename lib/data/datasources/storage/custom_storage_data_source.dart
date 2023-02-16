@@ -18,18 +18,19 @@ class CustomStorageDataSource extends StorageDataSource {
     List<String> uploadedFiles = [];
 
     for (var i = 0; i < images.length; i++) {
-      String myUrl = await uploadSingleImage(images[i]);
+      String myUrl = await uploadSingleImage(images[i], bucketName);
       uploadedFiles = [...uploadedFiles, myUrl];
     }
     return uploadedFiles;
   }
 
-  Future<String> uploadSingleImage(dynamic image) async {
+  Future<String> uploadSingleImage(dynamic image, String bucketName) async {
     var filename = image.path.split("/").last;
-    final uri = Uri.parse('$baseUrl/products/uploadProductImage');
+    final uri = Uri.parse(
+        '$baseUrl/upload/${bucketName == "product_images" ? 'productImage' : 'conversationImage'}');
     var request = http.MultipartRequest('POST', uri);
     final httpImage = await http.MultipartFile.fromPath(
-      'product-image',
+      bucketName == "product_images" ? 'product-image' : 'conversation-image',
       image.path,
       filename: filename,
       contentType: MediaType("image", "png"),
