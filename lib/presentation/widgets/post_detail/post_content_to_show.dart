@@ -474,6 +474,9 @@ class _PostContentToShowState extends State<PostContentToShow> {
               .where((p) =>
                   p.id != widget.product.id && p.title != widget.product.title)
               .toList();
+          contentOtherThanCurrentProduct.sort(
+            (a, b) => _compareRefreshedAt(a, b),
+          );
           return Column(
             children: [
               const Divider(),
@@ -558,6 +561,12 @@ class _PostContentToShowState extends State<PostContentToShow> {
             favoritesToSave,
           );
     }
+  }
+
+  int _compareRefreshedAt(Product a, Product b) {
+    var firstDate = DateFormatterUtil.parseProductCreatedDate(a.refreshedAt);
+    var secondDate = DateFormatterUtil.parseProductCreatedDate(b.refreshedAt);
+    return secondDate.compareTo(firstDate);
   }
 
   List<ProductModel> parseListToProductModelList() {
