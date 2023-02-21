@@ -34,7 +34,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   FilterCriteriaModel? filterValues;
   String searchKeyword = "";
   MainCategory? selectedMainCategory;
@@ -53,7 +54,9 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       selectedMainCategory = filterValues?.mainCategory;
       initializeCurrentUser();
-      fetchAllNeededToDisplayProductList();
+      if (products.isEmpty) {
+        fetchAllNeededToDisplayProductList();
+      }
     });
   }
 
@@ -62,8 +65,7 @@ class _HomePageState extends State<HomePage> {
       products = [];
     });
 
-    var pageAndLimitForSearch =
-        PageAndLimitModel(limit: 10000000000000000, page: 1);
+    var pageAndLimitForSearch = PageAndLimitModel(limit: 1200, page: 1);
 
     context.read<DisplayAllProductsCubit>().call(
           (filterValues?.keyword != null && filterValues!.keyword!.isNotEmpty)
@@ -216,20 +218,25 @@ class _HomePageState extends State<HomePage> {
 
   buildProductList(List<Product> filteredProducts) {
     return Expanded(
-      child:
-          (filterValues?.keyword != null && filterValues!.keyword!.isNotEmpty)
-              ? ProductGridWithOutPagination(
-                  products: filteredProducts,
-                  favorites: favorites,
-                  searchKeyword: searchKeyword,
-                )
-              : ProductGridWithPagination(
-                  filterValues: filterValues,
-                  products: filteredProducts,
-                  favorites: favorites,
-                  pageAndLimit: pageAndLimit,
-                  onRefreshed: updateStateOnRefresh,
-                ),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          fetchAllNeededToDisplayProductList();
+        },
+        child:
+            (filterValues?.keyword != null && filterValues!.keyword!.isNotEmpty)
+                ? ProductGridWithOutPagination(
+                    products: filteredProducts,
+                    favorites: favorites,
+                    searchKeyword: searchKeyword,
+                  )
+                : ProductGridWithPagination(
+                    filterValues: filterValues,
+                    products: filteredProducts,
+                    favorites: favorites,
+                    pageAndLimit: pageAndLimit,
+                    onRefreshed: updateStateOnRefresh,
+                  ),
+      ),
     );
   }
 
@@ -350,4 +357,7 @@ class _HomePageState extends State<HomePage> {
       currentUser = authState.currentUser;
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

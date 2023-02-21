@@ -116,6 +116,7 @@ class _ProductGridWithPaginationState extends State<ProductGridWithPagination> {
         enablePullDown: false,
         footer: const CustomFooterForLazyLoading(),
         child: GridView.builder(
+          key: const PageStorageKey<String>('productsList'),
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
