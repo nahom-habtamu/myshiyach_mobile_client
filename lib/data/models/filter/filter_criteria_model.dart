@@ -35,7 +35,7 @@ class FilterCriteriaModel {
     this.brand,
     this.city,
     this.sortByPriceAscending,
-    this.sortByCreatedByAscending,
+    this.sortByCreatedByAscending= true,
     this.keyword,
   });
 
