@@ -1,1 +1,1 @@
-const baseUrl = "https://myshiyach.com/api";
+const baseUrl = "https://api.myshiyach.com";
