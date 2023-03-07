@@ -34,8 +34,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin {
+class _HomePageState extends State<HomePage> {
   FilterCriteriaModel? filterValues;
   String searchKeyword = "";
   MainCategory? selectedMainCategory;
@@ -357,7 +356,4 @@ class _HomePageState extends State<HomePage>
       currentUser = authState.currentUser;
     }
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
