@@ -1,4 +1,3 @@
-import '../../data/models/product/product_model.dart';
 import '../contracts/user_service.dart';
 
 class UpdateFavoriteProducts {
@@ -7,8 +6,11 @@ class UpdateFavoriteProducts {
   UpdateFavoriteProducts(this.repository);
 
   Future<void> call(
-      String id, String token, List<ProductModel> favoriteProducts) async {
+      String id, String token, List<String> favoriteProducts) async {
     await repository.updateFavoriteProducts(
-        id, token, favoriteProducts.map((e) => e.id).toList());
+      id,
+      token,
+      favoriteProducts,
+    );
   }
 }

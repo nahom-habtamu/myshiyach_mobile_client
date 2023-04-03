@@ -558,7 +558,7 @@ class _PostContentToShowState extends State<PostContentToShow> {
       context.read<UpdateFavoriteProductsCubit>().execute(
             authState.currentUser.id,
             authState.loginResult.token,
-            favoritesToSave,
+            favoritesToSave.map((e) => e.id).toList(),
           );
     }
   }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../data/models/product/product_model.dart';
 import '../../../domain/enitites/product.dart';
 import '../../bloc/auth/auth_cubit.dart';
 import '../../bloc/auth/auth_state.dart';
@@ -13,7 +12,7 @@ import '../common/error_content.dart';
 import 'product_grid_item.dart';
 
 class ProductGridWithOutPagination extends StatefulWidget {
-  List<Product> favorites;
+  List<String> favorites;
   final List<Product> products;
   final String searchKeyword;
   ProductGridWithOutPagination({
@@ -84,7 +83,7 @@ class _ProductGridWithOutPaginationState
 
   ProductGridItem buildProduct(Product product) {
     var duplicate =
-        widget.favorites.where((element) => element.id == product.id).toList();
+        widget.favorites.where((element) => element == product.id).toList();
     return ProductGridItem(
       product: product,
       isFavorite: duplicate.isEmpty,
@@ -94,34 +93,27 @@ class _ProductGridWithOutPaginationState
     );
   }
 
-  void updateFavorites(List<Product> duplicate, Product product) {
+  void updateFavorites(List<String> duplicate, Product product) {
     if (duplicate.isNotEmpty) {
-      widget.favorites.removeWhere((element) => element.id == product.id);
+      widget.favorites.removeWhere((element) => element == product.id);
       setState(() {});
     } else {
       setState(() {
-        widget.favorites = [product, ...widget.favorites];
+        widget.favorites = [product.id, ...widget.favorites];
       });
     }
-    List<ProductModel> favoritesToSave = parseListToProductModelList();
     var authState = context.read<AuthCubit>().state;
     if (authState is AuthSuccessfull) {
       context.read<AuthCubit>().updateFavoriteProducts(
             authState.loginResult.token,
             authState.currentUser,
-            favoritesToSave.map((e) => e.id).toList(),
+            widget.favorites,
           );
       context.read<UpdateFavoriteProductsCubit>().execute(
             authState.currentUser.id,
             authState.loginResult.token,
-            favoritesToSave,
+            widget.favorites,
           );
     }
-  }
-
-  List<ProductModel> parseListToProductModelList() {
-    var favoritesToSave =
-        widget.favorites.map((e) => ProductModel.fromProduct(e)).toList();
-    return favoritesToSave;
   }
 }

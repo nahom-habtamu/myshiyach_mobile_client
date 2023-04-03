@@ -241,10 +241,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
           currentUser!,
           favoritesToSave.map((e) => e.id).toList(),
         );
-    context
-        .read<UpdateFavoriteProductsCubit>()
-        .updateFavoriteProducts
-        .call(currentUser!.id, authToken!, favoritesToSave);
+    context.read<UpdateFavoriteProductsCubit>().updateFavoriteProducts.call(
+          currentUser!.id,
+          authToken!,
+          favoritesToSave.map((e) => e.id).toList(),
+        );
   }
 
   List<ProductModel> buildListWithProductRemoved(

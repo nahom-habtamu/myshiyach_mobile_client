@@ -39,7 +39,7 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
   User? currentUser;
   User? strangerUser;
   String userId = "";
-  List<Product> favorites = [];
+  List<String> favorites = [];
   List<Product> productsToDisplay = [];
   PageAndLimitModel? pageAndLimit = PageAndLimitModel.initialDefault();
 
@@ -259,24 +259,17 @@ class _PostsCreatedByUserPageState extends State<PostsCreatedByUserPage> {
     Product product,
   ) {
     if (duplicate.isNotEmpty) {
-      favorites.removeWhere((element) => element.id == product.id);
+      favorites.removeWhere((element) => element == product.id);
       setState(() {});
     } else {
       setState(() {
-        favorites = [...favorites, product];
+        favorites = [product.id, ...favorites];
       });
     }
-    List<ProductModel> favoritesToSave = parseListToProductModelList();
     context
         .read<UpdateFavoriteProductsCubit>()
         .updateFavoriteProducts
-        .call(currentUser!.id, accessToken, favoritesToSave);
-  }
-
-  List<ProductModel> parseListToProductModelList() {
-    var favoritesToSave =
-        favorites.map((e) => ProductModel.fromProduct(e)).toList();
-    return favoritesToSave;
+        .call(currentUser!.id, accessToken, favorites);
   }
 
   void initializeUser(String userId) async {

@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   SubCategory? selectedSubCategory;
   PageAndLimitModel? pageAndLimit = PageAndLimitModel.initialDefault();
   List<Product> products = [];
-  List<Product> favorites = [];
+  List<String> favorites = [];
   List<MainCategory> categories = [];
   String accessToken = "";
   User? currentUser;

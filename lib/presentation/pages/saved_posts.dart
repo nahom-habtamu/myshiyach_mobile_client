@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/product.dart';
 import '../bloc/auth/auth_cubit.dart';
 import '../bloc/auth/auth_state.dart';
@@ -117,20 +116,19 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
   }
 
   void updateFavoriteProducts(List<Product> products) {
-    var mappedToProductModel =
-        products.map((e) => ProductModel.fromProduct(e)).toList();
+    var mappedToIdList = products.map((e) => e.id).toList();
     var authState = context.read<AuthCubit>().state;
     if (authState is AuthSuccessfull) {
       context.read<AuthCubit>().updateFavoriteProducts(
             authState.loginResult.token,
             authState.currentUser,
-            mappedToProductModel.map((e) => e.id).toList(),
+            mappedToIdList,
           );
 
       updateFavoriteProductsCubit!.updateFavoriteProducts(
         authState.currentUser.id,
         authState.loginResult.token,
-        mappedToProductModel,
+        mappedToIdList,
       );
     }
   }

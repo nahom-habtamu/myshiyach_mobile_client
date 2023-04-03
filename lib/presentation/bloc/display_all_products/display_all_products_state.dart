@@ -1,7 +1,5 @@
-import 'package:mnale_client/domain/enitites/get_paginate_products_result.dart';
-
+import '../../../domain/enitites/get_paginate_products_result.dart';
 import '../../../domain/enitites/main_category.dart';
-import '../../../domain/enitites/product.dart';
 
 abstract class DisplayAllProductsState {}
 
@@ -14,7 +12,7 @@ class NoNetwork extends DisplayAllProductsState {}
 class Loaded extends DisplayAllProductsState {
   final GetPaginatedProductsResult paginatedResult;
   final List<MainCategory> categories;
-  final List<Product> favorites;
+  final List<String> favorites;
   Loaded(this.paginatedResult, this.categories, this.favorites);
 }
 
