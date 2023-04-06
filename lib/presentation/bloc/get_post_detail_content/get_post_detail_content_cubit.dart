@@ -26,9 +26,7 @@ class GetPostDetailContentCubit extends Cubit<GetPostDetailContentState> {
         emit(Loading());
         var currentUser = await getUserById.call(productOwnerId, token);
         var user = await getUserById.call(currentUserId, token);
-        var products =
-            await getFavoriteProducts.call(token, user.favoriteProducts);
-        emit(Loaded(products, currentUser));
+        emit(Loaded(user.favoriteProducts, currentUser));
       } else {
         emit(NoNetwork());
       }

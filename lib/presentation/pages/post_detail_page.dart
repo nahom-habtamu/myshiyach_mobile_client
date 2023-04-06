@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../data/models/product/product_model.dart';
 import '../../domain/enitites/product.dart';
 import '../../domain/enitites/user.dart';
 import '../bloc/auth/auth_cubit.dart';
@@ -40,7 +39,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   User? currentUser;
   String? authToken;
   bool isFromDynamicLink = false;
-  List<Product> favorites = [];
+  List<String> favorites = [];
 
   @override
   void initState() {
@@ -146,7 +145,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           });
         });
       }
-      var duplicate = favorites.where((e) => e.id == product!.id).toList();
+      var duplicate = favorites.where((e) => e == product!.id).toList();
       return SizedBox(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
@@ -226,8 +225,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   void updateFavorites(Product product) {
-    var duplicate = favorites.where((e) => e.id == product.id).toList();
-    List<ProductModel> favoritesToSave = [];
+    var duplicate = favorites.where((e) => e == product.id).toList();
+    List<String> favoritesToSave = [];
     if (duplicate.isEmpty) {
       favoritesToSave = buildListWithProductAdded(favorites, product);
     } else {
@@ -239,28 +238,21 @@ class _PostDetailPageState extends State<PostDetailPage> {
     context.read<AuthCubit>().updateFavoriteProducts(
           authToken!,
           currentUser!,
-          favoritesToSave.map((e) => e.id).toList(),
+          favoritesToSave,
         );
     context.read<UpdateFavoriteProductsCubit>().updateFavoriteProducts.call(
           currentUser!.id,
           authToken!,
-          favoritesToSave.map((e) => e.id).toList(),
+          favoritesToSave,
         );
   }
 
-  List<ProductModel> buildListWithProductRemoved(
-    List<Product> favoriteProducts,
-    Product product,
-  ) {
-    var removed = favoriteProducts.where((e) => e.id != product.id).toList();
-    return removed.map((e) => ProductModel.fromProduct(e)).toList();
+  buildListWithProductRemoved(List<String> fProducts, Product p) {
+    return fProducts.where((e) => e != p.id).toList();
   }
 
-  List<ProductModel> buildListWithProductAdded(
-      List<Product> favoriteProducts, Product product) {
-    return [product, ...favoriteProducts]
-        .map((e) => ProductModel.fromProduct(e))
-        .toList();
+  List<String> buildListWithProductAdded(List<String> fProducts, Product p) {
+    return [p.id, ...fProducts];
   }
 
   void refreshProduct(Product product) {
