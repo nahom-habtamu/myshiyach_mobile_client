@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mnale_client/presentation/pages/master_page.dart';
 
 import '../../../domain/enitites/product.dart';
+import '../../pages/master_page.dart';
 import '../../screen_arguments/post_detail_page_arguments.dart';
 import 'pop_up_dialog.dart';
 
 class PostCardListItem extends StatelessWidget {
   final Product product;
-  final Function? onDissmissed;
+  final Function(Product)? onDissmissed;
   const PostCardListItem({
     Key? key,
     required this.product,
@@ -35,6 +35,7 @@ class PostCardListItem extends StatelessWidget {
 
   Dismissible renderDismissible(BuildContext context) {
     return Dismissible(
+      key: Key(product.id),
       direction: DismissDirection.startToEnd,
       background: dismissibleBackground(),
       confirmDismiss: (DismissDirection direction) async {
@@ -49,9 +50,8 @@ class PostCardListItem extends StatelessWidget {
         );
       },
       onDismissed: (DismissDirection direction) {
-        onDissmissed!();
+        onDissmissed!(product);
       },
-      key: ValueKey<String>(product.id),
       child: renderMainContent(context),
     );
   }

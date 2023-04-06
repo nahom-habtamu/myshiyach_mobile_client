@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -25,6 +26,7 @@ class SavedPostsPage extends StatefulWidget {
 
 class _SavedPostsPageState extends State<SavedPostsPage> {
   UpdateFavoriteProductsCubit? updateFavoriteProductsCubit;
+  List<Product> products = [];
 
   @override
   void initState() {
@@ -56,7 +58,14 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
         child: BlocBuilder<GetFavoriteProductsCubit, GetFavoriteProductsState>(
           builder: (context, state) {
             if (state is Loaded) {
-              return buildProductList(state.products);
+              SchedulerBinding.instance.addPostFrameCallback(
+                (timeStamp) {
+                  setState(() {
+                    products = state.products;
+                  });
+                },
+              );
+              return buildProductList();
             } else if (state is Loading) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -76,7 +85,7 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
     );
   }
 
-  buildProductList(List<Product> products) {
+  buildProductList() {
     return Column(
       children: [
         Padding(
@@ -96,8 +105,8 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
             itemBuilder: (context, index) {
               return PostCardListItem(
                 product: products[index],
-                onDissmissed: () {
-                  handleProductDismissal(products, index);
+                onDissmissed: (product) {
+                  handleProductDismissal(product);
                 },
               );
             },
@@ -108,11 +117,13 @@ class _SavedPostsPageState extends State<SavedPostsPage> {
     );
   }
 
-  void handleProductDismissal(List<Product> products, int index) {
-    var updatedProducts = [...products];
-    updatedProducts.removeWhere((element) => element.id == products[index].id);
-    updateFavoriteProducts(updatedProducts);
-    fetchFavoriteProducts();
+  void handleProductDismissal(Product product) {
+    setState(() {
+      products.removeWhere((element) => element.id == product.id);
+      updateFavoriteProducts(products);
+    });
+
+    // fetchFavoriteProducts();
   }
 
   void updateFavoriteProducts(List<Product> products) {

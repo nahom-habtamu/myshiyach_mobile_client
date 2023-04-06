@@ -124,9 +124,9 @@ class _MyPostsPageState extends State<MyPostsPage> {
             shrinkWrap: true,
             itemBuilder: (context, index) => PostCardListItem(
               product: products[index],
-              onDissmissed: () {
+              onDissmissed: (product) {
                 context.read<DeleteProductByIdCubit>().call(
-                      products[index].id,
+                      product.id,
                       accessToken,
                     );
                 fetchMyPosts();
