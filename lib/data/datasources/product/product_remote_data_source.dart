@@ -212,4 +212,27 @@ class ProductRemoteDataSource extends ProductDataSource {
     }
     throw Exception("Couldn't Report Product");
   }
+
+  @override
+  Future<List<ProductModel>> getProductsByListOfId(
+      List<String> ids, String token) async {
+    String endPoint = '$baseUrl/products/getAllProductsWithListOfId';
+
+    var body = jsonEncode({"listOfId": ids});
+
+    final response = await http.post(
+      Uri.parse(endPoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': token
+      },
+      body: body,
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      var data = json.decode(response.body);
+      return ProductModel.parseProductsFromJson(data);
+    }
+    throw Exception("Couldn't Fetch Products By These Id");
+  }
 }

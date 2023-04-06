@@ -88,15 +88,7 @@ class ProductRepository extends ProductService {
   @override
   Future<List<ProductModel>> getAllFavoriteProducts(
       String token, List<String> favoriteProducts) async {
-    List<ProductModel> products = [];
-
-    for (var fav in favoriteProducts) {
-      var productDetail = await getProduct(fav, token);
-      if (productDetail != null) {
-        products = [...products, productDetail];
-      }
-    }
-    return products;
+    return remoteDataSource.getProductsByListOfId(favoriteProducts, token);
   }
 
   Future<ProductModel?> getProduct(String id, String token) async {
