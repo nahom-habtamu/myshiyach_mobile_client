@@ -19,14 +19,13 @@ class GetPostDetailContentCubit extends Cubit<GetPostDetailContentState> {
     emit(Empty());
   }
 
-  void execute(String productOwnerId, String currentUserId, String token) async {
+  void execute(String productOwnerId, String token) async {
     try {
       if (await networkInfo.isConnected()) {
         emit(Empty());
         emit(Loading());
         var currentUser = await getUserById.call(productOwnerId, token);
-        var user = await getUserById.call(currentUserId, token);
-        emit(Loaded(user.favoriteProducts, currentUser));
+        emit(Loaded(currentUser));
       } else {
         emit(NoNetwork());
       }

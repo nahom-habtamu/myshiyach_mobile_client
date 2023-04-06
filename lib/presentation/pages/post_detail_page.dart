@@ -55,12 +55,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
       authToken = getToken() ?? widget.args.token;
       product = widget.args.product;
       isFromDynamicLink = widget.args.isFromDynamicLink;
+      favorites = [...currentUser?.favoriteProducts ?? []];
     });
     context.read<HandleGoingToMessageCubit>().clear();
     context.read<RefreshProductCubit>().clear();
     context.read<GetPostDetailContentCubit>().execute(
           widget.args.product.createdBy,
-          currentUser!.id,
           authToken!,
         );
   }
@@ -80,14 +80,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
           } else if (state is NoNetwork) {
             return buildNoNetworkContent();
           } else if (state is Loaded) {
-            SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-              if (favorites.isEmpty) {
-                setState(() {
-                  favorites = [...state.favoriteProducts];
-                });
-              }
-              // context.read<GetPostDetailContentCubit>().clear();
-            });
+            // SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+            //   if (favorites.isEmpty) {
+            //     setState(() {
+            //       favorites = [...state.favoriteProducts];
+            //     });
+            //   }
+            //   // context.read<GetPostDetailContentCubit>().clear();
+            // });
             return renderBody(state.postCreator);
           }
           return Container();

@@ -9,9 +9,8 @@ class Loading extends GetPostDetailContentState {}
 class NoNetwork extends GetPostDetailContentState {}
 
 class Loaded extends GetPostDetailContentState {
-  final List<String> favoriteProducts;
   final User postCreator;
-  Loaded(this.favoriteProducts, this.postCreator);
+  Loaded(this.postCreator);
 }
 
 class Error extends GetPostDetailContentState {
